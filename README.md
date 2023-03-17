@@ -39,12 +39,26 @@
         - GitLens
         - Maven
 
-## **Test Environment**
-To verify if everything is correctly setup you just have to run the build.sh script
+### **Test Environment**
+To verify if everything is correctly setup you just have to run **build.sh**
 
-**To run it you can use :**
+To run the script, you can use :
 - Git bash on Windows
-- standard terminal on Linux/Mac
+- Standard terminal on Linux/Mac
+
+## Build for debugging
+### Back
+- Run directly the Back-end with the "RUN" button on VS Code
+### Front
+- Start the front using :
+```
+ng serve
+```
+
+## Build for Production
+When you want to build for prod, just run the 'build.sh' script and it will start a docker container with tomcat and your front and back.
+
+The container is located on localhost:8080
 
 # Tools Used
 ### Back-end :
@@ -56,15 +70,18 @@ To verify if everything is correctly setup you just have to run the build.sh scr
 - Node.js v18.15.0
 - Angular
 
-## Reference Documentation
+# Reference Documentation
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
 * [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.0.4/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.0.4/maven-plugin/reference/html/#build-image)
 * [Spring Web](https://docs.spring.io/spring-boot/docs/3.0.4/reference/htmlsingle/#web)
+* [Angular Documentation](https://angular.io/start)
+* [Docker CLI References](https://docs.docker.com/engine/reference/run/)
+* [Dockerfile References](https://docs.docker.com/engine/reference/builder/)
+* [.gitlab-ci.yml (CI) References](https://docs.gitlab.com/ee/ci/yaml/)
 
-## Guides
+# Guides
 The following guides illustrate how to use some features concretely:
 
 * [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
