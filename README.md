@@ -46,6 +46,8 @@ To run the script, you can use :
 - Git bash on Windows
 - Standard terminal on Linux/Mac
 
+If the script end without error, you should be ready to dev !
+
 ## Build for debugging
 ### Back
 - Run directly the Back-end with the "RUN" button on VS Code
