@@ -1,0 +1,21 @@
+angular-build:
+  stage: build
+  image: node:16.19.1-alpine3.17
+  script:
+    - cd front
+    - ng build
+  artifacts:
+    paths:
+      - front/dist
+    expire_in: 1 hrs
+
+java-build:
+  stage: build
+  image: maven:latest
+  script:
+    - cd back
+    - mvn clean package
+  artifacts:
+    paths:
+      - back/target/taf.war
+    expire_in: 1 hrs
