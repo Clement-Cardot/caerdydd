@@ -1,3 +1,10 @@
+# first 8 char of the SHA commit : CI_COMMIT_SHORT_SHA
+# name of the targetted branch of the MR : CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'master' || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'develop'
+
 angular-build:
   stage: build
   image: node:16.19.1-alpine3.17
