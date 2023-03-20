@@ -1,0 +1,18 @@
+### VS Code ###
+**/.vscode/
+.history/*
+
+### API ###
+back/target/
+
+### front ###
+front/dist
+front/tmp
+front/out-tsc
+front/bazel-out
+front/node_modules
+front/.angular
+
+# System files
+.DS_Store
+Thumbs.db
