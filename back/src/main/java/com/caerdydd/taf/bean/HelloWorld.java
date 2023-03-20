@@ -1,4 +1,4 @@
-package com.caerdydd.taf;
+package com.caerdydd.taf.bean;
 
 public class HelloWorld {
     private final long id;
