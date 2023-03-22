@@ -26,6 +26,7 @@ angular-build:
   script:
     - cd front
     - npm install
+    - npm install -g @angular/cli
     - ng build
   artifacts:
     paths:
@@ -37,7 +38,8 @@ java-build:
   image: maven:latest
   script:
     - cd back
-    - mvn $MAVEN_CLI_OPTS clean package -DskipTests=true
+    - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
+    - mvn $MAVEN_CLI_OPTS clean package -DskipTests=true MAVEN_OPTS
   cache:
     key: "maven-$CI_COMMIT_REF_SLUG"
     paths:
