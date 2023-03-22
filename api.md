@@ -1,0 +1,5 @@
+/api
+    /users
+    /teams
+    /projects
+    /
