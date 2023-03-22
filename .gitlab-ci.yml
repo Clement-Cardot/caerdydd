@@ -39,7 +39,7 @@ java-build:
   script:
     - cd back
     - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
-    - mvn $MAVEN_CLI_OPTS clean package -DskipTests=true $MAVEN_OPTS
+    - mvn $MAVEN_CLI_OPTS clean package -DskipTests=true
   cache:
     key: "maven-$CI_COMMIT_REF_SLUG"
     paths:
