@@ -1,1 +1,96 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$eseo-primary: (
+  50: #f2e4ea,
+  100: #e0bccb,
+  200: #cb90a8,
+  300: #b66385,
+  400: #a6416b,
+  500: #962051,
+  600: #8e1c4a,
+  700: #831840,
+  800: #791337,
+  900: #680b27,
+  A100: #ff9bb4,
+  A200: #ff688e,
+  A400: #ff3567,
+  A700: #ff1b54,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: white,
+    A700: white,
+  )
+);
+
+$eseo-accent: (
+  50: #ebeaf3,
+  100: #cecae1,
+  200: #ada6cd,
+  300: #8c82b9,
+  400: #7368aa,
+  500: #5a4d9b,
+  600: #524693,
+  700: #483d89,
+  800: #3f347f,
+  900: #2e256d,
+  A100: #b9b0ff,
+  A200: #8c7dff,
+  A400: #5e4aff,
+  A700: #4830ff,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: white,
+    A700: white,
+  )
+);
+
+$frontend-primary: mat.define-palette($eseo-primary);
+$frontend-accent: mat.define-palette($eseo-accent, 500);
+
+$frontend-warn: mat.define-palette(mat.$red-palette);
+
+$frontend-theme: mat.define-light-theme((
+  color: (
+    primary: $frontend-primary,
+    accent: $frontend-accent,
+    warn: $frontend-warn,
+  )
+));
+
+@include mat.all-component-themes($frontend-theme);
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
