@@ -5,12 +5,27 @@ workflow:
   rules:
     - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'master' || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'develop'
 
+stages:
+  - build
+  - test
+  - sonar
+  - deploy
+
+variables:
+  MAVEN_SETTINGS_PATH: '.m2/settings.xml'
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+
+before_script:
+  - export https_proxy=http://192.168.4.8:3128/
+  - export http_proxy=http://192.168.4.8:3128/
+
 angular-build:
   stage: build
   image: node:16.19.1-alpine3.17
   script:
     - cd front
     - npm install
+    - npm install -g @angular/cli
     - ng build
   artifacts:
     paths:
@@ -19,11 +34,36 @@ angular-build:
 
 java-build:
   stage: build
-  image: maven:latest
+  image: maven:3.8.1-jdk-11
   script:
     - cd back
-    - mvn clean package
+    - mvn $MAVEN_CLI_OPTS clean package -DskipTests=true
+  cache:
+    key: "maven-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
   artifacts:
+    name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
     paths:
       - back/target/taf.war
     expire_in: 1 hrs
+
+# Tests unitaires
+# junit-test:
+#   stage: test
+#   ...
+
+# Tests d'intégrations
+# robotframework-test:
+#   stage: test
+#   ...
+
+# Analyse sonar
+# TODO : Add sonar project and key
+# sonar:
+#   stage: sonar
+#   image: maven:3.8.1-jdk-11
+#   script:
+#     - mvn clean install -DskipTests=true
+#      # sonar projectName projectKey login should be modified to match the Team Master branch project properties5
+#     - mvn validate sonar:sonar -Dsonar.projectName=EmployeeApp-MasterBranch -Dsonar.projectKey=Example-Project-MasterBranch -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=14100a5388499a6993303a2abc82a08dfca56d3df

@@ -1,3 +1,6 @@
+[![pipeline status](https://172.24.0.69/e4e/ld/projet-gl/2022-2023/caerdydd/badges/dev/pipeline.svg)](https://172.24.0.69/e4e/ld/projet-gl/2022-2023/caerdydd/commits/dev)
+
+[![coverage report](https://172.24.0.69/e4e/ld/projet-gl/2022-2023/caerdydd/badges/dev/coverage.svg)](https://172.24.0.69/e4e/ld/projet-gl/2022-2023/caerdydd/commits/dev)
 # Getting Started
 
 ## Prepare Development Environment
