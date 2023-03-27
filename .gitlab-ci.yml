@@ -13,7 +13,12 @@ stages:
 
 variables:
   MAVEN_SETTINGS_PATH: '.m2/settings.xml'
+  MAVEN_OPTS: "-Dhttp.proxyHost=192.168.4.8 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=192.168.4.8 -Dhttps.proxyPort=3128 -Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+
+cache:
+  paths:
+    - .m2/repository
 
 before_script:
   - export https_proxy=http://192.168.4.8:3128/
@@ -38,15 +43,30 @@ java-build:
   script:
     - cd back
     - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
-    - mvn $MAVEN_CLI_OPTS clean package -DskipTests=true
-  cache:
-    paths:
-      - .m2/repository
+    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean package -DskipTests=true
   artifacts:
     name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
     paths:
       - back/target/taf.war
     expire_in: 1 hrs
+
+quality-dev:
+  stage: sonar
+  image: maven:3.8.1-jdk-11
+  script:
+    - mvn clean install -DskipTests=true
+    - mvn validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
+  only:
+    - dev
+  
+quality-prod:
+  stage: sonar
+  image: maven:3.8.1-jdk-11
+  script:
+    - mvn clean install -DskipTests=true
+    - mvn validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=66a042836678156de40eac28c940b009324df42c
+  only:
+    - master
 
 # Tests unitaires
 # junit-test:
@@ -57,13 +77,3 @@ java-build:
 # robotframework-test:
 #   stage: test
 #   ...
-
-# Analyse sonar
-# TODO : Add sonar project and key
-# sonar:
-#   stage: sonar
-#   image: maven:3.8.1-jdk-11
-#   script:
-#     - mvn clean install -DskipTests=true
-#      # sonar projectName projectKey login should be modified to match the Team Master branch project properties5
-#     - mvn validate sonar:sonar -Dsonar.projectName=EmployeeApp-MasterBranch -Dsonar.projectKey=Example-Project-MasterBranch -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=14100a5388499a6993303a2abc82a08dfca56d3df
