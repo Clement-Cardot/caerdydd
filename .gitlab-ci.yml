@@ -53,9 +53,6 @@ java-build:
 quality-dev:
   stage: sonar
   image: maven:3.8.1-jdk-11
-  cache:
-    paths:
-      - .m2/repository
   script:
     - mvn clean install -DskipTests=true
     - mvn validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
@@ -65,15 +62,11 @@ quality-dev:
 quality-prod:
   stage: sonar
   image: maven:3.8.1-jdk-11
-  cache:
-    paths:
-      - .m2/repository
   script:
     - mvn clean install -DskipTests=true
     - mvn validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=66a042836678156de40eac28c940b009324df42c
   only:
     - master
-    - main
 
 # Tests unitaires
 # junit-test:
