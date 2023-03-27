@@ -17,7 +17,7 @@ public class Connexion {
     }
     
     try {
-      connex = DriverManager.getConnection("jdbc:mariadb://localhost:3300/ProjetGL", "root", "network");
+      connex = DriverManager.getConnection("jdbc:mariadb://localhost:3307/ProjetGL", "root", "password");
       System.out.println("Success 2");
     } catch (SQLException e){
       e.printStackTrace();
