@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'hello';
+  title = 'TAF';
+  login = true;
+
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    if(this.router.url != "/") {
+      this.login = false;
+    }
+  }
 }

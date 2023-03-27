@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit  {
     } else {
       this.logInService.signIn(this.loginForm.value).subscribe(data => {
           if(data) {
-            this.router.navigateByUrl("");
+            this.router.navigateByUrl("accueil");
           } else {
             this.router.navigateByUrl("error");
           }

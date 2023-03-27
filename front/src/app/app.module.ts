@@ -6,26 +6,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HelloWorldService } from './service/hello-world.service';
-import { MenuComponent } from './menu/menu.component';
-import { HelloWorldComponent } from './hello-world/hello-world.component';
 import { LoginPageModule } from './login-page/login-page.module';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    MenuComponent,
-    HelloWorldComponent,
+    AppComponent
   ],
   imports: [
+    CoreModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     LoginPageModule
-  ],
-  providers: [
-    HelloWorldService,
   ],
   bootstrap: [AppComponent]
 })
