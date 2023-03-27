@@ -12,10 +12,6 @@ variables:
   MAVEN_OPTS: "-Dhttp.proxyHost=192.168.4.8 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=192.168.4.8 -Dhttps.proxyPort=3128 -Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
-cache:
-  paths:
-    - .m2/repository
-
 before_script:
   - export https_proxy=http://192.168.4.8:3128/
   - export http_proxy=http://192.168.4.8:3128/
@@ -32,6 +28,10 @@ angular-build:
     paths:
       - front/dist
     expire_in: 1 hrs
+  cache:
+    paths:
+      - front/node_modules
+      - front/.angular/cache
 
 java-build:
   stage: build
@@ -45,13 +45,20 @@ java-build:
     paths:
       - back/target/taf.war
     expire_in: 1 hrs
+  cache:
+    paths:
+      - .m2/repository
 
 quality-dev:
   stage: sonar
   image: maven:3.8.1-jdk-11
   script:
+    - cd back
     - mvn clean install -DskipTests=true
     - mvn validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
+  cache:
+    paths:
+      - .m2/repository
   only:
     - dev
   
@@ -59,8 +66,12 @@ quality-prod:
   stage: sonar
   image: maven:3.8.1-jdk-11
   script:
+    - cd back
     - mvn clean install -DskipTests=true
     - mvn validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=66a042836678156de40eac28c940b009324df42c
+  cache:
+    paths:
+      - .m2/repository
   only:
     - master
 
