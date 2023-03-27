@@ -48,6 +48,35 @@ java-build:
       - back/target/taf.war
     expire_in: 1 hrs
 
+quality-dev:
+  stage: analysis
+  image: maven:3.8.1-jdk-11
+  cache:
+    key: "maven-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
+  script:
+    - mvn clean install -DskipTests=true
+    # sonar Team3_DevBranch Team3_DevBranch_Project and f8f9f9d664deefc1f0cc1f8ca8f5fce3cef63bad should be modified to match the Team Dev branch project properties
+    - mvn validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f8f9f9d664deefc1f0cc1f8ca8f5fce3cef63bad
+  only:
+    - dev
+  
+quality-prod:
+  stage: analysis
+  image: maven:3.8.1-jdk-11
+  cache:
+    key: "maven-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
+  script:
+    - mvn clean install -DskipTests=true
+     # sonar Team3_MasterBranch Team3_MasterBranch_Project and 21c3f523d2ac154675ce6167f285989f285afe77 should be modified to match the Team Master branch project properties5
+    - mvn validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=21c3f523d2ac154675ce6167f285989f285afe77
+  only:
+    - master
+    - main
+
 # Tests unitaires
 # junit-test:
 #   stage: test
