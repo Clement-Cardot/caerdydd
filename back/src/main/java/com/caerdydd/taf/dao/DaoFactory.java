@@ -40,7 +40,7 @@ public class DaoFactory {
     }
 
     // Récupération du Dao
-    public UserDao getEtudiantDao() {
+    public UserDao getUserDao() {
         return new UserDaoImpl(this);
     }
 }
