@@ -13,6 +13,8 @@ import { UserDataService } from './core/services/user-data.service';
 import { ApiAuthService } from './core/services/api-auth.service';
 import { ApiTeamService } from './core/services/api-team.service';
 import { ApiUserService } from './core/services/api-user.service';
+import { SidenavModule } from './sidenav/sidenav.module';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -30,7 +32,8 @@ import { ApiUserService } from './core/services/api-user.service';
     HttpClientModule,
     BrowserAnimationsModule,
     LoginPageModule,
-    TeamsPageModule
+    TeamsPageModule,
+    SidenavModule
   ],
   bootstrap: [AppComponent]
 })

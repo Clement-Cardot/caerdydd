@@ -1,26 +1,31 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { UserDataService } from './core/services/user-data.service';
 import { ApiUserService } from './core/services/api-user.service';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'TAF';
-  login = true;
+  login = false;
 
-  constructor(
-    private router: Router,
-    private userDataService: UserDataService,
-    private apiUserService: ApiUserService
-    ) {}
+  constructor(private router: Router, private userDataService: UserDataService, private apiUserService: ApiUserService) {
+    router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map(e => {
+        console.log(e);
+      })
+    );
+  }
 
   ngOnInit() {
-    if(this.router.url != "/") {
-      this.login = false;
+
+    if(this.router.url === "/") {
+      this.login = true;
     }
     this.refreshCurrentUser();
   }
