@@ -9,19 +9,17 @@ CREATE TABLE USER (
     password VARCHAR(8),
     CONSTRAINT password CHECK (password LIKE '%[0-9]%' AND password LIKE '%[^a-zA-Z0-9]%' AND LENGTH(password) >= 8),
     email VARCHAR(30),
-    type VARCHAR(20),
+    role VARCHAR(20),
     PRIMARY KEY(id_user)
 );
 
 
 CREATE TABLE TEACHING_STAFF (
-    id_ts INT AUTO_INCREMENT,
+    id_user INT(8),
     speciality VARCHAR(20),
     is_option_leader BOOLEAN,
-    is_jury_member BOOLEAN,
     is_subject_validator BOOLEAN,
-    id_user INT(8),
-    PRIMARY KEY(id_ts),
+    PRIMARY KEY(id_user),
     FOREIGN KEY (id_user) REFERENCES USER (id_user)
 );
 CREATE TABLE JURY (
@@ -93,8 +91,8 @@ CREATE TABLE CONSULTING (
 
 
 
-CREATE TABLE STUDENT(
-    id_student INT  AUTO_INCREMENT,
+CREATE TABLE TEAM_MEMBER(
+    id_tea INT  AUTO_INCREMENT,
     speciality VARCHAR(20),
     individual_mark INT,
     bonus_penalty INT,
