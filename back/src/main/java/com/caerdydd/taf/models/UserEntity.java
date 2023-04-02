@@ -1,30 +1,54 @@
-package com.caerdydd.taf.bean;
+package com.caerdydd.taf.models;
 
-public class User {
-    // Beans of User
-    private int id;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "user")
+public class UserEntity {
+
+    private Integer id;
     private String name;
     private String surname;
     private String login;
     private String password;
     private String email;
     private String role;
+ 
+    private UserAdditionalData userAdditionalData;
 
-    public User(int id, String name, String surname, String login, String password, String email) {
+    public UserEntity() {
+    }
+
+    public UserEntity(Integer id, String name, String surname, String login, String password, String email, String role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.login = login;
         this.password = password;
         this.email = email;
+        this.role = role;
+
+        if (this.role.equals("student")) {
+            // userAdditionalData -> StudentData (NONE ?)
+        } else if (this.role.equals("team_member")) {
+            // userAdditionalData -> TeamMemberData
+        } else if (this.role.equals("teaching_staff")) {
+            // userAdditionalData -> TeachingStaffData
+        } 
     }
 
     // Getters and Setters
-    public int getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
