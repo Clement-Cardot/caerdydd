@@ -1,66 +1,64 @@
 USE ProjetGL;
 
-
-CREATE TABLE USER (
-    id_user INT AUTO_INCREMENT,
-    name VARCHAR(20),
-    surname VARCHAR(20),
-    login VARCHAR(8) UNIQUE,
-    password VARCHAR(8),
-    CONSTRAINT password CHECK (password LIKE '%[0-9]%' AND password LIKE '%[^a-zA-Z0-9]%' AND LENGTH(password) >= 8),
-    email VARCHAR(30),
-    role VARCHAR(20),
-    PRIMARY KEY(id_user)
+CREATE TABLE user (
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    surname VARCHAR(20) NOT NULL,
+    login VARCHAR(15) UNIQUE NOT NULL,
+    password VARCHAR(250) NOT NULL,
+    email VARCHAR(40) NOT NULL,
+    role ENUM('student', 'team_member', 'teaching_staff') NOT NULL,
+    enabled BOOLEAN NOT NULL,
+    PRIMARY KEY(id)
 );
 
-
-CREATE TABLE TEACHING_STAFF (
-    id_user INT(8),
-    speciality VARCHAR(20),
-    is_option_leader BOOLEAN,
-    is_subject_validator BOOLEAN,
+CREATE TABLE teaching_staff (
+    id_user INT NOT NULL,
+    is_infrastructure_specialist BOOLEAN NOT NULL,
+    is_development_specialist BOOLEAN NOT NULL,
+    is_modeling_specialist BOOLEAN NOT NULL,
+    is_option_leader BOOLEAN NOT NULL,
+    is_subject_validator BOOLEAN NOT NULL,
     PRIMARY KEY(id_user),
-    FOREIGN KEY (id_user) REFERENCES USER (id_user)
+    FOREIGN KEY (id_user) REFERENCES user (id)
 );
-CREATE TABLE JURY (
-    id_jury INT AUTO_INCREMENT,
-    id_ts1 INT(8),
-    id_ts2 INT(8),
+
+CREATE TABLE jury (
+    id_jury INT NOT NULL AUTO_INCREMENT,
+    id_ts1 INT NOT NULL,
+    id_ts2 INT NOT NULL,
     PRIMARY KEY(id_jury),
-    FOREIGN KEY (id_ts1) REFERENCES TEACHING_STAFF (id_ts),
-    FOREIGN KEY (id_ts2) REFERENCES TEACHING_STAFF (id_ts)
+    FOREIGN KEY (id_ts1) REFERENCES teaching_staff (id_user),
+    FOREIGN KEY (id_ts2) REFERENCES teaching_staff (id_user)
 );
 
-CREATE TABLE PROJECT (
-    id_project  INT AUTO_INCREMENT, 
-    name VARCHAR(20),
+CREATE TABLE project (
+    id_project INT NOT NULL AUTO_INCREMENT, 
+    name VARCHAR(20) NOT NULL,
     description VARCHAR(250),
-    is_validated BOOLEAN,
-    id_jury INT(8),
+    is_validated BOOLEAN NOT NULL,
+    id_jury INT,
     PRIMARY KEY(id_project),
-    FOREIGN KEY (id_jury) REFERENCES JURY (id_jury)
+    FOREIGN KEY (id_jury) REFERENCES jury (id_jury)
 );
 
-CREATE TABLE PRESENTATION (
-    id_presentation INT AUTO_INCREMENT, 
-    type VARCHAR(20),
-    datetime_begin DATE,
-    datetime_end DATE,
-    room VARCHAR(20),
-    jury_a_notes INT(8),
-    jury_b_notes INT(8),
-    id_jury INT(8),
-    id_project INT(8),
+CREATE TABLE presentation (
+    id_presentation INT NOT NULL AUTO_INCREMENT, 
+    type ENUM('intermediate', 'final'),
+    datetime_begin DATE NOT NULL,
+    datetime_end DATE NOT NULL,
+    room VARCHAR(20) NOT NULL,
+    jury1_notes VARCHAR(250),
+    jury2_notes VARCHAR(250),
+    id_jury INT NOT NULL,
+    id_project INT NOT NULL,
     PRIMARY KEY(id_presentation),
-    FOREIGN KEY (id_jury) REFERENCES JURY (id_jury),
-    FOREIGN KEY (id_project) REFERENCES PROJECT (id_project)
-    
+    FOREIGN KEY (id_jury) REFERENCES jury (id_jury),
+    FOREIGN KEY (id_project) REFERENCES project (id_project)
 );
 
-
- 
-CREATE TABLE TEAM (
-    id_team  INT AUTO_INCREMENT, 
+CREATE TABLE team (
+    id_team INT NOT NULL AUTO_INCREMENT, 
     name VARCHAR(30),
     team_work_mark INT,
     team_validation_mark INT,
@@ -68,59 +66,51 @@ CREATE TABLE TEAM (
     file_path_scope_statement VARCHAR(100),
     file_path_final_scope_statement VARCHAR(100),
     file_path_scope_statement_analysis VARCHAR(100),
-    file_path_repor VARCHAR(100),
+    file_path_report VARCHAR(100),
+    id_project_dev INT NOT NULL,
+    id_project_validation INT NOT NULL,
     PRIMARY KEY(id_team),
-    id_project_dev INT(8),
-    id_project_validation INT(8),
-    FOREIGN KEY (id_project_dev) REFERENCES PROJECT (id_project),
-    FOREIGN KEY (id_project_validation) REFERENCES PROJECT (id_project)
+    FOREIGN KEY (id_project_dev) REFERENCES project (id_project),
+    FOREIGN KEY (id_project_validation) REFERENCES project (id_project)
 );
 
-CREATE TABLE CONSULTING (
-    id_consulting INT AUTO_INCREMENT,
-    datetime_begin DATE,
-    datetime_end DATE,
-    speciality VARCHAR(20),
+CREATE TABLE consulting (
+    id_consulting INT NOT NULL AUTO_INCREMENT,
+    datetime_begin DATE NOT NULL,
+    datetime_end DATE NOT NULL,
+    speciality ENUM('infrastructure', 'development', 'modeling'),
     notes VARCHAR(250),
-    is_validated BOOLEAN,
-    is_reserved BOOLEAN,
-    id_team INT(8),
+    is_validated BOOLEAN NOT NULL,
+    is_reserved BOOLEAN NOT NULL,
+    id_team INT,
     PRIMARY KEY(id_consulting),
-    FOREIGN KEY (id_team) REFERENCES TEAM (id_team)
+    FOREIGN KEY (id_team) REFERENCES team (id_team)
 );
 
-
-
-CREATE TABLE TEAM_MEMBER(
-    id_tea INT  AUTO_INCREMENT,
-    speciality VARCHAR(20),
+CREATE TABLE team_member (
+    id_user INT NOT NULL,
+    speciality ENUM('LD', 'CSS') NOT NULL,
     individual_mark INT,
     bonus_penalty INT,
-    PRIMARY KEY(id_student),
-    id_team INT(8),
-    id_user INT(8),
-    FOREIGN KEY (id_team) REFERENCES TEAM (id_team),
-    FOREIGN KEY (id_user) REFERENCES USER (id_user)
+    id_team INT NOT NULL,
+    PRIMARY KEY(id_user),
+    FOREIGN KEY (id_team) REFERENCES team (id_team),
+    FOREIGN KEY (id_user) REFERENCES user (id)
 );
 
-
-
-CREATE TABLE NOTIFICATION (
-    id_notification INT AUTO_INCREMENT,
-    message VARCHAR(250),
+CREATE TABLE notification (
+    id_notification INT NOT NULL AUTO_INCREMENT,
+    message VARCHAR(250) NOT NULL,
     link VARCHAR(100), 
-    id_user INT(8),
+    id_user INT NOT NULL,
     PRIMARY KEY(id_notification),
-    FOREIGN KEY (id_user) REFERENCES USER (id_user)
+    FOREIGN KEY (id_user) REFERENCES user (id)
 );
 
-
-
-
-CREATE TABLE ASSIGNMENT (
-    id_ts INT(8),
-    id_consulting INT(8),
-    FOREIGN KEY (id_ts) REFERENCES TEACHING_STAFF (id_ts),
-    FOREIGN KEY (id_consulting) REFERENCES CONSULTING (id_consulting),
-    PRIMARY KEY(id_ts, id_consulting)
+CREATE TABLE assignment (
+    id_ts INT NOT NULL,
+    id_consulting INT NOT NULL,
+    PRIMARY KEY(id_ts, id_consulting),
+    FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user),
+    FOREIGN KEY (id_consulting) REFERENCES consulting (id_consulting)
 );
