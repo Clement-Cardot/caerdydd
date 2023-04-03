@@ -1,4 +1,4 @@
-INSERT INTO user (name, surname, login, password, email, speciality, role) VALUES
+sINSERT INTO user (name, surname, login, password, email, speciality, role) VALUES
 ('Jean', 'Dupont', 'jdupont', '$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q', 'jean.dupont@reseau.eseo.fr', 'LD', 'student'),
 ('Pierre', 'Durand', 'pdurand', '$2a$12$zeVlwY3Eo6mBVM3INdB4GeXWrk8PpG4/gLs3W7.C9ZLmaLVFx9SOC', 'pierre.durand@reseau.eseo.fr', 'CSS', 'student'),
 ('Paul', 'Martin', 'pmartin', '$2a$12$lHpX7qcs5rf4wH4CejKBKu5j3FXqPwhyHl4Iki4vd3eSYEOfC7rbm', 'paul.martin@reseau.eseo.fr', 'LD', 'student'),
