@@ -8,7 +8,7 @@ CREATE TABLE user (
     password VARCHAR(250) NOT NULL,
     email VARCHAR(40) NOT NULL,
     role ENUM('student', 'team_member', 'teaching_staff') NOT NULL,
-    enabled BOOLEAN NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY(id)
 );
 
