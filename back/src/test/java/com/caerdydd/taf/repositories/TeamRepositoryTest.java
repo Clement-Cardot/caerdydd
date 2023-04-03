@@ -1,17 +1,23 @@
 package com.caerdydd.taf.repositories;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 import java.util.List;
 import java.util.Optional;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.caerdydd.taf.models.entities.TeamEntity;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class TeamRepositoryTest {
 
     @Autowired
@@ -19,21 +25,16 @@ public class TeamRepositoryTest {
 
 
     @Test
-    public void listAllUserTest() throws Exception {        
-        List<TeamEntity> teams = teamRepository.findAll();
+    public void testCreateReadDelete() {        
+        TeamEntity team = new TeamEntity(1, "Team 1");
 
-        assertEquals(8, teams.size());
-        assertEquals("Equipe 1", teams.get(0).getName());
-        assertEquals("Equipe 2", teams.get(1).getName());
-        assertEquals("Equipe 3", teams.get(2).getName());
-    }
+        teamRepository.save(team);
 
+        Iterable<TeamEntity> teams = teamRepository.findAll();
+        Assertions.assertThat(teams).extracting(TeamEntity::getName).containsOnly("Team 1");
 
-    @Test
-    public void findByIdTest() throws Exception {
-        Optional<TeamEntity> team3 = teamRepository.findById(3);
-        
-        assertEquals("Equipe 3", team3.get().getName());
+        teamRepository.delete(team);
+        Assertions.assertThat(teamRepository.findAll()).isEmpty();
     }
 
 }

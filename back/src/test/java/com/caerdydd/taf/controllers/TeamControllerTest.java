@@ -38,7 +38,6 @@ public class TeamControllerTest {
         
         Mockito.when(teamService.listAllTeams()).thenReturn(teams);
 
-        // TO DEBUG
         mockMvc.perform(get("/api/teams"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.hasSize(1)))
