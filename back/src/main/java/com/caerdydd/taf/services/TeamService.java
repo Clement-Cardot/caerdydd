@@ -15,6 +15,7 @@ import com.caerdydd.taf.repositories.TeamRepository;
 @Service
 @Transactional
 public class TeamService {
+
     @Autowired
     private TeamRepository teamRepository;
     
@@ -28,6 +29,10 @@ public class TeamService {
             throw new NoSuchElementException();
         }
         return team.get();
+    }
+
+    public TeamEntity saveTeam(TeamEntity team) {
+        return teamRepository.save(team);
     }
 
 }
