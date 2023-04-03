@@ -19,6 +19,7 @@ public class TeamMemberEntity {
 
     @Id
     private Integer idUser;
+    private String speciality;
     private Integer individualMark;
     private Integer bonusPenalty;
 
@@ -34,8 +35,9 @@ public class TeamMemberEntity {
     public TeamMemberEntity() {
     }
 
-    public TeamMemberEntity(UserEntity user, Integer individualMark, Integer bonusPenalty, TeamEntity team) {
+    public TeamMemberEntity(UserEntity user, String speciality, Integer individualMark, Integer bonusPenalty, TeamEntity team) {
         this.user = user;
+        this.speciality = speciality;
         this.individualMark = individualMark;
         this.bonusPenalty = bonusPenalty;
         this.team = team;

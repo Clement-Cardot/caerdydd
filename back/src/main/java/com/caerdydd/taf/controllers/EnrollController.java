@@ -50,11 +50,10 @@ public class EnrollController {
     @GetMapping("")
     public ResponseEntity<List<TeamDTO>> list() {
         try {
-            List<TeamDTO> teams = teamService.listAllTeams().stream()
-                                .map(team -> modelMapper.map(team, TeamDTO.class))
-                                .collect(Collectors.toList());
-                                
-            return new ResponseEntity<>(teams, HttpStatus.OK);
+            List<TeamDTO> users = teamService.listAllTeams().stream()
+                                .map(user -> modelMapper.map(user, TeamDTO.class))
+                                .collect(Collectors.toList()) ;
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
