@@ -1,7 +1,7 @@
 @startuml
 
 
-entity STUDENT {
+entity TEAM_MEMBER {
     + id_student [PK]
     --
     speciality
@@ -30,8 +30,8 @@ entity PRESENTATION {
     datetime_begin
     datetime_end
     room
-    jury_a_notes
-    jury_b_notes
+    jury1_notes
+    jury2_notes
     # id_jury [FK]
     # id_projet [FK]
 }
