@@ -32,7 +32,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.authorizeRequests()
+        return http
+                .cors().and().csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/api/student/**").hasAuthority("student")
                 .antMatchers("/api/team_member/**").hasAuthority("team_member")
                 .antMatchers("/api/teaching_staff/**").hasAuthority("teaching_staff")

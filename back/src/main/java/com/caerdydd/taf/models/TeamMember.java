@@ -1,14 +1,12 @@
 package com.caerdydd.taf.models;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "team_member")
-public class TeamMemberData extends UserAdditionalData{
+public class TeamMember {
 
     private Integer idUser;
     private String speciality;
@@ -16,10 +14,16 @@ public class TeamMemberData extends UserAdditionalData{
     private Integer bonusPenalty;
     private Integer idTeam;
 
-    public TeamMemberData() {
+    public TeamMember() {
     }
 
-    public TeamMemberData(Integer idUser, String speciality, Integer individualMark, Integer bonusPenalty,
+    public TeamMember(Integer idUser, Integer idTeam, String speciality) {
+        this.idUser = idUser;
+        this.idTeam = idTeam;
+        this.speciality = speciality;
+    }
+
+    public TeamMember(Integer idUser, String speciality, Integer individualMark, Integer bonusPenalty,
             Integer idTeam) {
         this.idUser = idUser;
         this.speciality = speciality;
@@ -31,7 +35,6 @@ public class TeamMemberData extends UserAdditionalData{
     // Getters and Setters
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getIdUser() {
         return idUser;
     }

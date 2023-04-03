@@ -1,14 +1,12 @@
 package com.caerdydd.taf.models;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "teaching_staff")
-public class TeachingStaffData extends UserAdditionalData{
+public class TeachingStaff {
     
     private Integer idUser;
     private Boolean isInfrastructureSpecialist;
@@ -17,10 +15,10 @@ public class TeachingStaffData extends UserAdditionalData{
     private Boolean isOptionLeader;
     private Boolean isSubjectValidator;
 
-    public TeachingStaffData() {
+    public TeachingStaff() {
     }
 
-    public TeachingStaffData(Integer idUser, Boolean isInfrastructureSpecialist, Boolean isDevelopmentSpecialist,
+    public TeachingStaff(Integer idUser, Boolean isInfrastructureSpecialist, Boolean isDevelopmentSpecialist,
             Boolean isModelingSpecialist, Boolean isOptionLeader, Boolean isSubjectValidator) {
         this.idUser = idUser;
         this.isInfrastructureSpecialist = isInfrastructureSpecialist;
@@ -32,7 +30,6 @@ public class TeachingStaffData extends UserAdditionalData{
 
     // Getters and Setters
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getIdUser() {
         return idUser;
     }

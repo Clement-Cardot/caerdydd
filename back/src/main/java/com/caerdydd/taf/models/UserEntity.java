@@ -17,8 +17,6 @@ public class UserEntity {
     private String password;
     private String email;
     private String role;
- 
-    private UserAdditionalData userAdditionalData;
 
     public UserEntity() {
     }
@@ -31,14 +29,6 @@ public class UserEntity {
         this.password = password;
         this.email = email;
         this.role = role;
-
-        if (this.role.equals("student")) {
-            // userAdditionalData -> StudentData (NONE ?)
-        } else if (this.role.equals("team_member")) {
-            // userAdditionalData -> TeamMemberData
-        } else if (this.role.equals("teaching_staff")) {
-            // userAdditionalData -> TeachingStaffData
-        } 
     }
 
     // Getters and Setters

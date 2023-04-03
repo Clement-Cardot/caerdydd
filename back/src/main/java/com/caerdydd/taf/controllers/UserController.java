@@ -32,7 +32,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> get(@PathVariable Integer id) {
         try {
-            UserEntity user = userService.getUser(id);
+            UserEntity user = userService.getUserById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -45,7 +45,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserEntity> update(@RequestBody UserEntity user, @PathVariable Integer id) {
         try {
-            UserEntity existUser = userService.getUser(id);
+            UserEntity existUser = userService.getUserById(id);
             user.setId(id);            
             userService.saveUser(user);
             return new ResponseEntity<>(HttpStatus.OK);
