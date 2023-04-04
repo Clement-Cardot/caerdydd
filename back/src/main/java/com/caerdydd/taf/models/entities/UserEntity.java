@@ -26,6 +26,7 @@ public class UserEntity {
     private String login;
     private String password;
     private String email;
+    private String speciality;
     private String role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

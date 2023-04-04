@@ -51,22 +51,19 @@ public class UserController {
         }
     }
 
-    /*
-     * Should not be able to create new Users ???
-     */
-    // @PostMapping
-    // public ResponseEntity<UserDTO> add(@RequestBody UserDTO userDto) {
+    @PutMapping("")
+    public ResponseEntity<UserDTO> add(@RequestBody UserDTO userDto) {
 
-    //     UserEntity userRequest = modelMapper.map(userDto, UserEntity.class);
+        UserEntity userRequest = modelMapper.map(userDto, UserEntity.class);
 
-    //     UserEntity user = userService.saveUser(userRequest);
+        UserEntity user = userService.saveUser(userRequest);
 
-    //     UserDTO userResponse = modelMapper.map(user, UserDTO.class);
+        UserDTO userResponse = modelMapper.map(user, UserDTO.class);
 
-    //     return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
-    // }
+        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
+    }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO userDto) {
 
         UserEntity userRequest = modelMapper.map(userDto, UserEntity.class);

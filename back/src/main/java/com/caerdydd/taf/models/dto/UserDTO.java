@@ -1,8 +1,5 @@
 package com.caerdydd.taf.models.dto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -21,9 +18,9 @@ public class UserDTO {
     private String name;
     private String surname;
     private String login;
-    @JsonIgnore
     private String password;
     private String email;
+    private String speciality;
     private String role;
 
     @JsonBackReference
