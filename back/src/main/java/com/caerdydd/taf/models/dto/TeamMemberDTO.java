@@ -18,7 +18,6 @@ public class TeamMemberDTO {
     private UserDTO user;
 
     private Integer idTeam;
-    private String speciality;
     private Integer individualMark;
     private Integer bonusPenalty;
     

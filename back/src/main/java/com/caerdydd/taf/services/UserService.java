@@ -49,7 +49,9 @@ public class UserService {
         user.setName(userRequest.getName());
         user.setSurname(userRequest.getSurname());
         user.setLogin(userRequest.getLogin());
+        user.setPassword(userRequest.getPassword());
         user.setEmail(userRequest.getEmail());
+        user.setSpeciality(userRequest.getSpeciality());
         user.setRole(userRequest.getRole());
 
         return userRepository.save(user);

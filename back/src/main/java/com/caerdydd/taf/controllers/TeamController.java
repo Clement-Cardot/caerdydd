@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.models.dto.TeamDTO;
+import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.services.TeamService;
 
 @RestController
@@ -27,7 +28,7 @@ public class TeamController {
     private ModelMapper modelMapper;
     
     @GetMapping("")
-    public ResponseEntity<List<TeamDTO>> list() {
+    public ResponseEntity<List<TeamDTO>> getAllTeams() {
         try {
             List<TeamDTO> users = teamService.listAllTeams().stream()
                                 .map(user -> modelMapper.map(user, TeamDTO.class))
@@ -38,11 +39,23 @@ public class TeamController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TeamDTO> get(@PathVariable Integer id) {
+    @GetMapping("/{idTeam}")
+    public ResponseEntity<TeamDTO> getTeamById(@PathVariable Integer idTeam) {
         try {
-            TeamDTO user = modelMapper.map(teamService.getTeamById(id), TeamDTO.class);
+            TeamDTO user = modelMapper.map(teamService.getTeamById(idTeam), TeamDTO.class);
             return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/{idTeam}/teamMembers")
+    public ResponseEntity<List<TeamMemberDTO>> getAllTeamMembersOfTeamById(@PathVariable Integer idTeam) {
+        try {
+            List<TeamMemberDTO> teamMembers = teamService.getTeamById(idTeam).getTeamMembers().stream()
+                                .map(user -> modelMapper.map(user, TeamMemberDTO.class))
+                                .collect(Collectors.toList()) ;
+            return new ResponseEntity<>(teamMembers, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

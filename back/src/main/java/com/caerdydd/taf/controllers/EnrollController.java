@@ -50,17 +50,18 @@ public class EnrollController {
     @GetMapping("")
     public ResponseEntity<List<TeamDTO>> list() {
         try {
-            List<TeamDTO> users = teamService.listAllTeams().stream()
-                                .map(user -> modelMapper.map(user, TeamDTO.class))
-                                .collect(Collectors.toList()) ;
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            List<TeamDTO> teams = teamService.listAllTeams().stream()
+                                .map(team -> modelMapper.map(team, TeamDTO.class))
+                                .collect(Collectors.toList());
+                                
+            return new ResponseEntity<>(teams, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @PutMapping("/{idTeam}/{idUser}/{speciality}")
-    public ResponseEntity<TeamMemberDTO> applyInATeam(@PathVariable Integer idTeam, @PathVariable Integer idUser, @PathVariable String speciality) {
+    @PutMapping("/{idTeam}/{idUser}")
+    public ResponseEntity<TeamMemberDTO> applyInATeam(@PathVariable Integer idTeam, @PathVariable Integer idUser) {
         
         // Check if the current user is the same as the user to update
         if(Boolean.FALSE.equals(securityConfig.checkCurrentUser(idUser))){
@@ -88,7 +89,6 @@ public class EnrollController {
             TeamMemberEntity teamMember = new TeamMemberEntity();
             teamMember.setUser(user);
             teamMember.setTeam(teamService.getTeamById(idTeam));
-            teamMember.setSpeciality(speciality);
             teamMemberService.saveTeamMember(teamMember);
 
             // Return the new team member entity
