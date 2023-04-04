@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
+import { LeaderMarkPageModule } from './leader-mark-page/leader-mark-page.module';
 import { CoreModule } from './core/core.module';
 
 @NgModule({
@@ -19,7 +20,8 @@ import { CoreModule } from './core/core.module';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    LoginPageModule
+    LoginPageModule,
+    LeaderMarkPageModule,
   ],
   bootstrap: [AppComponent]
 })
