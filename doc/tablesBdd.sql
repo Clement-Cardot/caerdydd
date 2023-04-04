@@ -7,6 +7,7 @@ CREATE TABLE user (
     login VARCHAR(15) UNIQUE NOT NULL,
     password VARCHAR(250) NOT NULL,
     email VARCHAR(40) NOT NULL,
+    speciality ENUM('LD', 'CSS'),
     role ENUM('student', 'team_member', 'teaching_staff') NOT NULL,
     enabled BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY(id)
@@ -89,7 +90,6 @@ CREATE TABLE consulting (
 
 CREATE TABLE team_member (
     id_user INT NOT NULL,
-    speciality ENUM('LD', 'CSS') NOT NULL,
     individual_mark INT,
     bonus_penalty INT,
     id_team INT NOT NULL,
