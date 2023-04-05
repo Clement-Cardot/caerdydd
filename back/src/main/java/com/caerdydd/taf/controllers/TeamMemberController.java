@@ -2,9 +2,7 @@ package com.caerdydd.taf.controllers;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +21,10 @@ public class TeamMemberController {
     @Autowired
     private TeamMemberService teamMemberService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     @GetMapping("")
     public ResponseEntity<List<TeamMemberDTO>> list() {
         try {
-            List<TeamMemberDTO> users = teamMemberService.listAllTeamMembers().stream()
-                                .map(user -> modelMapper.map(user, TeamMemberDTO.class))
-                                .collect(Collectors.toList()) ;
+            List<TeamMemberDTO> users = teamMemberService.listAllTeamMembers();
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -41,7 +34,7 @@ public class TeamMemberController {
     @GetMapping("/{id}")
     public ResponseEntity<TeamMemberDTO> get(@PathVariable Integer id) {
         try {
-            TeamMemberDTO user = modelMapper.map(teamMemberService.getTeamMemberById(id), TeamMemberDTO.class);
+            TeamMemberDTO user = teamMemberService.getTeamMemberById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

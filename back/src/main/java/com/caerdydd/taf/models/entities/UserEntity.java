@@ -1,10 +1,13 @@
 package com.caerdydd.taf.models.entities;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -21,13 +24,15 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
-    private String surname;
+    private String firstname;
+    private String lastname;
     private String login;
     private String password;
     private String email;
     private String speciality;
-    private String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RoleEntity> roleEntities;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
@@ -43,13 +48,12 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity( String name, String surname, String login, String password, String email, String role) {
-        this.name = name;
-        this.surname = surname;
+    public UserEntity( String firstname, String lastname, String login, String password, String email, String role) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.login = login;
         this.password = password;
         this.email = email;
-        this.role = role;
     }
 
 }
