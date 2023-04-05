@@ -8,7 +8,7 @@ const websiteName = " - Taf"
 
 const routes: Routes = [
   { path: '',title: 'Login' + websiteName, component: LoginComponent },
-  { path: 'valide',title: 'Valide Subject' + websiteName, component: ViewValidateSubjectsComponent }
+  { path: 'valide',title: 'Validate Subjects' + websiteName, component: ViewValidateSubjectsComponent }
 ];
 
 @NgModule({
