@@ -8,6 +8,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
+import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { CoreModule } from './core/core.module';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    LoginPageModule
+    LoginPageModule,
+    ProjectDescriptionPageModule
   ],
   bootstrap: [AppComponent]
 })
