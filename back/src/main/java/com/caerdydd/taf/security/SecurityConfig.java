@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.services.UserService;
 
 
@@ -35,7 +35,7 @@ public class SecurityConfig {
         auth.jdbcAuthentication().passwordEncoder(new BCryptPasswordEncoder())
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select login, password, enabled from user where login=?")
-                .authoritiesByUsernameQuery("select login, role from user where login=?");
+                .authoritiesByUsernameQuery("SELECT user.login AS login, role.role AS role FROM user INNER JOIN role ON user.id = role.id_user WHERE login=?");
     }
 
     @Bean
@@ -44,14 +44,14 @@ public class SecurityConfig {
                 .cors().and().csrf().disable()
                 .authorizeRequests().antMatchers("**/error").permitAll()
                 
-                // .antMatchers("/api/student/**").hasAuthority("student")
-                // .antMatchers("/api/team_member/**").hasAuthority("team_member")
-                // .antMatchers("/api/teaching_staff/**").hasAuthority("teaching_staff")
-                // .antMatchers("/api/option_leader/**").hasAuthority("option_leader")
+                // .antMatchers("/api/student/**").hasAuthority("STUDENT_ROLE")
+                // .antMatchers("/api/team_member/**").hasAuthority("TEAM_MEMBER_ROLE")
+                // .antMatchers("/api/teaching_staff/**").hasAuthority("TEACHING_STAFF_ROLE")
+                // .antMatchers("/api/option_leader/**").hasAuthority("OPTION_LEADER_ROLE")
 
                 // TO ENABLE AUTHENTICATION : UNCOMMENT THE LINES ABOVE AND COMMENT THE LINE BELOW
 
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
 
                 .and()
                 .formLogin()
@@ -62,12 +62,12 @@ public class SecurityConfig {
     public Boolean checkCurrentUser(Integer id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentLogin = authentication.getName();
-        UserEntity user = userService.getUserById(id);
+        UserDTO user = userService.getUserById(id);
 
         return user.getLogin().equals(currentLogin);
     }
 
-    public UserEntity getCurrentUser(){
+    public UserDTO getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentLogin = authentication.getName();
         return userService.getUserByLogin(currentLogin);

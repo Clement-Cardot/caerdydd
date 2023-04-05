@@ -3,58 +3,62 @@ package com.caerdydd.taf.services;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.UserEntity;
 import com.caerdydd.taf.repositories.UserRepository;
 
 @Service
 @Transactional
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
-    public List<UserEntity> listAllUsers() {
-        return userRepository.findAll();
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public List<UserDTO> listAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> modelMapper.map(user, UserDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public UserEntity getUserById(Integer id) throws NoSuchElementException {
-        Optional<UserEntity> user = userRepository.findById(id);
-        if (user.isEmpty()) {
+    public UserDTO getUserById(Integer id) throws NoSuchElementException {
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
             throw new NoSuchElementException();
         }
-        return user.get();
+        return modelMapper.map(optionalUser.get(), UserDTO.class);
     }
 
-    public UserEntity getUserByLogin(String login) throws NoSuchElementException {
-        Optional<UserEntity> user = userRepository.findByLogin(login);
-        if (user.isEmpty()) {
+    public UserDTO getUserByLogin(String login) throws NoSuchElementException {
+        Optional<UserEntity> optionalUser = userRepository.findByLogin(login);
+        if (optionalUser.isEmpty()) {
             throw new NoSuchElementException();
         }
-        return user.get();
+        return modelMapper.map(optionalUser.get(), UserDTO.class);
     }
 
-    public UserEntity saveUser(UserEntity user) {
-        return userRepository.save(user);
+    public void saveUser(UserDTO user) {
+        UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+
+        userRepository.save(userEntity);
     }
 
-    public UserEntity updateUser(Integer id, UserEntity userRequest) {
-        UserEntity user = userRepository.findById(id)
+    public void updateUser(UserDTO userRequest) {
+        UserEntity user = userRepository.findById(userRequest.getId())
                                         .orElseThrow(NoSuchElementException::new);
 
-        user.setName(userRequest.getName());
-        user.setSurname(userRequest.getSurname());
-        user.setLogin(userRequest.getLogin());
-        user.setPassword(userRequest.getPassword());
-        user.setEmail(userRequest.getEmail());
-        user.setSpeciality(userRequest.getSpeciality());
-        user.setRole(userRequest.getRole());
-
-        return userRepository.save(user);
+        modelMapper.map(userRequest, user);
+        userRepository.save(user);
     }
 
     public void deleteUser(Integer id) {

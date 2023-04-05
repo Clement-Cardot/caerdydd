@@ -1,6 +1,6 @@
 USE ProjetGL;
 
-CREATE TABLE USER (
+CREATE TABLE user (
     id INT NOT NULL AUTO_INCREMENT,
     firstname VARCHAR(20) NOT NULL,
     lastname VARCHAR(20) NOT NULL,
@@ -12,14 +12,15 @@ CREATE TABLE USER (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE ROLE (
+CREATE TABLE role (
+    id_role INT NOT NULL AUTO_INCREMENT,
     id_user INT NOT NULL,
     role ENUM('STUDENT_ROLE', 'TEAM_MEMBER_ROLE', 'TEACHING_STAFF_ROLE', 'OPTION_LEADER_ROLE') NOT NULL,
-    FOREIGN KEY (id_user) REFERENCES USER (id),
-    PRIMARY KEY(id_user)
+    FOREIGN KEY (id_user) REFERENCES user (id),
+    PRIMARY KEY(id_role)
 );
 
-CREATE TABLE TEACHING_STAFF (
+CREATE TABLE teaching_staff (
     id_user INT NOT NULL,
     is_infrastructure_specialist BOOLEAN NOT NULL,
     is_development_specialist BOOLEAN NOT NULL,
@@ -27,29 +28,29 @@ CREATE TABLE TEACHING_STAFF (
     is_option_leader BOOLEAN NOT NULL,
     is_subject_validator BOOLEAN NOT NULL,
     PRIMARY KEY(id_user),
-    FOREIGN KEY (id_user) REFERENCES USER (id)
+    FOREIGN KEY (id_user) REFERENCES user (id)
 );
 
-CREATE TABLE JURY (
+CREATE TABLE jury (
     id_jury INT NOT NULL AUTO_INCREMENT,
     id_ts1 INT NOT NULL,
     id_ts2 INT NOT NULL,
     PRIMARY KEY(id_jury),
-    FOREIGN KEY (id_ts1) REFERENCES TEACHING_STAFF (id_user),
-    FOREIGN KEY (id_ts2) REFERENCES TEACHING_STAFF (id_user)
+    FOREIGN KEY (id_ts1) REFERENCES teaching_staff (id_user),
+    FOREIGN KEY (id_ts2) REFERENCES teaching_staff (id_user)
 );
 
-CREATE TABLE PROJECT (
+CREATE TABLE project (
     id_project INT NOT NULL AUTO_INCREMENT, 
     name VARCHAR(20) NOT NULL,
     description VARCHAR(250),
     is_validated BOOLEAN NOT NULL,
     id_jury INT,
     PRIMARY KEY(id_project),
-    FOREIGN KEY (id_jury) REFERENCES JURY (id_jury)
+    FOREIGN KEY (id_jury) REFERENCES jury (id_jury)
 );
 
-CREATE TABLE PRESENTATION (
+CREATE TABLE presentation (
     id_presentation INT NOT NULL AUTO_INCREMENT, 
     type ENUM('intermediate', 'final'),
     datetime_begin DATE NOT NULL,
@@ -60,11 +61,11 @@ CREATE TABLE PRESENTATION (
     id_jury INT NOT NULL,
     id_project INT NOT NULL,
     PRIMARY KEY(id_presentation),
-    FOREIGN KEY (id_jury) REFERENCES JURY (id_jury),
-    FOREIGN KEY (id_project) REFERENCES PROJECT (id_project)
+    FOREIGN KEY (id_jury) REFERENCES jury (id_jury),
+    FOREIGN KEY (id_project) REFERENCES project (id_project)
 );
 
-CREATE TABLE TEAM (
+CREATE TABLE team (
     id_team INT NOT NULL AUTO_INCREMENT, 
     name VARCHAR(30),
     team_work_mark INT,
@@ -77,11 +78,11 @@ CREATE TABLE TEAM (
     id_project_dev INT NOT NULL,
     id_project_validation INT NOT NULL,
     PRIMARY KEY(id_team),
-    FOREIGN KEY (id_project_dev) REFERENCES PROJECT (id_project),
-    FOREIGN KEY (id_project_validation) REFERENCES PROJECT (id_project)
+    FOREIGN KEY (id_project_dev) REFERENCES project (id_project),
+    FOREIGN KEY (id_project_validation) REFERENCES project (id_project)
 );
 
-CREATE TABLE CONSULTING (
+CREATE TABLE consulting (
     id_consulting INT NOT NULL AUTO_INCREMENT,
     datetime_begin DATE NOT NULL,
     datetime_end DATE NOT NULL,
@@ -91,32 +92,32 @@ CREATE TABLE CONSULTING (
     is_reserved BOOLEAN NOT NULL,
     id_team INT,
     PRIMARY KEY(id_consulting),
-    FOREIGN KEY (id_team) REFERENCES TEAM (id_team)
+    FOREIGN KEY (id_team) REFERENCES team (id_team)
 );
 
-CREATE TABLE TEAM_MEMBER (
+CREATE TABLE team_member (
     id_user INT NOT NULL,
     individual_mark INT,
     bonus_penalty INT,
     id_team INT NOT NULL,
     PRIMARY KEY(id_user),
-    FOREIGN KEY (id_team) REFERENCES TEAM (id_team),
-    FOREIGN KEY (id_user) REFERENCES USER (id)
+    FOREIGN KEY (id_team) REFERENCES team (id_team),
+    FOREIGN KEY (id_user) REFERENCES user (id)
 );
 
-CREATE TABLE NOTIFICATION (
+CREATE TABLE notification (
     id_notification INT NOT NULL AUTO_INCREMENT,
     message VARCHAR(250) NOT NULL,
     link VARCHAR(100), 
     id_user INT NOT NULL,
     PRIMARY KEY(id_notification),
-    FOREIGN KEY (id_user) REFERENCES USER (id)
+    FOREIGN KEY (id_user) REFERENCES user (id)
 );
 
-CREATE TABLE ASSIGNED_CONSULTING (
+CREATE TABLE assigned_consulting (
     id_ts INT NOT NULL,
     id_consulting INT NOT NULL,
     PRIMARY KEY(id_ts, id_consulting),
-    FOREIGN KEY (id_ts) REFERENCES TEACHING_STAFF (id_user),
-    FOREIGN KEY (id_consulting) REFERENCES CONSULTING (id_consulting)
+    FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user),
+    FOREIGN KEY (id_consulting) REFERENCES consulting (id_consulting)
 );

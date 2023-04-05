@@ -1,9 +1,11 @@
 package com.caerdydd.taf.models.dto;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,13 +17,15 @@ import lombok.Setter;
 public class UserDTO {
 
     private Integer id;
-    private String name;
-    private String surname;
+    private String firstname;
+    private String lastname;
     private String login;
     private String password;
     private String email;
     private String speciality;
-    private String role;
+
+    @JsonManagedReference
+    private List<RoleDTO> roleEntities;
 
     @JsonBackReference
     private TeamMemberDTO teamMember;
