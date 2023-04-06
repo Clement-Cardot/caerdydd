@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
 import { PageValidateSubjectModule } from './page-validate-subject/page-validate-subject.module';
-
+import {TeamsPageModule } from './teams-page/teams-page.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -21,7 +21,8 @@ import { PageValidateSubjectModule } from './page-validate-subject/page-validate
     HttpClientModule,
     BrowserAnimationsModule,
     LoginPageModule,
-    PageValidateSubjectModule
+    PageValidateSubjectModule,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent]
 })
