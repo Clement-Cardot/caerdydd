@@ -4,25 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.caerdydd.taf.models.UserEntity;
-import com.caerdydd.taf.repository.UserRepository;
+import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.services.UserService;
 
 public class CustomUserDetailService implements UserDetailsService{
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        final UserEntity userEntity = userRepository.findByLogin(login);
-        if (userEntity == null) {
-            throw new UsernameNotFoundException("username not found");
-        }
+    public UserDetails loadUserByUsername(String login) {
+        final UserDTO user = userService.getUserByLogin(login);
         return User.withUsername(login)
-                    .password(userEntity.getPassword())
-                    .authorities(userEntity.getRole())
+                    .password(user.getPassword())
+                    .authorities(user.getRoleEntities().stream().map(r -> r.getRole()).toArray(String[]::new))
                     .build();
     }
     

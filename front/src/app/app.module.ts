@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
-
+import {TeamsPageModule } from './teams-page/teams-page.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -19,7 +19,8 @@ import { CoreModule } from './core/core.module';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    LoginPageModule
+    LoginPageModule,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent]
 })
