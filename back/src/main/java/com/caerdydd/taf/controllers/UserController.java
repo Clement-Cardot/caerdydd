@@ -46,7 +46,7 @@ public class UserController {
     @PutMapping("")
     public ResponseEntity<HttpStatus> add(@RequestBody UserDTO userDto) {
         try {
-            userService.saveUser(userDto);
+            userService.registerNewUser(userDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

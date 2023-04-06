@@ -33,11 +33,5 @@ public class RoleService {
         RoleEntity roleEntity = modelMapper.map(role, RoleEntity.class);
         roleRepository.save(roleEntity);
     }
-
-    // public List<RoleDTO> getRoleOfUser() {
-    //     return roleRepository.findAll().stream()
-    //     .map(role -> modelMapper.map(role, RoleDTO.class))
-    //     .collect(Collectors.toList()) ;
-    // }
     
 }

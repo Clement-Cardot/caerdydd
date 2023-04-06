@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.UserDTO;
@@ -24,6 +25,9 @@ public class UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public List<UserDTO> listAllUsers() {
         return userRepository.findAll().stream()
@@ -47,8 +51,10 @@ public class UserService {
         return modelMapper.map(optionalUser.get(), UserDTO.class);
     }
 
-    public void saveUser(UserDTO user) {
+    public void registerNewUser(UserDTO user) {
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+
+        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepository.save(userEntity);
     }

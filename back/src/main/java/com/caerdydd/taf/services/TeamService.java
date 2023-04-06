@@ -71,8 +71,10 @@ public class TeamService {
         }
 
         // Check if the current user is the same as the user to update
-        if(Boolean.FALSE.equals(securityConfig.checkCurrentUser(idUser))){
-            logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} for user {}", securityConfig.getCurrentUser().getId(), idTeam, idUser);
+        String currentUserLogin = securityConfig.getCurrentUserLogin();
+        userService.getUserByLogin(currentUserLogin);
+        if(!currentUserLogin.equals(user.getLogin())){
+            logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} for user {}", currentUserLogin, idTeam, idUser);
             throw new CustomRuntimeException("Can't apply in a team for another user");
         }
 
@@ -98,7 +100,7 @@ public class TeamService {
         user.setTeamMember(teamMember);
 
         logger.info("Save modifications ...");
-        userService.saveUser(user);
+        userService.updateUser(user);
         logger.info("Modifications saved !");
     }
 
