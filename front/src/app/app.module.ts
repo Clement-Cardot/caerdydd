@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
 
 
+import {TeamsPageModule } from './teams-page/teams-page.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -22,7 +23,8 @@ import { ProjectDescriptionPageModule } from './project-description-page/project
     HttpClientModule,
     BrowserAnimationsModule,
     LoginPageModule,
-    ProjectDescriptionPageModule
+    ProjectDescriptionPageModule,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent]
 })
