@@ -49,6 +49,17 @@ java-build:
     paths:
       - .m2/repository
 
+junit-test:
+  stage: test
+  script:
+    - mvn compile test
+  artifacts:
+    reports:
+      junit: back/target/surefire-reports/TEST*.xml
+  cache:
+    paths:
+      - .m2/repository
+
 quality-dev:
   stage: sonar
   image: maven:3.8.1-jdk-11
@@ -74,11 +85,6 @@ quality-prod:
       - .m2/repository
   only:
     - master
-
-# Tests unitaires
-# junit-test:
-#   stage: test
-#   ...
 
 # Tests d'intégrations
 # robotframework-test:
