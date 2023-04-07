@@ -1,7 +1,6 @@
 package com.caerdydd.taf.services;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,42 +44,45 @@ public class TeamService {
         .collect(Collectors.toList()) ;
     }
 
-    public TeamDTO getTeamById(Integer id) throws NoSuchElementException {
+    public TeamDTO getTeamById(Integer id) throws CustomRuntimeException {
         Optional<TeamEntity> optionalTeam = teamRepository.findById(id);
         if (optionalTeam.isEmpty()) {
-            throw new NoSuchElementException();
+            throw new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND);
         }
         return modelMapper.map(optionalTeam.get(), TeamDTO.class);
     }
 
-    public void saveTeam(TeamDTO team) {
+    public TeamDTO saveTeam(TeamDTO team) {
         TeamEntity teamEntity = modelMapper.map(team, TeamEntity.class);
 
-        teamRepository.save(teamEntity);
+        TeamEntity response = teamRepository.save(teamEntity);
+
+        return modelMapper.map(response, TeamDTO.class);
     }
 
-    public void applyInATeam(Integer idTeam, Integer idUser) throws CustomRuntimeException {
+    public UserDTO applyInATeam(Integer idTeam, Integer idUser) throws CustomRuntimeException {
         // Check if the user and the team exists
         UserDTO user;
+        TeamDTO team;
         try {
             user = userService.getUserById(idUser);
-            getTeamById(idTeam);
-        } catch (NoSuchElementException e) {
+            team = getTeamById(idTeam);
+        } catch (CustomRuntimeException e) {
             logger.warn("User {} or Team {} not found", idUser, idTeam);
-            throw new CustomRuntimeException("User not found");
+            throw e;
         }
 
         // Check if the current user is the same as the user to update
         if(Boolean.FALSE.equals(securityConfig.checkCurrentUser(idUser))){
             logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} for user {}", securityConfig.getCurrentUser().getId(), idTeam, idUser);
-            throw new CustomRuntimeException("Can't apply in a team for another user");
+            throw new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER);
         }
 
         // Check if the user is already in a team
-        if (userService.getUserById(idUser).getTeamMember() != null) {
-            Integer idTeamAlreadyIn = userService.getUserById(idUser).getTeamMember().getTeam().getIdTeam();
+        if (user.getTeamMember() != null) {
+            Integer idTeamAlreadyIn = user.getTeamMember().getTeam().getIdTeam();
             logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} but is already in team {}", idTeam, idUser, idTeamAlreadyIn);
-            throw new CustomRuntimeException("User is already in a team");
+            throw new CustomRuntimeException(CustomRuntimeException.USER_ALREADY_IN_A_TEAM);
         }
 
         // If everythings OK : create the user role "team_member" and create a new team member entity
@@ -92,14 +94,19 @@ public class TeamService {
         logger.info("Create a new TeamMemberEntity link to User {} and Team {}", idUser, idTeam);
         TeamMemberDTO teamMember = new TeamMemberDTO();
         teamMember.setUser(user);
-        teamMember.setTeam(getTeamById(idTeam));
+        teamMember.setTeam(team);
 
+        // Update roles (remove USER_ROLE and add TEAM_MEMBER_ROLE)
         user.getRoleEntities().add(newRole);
+        user.getRoleEntities().removeIf(role -> role.getRole().equals("USER_ROLE"));
+
+        // Set team member entity
         user.setTeamMember(teamMember);
 
         logger.info("Save modifications ...");
-        userService.saveUser(user);
+        UserDTO response = userService.saveUser(user);
         logger.info("Modifications saved !");
+        return response;
     }
 
 }

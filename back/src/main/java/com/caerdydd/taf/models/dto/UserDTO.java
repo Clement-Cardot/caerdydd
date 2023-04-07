@@ -33,4 +33,7 @@ public class UserDTO {
     // @JsonBackReference
     // private TeachingStaffDTO teachingStaff;
 
+    public UserDTO() {
+    }
+
 }

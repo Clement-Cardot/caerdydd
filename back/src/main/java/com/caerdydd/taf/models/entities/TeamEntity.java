@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,21 +49,14 @@ public class TeamEntity {
         this.name = name;
     }
 
-    public TeamEntity(Integer idTeam, String name, Integer teamWorkMark, Integer teamValidationMark, String testBookLink,
-            String filePathScopeStatement, String filePathFinalScopeStatement, String filePathScopeStatementAnalysis,
-            String filePathReport, Integer idProjectDev, Integer idProjectValidation) {
-
-        this.idTeam = idTeam;
-        this.name = name;
-        this.teamWorkMark = teamWorkMark;
-        this.teamValidationMark = teamValidationMark;
-        this.testBookLink = testBookLink;
-        this.filePathScopeStatement = filePathScopeStatement;
-        this.filePathFinalScopeStatement = filePathFinalScopeStatement;
-        this.filePathScopeStatementAnalysis = filePathScopeStatementAnalysis;
-        this.filePathReport = filePathReport;
-        this.idProjectDev = idProjectDev;
-        this.idProjectValidation = idProjectValidation;
+    @Override
+    public String toString() {
+        return "TeamEntity [idTeam=" + idTeam + ", name=" + name + ", teamWorkMark=" + teamWorkMark
+                + ", teamValidationMark=" + teamValidationMark + ", testBookLink=" + testBookLink
+                + ", filePathScopeStatement=" + filePathScopeStatement + ", filePathFinalScopeStatement="
+                + filePathFinalScopeStatement + ", filePathScopeStatementAnalysis=" + filePathScopeStatementAnalysis
+                + ", filePathReport=" + filePathReport + ", idProjectDev=" + idProjectDev + ", idProjectValidation="
+                + idProjectValidation + ", teamMembers=" + teamMembers + "]";
     }
 
 }

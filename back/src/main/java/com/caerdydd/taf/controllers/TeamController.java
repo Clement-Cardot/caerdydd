@@ -30,7 +30,10 @@ public class TeamController {
             List<TeamDTO> users = teamService.listAllTeams();
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -39,8 +42,11 @@ public class TeamController {
         try {
             TeamDTO user = teamService.getTeamById(idTeam);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -49,8 +55,11 @@ public class TeamController {
         try {
             List<TeamMemberDTO> teamMembers = teamService.getTeamById(idTeam).getTeamMembers();
             return new ResponseEntity<>(teamMembers, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -61,14 +70,16 @@ public class TeamController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
-            case "Can't apply in a team for another user":
+            case CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER:
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            case "User is already in a team":
+            case CustomRuntimeException.USER_ALREADY_IN_A_TEAM:
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            case "User not found":
+            case CustomRuntimeException.USER_NOT_FOUND:
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            case CustomRuntimeException.TEAM_NOT_FOUND:
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             default:
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
