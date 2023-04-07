@@ -24,4 +24,12 @@ public class TeamMemberDTO {
     @JsonBackReference
     private TeamDTO team;
 
+    public TeamMemberDTO() {
+    }
+
+    public TeamMemberDTO(UserDTO user, Integer idTeam) {
+        this.user = user;
+        this.idTeam = idTeam;
+    }
+
 }
