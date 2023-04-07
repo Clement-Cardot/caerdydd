@@ -53,6 +53,8 @@ junit-test:
   stage: test
   image: maven:3.8.1-jdk-11
   script:
+    - cd back
+    - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
     - mvn compile test
   artifacts:
     reports:
@@ -60,6 +62,11 @@ junit-test:
   cache:
     paths:
       - .m2/repository
+
+# Tests d'intégrations
+# robotframework-test:
+#   stage: test
+#   ...
 
 quality-dev:
   stage: sonar
@@ -86,8 +93,3 @@ quality-prod:
       - .m2/repository
   only:
     - master
-
-# Tests d'intégrations
-# robotframework-test:
-#   stage: test
-#   ...
