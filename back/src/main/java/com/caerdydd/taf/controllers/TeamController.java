@@ -1,7 +1,6 @@
 package com.caerdydd.taf.controllers;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,11 +28,11 @@ public class TeamController {
         try {
             List<TeamDTO> users = teamService.listAllTeams();
             return new ResponseEntity<>(users, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -46,7 +45,10 @@ public class TeamController {
             if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -59,7 +61,10 @@ public class TeamController {
             if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -78,8 +83,10 @@ public class TeamController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case CustomRuntimeException.TEAM_NOT_FOUND:
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            default:
+            case CustomRuntimeException.SERVICE_ERROR:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            default:
+                return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
     }

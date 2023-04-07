@@ -38,14 +38,25 @@ public class TeamService {
     @Autowired
     SecurityConfig securityConfig;
     
-    public List<TeamDTO> listAllTeams() {
-        return teamRepository.findAll().stream()
-        .map(user -> modelMapper.map(user, TeamDTO.class))
-        .collect(Collectors.toList()) ;
+    public List<TeamDTO> listAllTeams() throws CustomRuntimeException {
+        try {
+            return teamRepository.findAll().stream()
+                    .map(user -> modelMapper.map(user, TeamDTO.class))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+        
     }
 
     public TeamDTO getTeamById(Integer id) throws CustomRuntimeException {
-        Optional<TeamEntity> optionalTeam = teamRepository.findById(id);
+        Optional<TeamEntity> optionalTeam;
+        try {
+            optionalTeam = teamRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+        
         if (optionalTeam.isEmpty()) {
             throw new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND);
         }
