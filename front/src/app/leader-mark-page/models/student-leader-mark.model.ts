@@ -1,4 +1,5 @@
 export class Student {
+	id!: number;
 	name!: string;
 	firstname!: string;
 	individualMark!: number;

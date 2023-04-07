@@ -1,12 +1,4 @@
-<h4>Selection d'équipe</h4>
-<mat-form-field appearance="fill">
-  <mat-label>Equipe</mat-label>
-  <mat-select>
-    <mat-option *ngFor="let food of foods" [value]="food.value">
-      {{food.viewValue}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<h1>{{idTeam}}</h1>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 

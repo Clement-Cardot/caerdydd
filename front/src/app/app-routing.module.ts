@@ -8,7 +8,8 @@ const websiteName = " - Taf"
 
 const routes: Routes = [
   { path: '',title: 'Login' + websiteName, component: LoginComponent },
-  { path: 'mark',title: 'Notes' + websiteName, component: LeaderMarkComponent }
+  { path: 'mark',title: 'Notes' + websiteName, component: LeaderMarkComponent },
+  { path: 'mark/:idTeam',title: 'Notes' + websiteName, component: LeaderMarkComponent }
 ];
 
 @NgModule({
