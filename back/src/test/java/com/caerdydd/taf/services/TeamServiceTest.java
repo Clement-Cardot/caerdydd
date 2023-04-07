@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -60,7 +59,12 @@ class TeamServiceTest {
         expectedAnswer.add(new TeamDTO(2, "Team B"));
 
         // Call the method to test
-        List<TeamDTO> result = teamService.listAllTeams();
+        List<TeamDTO> result = new ArrayList<TeamDTO>();
+        try {
+            result = teamService.listAllTeams();
+        } catch (CustomRuntimeException e) {
+            fail();
+        }
 
         // Verify the result
         verify(teamRepository, times(1)).findAll();
@@ -78,7 +82,12 @@ class TeamServiceTest {
         List<TeamDTO> expectedAnswer = new ArrayList<TeamDTO>();
 
         // Call the method to test
-        List<TeamDTO> result = teamService.listAllTeams();
+        List<TeamDTO> result = new ArrayList<TeamDTO>();
+        try {
+            result = teamService.listAllTeams();
+        } catch (CustomRuntimeException e) {
+            fail();
+        }
 
         // Verify the result
         verify(teamRepository, times(1)).findAll();
@@ -121,7 +130,7 @@ class TeamServiceTest {
 
         // Verify the result
         verify(teamRepository, times(1)).findById(1);
-        assertEquals("Team not found", exception.getMessage());
+        assertEquals(CustomRuntimeException.TEAM_NOT_FOUND, exception.getMessage());
     }
 
     @Test
