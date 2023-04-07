@@ -1,9 +1,9 @@
 <mat-card>
     <mat-card-header>
-        <mat-card-title>Team x</mat-card-title>
+        <mat-card-title>{{ validateSubject.team }}</mat-card-title>
     </mat-card-header>
     <mat-card-actions>
-        <mat-card-subtitle>Système de management des services d'urgences</mat-card-subtitle>
-        <button mat-button>Valider le sujet</button>
+        <mat-card-subtitle>{{ validateSubject.subject }}</mat-card-subtitle>
+        <button *ngIf="validateSubject.is_validated" mat-button>Valider le sujet</button>
     </mat-card-actions>
 </mat-card>

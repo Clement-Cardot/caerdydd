@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ValidateSubject } from '../../models/validate-subjects.model';
 
 
 @Component({
@@ -6,6 +7,11 @@ import { Component } from '@angular/core';
   templateUrl: './box-validate-subject.component.html',
   styleUrls: ['./box-validate-subject.component.scss']
 })
-export class BoxValidateSubjectComponent {
+export class BoxValidateSubjectComponent implements OnInit {
+  @Input() validateSubject!: ValidateSubject;
+  constructor() { }
+
+  ngOnInit() {
+  }
 
 }
