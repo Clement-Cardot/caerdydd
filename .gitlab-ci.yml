@@ -51,6 +51,7 @@ java-build:
 
 junit-test:
   stage: test
+  image: maven:3.8.1-jdk-11
   script:
     - mvn compile test
   artifacts:
