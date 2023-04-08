@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -49,7 +48,7 @@ public class TeamControllerTest {
 
         // Verify the result
         verify(teamService, times(1)).listAllTeams();
-        Assertions.assertEquals(expectedAnswer.toString(), result.toString());
+        assertEquals(expectedAnswer.toString(), result.toString());
     }
 
     @Test
