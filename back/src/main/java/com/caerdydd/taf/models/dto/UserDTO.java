@@ -47,4 +47,10 @@ public class UserDTO {
         this.speciality = speciality;
     }
 
+    @Override
+    public String toString() {
+        return "UserDTO [email=" + email + ", firstname=" + firstname + ", id=" + id + ", lastname=" + lastname
+                + ", login=" + login + ", password=" + password + ", speciality=" + speciality + "]";
+    }
+
 }

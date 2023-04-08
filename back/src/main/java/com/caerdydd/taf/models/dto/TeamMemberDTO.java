@@ -27,9 +27,16 @@ public class TeamMemberDTO {
     public TeamMemberDTO() {
     }
 
-    public TeamMemberDTO(UserDTO user, Integer idTeam) {
+    public TeamMemberDTO(UserDTO user, TeamDTO team) {
         this.user = user;
-        this.idTeam = idTeam;
+        this.team = team;
+        this.idTeam = team.getIdTeam();
+    }
+
+    @Override
+    public String toString() {
+        return "TeamMemberDTO [user=" + user.getId() + ", idTeam=" + idTeam + ", individualMark=" + individualMark
+                + ", bonusPenalty=" + bonusPenalty + ", team=" + team.getIdTeam() + "]";
     }
 
 }

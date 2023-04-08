@@ -18,4 +18,18 @@ public class RoleDTO {
 
     @JsonBackReference
     private UserDTO user;
+
+    public RoleDTO() {
+    }
+
+    public RoleDTO(Integer idRole, String role, UserDTO user) {
+        this.idRole = idRole;
+        this.role = role;
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "RoleDTO [idRole=" + idRole + ", role=" + role + ", user=" + user + "]";
+    }
 }
