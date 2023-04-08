@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -46,7 +47,7 @@ class TeamServiceTest {
     private SecurityConfig securityConfig;
 
     @Test
-    void testListAllTeams() {
+    void testListAllTeams_Nominal() {
         // Mock teamRepository.findAll() method
         List<TeamEntity> mockedAnswer = new ArrayList<TeamEntity>();
         mockedAnswer.add(new TeamEntity(1, "Team A"));
@@ -73,7 +74,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void testListAllTeamsWhenEmpty() {
+    void testListAllTeams_Empty() {
         // Mock teamRepository.findAll() method
         List<TeamEntity> mockedAnswer = new ArrayList<TeamEntity>();
         when(teamRepository.findAll()).thenReturn(mockedAnswer);
@@ -93,6 +94,21 @@ class TeamServiceTest {
         verify(teamRepository, times(1)).findAll();
         assertEquals(0, result.size());
         assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testListAllTeams_ServiceError() {
+        // Mock teamRepository.findAll() method
+        when(teamRepository.findAll()).thenThrow(new NoSuchElementException());
+
+        // Call the method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamService.listAllTeams();
+        });
+
+        // Verify the result
+        verify(teamRepository, times(1)).findAll();
+        assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
     }
 
     @Test
@@ -118,6 +134,21 @@ class TeamServiceTest {
     }
 
     @Test
+    void testGetTeamById_ServiceError() {
+        // Mock teamRepository.findById() method
+        when(teamRepository.findById(1)).thenThrow(new NoSuchElementException());
+
+        // Call the method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamService.getTeamById(1);
+        });
+
+        // Verify the result
+        verify(teamRepository, times(1)).findById(1);
+        assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
+    }
+
+    @Test
     void testGetTeamById_TeamNotFound() {
         // Mock teamRepository.findById() method
         Optional<TeamEntity> mockedAnswer = Optional.empty();
@@ -134,17 +165,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void testGetTeamByIdWithNoSuchElementException() {
-        Optional<TeamEntity> optionalTeam = Optional.empty();
-        when(teamRepository.findById(anyInt())).thenReturn(optionalTeam);
-
-        Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            teamService.getTeamById(1);
-        });
-    }
-
-    @Test
-    public void saveTeamTest(){
+    public void saveTeamTest_Nominal(){
         // Mock teamRepository.save() method
         TeamEntity mockedAnswer = new TeamEntity(1, "test");
 		when(teamRepository.save(any(TeamEntity.class))).thenReturn(mockedAnswer);

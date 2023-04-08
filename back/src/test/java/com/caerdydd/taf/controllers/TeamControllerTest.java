@@ -315,6 +315,19 @@ public class TeamControllerTest {
     }
 
     @Test
+    void testApplyInATeam_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER));
+
+        // Call the method to test
+        ResponseEntity<HttpStatus> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
+    @Test
     void testApplyInATeam_ServiceError() throws CustomRuntimeException {
         // Mock teamService.applyInATeam() method
         when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
