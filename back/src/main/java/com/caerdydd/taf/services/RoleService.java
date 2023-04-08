@@ -58,11 +58,5 @@ public class RoleService {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
-
-    // public List<RoleDTO> getRoleOfUser() {
-    //     return roleRepository.findAll().stream()
-    //     .map(role -> modelMapper.map(role, RoleDTO.class))
-    //     .collect(Collectors.toList()) ;
-    // }
     
 }
