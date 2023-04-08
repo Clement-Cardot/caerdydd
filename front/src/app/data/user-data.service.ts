@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { User } from "./models/user.model";
 import { Team } from "./models/team.model";
+import { TeamMembers } from "./models/team-members.model";
 
 @Injectable()
 export class UserDataService {
@@ -31,5 +32,9 @@ export class UserDataService {
 
     public setTeams(teams: Team[]): void {
         this.teams = teams;
+    }
+
+    public getTeamMembersOfTeam(idTeam: number): TeamMembers[] {
+        return this.teams.find(team => team.idTeam === idTeam)!.teamMembers;
     }
 }
