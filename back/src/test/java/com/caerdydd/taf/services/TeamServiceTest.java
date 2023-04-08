@@ -129,7 +129,7 @@ class TeamServiceTest {
         } 
 
         // Verify the result
-        verify(teamRepository, times(1)).findById(1);
+        verify(teamRepository, times(1)).findById(anyInt());
         assertEquals(expectedAnswer.toString(), result.toString());
     }
 
@@ -178,7 +178,7 @@ class TeamServiceTest {
 
         // Verify the result
         verify(teamRepository, times(1)).save(any(TeamEntity.class));
-        assertEquals(response.toString(), teamToSave.toString());
+        assertEquals(teamToSave.toString(), response.toString());
     }
 
     @Test

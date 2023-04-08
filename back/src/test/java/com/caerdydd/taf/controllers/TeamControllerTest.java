@@ -175,8 +175,8 @@ public class TeamControllerTest {
         UserDTO user1 = new UserDTO(1, "Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
         UserDTO user2 = new UserDTO(2, "Firstname2", "Lastname2", "user2", "password2", "email2", "CSS");
         
-        TeamMemberDTO teamMember1 = new TeamMemberDTO(user1, 1);
-        TeamMemberDTO teamMember2 = new TeamMemberDTO(user2, 1);
+        TeamMemberDTO teamMember1 = new TeamMemberDTO(user1, mockedAnswer);
+        TeamMemberDTO teamMember2 = new TeamMemberDTO(user2, mockedAnswer);
         
         teamMembers.add(teamMember1);
         teamMembers.add(teamMember2);
