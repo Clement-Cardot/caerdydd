@@ -42,6 +42,23 @@ public class RoleService {
         return modelMapper.map(response, RoleDTO.class);
     }
 
+    public RoleDTO getRoleById(Integer id) throws CustomRuntimeException {
+        try {
+            RoleEntity roleEntity = roleRepository.findByIdRole(id);
+            return modelMapper.map(roleEntity, RoleDTO.class);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
+
+    public void deleteRole(RoleDTO role) throws CustomRuntimeException {
+        try {
+            roleRepository.delete(modelMapper.map(role, RoleEntity.class));
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
+
     // public List<RoleDTO> getRoleOfUser() {
     //     return roleRepository.findAll().stream()
     //     .map(role -> modelMapper.map(role, RoleDTO.class))
