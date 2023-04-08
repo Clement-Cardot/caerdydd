@@ -1,7 +1,6 @@
 package com.caerdydd.taf.services;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,22 +30,30 @@ public class TeamMemberService {
             return teamMemberRepository.findAll().stream()
             .map(user -> modelMapper.map(user, TeamMemberDTO.class))
             .collect(Collectors.toList()) ;
-        } catch (NoSuchElementException e) {
-            throw new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
 
     public TeamMemberDTO getTeamMemberById(Integer id) throws CustomRuntimeException {
-        Optional<TeamMemberEntity> teamMember = teamMemberRepository.findById(id);
-        if (teamMember.isEmpty()) {
+        Optional<TeamMemberEntity> optionalTeamMember;
+        try{
+            optionalTeamMember = teamMemberRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+
+        if (optionalTeamMember.isEmpty()) {
             throw new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND);
         }
-        return  modelMapper.map(teamMember.get(), TeamMemberDTO.class);
+        return  modelMapper.map(optionalTeamMember.get(), TeamMemberDTO.class);
     }
 
-    public void saveTeamMember(TeamMemberDTO teamMember) {
+    public TeamMemberDTO saveTeamMember(TeamMemberDTO teamMember) {
         TeamMemberEntity teamMemberEntity = modelMapper.map(teamMember, TeamMemberEntity.class);
 
-        teamMemberRepository.save(teamMemberEntity);
+        TeamMemberEntity response = teamMemberRepository.save(teamMemberEntity);
+
+        return modelMapper.map(response, TeamMemberDTO.class);
     }
 }

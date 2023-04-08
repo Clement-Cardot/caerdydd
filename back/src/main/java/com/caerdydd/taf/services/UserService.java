@@ -31,13 +31,18 @@ public class UserService {
             return userRepository.findAll().stream()
                 .map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
-        } catch (NoSuchElementException e) {
-            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
 
     public UserDTO getUserById(Integer id) throws CustomRuntimeException {
-        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        Optional<UserEntity> optionalUser = Optional.empty();
+        try {
+            optionalUser = userRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
         if (optionalUser.isEmpty()) {
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
@@ -45,14 +50,19 @@ public class UserService {
     }
 
     public UserDTO getUserByLogin(String login) throws CustomRuntimeException {
-        Optional<UserEntity> optionalUser = userRepository.findByLogin(login);
+        Optional<UserEntity> optionalUser = Optional.empty();
+        try{
+            optionalUser = userRepository.findByLogin(login);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
         if (optionalUser.isEmpty()) {
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
         return modelMapper.map(optionalUser.get(), UserDTO.class);
     }
 
-    public UserDTO saveUser(UserDTO user) {
+    public UserDTO saveUser(UserDTO user) throws CustomRuntimeException {
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
         UserEntity response = userRepository.save(userEntity);
@@ -60,15 +70,7 @@ public class UserService {
         return modelMapper.map(response, UserDTO.class);
     }
 
-    public void updateUser(UserDTO userRequest) throws CustomRuntimeException {
-        UserEntity user = userRepository.findById(userRequest.getId())
-                                        .orElseThrow(() -> new CustomRuntimeException("User not found"));
-
-        modelMapper.map(userRequest, user);
-        userRepository.save(user);
-    }
-
-    public void deleteUser(Integer id) {
+    public void deleteUserById(Integer id) throws CustomRuntimeException {
         userRepository.deleteById(id);
     }
 }
