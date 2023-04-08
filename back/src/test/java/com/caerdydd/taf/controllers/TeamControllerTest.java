@@ -310,7 +310,7 @@ public class TeamControllerTest {
 
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
-        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+        assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
     }
 
     @Test

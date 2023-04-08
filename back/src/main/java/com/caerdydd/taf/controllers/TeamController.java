@@ -85,7 +85,7 @@ public class TeamController {
             case CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER:
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             case CustomRuntimeException.USER_ALREADY_IN_A_TEAM:
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.USER_NOT_FOUND:
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case CustomRuntimeException.TEAM_NOT_FOUND:
