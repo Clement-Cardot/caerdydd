@@ -59,7 +59,7 @@ public class UserController {
     @PostMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable Integer id, @RequestBody UserDTO userDto) {
         try {
-            userService.updateUser(userDto);
+            userService.saveUser(userDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
