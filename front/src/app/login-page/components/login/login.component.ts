@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LogInService } from '../../services/log-in.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit  {
 
   constructor(private router: Router,
     private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
     private logInService: LogInService) {
   }
 
@@ -32,6 +33,9 @@ export class LoginComponent implements OnInit  {
     this.loginForm  =  this.formBuilder.group({
       username: this.usernameFormControl,
       password: this.passwordFormControl
+    });
+    this.activatedRoute.url.subscribe(url => {
+      console.log(url)
     });
   }
 
@@ -41,7 +45,8 @@ export class LoginComponent implements OnInit  {
     } else {
       this.logInService.signIn(this.loginForm.value).subscribe(data => {
           if(data) {
-            this.router.navigateByUrl("accueil");
+            this.router.navigateByUrl("dashboard");
+            console.log("twd");
           } else {
             this.router.navigateByUrl("error");
           }

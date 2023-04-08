@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
+import { CoreServiceService } from './core/services/core-service.service';
 
 @Component({
   selector: 'app-root',
@@ -9,21 +10,27 @@ import { filter, map } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   title = 'TAF';
-  login = false;
 
-  constructor(private router: Router) {
-    router.events.pipe(
-      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
-      map(e => {
-        console.log(e);
-      })
-    );
+  constructor(private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private coreService: CoreServiceService) {}
+
+  ngOnInit(): void {
+    if(this.router.url === "/") {
+      this.coreService.setLoginTrue();
+    }
+    console.log(this.router.url);
+    this.isOnLoginPage();
+    console.log(this.coreService.getLogin());
   }
 
-  ngOnInit() {
+  public getLoginStatut(): boolean {
+    return this.coreService.getLogin();
+  }
 
-    if(this.router.url === "/") {
-      this.login = true;
-    }
+  private isOnLoginPage(): void {
+    
+    // console.log(this.activatedRoute.snapshot.paramMap.get('url'));
+
   }
 }

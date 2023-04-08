@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { MockComponents } from 'ng-mocks';
+import { LoginComponent } from './login-page/components/login/login.component';
+import { SidenavComponent } from './sidenav/components/sidenav/sidenav.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -9,7 +12,11 @@ describe('AppComponent', () => {
         RouterTestingModule
       ],
       declarations: [
-        AppComponent
+        AppComponent,
+        MockComponents(
+          LoginComponent,
+          SidenavComponent
+        )
       ],
     }).compileComponents();
   });
@@ -20,16 +27,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'Front'`, () => {
+  it(`should have as title 'TAF'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('Front');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('Front app is running!');
+    expect(app.title).toEqual('TAF');
   });
 });
