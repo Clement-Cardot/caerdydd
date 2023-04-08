@@ -9,9 +9,13 @@ import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
 import {TeamsPageModule } from './teams-page/teams-page.module';
+import { UserDataService } from './data/user-data.service';
 @NgModule({
   declarations: [
     AppComponent
+  ],
+  providers: [
+    UserDataService,
   ],
   imports: [
     CoreModule,

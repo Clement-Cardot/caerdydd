@@ -1,2 +1,3 @@
-<app-team-list [team_list]="team1"></app-team-list>
-<app-team-list [team_list]="team2"></app-team-list>
+<div class="twoColumnDisplay">
+    <app-team-list *ngFor="let team of teams" [team]="team"></app-team-list>
+</div>
