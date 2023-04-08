@@ -16,8 +16,16 @@ echo "Step 3 --> Build Docker Image"
 cd ../
 docker build -t taf .
 
-# 4. Run Docker Image
-echo "Step 4 --> Run Docker Image"
+# 4. Run Docker Image (Database)
+echo "Step 4 --> Run Docker Image (Database)"
+docker rm -f taf-db
+docker run --name taf-db -d -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ProjetGL mariadb:10.5.18
+sleep 15
+echo "Run SQL Script"
+docker exec -i taf-db mysql -uroot -proot ProjetGL < ./doc/tablesBdd.sql
+
+# 4. Run Docker Image (WEB)
+echo "Step 4 --> Run Docker Image (WEB)"
 docker rm -f taf
 docker run --name taf -it -p 8080:8080 taf
 

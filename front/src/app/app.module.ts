@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
 import { SidenavModule } from './sidenav/sidenav.module';
-
+import {TeamsPageModule } from './teams-page/teams-page.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -21,7 +21,8 @@ import { SidenavModule } from './sidenav/sidenav.module';
     HttpClientModule,
     BrowserAnimationsModule,
     LoginPageModule,
-    SidenavModule
+    SidenavModule,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent]
 })
