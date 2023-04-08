@@ -1,31 +1,35 @@
 import { Injectable } from '@angular/core';
 import { UserLogIn } from '../models/user-log-in.model';
-import { sha256 } from 'js-sha256';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LogInService {
 
+
   constructor(private _http: HttpClient) { }
 
-  public getLoginValidation(userInfo: UserLogIn) {
-    return this._http.get<boolean>('http://localhost:4200/api/login?username=' + userInfo.username + '&password=' + userInfo.password);
+  public getLoginValidation(userInfo: UserLogIn): Observable<boolean> {
+    // const body = { login: userInfo.login, password: userInfo.password };
+    return this._http.post<boolean>('http://localhost:4200/api/auth/login', userInfo)
+    .pipe(
+      catchError(this.handleError)
+    );
   }
 
-  public signIn(userInfo: UserLogIn): Observable<boolean> {
-    console.log(userInfo);
-    userInfo.password = this.hashString(userInfo.password);
-    console.log(userInfo.password);
-    return this.getLoginValidation(userInfo);
-  }
-
-  private hashString(stringToHash: string): string {
-    for (let i = 1; i < 3; i++) {
-      stringToHash = sha256(stringToHash);
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
     }
-    return stringToHash;
+    // Return an observable with a user-facing error message.
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 }

@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit  {
 
   ngOnInit() {
     this.loginForm  =  this.formBuilder.group({
-      username: this.usernameFormControl,
+      login: this.usernameFormControl,
       password: this.passwordFormControl
     });
   }
@@ -39,12 +39,12 @@ export class LoginComponent implements OnInit  {
     if(this.loginForm.invalid){
       return;
     } else {
-      this.logInService.signIn(this.loginForm.value).subscribe(data => {
-          if(data) {
-            this.router.navigateByUrl("accueil");
-          } else {
+      this.logInService.getLoginValidation(this.loginForm.value).subscribe(data => {
+        if(data) {
+          this.router.navigateByUrl("teams");
+        } else {
             this.router.navigateByUrl("error");
-          }
+        }
       });
     }
   }
