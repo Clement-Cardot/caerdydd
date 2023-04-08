@@ -1,7 +1,6 @@
 package com.caerdydd.taf.services;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -64,8 +63,36 @@ public class UserService {
 
     public UserDTO saveUser(UserDTO user) throws CustomRuntimeException {
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+        
+        Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
+        if (optionalUser.isPresent()){
+            throw new CustomRuntimeException(CustomRuntimeException.USER_ALREADY_EXISTS);
+        }
 
-        UserEntity response = userRepository.save(userEntity);
+        UserEntity response = null;
+        try {
+            response = userRepository.save(userEntity);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+
+        return modelMapper.map(response, UserDTO.class);
+    }
+
+    public UserDTO updateUser(UserDTO user) throws CustomRuntimeException {
+        UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+        
+        Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
+        if (optionalUser.isEmpty()){
+            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
+        }
+
+        UserEntity response = null;
+        try {
+            response = userRepository.save(userEntity);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
 
         return modelMapper.map(response, UserDTO.class);
     }

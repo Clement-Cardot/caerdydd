@@ -29,7 +29,10 @@ public class UserController {
             List<UserDTO> users = userService.listAllUsers();
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -42,7 +45,10 @@ public class UserController {
             if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -51,21 +57,30 @@ public class UserController {
         try {
             userService.saveUser(userDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.USER_ALREADY_EXISTS)) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@PathVariable Integer id, @RequestBody UserDTO userDto) {
+    @PostMapping("")
+    public ResponseEntity<HttpStatus> update(@RequestBody UserDTO userDto) {
         try {
-            userService.saveUser(userDto);
+            userService.updateUser(userDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }        
     }
 }
