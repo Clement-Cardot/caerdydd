@@ -1,8 +1,9 @@
 import { UserDataService } from './core/services/user-data.service';
 import { ApiUserService } from './core/services/api-user.service';
 import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
+import { CoreServiceService } from './core/services/core-service.service';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +12,8 @@ import { filter, map } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   title = 'TAF';
-  login = false;
 
-  constructor(private router: Router, private userDataService: UserDataService, private apiUserService: ApiUserService) {
+  constructor(private router: Router, private coreService: CoreServiceService, private activatedRoute: ActivatedRoute, private userDataService: UserDataService, private apiUserService: ApiUserService) {
     router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       map(e => {
@@ -22,12 +22,10 @@ export class AppComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
+  ngOnInit(): void {}
 
-    if(this.router.url === "/") {
-      this.login = true;
-    }
-    this.refreshCurrentUser();
+  public getLoginStatut(): boolean {
+    return this.coreService.getLogin();
   }
 
   refreshCurrentUser() {
