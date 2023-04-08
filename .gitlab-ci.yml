@@ -59,6 +59,8 @@ junit-test:
   artifacts:
     reports:
       junit: back/target/surefire-reports/TEST*.xml
+    paths:
+      - back/target/site/jacoco
   cache:
     paths:
       - .m2/repository
