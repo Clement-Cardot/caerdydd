@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
@@ -39,6 +40,9 @@ class TeamServiceTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private RoleService roleService;
 
     @Spy
     private ModelMapper modelMapper;
@@ -200,7 +204,7 @@ class TeamServiceTest {
         mockedUser.setRoleEntities(new ArrayList<RoleDTO>());
         mockedUser.getRoleEntities().add(mockedRole);
         when(userService.getUserById(1)).thenReturn(mockedUser);
-        when(userService.saveUser(any(UserDTO.class))).then(AdditionalAnswers.returnsFirstArg());
+        when(userService.updateUser(any(UserDTO.class))).then(AdditionalAnswers.returnsFirstArg());
 
         // Mock teamRepository.findById() method
         Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(1, "Team A"));
@@ -208,6 +212,9 @@ class TeamServiceTest {
 
         // Mock Securityconfig.checkCurrentUser() method
         when(securityConfig.checkCurrentUser(1)).thenReturn(true);
+
+        // Mock roleService.deleteRole() method
+        Mockito.doNothing().when(roleService).deleteRole(any(RoleDTO.class));
 
         // Define the expected answer
         UserDTO expectedAnswer = mockedUser;
@@ -224,7 +231,8 @@ class TeamServiceTest {
 
         // Verify the result
         verify(userService, times(1)).getUserById(1);
-        verify(userService, times(1)).saveUser(any(UserDTO.class));
+        verify(userService, times(1)).updateUser(any(UserDTO.class));
+        verify(roleService, times(1)).deleteRole(any(RoleDTO.class));
         verify(teamRepository, times(1)).findById(1);
         verify(securityConfig, times(1)).checkCurrentUser(1);
 
@@ -232,7 +240,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_AlreadyTeamMember() throws CustomRuntimeException {
+    public void applyInATeamTest_UserIsNotAStudent() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -244,7 +252,7 @@ class TeamServiceTest {
 
         RoleDTO mockedRole = new RoleDTO();
         mockedRole.setIdRole(1);
-        mockedRole.setRole("TEAM_MEMBER_ROLE");
+        mockedRole.setRole(RoleDTO.TEAM_MEMBER_ROLE);
         mockedRole.setUser(mockedUser);
 
         TeamMemberDTO mockedTeamMember = new TeamMemberDTO();
@@ -260,9 +268,6 @@ class TeamServiceTest {
         // Mock teamRepository.findById() method
         Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(1, "Team A"));
         when(teamRepository.findById(1)).thenReturn(mockedAnswer);
-
-        // Mock Securityconfig.checkCurrentUser() method
-        when(securityConfig.checkCurrentUser(1)).thenReturn(true);
         
         // Call the method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
@@ -270,11 +275,11 @@ class TeamServiceTest {
         });
 
         // Verify the result
+        assertEquals(CustomRuntimeException.USER_IS_NOT_A_STUDENT, exception.getMessage());
         verify(userService, times(1)).getUserById(1);
         verify(userService, times(0)).saveUser(any(UserDTO.class));
         verify(teamRepository, times(1)).findById(1);
-        verify(securityConfig, times(1)).checkCurrentUser(1);
-        assertEquals(CustomRuntimeException.USER_ALREADY_IN_A_TEAM, exception.getMessage());
+        verify(securityConfig, times(0)).checkCurrentUser(1);
     }
 
     @Test
