@@ -7,16 +7,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.security.jwt.AuthEntryPointJwt;
+import com.caerdydd.taf.security.jwt.AuthTokenFilter;
 import com.caerdydd.taf.services.UserService;
 
 
@@ -31,7 +34,28 @@ public class SecurityConfig{
     DataSource dataSource;
 
     @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+
+    @Autowired
+    CustomUserDetailService userDetailsService;
+
+    @Autowired
     UserService userService;
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return authProvider;
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -39,44 +63,23 @@ public class SecurityConfig{
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
-        return new CustomUserDetailService();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
-    @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder.authenticationProvider(authProvider());
-        return builder.build();
+    public AuthenticationManager authManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // .authenticationProvider(authProvider())
                 .cors().and().csrf().disable()
-                .authorizeRequests().antMatchers("**/error").permitAll()
-                .antMatchers("/api/auth/login").permitAll()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
+
+                .and().authenticationProvider(authenticationProvider())
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 
-                // .antMatchers("/api/student/**").hasAuthority("STUDENT_ROLE")
-                // .antMatchers("/api/team_member/**").hasAuthority("TEAM_MEMBER_ROLE")
-                // .antMatchers("/api/teaching_staff/**").hasAuthority("TEACHING_STAFF_ROLE")
-                // .antMatchers("/api/option_leader/**").hasAuthority("OPTION_LEADER_ROLE"
-
-                .anyRequest().permitAll()
-
-                .and()
-                .formLogin().loginPage("/api/auth").permitAll()
-                .and().httpBasic()
-                .and().build();
+                .build();
     }
 
     public Boolean checkCurrentUser(Integer id) throws CustomRuntimeException{
