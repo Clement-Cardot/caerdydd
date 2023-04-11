@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs/internal/Observable";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
 import { Team, TeamAdapter } from "../data/models/team.model";
+import { User, UserAdapter } from "../data/models/user.model";
 
 @Injectable({
     providedIn: "root"
@@ -12,22 +13,40 @@ import { Team, TeamAdapter } from "../data/models/team.model";
 export class ApiTeamService {
     private baseUrl = "http://localhost:4200/api/teams";
 
-    constructor(private http: HttpClient, private adapter: TeamAdapter) {
+    constructor(
+        private http: HttpClient, 
+        private teamAdapter: TeamAdapter, 
+        private userAdapter: UserAdapter
+        ) {
     }
     
     getAllTeams(): Observable<Team[]> {	
         return this.http.get<any[]>(this.baseUrl)
         .pipe(
-            map((data: any[]) => data.map((item) => this.adapter.adapt(item)))
+            map((data: any[]) => data.map((item) => this.teamAdapter.adapt(item)))
         )
         .pipe(
             catchError(this.handleError)
         );
     }
 
-    applyForTeam(teamId: number, userId: number): Observable<any> {
+    getTeam(teamId: number): Observable<Team> {
+        const url = `${this.baseUrl}/${teamId}`;
+        return this.http.get<any>(url)
+        .pipe(
+            map((data: any) => this.teamAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    applyForTeam(teamId: number, userId: number): Observable<User> {
         const url = `${this.baseUrl}/${teamId}/${userId}`;	
         return this.http.put(url, {})
+        .pipe(
+            map((data: any) => this.userAdapter.adapt(data))
+        )
         .pipe(
             catchError(this.handleError)
         );
