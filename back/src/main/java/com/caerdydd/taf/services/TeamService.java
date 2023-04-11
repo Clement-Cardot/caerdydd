@@ -94,7 +94,7 @@ public class TeamService {
 
         // Check if the current user is the same as the user to update
         if(Boolean.FALSE.equals(securityConfig.checkCurrentUser(idUser))){
-            logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} for user {}", securityConfig.getCurrentUser().getId(), idTeam, idUser);
+            logger.warn("ILLEGAL API USE : Current user is not Request User");
             throw new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER);
         }
 

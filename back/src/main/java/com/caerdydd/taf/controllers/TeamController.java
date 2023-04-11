@@ -10,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeamService;
 
@@ -29,6 +31,7 @@ public class TeamController {
     
     @GetMapping("")
     public ResponseEntity<List<TeamDTO>> getAllTeams() {
+        logger.info("Process request : Get all teams");
         try {
             List<TeamDTO> users = teamService.listAllTeams();
             return new ResponseEntity<>(users, HttpStatus.OK);
@@ -43,6 +46,7 @@ public class TeamController {
 
     @GetMapping("/{idTeam}")
     public ResponseEntity<TeamDTO> getTeamById(@PathVariable Integer idTeam) {
+        logger.info("Process request : Get team by id : {}", idTeam);
         try {
             TeamDTO user = teamService.getTeamById(idTeam);
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -60,6 +64,7 @@ public class TeamController {
 
     @GetMapping("/{idTeam}/teamMembers")
     public ResponseEntity<List<TeamMemberDTO>> getAllTeamMembersOfTeamById(@PathVariable Integer idTeam) {
+        logger.info("Process request : Get all members of team by id : {}", idTeam);
         try {
             List<TeamMemberDTO> teamMembers = teamService.getTeamById(idTeam).getTeamMembers();
             return new ResponseEntity<>(teamMembers, HttpStatus.OK);
@@ -76,10 +81,11 @@ public class TeamController {
     }
 
     @PutMapping("/{idTeam}/{idUser}")
-    public ResponseEntity<HttpStatus> applyInATeam(@PathVariable Integer idTeam, @PathVariable Integer idUser) {
+    public ResponseEntity<UserDTO> applyInATeam(@PathVariable Integer idTeam, @PathVariable Integer idUser) {
+        logger.info("Process request : Apply in team: {} with user {}", idTeam, idUser);
         try {
-            teamService.applyInATeam(idTeam, idUser);
-            return new ResponseEntity<>(HttpStatus.OK);
+            UserDTO updatedUser = teamService.applyInATeam(idTeam, idUser);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
             case CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER:
@@ -87,8 +93,10 @@ public class TeamController {
             case CustomRuntimeException.USER_ALREADY_IN_A_TEAM:
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.USER_NOT_FOUND:
+                logger.warn("User not found", e);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case CustomRuntimeException.TEAM_NOT_FOUND:
+                logger.warn("Team not found", e);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case CustomRuntimeException.SERVICE_ERROR:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
