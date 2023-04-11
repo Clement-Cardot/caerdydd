@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -28,18 +29,18 @@ public class TeamEntity {
     private String filePathFinalScopeStatement;
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
-    private Integer idProjectDev;
-    private Integer idProjectValidation;
 
     @OneToMany
     @JoinColumn(name = "id_team")
     List<TeamMemberEntity> teamMembers;
 
-    // @OneToOne
-    // private ProjectEntity projectDev;
+    @OneToOne
+    @JoinColumn(name = "id_project_dev")
+    private ProjectEntity projectDev;
 
-    // @OneToOne
-    // private ProjectEntity projectValidation;
+    @OneToOne
+    @JoinColumn(name = "id_project_validation")
+    private ProjectEntity projectValidation;
 
     public TeamEntity() {
     }
@@ -51,7 +52,7 @@ public class TeamEntity {
 
     public TeamEntity(Integer idTeam, String name, Integer teamWorkMark, Integer teamValidationMark, String testBookLink,
             String filePathScopeStatement, String filePathFinalScopeStatement, String filePathScopeStatementAnalysis,
-            String filePathReport, Integer idProjectDev, Integer idProjectValidation) {
+            String filePathReport, ProjectEntity projectDev, ProjectEntity projectValidation) {
 
         this.idTeam = idTeam;
         this.name = name;
@@ -62,8 +63,8 @@ public class TeamEntity {
         this.filePathFinalScopeStatement = filePathFinalScopeStatement;
         this.filePathScopeStatementAnalysis = filePathScopeStatementAnalysis;
         this.filePathReport = filePathReport;
-        this.idProjectDev = idProjectDev;
-        this.idProjectValidation = idProjectValidation;
+        this.projectDev=projectDev;
+        this.projectValidation=projectValidation;
     }
 
 }

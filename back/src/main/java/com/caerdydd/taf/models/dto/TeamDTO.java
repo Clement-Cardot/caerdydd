@@ -2,6 +2,8 @@ package com.caerdydd.taf.models.dto;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
+
+import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -22,10 +24,14 @@ public class TeamDTO {
     private String filePathFinalScopeStatement;
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
-    private Integer idProjectDev;
-    private Integer idProjectValidation;
 
     @JsonManagedReference
     List<TeamMemberDTO> teamMembers;
+
+    @JsonManagedReference
+    private ProjectEntity projectDev;
+
+    @JsonManagedReference
+    private ProjectEntity projectValidation;
 
 }
