@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.LoginService;
 
 @RestController
@@ -24,11 +25,18 @@ public class LoginController {
     LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> processLogin(@RequestBody UserDTO requestUser) {
+    public ResponseEntity<UserDTO> processLogin(@RequestBody UserDTO requestUser) {
         logger.info("processLogin() - {}", requestUser.getLogin());
-        Boolean result = loginService.login(requestUser.getLogin(), requestUser.getPassword());
+        UserDTO result = null;
+        try {
+            result = loginService.login(requestUser.getLogin(), requestUser.getPassword());
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
         logger.info("processLogin() result : {}", result);
-        if (Boolean.TRUE.equals(result)) {
+        if (result != null) {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);

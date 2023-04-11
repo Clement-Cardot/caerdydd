@@ -25,7 +25,7 @@ public class UserDTO {
     private String speciality;
 
     @JsonManagedReference
-    private List<RoleDTO> roleEntities;
+    private List<RoleDTO> roles;
 
     @JsonBackReference
     private TeamMemberDTO teamMember;

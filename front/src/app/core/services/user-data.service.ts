@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { User } from "./models/user.model";
-import { Team } from "./models/team.model";
-import { TeamMembers } from "./models/team-members.model";
+import { User } from "../data/models/user.model";
+import { Team } from "../data/models/team.model";
+import { TeamMember } from "../data/models/team-member.model";
 
 @Injectable()
 export class UserDataService {
-    private currentUser: User = new User(1, "jean", "dupont", "jdupont", "mdp", "jdupont@reseau.eseo.fr", "LD", ["STUDENT_ROLE"]);
+    private currentUser!: User;
     private users!: User[];
     private teams!: Team[];
 
@@ -34,7 +34,7 @@ export class UserDataService {
         this.teams = teams;
     }
 
-    public getTeamMembersOfTeam(idTeam: number): TeamMembers[] {
+    public getTeamMembersOfTeam(idTeam: number): TeamMember[] {
         return this.teams.find(team => team.idTeam === idTeam)!.teamMembers;
     }
 }

@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { UserDataService } from 'src/app/data/user-data.service';
-import { TeamMembers } from 'src/app/data/models/team-members.model';
-import { Team } from 'src/app/data/models/team.model';
+import { UserDataService } from 'src/app/core/services/user-data.service';
+import { Team } from 'src/app/core/data/models/team.model';
+import { ApiTeamService } from 'src/app/core/services/api-team.service';
 
 @Component({
   selector: 'app-team-list',
@@ -14,25 +13,22 @@ export class TeamListComponent {
   @Input() team!: Team;
   displayedColumns: string[] = ['id', 'name', 'surname', 'speciality'];
 
-  constructor(private http: HttpClient, public userDataService: UserDataService) {  }
+  constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {  }
 
   applyInTeam(idTeam: number) {
-    let idUser = this.userDataService.getCurrentUser().id;
-    const url = "http://localhost:4200/api/teams/"+ idTeam +"/" + idUser
-    this.http.put(url, null).subscribe((res) => {
-
-      this.http.get("http://localhost:4200/api/teams/" + idTeam + "/teamMembers").subscribe((res) => {
-        console.log(this.team.teamMembers);
-        this.team.teamMembers = res as TeamMembers[];
-        console.log(this.team.teamMembers);
-      });
-
+    this.apiTeamService.applyForTeam(idTeam, this.userDataService.getCurrentUser().id).subscribe((res) => {
+      console.log(res);
     });
   }
 
   isCurrentUserAStudent() {
-    return this.userDataService.getCurrentUser().roles.includes("STUDENT_ROLE");
+    let isStudent = false;
+    this.userDataService.getCurrentUser().roles.forEach(role => {
+      if(role.role == "STUDENT_ROLE"){
+        console.log("User is Student");
+        isStudent = true;
+      }
+    });
+    return isStudent;
   }
-
-
 }

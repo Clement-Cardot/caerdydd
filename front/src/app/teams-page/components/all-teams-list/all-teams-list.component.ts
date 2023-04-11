@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { UserDataService } from 'src/app/data/user-data.service';
-import { Team } from 'src/app/data/models/team.model';
+import { UserDataService } from 'src/app/core/services/user-data.service';
+import { ApiTeamService } from 'src/app/core/services/api-team.service';
+import { Team } from 'src/app/core/data/models/team.model';
 
 
 
@@ -13,15 +13,15 @@ import { Team } from 'src/app/data/models/team.model';
 
 export class AllTeamsListComponent{
   teams!: Team[];
-  constructor(private http: HttpClient, public userDataService: UserDataService) { 
+  constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) { 
     this.getData();
   }
 
   getData(){
-    const url = "http://localhost:4200/api/teams";
-    this.http.get(url).subscribe((res) => {
-      this.teams = res as Team[];
-      this.userDataService.setTeams(this.teams);
-    });
+    this.apiTeamService.getAllTeams()
+          .subscribe(data => {
+            this.teams = data;
+          }
+        );
   }
 }

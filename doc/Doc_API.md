@@ -34,7 +34,7 @@ HTTP Status = **OK**
         "password": "$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q",
         "email": "jean.dupont@reseau.eseo.fr",
         "speciality": "LD",
-        "roleEntities": [
+        "Roles": [
             {
                 "idRole": 9,
                 "role": "TEAM_MEMBER_ROLE"
@@ -63,7 +63,7 @@ HTTP Status = **OK**
     "password": "$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q",
     "email": "jean.dupont@reseau.eseo.fr",
     "speciality": "LD",
-    "roleEntities": [
+    "roles": [
         {
             "idRole": 9,
             "role": "TEAM_MEMBER_ROLE"
@@ -90,7 +90,7 @@ Body :
     "password": "$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q",
     "email": "jean.dupont@reseau.eseo.fr",
     "speciality": "LD",
-    "roleEntities": [
+    "roles": [
         {
             "idRole": 9,
             "role": "TEAM_MEMBER_ROLE"
@@ -117,7 +117,7 @@ Body :
     "password": "$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q",
     "email": "jean.dupont@reseau.eseo.fr",
     "speciality": "LD",
-    "roleEntities": [
+    "roles": [
         {
             "idRole": 9,
             "role": "TEAM_MEMBER_ROLE"
@@ -163,7 +163,7 @@ HTTP STATUS = **OK**
                     "password": "$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q",
                     "email": "jean.dupont@reseau.eseo.fr",
                     "speciality": "LD",
-                    "roleEntities": [
+                    "roles": [
                         {
                             "idRole": 9,
                             "role": "TEAM_MEMBER_ROLE"
@@ -211,7 +211,7 @@ HTTP STATUS = **OK**
                 "password": "$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q",
                 "email": "jean.dupont@reseau.eseo.fr",
                 "speciality": "LD",
-                "roleEntities": [
+                "roles": [
                     {
                         "idRole": 9,
                         "role": "TEAM_MEMBER_ROLE"
@@ -249,7 +249,7 @@ HTTP STATUS : **OK**
             "password": "$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q",
             "email": "jean.dupont@reseau.eseo.fr",
             "speciality": "LD",
-            "roleEntities": [
+            "roles": [
                 {
                     "idRole": 9,
                     "role": "TEAM_MEMBER_ROLE"

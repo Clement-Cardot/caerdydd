@@ -32,7 +32,7 @@ public class UserEntity {
     private String speciality;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<RoleEntity> roleEntities;
+    private List<RoleEntity> roles;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn

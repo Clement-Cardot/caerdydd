@@ -26,10 +26,10 @@ public class CustomUserDetailService implements UserDetailsService{
             user = userService.getUserByLogin(login);
             return User.withUsername(login)
                     .password(user.getPassword())
-                    .authorities(user.getRoleEntities().stream().map(r -> r.getRole()).toArray(String[]::new))
+                    .authorities(user.getRoles().stream().map(r -> r.getRole()).toArray(String[]::new))
                     .build();
         } catch (CustomRuntimeException e) {
-            logger.error("User not found");
+            logger.error(e);
             return null;
         }
     }

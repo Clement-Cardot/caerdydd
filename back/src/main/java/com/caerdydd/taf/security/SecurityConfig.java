@@ -64,20 +64,17 @@ public class SecurityConfig{
                 // .authenticationProvider(authProvider())
                 .cors().and().csrf().disable()
                 .authorizeRequests().antMatchers("**/error").permitAll()
+                .antMatchers("/api/auth/login").permitAll()
                 
                 // .antMatchers("/api/student/**").hasAuthority("STUDENT_ROLE")
                 // .antMatchers("/api/team_member/**").hasAuthority("TEAM_MEMBER_ROLE")
                 // .antMatchers("/api/teaching_staff/**").hasAuthority("TEACHING_STAFF_ROLE")
-                // .antMatchers("/api/option_leader/**").hasAuthority("OPTION_LEADER_ROLE")
-
-                // TO ENABLE AUTHENTICATION : UNCOMMENT THE LINES ABOVE AND COMMENT THE LINE BELOW
+                // .antMatchers("/api/option_leader/**").hasAuthority("OPTION_LEADER_ROLE"
 
                 .anyRequest().permitAll()
 
                 .and()
-                .formLogin()
-                .loginPage("/api/auth")
-                .permitAll()
+                .formLogin().loginPage("/api/auth").permitAll()
                 .and().httpBasic()
                 .and().build();
     }

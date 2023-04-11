@@ -201,8 +201,8 @@ class TeamServiceTest {
         mockedRole.setRole("STUDENT_ROLE");
         mockedRole.setUser(mockedUser);
 
-        mockedUser.setRoleEntities(new ArrayList<RoleDTO>());
-        mockedUser.getRoleEntities().add(mockedRole);
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
         when(userService.getUserById(1)).thenReturn(mockedUser);
         when(userService.updateUser(any(UserDTO.class))).then(AdditionalAnswers.returnsFirstArg());
 
@@ -259,8 +259,8 @@ class TeamServiceTest {
         mockedTeamMember.setUser(mockedUser);
         mockedTeamMember.setTeam(new TeamDTO(1, "Team A"));
 
-        mockedUser.setRoleEntities(new ArrayList<RoleDTO>());
-        mockedUser.getRoleEntities().add(mockedRole);
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
         mockedUser.setTeamMember(mockedTeamMember);
 
         when(userService.getUserById(1)).thenReturn(mockedUser);
@@ -320,8 +320,8 @@ class TeamServiceTest {
         mockedTeamMember.setUser(mockedUser);
         mockedTeamMember.setTeam(new TeamDTO(1, "Team A"));
 
-        mockedUser.setRoleEntities(new ArrayList<RoleDTO>());
-        mockedUser.getRoleEntities().add(mockedRole);
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
         mockedUser.setTeamMember(mockedTeamMember);
 
         when(userService.getUserById(1)).thenReturn(mockedUser);
@@ -362,8 +362,8 @@ class TeamServiceTest {
         mockedTeamMember.setUser(mockedUser);
         mockedTeamMember.setTeam(new TeamDTO(1, "Team A"));
 
-        mockedUser.setRoleEntities(new ArrayList<RoleDTO>());
-        mockedUser.getRoleEntities().add(mockedRole);
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
         mockedUser.setTeamMember(mockedTeamMember);
 
         when(userService.getUserById(1)).thenReturn(mockedUser);

@@ -87,7 +87,7 @@ public class TeamService {
         }
 
         // Check if the user is a Student
-        if(user.getRoleEntities().stream().noneMatch(role -> role.getRole().equals(RoleDTO.STUDENT_ROLE))){
+        if(user.getRoles().stream().noneMatch(role -> role.getRole().equals(RoleDTO.STUDENT_ROLE))){
             logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} but is not a student", idUser, idTeam);
             throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_STUDENT);
         }
@@ -111,15 +111,15 @@ public class TeamService {
 
         logger.info("Create a new Role 'TeamMember' and delete role 'Student' link to User {}", idUser);
         // Get the role equal to STUDENT_ROLE and delete it
-        Optional<RoleDTO> roleToRemove = user.getRoleEntities().stream().filter(role -> role.getRole().equals(RoleDTO.STUDENT_ROLE)).findFirst();
+        Optional<RoleDTO> roleToRemove = user.getRoles().stream().filter(role -> role.getRole().equals(RoleDTO.STUDENT_ROLE)).findFirst();
         if (roleToRemove.isPresent()){
-            user.getRoleEntities().remove(roleToRemove.get());
+            user.getRoles().remove(roleToRemove.get());
         } else {
             logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} but is not a student", idUser, idTeam);
             throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_STUDENT);
         }
         // Add the new role
-        user.getRoleEntities().add(newRole);
+        user.getRoles().add(newRole);
 
         // Set team member entity
         user.setTeamMember(teamMember);
