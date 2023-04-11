@@ -81,6 +81,7 @@ quality-dev:
       - .m2/repository
   only:
     - dev
+    - sonar_coverage_config
   
 quality-prod:
   stage: sonar
