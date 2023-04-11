@@ -10,6 +10,7 @@ export class User {
         public login: string,
         public password: string,
         public email: string,
+        public speciality: string,
         public roles: Role[]
     ) { }
 }
@@ -34,6 +35,7 @@ export class UserAdapter implements Adapter<User> {
             item.login,
             item.password,
             item.email,
+            item.speciality,
             roleList
         );
     }
