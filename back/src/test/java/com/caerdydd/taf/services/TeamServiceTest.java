@@ -374,10 +374,6 @@ class TeamServiceTest {
 
         // Mock Securityconfig.checkCurrentUser() method
         when(securityConfig.checkCurrentUser(1)).thenReturn(false);
-        // Mock Securityconfig.getCurrentUser() method
-        UserDTO mockedCurrentUser = new UserDTO();
-        mockedCurrentUser.setId(2);
-        when(securityConfig.getCurrentUser()).thenReturn(mockedCurrentUser);
         
         // Call the method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {

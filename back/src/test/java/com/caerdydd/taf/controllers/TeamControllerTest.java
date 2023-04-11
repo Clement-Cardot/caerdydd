@@ -264,14 +264,14 @@ public class TeamControllerTest {
     @Test
     void testApplyInATeam_Nominal() throws CustomRuntimeException {
         // Mock teamService.applyInATeam() method
-        when(teamService.applyInATeam(1, 1)).thenReturn(null);
-
+        UserDTO mockedAnswer = new UserDTO(1, "Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
+        when(teamService.applyInATeam(1, 1)).thenReturn(mockedAnswer);
         // Call the method to test
-        ResponseEntity<HttpStatus> result = teamController.applyInATeam(1, 1);
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
 
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(mockedAnswer.toString(), result.getBody().toString());
     }
 
     @Test
@@ -280,7 +280,7 @@ public class TeamControllerTest {
         when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
 
         // Call the method to test
-        ResponseEntity<HttpStatus> result = teamController.applyInATeam(1, 1);
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
 
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
@@ -293,7 +293,7 @@ public class TeamControllerTest {
         when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
 
         // Call the method to test
-        ResponseEntity<HttpStatus> result = teamController.applyInATeam(1, 1);
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
 
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
@@ -306,7 +306,7 @@ public class TeamControllerTest {
         when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_ALREADY_IN_A_TEAM));
 
         // Call the method to test
-        ResponseEntity<HttpStatus> result = teamController.applyInATeam(1, 1);
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
 
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
@@ -319,7 +319,7 @@ public class TeamControllerTest {
         when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER));
 
         // Call the method to test
-        ResponseEntity<HttpStatus> result = teamController.applyInATeam(1, 1);
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
 
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
@@ -332,7 +332,7 @@ public class TeamControllerTest {
         when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
         // Call the method to test
-        ResponseEntity<HttpStatus> result = teamController.applyInATeam(1, 1);
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
 
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
@@ -345,7 +345,7 @@ public class TeamControllerTest {
         when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException("Unexpected error"));
 
         // Call the method to test
-        ResponseEntity<HttpStatus> result = teamController.applyInATeam(1, 1);
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
 
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
