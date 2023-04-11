@@ -1,4 +1,23 @@
-.teamTitle {
+.Title {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.Title *{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.TeamTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.TeamTitle p{
     font-size: 1.5rem;
     font-weight: 500;
     color: #000;
@@ -13,5 +32,5 @@
 }
 
 button {
-    width: 45%;
+    padding: 1.25rem;
 }

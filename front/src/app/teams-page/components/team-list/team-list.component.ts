@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { Team } from 'src/app/core/data/models/team.model';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
@@ -11,13 +11,16 @@ import { ApiTeamService } from 'src/app/core/services/api-team.service';
 
 export class TeamListComponent {
   @Input() team!: Team;
+  @Output() applyEvent = new EventEmitter<number>();
   displayedColumns: string[] = ['id', 'name', 'surname', 'speciality'];
 
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {  }
 
   applyInTeam(idTeam: number) {
-    this.apiTeamService.applyForTeam(idTeam, this.userDataService.getCurrentUser().id).subscribe((res) => {
-      console.log(res);
+    this.apiTeamService.applyForTeam(idTeam, this.userDataService.getCurrentUser().id).subscribe((response) => {
+      console.log(response);
+      this.userDataService.setCurrentUser(response);
+      this.update();
     });
   }
 
@@ -30,5 +33,9 @@ export class TeamListComponent {
       }
     });
     return isStudent;
+  }
+
+  update(){
+    this.applyEvent.emit(this.team.idTeam);
   }
 }

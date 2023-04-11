@@ -1,3 +1,3 @@
 <div class="twoColumnDisplay">
-    <app-team-list *ngFor="let team of teams" [team]="team"></app-team-list>
+    <app-team-list (applyEvent)='update($event)' *ngFor="let team of teams" [team]="team"></app-team-list>
 </div>

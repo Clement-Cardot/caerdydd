@@ -1,4 +1,12 @@
-<p class="teamTitle"> Équipe n°{{team.idTeam}} : {{team.name}} </p>
+<div class="Title">
+
+  <div class="TeamTitle">
+    <p> Équipe n°{{team.idTeam}} : </p>
+    <p> {{team.name}} </p>
+  </div>
+  
+  <button *ngIf="isCurrentUserAStudent()" (click)="applyInTeam(team.idTeam)" mat-raised-button color="primary" id="buttonJoinTeam">Rejoindre l'équipe</button>
+</div>
 <table mat-table [dataSource]="team.teamMembers" class="mat-elevation-z8">
 
     <!--- Note that these columns can be defined in any order.
@@ -31,4 +39,3 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <button *ngIf="isCurrentUserAStudent()" (click)="applyInTeam(team.idTeam)" mat-raised-button color="primary" id="buttonJoinTeam">Rejoindre l'équipe</button>
