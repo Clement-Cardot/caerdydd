@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.ProjectDTO;
 import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
@@ -34,6 +35,9 @@ public class TeamService {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -76,18 +80,21 @@ public class TeamService {
 
     public void createTeams(Integer nbTeams) throws CustomRuntimeException{
         if(nbTeams % 2 == 0) { 
+            ProjectDTO[] projects = projectService.createProjects(nbTeams);
             for (int i = 0; i < nbTeams; i++) {
                 TeamDTO team = new TeamDTO();
-                team.setName("Team " + i);
-                team.setIdProjectDev(i);
+                team.setName("Team " + i+1);
+                team.setProjectDev(projects[i]);
+                projects[i].setTeamDev(team);
                 if (i % 2 == 0) {
-                    team.setIdProjectValidation(i+2);
+                    team.setProjectValidation(projects[i+1]);
+                    projects[i+1].setTeamValidation(team);
                 }
                 else {
-                    team.setIdProjectValidation(i);
+                    team.setProjectValidation(projects[i-1]);
+                    projects[i-1].setTeamValidation(team);
                 }
                 saveTeam(team);
-                //TO-DO : création paires d'équipes
             }
         }
         else {

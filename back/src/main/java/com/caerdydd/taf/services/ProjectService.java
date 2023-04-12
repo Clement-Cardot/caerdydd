@@ -6,6 +6,8 @@ import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.caerdydd.taf.models.entities.TeamEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ public class ProjectService {
     @Autowired
     private TeamRepository teamRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
     
 
     @Transactional
@@ -42,5 +46,25 @@ public class ProjectService {
         projectRepository.save(projectEntity);
 
         return projectDTO;
+    }
+
+    public ProjectDTO saveProject(ProjectDTO project) {
+        ProjectEntity projectEntity = modelMapper.map(project, ProjectEntity.class);
+
+        ProjectEntity response = projectRepository.save(projectEntity);
+
+        return modelMapper.map(response, ProjectDTO.class);
+    }
+
+    public ProjectDTO[] createProjects(Integer nbProjects) {
+        ProjectDTO[] projects = new ProjectDTO[nbProjects];
+        for(int i = 0; i < nbProjects; i++) {
+            ProjectDTO project = new ProjectDTO();
+            project.setName("Project " + i+1);
+            project.setDescription("Description " + i+1);
+            project.setIsValidated(false);
+            projects[i] = saveProject(project);
+        }
+        return projects;
     }
 }

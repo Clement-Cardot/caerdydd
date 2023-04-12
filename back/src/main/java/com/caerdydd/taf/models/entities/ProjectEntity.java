@@ -1,6 +1,8 @@
 package com.caerdydd.taf.models.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -17,6 +19,7 @@ import lombok.Setter;
 public class ProjectEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProject;
     private String name;
     private String description;

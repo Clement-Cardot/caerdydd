@@ -14,6 +14,7 @@ public class ProjectDTO {
     private Integer idProject;
     private String name;
     private String description;
+    private Boolean isValidated;
 
     @JsonBackReference(value="projectDev")
     private TeamDTO teamDev;
