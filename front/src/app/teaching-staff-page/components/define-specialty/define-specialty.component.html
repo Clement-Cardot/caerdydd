@@ -1,49 +1,38 @@
-<p>define-specialty works!</p>
 <div>
-  <select [(ngModel)]="specialty1" class="form-control" id="DropdownOptions">
-    <option
-      *ngFor="let opt of ngOptions"
-      [selected]="opt === ngDropdown"
-      [value]="opt"
-    >
-      {{ opt }}
-    </option>
-  </select>
-  <button
-    *ngIf="afficheBouton"
-    (click)="afficherContenu()"
-    (click)="cacherBouton()"
-  >
-    +
-  </button>
-  <div *ngIf="afficheContenu">
-    <select [(ngModel)]="specialty2">
-      <option
-        *ngFor="let opt of ngOptions"
-        [selected]="opt === ngDropdown"
-        [value]="opt"
-      >
-        {{ opt }}
-      </option>
-    </select>
+  <mat-form-field>
+    <mat-select [(ngModel)]="specialty1" placeholder="Specialty 1">
+      <mat-option *ngFor="let opt of ngOptions" [value]="opt.value">
+        {{ opt.viewValue }}
+      </mat-option>
+    </mat-select>
     <button
-      *ngIf="afficheBouton2"
-      (click)="afficherContenu2()"
-      (click)="cacherBouton2()"
+      *ngIf="afficheBouton"
+      (click)="afficherContenu()"
+      (click)="cacherBouton()"
     >
       +
     </button>
-    <div *ngIf="afficheContenu2">
-      <select [(ngModel)]="specialty3">
-        <option
-          *ngFor="let opt of ngOptions"
-          [selected]="opt === ngDropdown"
-          [value]="opt"
-        >
-          {{ opt }}
-        </option>
-      </select>
+    <div *ngIf="afficheContenu">
+      <mat-select [(ngModel)]="specialty2" placeholder="Specialty 2">
+        <mat-option *ngFor="let opt of ngOptions" [value]="opt.value">
+          {{ opt.viewValue }}
+        </mat-option>
+      </mat-select>
+      <button
+        *ngIf="afficheBouton2"
+        (click)="afficherContenu2()"
+        (click)="cacherBouton2()"
+      >
+        +
+      </button>
+      <div *ngIf="afficheContenu2">
+        <mat-select [(ngModel)]="specialty3" placeholder="Specialty 3">
+          <mat-option *ngFor="let opt of ngOptions" [value]="opt.value">
+            {{ opt.viewValue }}
+          </mat-option>
+        </mat-select>
+      </div>
     </div>
-  </div>
+  </mat-form-field>
 </div>
 <button (click)="onSubmit()">Valider</button>

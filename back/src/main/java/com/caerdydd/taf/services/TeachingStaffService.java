@@ -72,7 +72,6 @@ public class TeachingStaffService {
     logger.info("Create specialty of User Teaching Staff {} : is_infrastructure_specialist", idUser);
     TeachingStaffDTO newSpecialty = new TeachingStaffDTO();
     newSpecialty.setIsInfrastructureSpecialist(1);
-    user.setTeachingStaff(newSpecialty);
   } catch(NoSuchElementException e){
     logger.warn("Wrong specialty selected : not infrastructure");
     throw new CustomRuntimeException("Wrong specialty selected : not infrastructure");
@@ -82,7 +81,6 @@ public class TeachingStaffService {
     logger.info("Create specialty of User Teaching Staff {} : is_development_specialist", idUser);
     TeachingStaffDTO newSpecialty = new TeachingStaffDTO();
     newSpecialty.setIsDevelopmentSpecialist(1);
-    user.setTeachingStaff(newSpecialty);
   } catch(NoSuchElementException e){
     logger.warn("Wrong specialty selected : not development");
     throw new CustomRuntimeException("Wrong specialty selected : not development");
@@ -92,7 +90,6 @@ public class TeachingStaffService {
     logger.info("Create specialty of User Teaching Staff {} : is_modeling_specialist", idUser);
     TeachingStaffDTO newSpecialty = new TeachingStaffDTO();
     newSpecialty.setIsModelingSpecialist(1);
-    user.setTeachingStaff(newSpecialty);
   } catch(NoSuchElementException e){
     logger.warn("Wrong specialty selected : not modeling");
     throw new CustomRuntimeException("Wrong specialty selected : not modeling");
