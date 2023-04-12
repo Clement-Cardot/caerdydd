@@ -35,6 +35,6 @@ import { SidenavModule } from './sidenav/sidenav.module';
     TeamsPageModule,
     SidenavModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

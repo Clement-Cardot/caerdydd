@@ -5,6 +5,7 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiAuthService } from 'src/app/core/services/api-auth.service';
 import { User } from 'src/app/core/data/models/user.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CoreServiceService } from 'src/app/core/services/core-service.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -29,17 +30,18 @@ export class LoginComponent implements OnInit  {
     private formBuilder: FormBuilder,
     private apiAuthService: ApiAuthService,
     private userDataService: UserDataService,
-    private activatedRoute: ActivatedRoute
-    ) {}
+    private activatedRoute: ActivatedRoute,
+    private coreService: CoreServiceService) {
+  }
 
   ngOnInit() {
     this.loginForm  =  this.formBuilder.group({
       login: this.usernameFormControl,
       password: this.passwordFormControl
     });
-    this.activatedRoute.url.subscribe(url => {
-      console.log(url)
-    });
+    if (this.router.url == "/") {
+      this.coreService.setLoginTrue();
+    };
   }
 
   loggingIn(): void {
