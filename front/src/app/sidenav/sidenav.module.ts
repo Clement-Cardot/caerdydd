@@ -1,21 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { LoginComponent } from './components/login/login.component';
 import { MaterialModule } from '../material.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { AppRoutingModule } from '../app-routing.module';
+
+
 
 @NgModule({
   declarations: [
-    LoginComponent,
+    SidenavComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
-    ReactiveFormsModule,
+    AppRoutingModule,
   ],
   exports: [
-    LoginComponent,
-  ],
+    SidenavComponent,
+  ]
 })
-export class LoginPageModule { }
+export class SidenavModule { }

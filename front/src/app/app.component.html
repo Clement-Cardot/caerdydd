@@ -1,1 +1,3 @@
-<router-outlet></router-outlet>
+<app-login *ngIf="this.getLoginStatut()"></app-login>
+<app-sidenav *ngIf="!this.getLoginStatut()"></app-sidenav>
+
