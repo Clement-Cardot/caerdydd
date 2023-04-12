@@ -41,12 +41,7 @@ public class ProjectEntity {
     public ProjectEntity() {
     }
 
-    public ProjectEntity(Integer idProject, String name) {
-        this.idProject=idProject;
-        this.name=name;
-    }
-
-    public ProjectEntity(Integer idProject, String name, String description) {
+    public ProjectEntity(String name, String description) {
         this.idProject=idProject;
         this.name=name;
         this.description=description;

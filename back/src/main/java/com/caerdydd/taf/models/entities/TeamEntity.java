@@ -2,6 +2,7 @@ package com.caerdydd.taf.models.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,11 +33,11 @@ public class TeamEntity {
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name = "id_team")
     List<TeamMemberEntity> teamMembers;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "id_project_dev")
     private ProjectEntity projectDev;
 
@@ -47,9 +48,11 @@ public class TeamEntity {
     public TeamEntity() {
     }
 
-    public TeamEntity(Integer idTeam, String name) {
+    public TeamEntity(Integer idTeam, String name, ProjectEntity projectDev, ProjectEntity projectValidation) {
         this.idTeam = idTeam;
         this.name = name;
+        this.projectDev = projectDev;
+        this.projectValidation = projectValidation;
     }
 
     public TeamEntity(Integer idTeam, String name, Integer teamWorkMark, Integer teamValidationMark, String testBookLink,

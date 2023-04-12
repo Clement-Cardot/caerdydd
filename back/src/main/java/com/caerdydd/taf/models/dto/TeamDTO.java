@@ -40,9 +40,11 @@ public class TeamDTO {
     public TeamDTO() {
     }
 
-    public TeamDTO(Integer idTeam, String name) {
+    public TeamDTO(Integer idTeam, String name, ProjectDTO projectDev, ProjectDTO projectValidation) {
         this.idTeam = idTeam;
         this.name = name;
+        this.projectDev = projectDev;
+        this.projectValidation = projectValidation;
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.caerdydd.taf.models.dto.ProjectDTO;
 import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
@@ -36,8 +37,18 @@ public class TeamControllerTest {
     public void testGetAllTeams_Nominal() throws CustomRuntimeException {
         // Mock teamService.listAllTeams() method
         List<TeamDTO> mockedAnswer = new ArrayList<>();
-        mockedAnswer.add(new TeamDTO(1, "Team 1"));
-        mockedAnswer.add(new TeamDTO(2, "Team 2"));
+        mockedAnswer.add(new TeamDTO(
+                                1, 
+                                "Team 1",
+                                new ProjectDTO("Project 1", "Description 1"),
+                                new ProjectDTO("Project 2", "Description 2")
+                            ));
+        mockedAnswer.add(new TeamDTO(
+                                2, 
+                                "Team 2",
+                                new ProjectDTO("Project 2", "Description 2"),
+                                new ProjectDTO("Project 1", "Description 1")
+                            ));
         when(teamService.listAllTeams()).thenReturn(mockedAnswer);
 
         // Define the expected response
@@ -103,7 +114,12 @@ public class TeamControllerTest {
     @Test
     void testGetTeamById_Nominal() throws CustomRuntimeException {
         // Mock teamService.getTeamById() method
-        TeamDTO mockedAnswer = new TeamDTO(1, "Team 1");
+        TeamDTO mockedAnswer = new TeamDTO(
+                                        1, 
+                                        "Team 1",
+                                        new ProjectDTO("Project 1", "Description 1"),
+                                        new ProjectDTO("Project 2", "Description 2")
+                                        );
         when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
 
         // Define the expected response
@@ -168,7 +184,12 @@ public class TeamControllerTest {
     @Test
     void testGetAllTeamMembersOfTeamById_Nominal() throws CustomRuntimeException {
         // Mock teamService.getTeamById() method
-        TeamDTO mockedAnswer = new TeamDTO(1, "Team 1");
+        TeamDTO mockedAnswer = new TeamDTO(
+                                    1, 
+                                    "Team 1",
+                                    new ProjectDTO("Project 1", "Description 1"),
+                                    new ProjectDTO("Project 2", "Description 2")
+                                );
         List<TeamMemberDTO> teamMembers = new ArrayList<>();
 
         UserDTO user1 = new UserDTO(1, "Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
@@ -197,7 +218,12 @@ public class TeamControllerTest {
     @Test
     void testGetAllTeamMembersOfTeamById_EmptyTeam() throws CustomRuntimeException {
         // Mock teamService.getTeamById() method
-        TeamDTO mockedAnswer = new TeamDTO(1, "Team 1");
+        TeamDTO mockedAnswer = new TeamDTO(
+                                        1, 
+                                        "Team 1",
+                                        new ProjectDTO("Project 1", "Description 1"),
+                                        new ProjectDTO("Project 2", "Description 2")
+                                    );
         List<TeamMemberDTO> teamMembers = new ArrayList<>();
         mockedAnswer.setTeamMembers(teamMembers);
         when(teamService.getTeamById(1)).thenReturn(mockedAnswer);

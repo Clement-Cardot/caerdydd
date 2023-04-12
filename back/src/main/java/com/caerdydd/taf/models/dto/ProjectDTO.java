@@ -25,6 +25,12 @@ public class ProjectDTO {
     public ProjectDTO() {
     }
 
+    public ProjectDTO(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.isValidated = isValidated;
+    }
+
 
 
 

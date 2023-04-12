@@ -20,10 +20,12 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import com.caerdydd.taf.models.dto.ProjectDTO;
 import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.caerdydd.taf.models.entities.TeamEntity;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -54,14 +56,35 @@ class TeamServiceTest {
     void testListAllTeams_Nominal() {
         // Mock teamRepository.findAll() method
         List<TeamEntity> mockedAnswer = new ArrayList<TeamEntity>();
-        mockedAnswer.add(new TeamEntity(1, "Team A"));
-        mockedAnswer.add(new TeamEntity(2, "Team B"));
+        mockedAnswer.add(new TeamEntity(
+            1, 
+            "Team A", 
+            new ProjectEntity("Project A", "Description 1"), 
+            new ProjectEntity("Project B", "Description 2")
+        ));
+        mockedAnswer.add(
+            new TeamEntity(
+                2, 
+                "Team B",
+                new ProjectEntity("Project B", "Description 2"),
+                new ProjectEntity("Project A", "Description 1")
+            ));
         when(teamRepository.findAll()).thenReturn(mockedAnswer);
 
         // Define the expected answer
         List<TeamDTO> expectedAnswer = new ArrayList<TeamDTO>();
-        expectedAnswer.add(new TeamDTO(1, "Team A"));
-        expectedAnswer.add(new TeamDTO(2, "Team B"));
+        expectedAnswer.add(new TeamDTO(
+            1, 
+            "Team A",
+            new ProjectDTO("Project A", "Description 1"),
+            new ProjectDTO("Project B", "Description 2")
+        ));
+        expectedAnswer.add(new TeamDTO(
+            2, 
+            "Team B",
+            new ProjectDTO("Project B", "Description 2"),
+            new ProjectDTO("Project A", "Description 1")
+        ));
 
         // Call the method to test
         List<TeamDTO> result = new ArrayList<TeamDTO>();
@@ -118,11 +141,21 @@ class TeamServiceTest {
     @Test
     void testGetTeamById_Nominal() {
         // Mock teamRepository.findById() method
-        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(1, "Team A"));
+        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(
+                                                                1, 
+                                                                "Team A", 
+                                                                new ProjectEntity("Project A", "Description 1"),
+                                                                new ProjectEntity("Project B", "Description 2")
+                                                        ));
         when(teamRepository.findById(1)).thenReturn(mockedAnswer);
 
         // Define the expected answer
-        TeamDTO expectedAnswer = new TeamDTO(1, "Team A");
+        TeamDTO expectedAnswer = new TeamDTO(
+                                        1, 
+                                        "Team A",
+                                        new ProjectDTO("Project A", "Description 1"),
+                                        new ProjectDTO("Project B", "Description 2")    
+                                    );
 
         // Call the method to test
         TeamDTO result = new TeamDTO();
@@ -171,11 +204,21 @@ class TeamServiceTest {
     @Test
     public void saveTeamTest_Nominal(){
         // Mock teamRepository.save() method
-        TeamEntity mockedAnswer = new TeamEntity(1, "test");
+        TeamEntity mockedAnswer = new TeamEntity(
+                                            1, 
+                                            "test",
+                                            new ProjectEntity("Project A", "Description 1"),
+                                            new ProjectEntity("Project B", "Description 2")
+                                            );
 		when(teamRepository.save(any(TeamEntity.class))).thenReturn(mockedAnswer);
         
         // Prepare the input
-        TeamDTO teamToSave = new TeamDTO(1, "test");
+        TeamDTO teamToSave = new TeamDTO(
+                                    1, 
+                                    "test",
+                                    new ProjectDTO("Project A", "Description 1"),
+                                    new ProjectDTO("Project B", "Description 2")
+                                );
 
         // Call the method to test
         TeamDTO response = teamService.saveTeam(teamToSave);
@@ -207,7 +250,12 @@ class TeamServiceTest {
         when(userService.updateUser(any(UserDTO.class))).then(AdditionalAnswers.returnsFirstArg());
 
         // Mock teamRepository.findById() method
-        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(1, "Team A"));
+        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(
+                                                                    1, 
+                                                                    "Team A",
+                                                                    new ProjectEntity("Project A", "Description 1"),
+                                                                    new ProjectEntity("Project B", "Description 2")
+                                                                ));
         when(teamRepository.findById(1)).thenReturn(mockedAnswer);
 
         // Mock Securityconfig.checkCurrentUser() method
@@ -257,7 +305,12 @@ class TeamServiceTest {
 
         TeamMemberDTO mockedTeamMember = new TeamMemberDTO();
         mockedTeamMember.setUser(mockedUser);
-        mockedTeamMember.setTeam(new TeamDTO(1, "Team A"));
+        mockedTeamMember.setTeam(new TeamDTO(
+                                            1, 
+                                            "Team A",
+                                            new ProjectDTO("Project A", "Description 1"),
+                                            new ProjectDTO("Project B", "Description 2")
+                                        ));
 
         mockedUser.setRoles(new ArrayList<RoleDTO>());
         mockedUser.getRoles().add(mockedRole);
@@ -266,7 +319,12 @@ class TeamServiceTest {
         when(userService.getUserById(1)).thenReturn(mockedUser);
 
         // Mock teamRepository.findById() method
-        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(1, "Team A"));
+        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(
+                                                                    1, 
+                                                                    "Team A",
+                                                                    new ProjectEntity("Project A", "Description 1"),
+                                                                    new ProjectEntity("Project B", "Description 2")
+                                                                ));
         when(teamRepository.findById(1)).thenReturn(mockedAnswer);
         
         // Call the method to test
@@ -318,7 +376,12 @@ class TeamServiceTest {
 
         TeamMemberDTO mockedTeamMember = new TeamMemberDTO();
         mockedTeamMember.setUser(mockedUser);
-        mockedTeamMember.setTeam(new TeamDTO(1, "Team A"));
+        mockedTeamMember.setTeam(new TeamDTO(
+                                            1, 
+                                            "Team A",
+                                            new ProjectDTO("Project A", "Description 1"),
+                                            new ProjectDTO("Project B", "Description 2")
+                                        ));
 
         mockedUser.setRoles(new ArrayList<RoleDTO>());
         mockedUser.getRoles().add(mockedRole);
@@ -360,7 +423,12 @@ class TeamServiceTest {
 
         TeamMemberDTO mockedTeamMember = new TeamMemberDTO();
         mockedTeamMember.setUser(mockedUser);
-        mockedTeamMember.setTeam(new TeamDTO(1, "Team A"));
+        mockedTeamMember.setTeam(new TeamDTO(
+                                        1, 
+                                        "Team A",
+                                        new ProjectDTO("Project A", "Description 1"),
+                                        new ProjectDTO("Project B", "Description 2")
+                                    ));
 
         mockedUser.setRoles(new ArrayList<RoleDTO>());
         mockedUser.getRoles().add(mockedRole);
@@ -369,7 +437,12 @@ class TeamServiceTest {
         when(userService.getUserById(1)).thenReturn(mockedUser);
 
         // Mock teamRepository.findById() method
-        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(1, "Team A"));
+        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(
+                                                                    1, 
+                                                                    "Team A",
+                                                                    new ProjectEntity("Project A", "Description 1"),
+                                                                    new ProjectEntity("Project B", "Description 2")
+                                                                ));
         when(teamRepository.findById(1)).thenReturn(mockedAnswer);
 
         // Mock Securityconfig.checkCurrentUser() method
