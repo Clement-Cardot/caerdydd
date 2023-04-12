@@ -5,15 +5,21 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.security.jwt.AuthEntryPointJwt;
+import com.caerdydd.taf.security.jwt.AuthTokenFilter;
 import com.caerdydd.taf.services.UserService;
 
 
@@ -22,41 +28,58 @@ import com.caerdydd.taf.services.UserService;
         //securedEnabled = true,
         //jsr250Enabled = true,
         prePostEnabled = true)
-public class SecurityConfig {
+public class SecurityConfig{
 
     @Autowired
     DataSource dataSource;
 
     @Autowired
-    UserService userService;
+    private AuthEntryPointJwt unauthorizedHandler;
 
     @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().passwordEncoder(new BCryptPasswordEncoder())
-                .dataSource(dataSource)
-                .usersByUsernameQuery("select login, password, enabled from user where login=?")
-                .authoritiesByUsernameQuery("SELECT user.login AS login, role.role AS role FROM user INNER JOIN role ON user.id = role.id_user WHERE login=?");
+    CustomUserDetailService userDetailsService;
+
+    @Autowired
+    UserService userService;
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return authProvider;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors().and().csrf().disable()
-                .authorizeRequests().antMatchers("**/error").permitAll()
-                
-                // .antMatchers("/api/student/**").hasAuthority("STUDENT_ROLE")
-                // .antMatchers("/api/team_member/**").hasAuthority("TEAM_MEMBER_ROLE")
-                // .antMatchers("/api/teaching_staff/**").hasAuthority("TEACHING_STAFF_ROLE")
-                // .antMatchers("/api/option_leader/**").hasAuthority("OPTION_LEADER_ROLE")
-
-                // TO ENABLE AUTHENTICATION : UNCOMMENT THE LINES ABOVE AND COMMENT THE LINE BELOW
-
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
 
-                .and()
-                .formLogin()
-                .permitAll()
-                .and().build();
+                .and().authenticationProvider(authenticationProvider())
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                
+                .build();
     }
 
     public Boolean checkCurrentUser(Integer id){
