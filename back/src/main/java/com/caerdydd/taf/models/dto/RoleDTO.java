@@ -12,10 +12,29 @@ import lombok.Setter;
 @Component
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RoleDTO {
+
+    public static final String STUDENT_ROLE = "STUDENT_ROLE";
+    public static final String TEAM_MEMBER_ROLE = "TEAM_MEMBER_ROLE";
+    public static final String TEACHING_STAFF_ROLE = "TEACHING_STAFF_ROLE";
+    public static final String OPTION_LEADER_ROLE = "OPTION_LEADER_ROLE";
     
     private Integer idRole;
     private String role;
 
     @JsonBackReference
     private UserDTO user;
+
+    public RoleDTO() {
+    }
+
+    public RoleDTO(Integer idRole, String role, UserDTO user) {
+        this.idRole = idRole;
+        this.role = role;
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "RoleDTO [idRole=" + idRole + ", role=" + role + ", user=" + user + "]";
+    }
 }

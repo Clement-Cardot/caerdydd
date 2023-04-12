@@ -1,7 +1,6 @@
 package com.caerdydd.taf.controllers;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
+import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeamMemberService;
 
 @RestController
@@ -26,8 +26,11 @@ public class TeamMemberController {
         try {
             List<TeamMemberDTO> users = teamMemberService.listAllTeamMembers();
             return new ResponseEntity<>(users, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -36,8 +39,11 @@ public class TeamMemberController {
         try {
             TeamMemberDTO user = teamMemberService.getTeamMemberById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
