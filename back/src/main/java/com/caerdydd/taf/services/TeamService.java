@@ -79,8 +79,15 @@ public class TeamService {
             for (int i = 0; i < nbTeams; i++) {
                 TeamDTO team = new TeamDTO();
                 team.setName("Team " + i);
-                //TO-DO : création paires d'équipes
+                team.setIdProjectDev(i);
+                if (i % 2 == 0) {
+                    team.setIdProjectValidation(i+2);
+                }
+                else {
+                    team.setIdProjectValidation(i);
+                }
                 saveTeam(team);
+                //TO-DO : création paires d'équipes
             }
         }
         else {

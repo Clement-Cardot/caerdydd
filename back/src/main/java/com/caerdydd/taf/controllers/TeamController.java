@@ -81,6 +81,7 @@ public class TeamController {
 
     @PutMapping("/createTeams/{nbTeams}")
     public ResponseEntity<HttpStatus> createTeams(@PathVariable Integer nbTeams) {
+        logger.info("Entrée Methode");
         try {
             teamService.createTeams(nbTeams);
             return new ResponseEntity<>(HttpStatus.OK);
