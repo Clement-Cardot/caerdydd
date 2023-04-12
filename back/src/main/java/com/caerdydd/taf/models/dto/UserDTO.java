@@ -25,12 +25,32 @@ public class UserDTO {
     private String speciality;
 
     @JsonManagedReference
-    private List<RoleDTO> roleEntities;
+    private List<RoleDTO> roles;
 
     @JsonBackReference
     private TeamMemberDTO teamMember;
     
     // @JsonBackReference
     // private TeachingStaffDTO teachingStaff;
+
+    public UserDTO() {
+    }
+
+    public UserDTO(Integer id, String firstname, String lastname, String login, String password, String email,
+            String speciality) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.speciality = speciality;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO [email=" + email + ", firstname=" + firstname + ", id=" + id + ", lastname=" + lastname
+                + ", login=" + login + ", password=" + password + ", speciality=" + speciality + "]";
+    }
 
 }

@@ -1,25 +1,29 @@
 package com.caerdydd.taf.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.modelmapper.ModelMapper;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.entities.TeamEntity;
+import com.caerdydd.taf.models.dto.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeamService;
 
+@ExtendWith(MockitoExtension.class)
 public class TeamControllerTest {
 
     @InjectMocks
@@ -28,59 +32,323 @@ public class TeamControllerTest {
     @Mock
     private TeamService teamService;
 
-    @Mock
-    private ModelMapper modelMapper;
+    @Test
+    public void testGetAllTeams_Nominal() throws CustomRuntimeException {
+        // Mock teamService.listAllTeams() method
+        List<TeamDTO> mockedAnswer = new ArrayList<>();
+        mockedAnswer.add(new TeamDTO(1, "Team 1"));
+        mockedAnswer.add(new TeamDTO(2, "Team 2"));
+        when(teamService.listAllTeams()).thenReturn(mockedAnswer);
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
+        // Define the expected response
+        ResponseEntity<List<TeamDTO>> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
+        
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.getAllTeams();
+
+        // Verify the result
+        verify(teamService, times(1)).listAllTeams();
+        assertEquals(expectedAnswer.toString(), result.toString());
     }
 
-    // @Test
-    // void testGetAllTeams() {
-    //     List<TeamDTO> teams = new ArrayList<>();
-    //     teams.add(new TeamDTO(1, "Team 1"));
-    //     teams.add(new TeamDTO(2, "Team 2"));
+    @Test
+    public void testGetAllTeams_Empty() throws CustomRuntimeException {
+        // Mock teamService.listAllTeams() method
+        List<TeamDTO> mockedAnswer = new ArrayList<>();
+        when(teamService.listAllTeams()).thenReturn(mockedAnswer);
 
-    //     List<TeamDTO> teamDTOs = new ArrayList<>();
-    //     teamDTOs.add(new TeamDTO(1, "Team 1"));
-    //     teamDTOs.add(new TeamDTO(2, "Team 2"));
+        // Define the expected response
+        ResponseEntity<List<TeamDTO>> expectedAnswer = new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.getAllTeams();
 
-    //     when(teamService.listAllTeams()).thenReturn(teams);
-    //     when(modelMapper.map(teams.get(0), TeamDTO.class)).thenReturn(teamDTOs.get(0));
-    //     when(modelMapper.map(teams.get(1), TeamDTO.class)).thenReturn(teamDTOs.get(1));
+        // Verify the result
+        verify(teamService, times(1)).listAllTeams();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
 
-    //     ResponseEntity<List<TeamDTO>> response = teamController.getAllTeams();
+    @Test
+    public void testGetAllTeams_ServiceError() throws CustomRuntimeException {
+        // Mock teamService.listAllTeams() method
+        when(teamService.listAllTeams()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
-    //     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     assert response.getBody().size() == 2;
-    //     assert response.getBody().get(0).getIdTeam() == 1;
-    //     assert response.getBody().get(0).getName().equals("Team 1");
-    //     assert response.getBody().get(1).getIdTeam() == 2;
-    //     assert response.getBody().get(1).getName().equals("Team 2");
-    // }
+        // Define the expected response
+        ResponseEntity<List<TeamDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    // @Test
-    // void testGetTeamById() {
-    //     TeamDTO team = new TeamDTO(1, "Team 1");
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.getAllTeams();
 
-    //     when(teamService.getTeamById(1)).thenReturn(team);
-    //     when(modelMapper.map(team, TeamDTO.class)).thenReturn(team);
+        // Verify the result
+        verify(teamService, times(1)).listAllTeams();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
 
-    //     ResponseEntity<TeamDTO> response = teamController.getTeamById(1);
+    @Test
+    public void testGetAllTeams_UnexpectedError() throws CustomRuntimeException {
+        // Mock teamService.listAllTeams() method
+        when(teamService.listAllTeams()).thenThrow(new CustomRuntimeException("Unexpected error"));
 
-    //     assert response.getStatusCode() == HttpStatus.OK;
-    //     assert response.getBody().getIdTeam() == 1;
-    //     assert response.getBody().getName().equals("Team 1");
-    // }
+        // Define the expected response
+        ResponseEntity<List<TeamDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
 
-    // @Test
-    // void testGetTeamByIdNotFound() {
-    //     when(teamService.getTeamById(1)).thenThrow(new NoSuchElementException());
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.getAllTeams();
 
-    //     ResponseEntity<TeamDTO> response = teamController.getTeamById(1);
+        // Verify the result
+        verify(teamService, times(1)).listAllTeams();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
 
-    //     assert response.getStatusCode() == HttpStatus.NOT_FOUND;
-    // }
+    @Test
+    void testGetTeamById_Nominal() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        TeamDTO mockedAnswer = new TeamDTO(1, "Team 1");
+        when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
 
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<TeamDTO> result = teamController.getTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTeamById_TeamNotFound() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        when(teamService.getTeamById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));   
+
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<TeamDTO> result = teamController.getTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTeamById_ServiceError() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        when(teamService.getTeamById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));   
+
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // Call the method to test
+        ResponseEntity<TeamDTO> result = teamController.getTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTeamById_UnexpectedError() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        when(teamService.getTeamById(1)).thenThrow(new CustomRuntimeException("Unexpected error"));   
+
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Call the method to test
+        ResponseEntity<TeamDTO> result = teamController.getTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetAllTeamMembersOfTeamById_Nominal() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        TeamDTO mockedAnswer = new TeamDTO(1, "Team 1");
+        List<TeamMemberDTO> teamMembers = new ArrayList<>();
+
+        UserDTO user1 = new UserDTO(1, "Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
+        UserDTO user2 = new UserDTO(2, "Firstname2", "Lastname2", "user2", "password2", "email2", "CSS");
+        
+        TeamMemberDTO teamMember1 = new TeamMemberDTO(user1, mockedAnswer);
+        TeamMemberDTO teamMember2 = new TeamMemberDTO(user2, mockedAnswer);
+        
+        teamMembers.add(teamMember1);
+        teamMembers.add(teamMember2);
+
+        mockedAnswer.setTeamMembers(teamMembers);
+        when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
+
+        // Define the expected response
+        ResponseEntity<List<TeamMemberDTO>> expectedAnswer = new ResponseEntity<>(mockedAnswer.getTeamMembers(), HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<List<TeamMemberDTO>> result = teamController.getAllTeamMembersOfTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetAllTeamMembersOfTeamById_EmptyTeam() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        TeamDTO mockedAnswer = new TeamDTO(1, "Team 1");
+        List<TeamMemberDTO> teamMembers = new ArrayList<>();
+        mockedAnswer.setTeamMembers(teamMembers);
+        when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
+
+        // Define the expected response
+        ResponseEntity<List<TeamMemberDTO>> expectedAnswer = new ResponseEntity<>(mockedAnswer.getTeamMembers(), HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<List<TeamMemberDTO>> result = teamController.getAllTeamMembersOfTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetAllTeamMembersOfTeamById_TeamNotFound() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        when(teamService.getTeamById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<List<TeamMemberDTO>> result = teamController.getAllTeamMembersOfTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetAllTeamMembersOfTeamById_ServiceError() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        when(teamService.getTeamById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // Call the method to test
+        ResponseEntity<List<TeamMemberDTO>> result = teamController.getAllTeamMembersOfTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetAllTeamMembersOfTeamById_UnexpectedError() throws CustomRuntimeException {
+        // Mock teamService.getTeamById() method
+        when(teamService.getTeamById(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Call the method to test
+        ResponseEntity<List<TeamMemberDTO>> result = teamController.getAllTeamMembersOfTeamById(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTeamById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testApplyInATeam_Nominal() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        UserDTO mockedAnswer = new UserDTO(1, "Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
+        when(teamService.applyInATeam(1, 1)).thenReturn(mockedAnswer);
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(mockedAnswer.toString(), result.getBody().toString());
+    }
+
+    @Test
+    void testApplyInATeam_TeamNotFound() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_UserNotFound() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_UserAlreadyInATeam() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_ALREADY_IN_A_TEAM));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_ServiceError() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_UnexpectedError() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
+    }
 }

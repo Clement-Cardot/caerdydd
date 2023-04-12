@@ -28,5 +28,11 @@ public class RoleEntity {
 
     public RoleEntity() {
     }
+
+    public RoleEntity(Integer idRole, String role, UserEntity user) {
+        this.idRole = idRole;
+        this.role = role;
+        this.user = user;
+    }
     
 }

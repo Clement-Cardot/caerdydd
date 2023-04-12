@@ -24,4 +24,19 @@ public class TeamMemberDTO {
     @JsonBackReference
     private TeamDTO team;
 
+    public TeamMemberDTO() {
+    }
+
+    public TeamMemberDTO(UserDTO user, TeamDTO team) {
+        this.user = user;
+        this.team = team;
+        this.idTeam = team.getIdTeam();
+    }
+
+    @Override
+    public String toString() {
+        return "TeamMemberDTO [user=" + user.getId() + ", idTeam=" + idTeam + ", individualMark=" + individualMark
+                + ", bonusPenalty=" + bonusPenalty + ", team=" + team.getIdTeam() + "]";
+    }
+
 }
