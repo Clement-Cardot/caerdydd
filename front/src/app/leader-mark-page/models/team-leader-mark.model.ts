@@ -1,9 +1,7 @@
 import { Student } from "./student-leader-mark.model";
 
 export interface Team {
-	id: number;
+	idTeam: number;
 	name: string;
-	teamMark: number;
-	validationMark: number;
 	students : Student[];
 }

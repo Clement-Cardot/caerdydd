@@ -3,7 +3,9 @@ import { Student } from '../../models/student-leader-mark.model';
 import { StudentService } from '../../services/leader-mark.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Team } from '../../models/team-leader-mark.model';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
 	selector: 'app-leader-mark',
@@ -80,21 +82,16 @@ export class LeaderMarkComponent implements OnInit {
 	];
 	idTeamString: any;
 
-	constructor(private route: ActivatedRoute, private router: Router) {
+	constructor(private studentService: StudentService, private route: ActivatedRoute, private router: Router) {
 		this.idTeamString = this.route.snapshot.paramMap.get('idTeam');
-		if(this.idTeamString == null ){
-			this.router.navigate(['/erreur']); //Il faudra créer une page erreur pour gerer les trucs comme ça
-		} else {
-			this.idTeam = parseInt(this.idTeamString);
-			//StudentService.getTeamById(this.idTeam);
-		}
+		this.idTeam = parseInt(this.idTeamString);
 
 		// tester si la team existe, sinon rediriger vers erreur.
 		// rediriger : this.router.navigate(['/ma-route', 'valeur1', 'valeur2']);
 	  }
 
 	ngOnInit(): void {
-		//this.dataSource = StudentService.getStudents(StudentService.getTeamById(id));
+
 		this.dataSource.forEach((student) => this.updateFinalMark(student));
 	}
 

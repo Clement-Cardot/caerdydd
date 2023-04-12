@@ -2,14 +2,22 @@ USE ProjetGL;
 
 CREATE TABLE user (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(20) NOT NULL,
-    surname VARCHAR(20) NOT NULL,
+    firstname VARCHAR(20) NOT NULL,
+    lastname VARCHAR(20) NOT NULL,
     login VARCHAR(15) UNIQUE NOT NULL,
     password VARCHAR(250) NOT NULL,
     email VARCHAR(40) NOT NULL,
-    role ENUM('student', 'team_member', 'teaching_staff') NOT NULL,
-    enabled BOOLEAN NOT NULL,
+    speciality ENUM('LD', 'CSS'),
+    enabled BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY(id)
+);
+
+CREATE TABLE role (
+    id_role INT NOT NULL AUTO_INCREMENT,
+    id_user INT NOT NULL,
+    role ENUM('STUDENT_ROLE', 'TEAM_MEMBER_ROLE', 'TEACHING_STAFF_ROLE', 'OPTION_LEADER_ROLE') NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES user (id),
+    PRIMARY KEY(id_role)
 );
 
 CREATE TABLE teaching_staff (
@@ -89,7 +97,6 @@ CREATE TABLE consulting (
 
 CREATE TABLE team_member (
     id_user INT NOT NULL,
-    speciality ENUM('LD', 'CSS') NOT NULL,
     individual_mark INT,
     bonus_penalty INT,
     id_team INT NOT NULL,
@@ -107,7 +114,7 @@ CREATE TABLE notification (
     FOREIGN KEY (id_user) REFERENCES user (id)
 );
 
-CREATE TABLE assignment (
+CREATE TABLE assigned_consulting (
     id_ts INT NOT NULL,
     id_consulting INT NOT NULL,
     PRIMARY KEY(id_ts, id_consulting),
