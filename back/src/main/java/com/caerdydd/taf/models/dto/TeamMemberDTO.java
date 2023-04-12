@@ -14,7 +14,7 @@ import lombok.Setter;
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeamMemberDTO {
 
-    @JsonManagedReference
+    @JsonManagedReference(value="teamMember")
     private UserDTO user;
 
     private Integer idTeam;

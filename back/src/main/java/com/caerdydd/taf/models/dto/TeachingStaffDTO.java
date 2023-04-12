@@ -20,7 +20,7 @@ public class TeachingStaffDTO {
   private Integer isOptionLeader;
   private Integer isSubjectValidator;
 
-  @JsonManagedReference
+  @JsonManagedReference(value="teachingStaff")
   private UserDTO user;
 
 }
