@@ -74,7 +74,8 @@ quality-dev:
   image: maven:3.8.1-jdk-11
   script:
     - cd back
-    - ls -la ./target/site/jacoco
+    - cp ./target/site/jacoco/jacoco.xml ./jacoco.xml
+    - cp ./target/site/jacoco/jacoco.xml /jacoco.xml
     - mvn clean install -DskipTests=true
     - mvn validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
   cache:
