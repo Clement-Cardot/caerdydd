@@ -34,11 +34,10 @@ public class TeamMemberEntity {
     public TeamMemberEntity() {
     }
 
-    public TeamMemberEntity(UserEntity user, Integer individualMark, Integer bonusPenalty, TeamEntity team) {
+    public TeamMemberEntity(UserEntity user, TeamEntity team) {
         this.user = user;
-        this.individualMark = individualMark;
-        this.bonusPenalty = bonusPenalty;
         this.team = team;
+        this.idUser = user.getId();
     }
 
 

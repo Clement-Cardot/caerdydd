@@ -33,5 +33,22 @@ public class TeamDTO {
 
     @JsonManagedReference
     private ProjectEntity projectValidation;
+    public TeamDTO() {
+    }
+
+    public TeamDTO(Integer idTeam, String name) {
+        this.idTeam = idTeam;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "TeamDTO [idTeam=" + idTeam + ", name=" + name + ", teamWorkMark=" + teamWorkMark
+                + ", teamValidationMark=" + teamValidationMark + ", testBookLink=" + testBookLink
+                + ", filePathScopeStatement=" + filePathScopeStatement + ", filePathFinalScopeStatement="
+                + filePathFinalScopeStatement + ", filePathScopeStatementAnalysis=" + filePathScopeStatementAnalysis
+                + ", filePathReport=" + filePathReport + ", idProjectDev=" + projectDev.getIdProject() + ", idProjectValidation="
+                + projectValidation.getIdProject() + ", teamMembers=" + teamMembers + "]";
+    }
 
 }

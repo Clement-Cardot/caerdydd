@@ -49,6 +49,27 @@ java-build:
     paths:
       - .m2/repository
 
+junit-test:
+  stage: test
+  image: maven:3.8.1-jdk-11
+  script:
+    - cd back
+    - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
+    - mvn compile test
+  artifacts:
+    reports:
+      junit: back/target/surefire-reports/TEST*.xml
+    paths:
+      - back/target/site/jacoco
+  cache:
+    paths:
+      - .m2/repository
+
+# Tests d'intégrations
+# robotframework-test:
+#   stage: test
+#   ...
+
 quality-dev:
   stage: sonar
   image: maven:3.8.1-jdk-11
@@ -74,13 +95,3 @@ quality-prod:
       - .m2/repository
   only:
     - master
-
-# Tests unitaires
-# junit-test:
-#   stage: test
-#   ...
-
-# Tests d'intégrations
-# robotframework-test:
-#   stage: test
-#   ...

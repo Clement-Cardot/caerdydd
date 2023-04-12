@@ -9,7 +9,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -65,6 +64,16 @@ public class TeamEntity {
         this.filePathReport = filePathReport;
         this.projectDev=projectDev;
         this.projectValidation=projectValidation;
+    }
+
+    @Override
+    public String toString() {
+        return "TeamEntity [idTeam=" + idTeam + ", name=" + name + ", teamWorkMark=" + teamWorkMark
+                + ", teamValidationMark=" + teamValidationMark + ", testBookLink=" + testBookLink
+                + ", filePathScopeStatement=" + filePathScopeStatement + ", filePathFinalScopeStatement="
+                + filePathFinalScopeStatement + ", filePathScopeStatementAnalysis=" + filePathScopeStatementAnalysis
+                + ", filePathReport=" + filePathReport + ", idProjectDev=" + projectDev.getIdProject() + ", idProjectValidation="
+                + projectValidation.getIdProject() + ", teamMembers=" + teamMembers + "]";
     }
 
 }
