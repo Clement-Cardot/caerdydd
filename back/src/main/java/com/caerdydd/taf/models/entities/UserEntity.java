@@ -34,7 +34,7 @@ public class UserEntity {
     private String speciality;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<RoleEntity> roleEntities;
+    private List<RoleEntity> roles;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
@@ -55,12 +55,14 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity( String firstname, String lastname, String login, String password, String email, String role) {
+    public UserEntity(Integer id, String firstname, String lastname, String login, String password, String email, String speciality) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.login = login;
         this.password = password;
         this.email = email;
+        this.speciality = speciality;
     }
 
 }

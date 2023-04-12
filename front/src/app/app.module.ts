@@ -8,10 +8,21 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
-import { TeamsPageModule } from './teams-page/teams-page.module';
-import { TeachingStaffPageModule } from './teaching-staff-page/teaching-staff-page.module';
+import {TeamsPageModule } from './teams-page/teams-page.module';
+import { UserDataService } from './core/services/user-data.service';
+import { ApiAuthService } from './core/services/api-auth.service';
+import { ApiTeamService } from './core/services/api-team.service';
+import { ApiUserService } from './core/services/api-user.service';
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent
+  ],
+  providers: [
+    UserDataService,
+    ApiAuthService,
+    ApiTeamService,
+    ApiUserService
+  ],
   imports: [
     CoreModule,
     BrowserModule,

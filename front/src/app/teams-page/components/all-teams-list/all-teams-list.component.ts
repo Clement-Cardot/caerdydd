@@ -1,20 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { TeamList } from '../../models/team_list.model';
-import { StudentsList } from '../../models/team_list.model';
+import { Component } from '@angular/core';
+import { UserDataService } from 'src/app/core/services/user-data.service';
+import { ApiTeamService } from 'src/app/core/services/api-team.service';
+import { Team } from 'src/app/core/data/models/team.model';
 
-const ELEMENT_DATA: StudentsList[] = [
-  {id: 1, name: 'John', surname: 'Doe', speciality: 'LD'},
-  {id: 2, name: 'Eric', surname: 'Smith', speciality: 'LD'},
-  {id: 3, name: 'Patrik', surname: 'Smith', speciality: 'LD'},
-  {id: 4, name: 'Isabelle', surname: 'Smith', speciality: 'CSS'},
-];
 
-const ELEMENT_DATA2: StudentsList[] = [
-  {id: 11, name: 'Georges', surname: 'A', speciality: 'CSS'},
-  {id: 23, name: 'Charles', surname: 'B', speciality: 'LD'},
-  {id: 33, name: 'Henri', surname: 'C', speciality: 'LD'},
-  {id: 43, name: 'Johny', surname: 'D', speciality: 'CSS'},
-];
 
 @Component({
   selector: 'app-all-teams-list',
@@ -22,23 +11,34 @@ const ELEMENT_DATA2: StudentsList[] = [
   styleUrls: ['./all-teams-list.component.scss']
 })
 
-export class AllTeamsListComponent implements OnInit{
-  team1!: TeamList;
-  team2!: TeamList;
+export class AllTeamsListComponent{
+  teams!: Team[];
+  constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {
+    // setInterval(() => { this.getData() },  5000 );
+  }
 
-  
-    ngOnInit() {
-      this.team1 = {
-        id: 1,
-        teamName: 'Team 1',
-        displayedColumns: ['id', 'name', 'surname', 'speciality'],
-        dataSource: ELEMENT_DATA,
-      }
-      this.team2 = {
-        id: 2,
-        teamName: 'Team 2',
-        displayedColumns: ['id', 'name', 'surname', 'speciality'],
-        dataSource: ELEMENT_DATA2,
-      }
-    }
+  ngOnInit(): void {
+    this.getAllData();
+  }
+
+  getAllData(){
+    this.apiTeamService.getAllTeams()
+        .subscribe(data => {
+            this.teams = data;
+          }
+        );
+  }
+
+  getTeamData(idTeam: number){
+    this.apiTeamService.getTeam(idTeam)
+          .subscribe(data => {
+            let index = this.teams.indexOf(this.teams.find(team => team.idTeam == idTeam) as Team);
+            this.teams[index] = data;
+          }
+        );
+  }
+
+  update(idTeam: number){
+    this.getTeamData(idTeam);
+  }
 }
