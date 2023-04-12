@@ -8,6 +8,7 @@
   <button *ngIf="isCurrentUserAStudent()" (click)="applyInTeam(team.idTeam)" mat-raised-button color="primary" id="buttonJoinTeam">Rejoindre l'équipe</button>
 </div>
 <table mat-table [dataSource]="team.teamMembers" class="mat-elevation-z8">
+    <caption>Team members of the Team</caption>
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
