@@ -11,7 +11,7 @@ const websiteName = " - Taf"
 
 const routes: Routes = [
   { path: '',title: 'Login' + websiteName, component: LoginComponent },
-  { path: 'teams_creation',title: 'Création d\'équipes' + websiteName, component: TeamCreationComponent },
+  { path: 'teams-creation',title: 'Création d\'équipes' + websiteName, component: TeamCreationComponent },
   { path: 'teams',title: 'Teams' + websiteName, component: AllTeamsListComponent },
   { path: 'projectD',title: 'Project-description' + websiteName, component: ProjectDescriptionComponent },
   { path: 'dashboard',title: 'Dashboard' + websiteName, component: DashboardComponent },

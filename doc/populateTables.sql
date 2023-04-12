@@ -11,7 +11,7 @@ INSERT INTO role (id_user, role) VALUES
 (2, 'STUDENT_ROLE'),
 (3, 'STUDENT_ROLE'),
 (4, 'STUDENT_ROLE'),
-(5, 'TEACHING_STAFF_ROLE'),
+(5, 'OPTION_LEADER_ROLE'),
 (6, 'TEACHING_STAFF_ROLE');
 
 INSERT INTO teaching_staff (id_user, is_infrastructure_specialist, is_development_specialist, is_modeling_specialist, is_option_leader, is_subject_validator) VALUES
