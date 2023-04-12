@@ -8,9 +8,23 @@
         <mat-form-field class="inputForm" appearance="fill" color="accent">
             <mat-label class="labelForm">Nombre d'équipe</mat-label>
             <input matInput  type="number" placeholder="Nombre d'équipes" [formControl]="nbTeamsFormControl"/>
+            <mat-error *ngIf="nbTeamsFormControl.hasError('required')">
+                Un nombre d'équipe est <strong>requis</strong>
+            </mat-error>
+            <mat-error *ngIf="nbTeamsFormControl.hasError('pattern')">
+                Le nombre doit être <strong>pair</strong>
+            </mat-error>
         </mat-form-field>
 
         <button mat-raised-button color="primary" id="buttonCreateTeam">Générer les équipes</button>
     
     </form>
+
+
+    <ul>
+        <li *ngFor="let team of teams">
+            <span>Equipe n° {{team.idTeam}} - {{team.name}} créée !</span>
+        </li>
+    </ul>
+    
 </div>

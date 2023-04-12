@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Team } from 'src/app/core/data/models/team.model';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { MyErrorStateMatcher } from 'src/app/login-page/components/login/login.component';
 
@@ -11,7 +12,8 @@ import { MyErrorStateMatcher } from 'src/app/login-page/components/login/login.c
 export class TeamCreationComponent implements OnInit {
   teamCreationForm!: FormGroup;
   matcher = new MyErrorStateMatcher();
-  nbTeamsFormControl = new FormControl('', [Validators.required]);
+  nbTeamsFormControl = new FormControl('', [Validators.required, Validators.pattern("^\d*[02468]$")]);
+  teams!: Team[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -30,6 +32,7 @@ export class TeamCreationComponent implements OnInit {
     } else {
       this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(response => {
         console.log("Team Creation Response : " + JSON.stringify(response));
+        this.teams = response;
       });
     }
   }
