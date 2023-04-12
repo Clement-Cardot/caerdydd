@@ -28,11 +28,12 @@ public class TeamDTO {
     @JsonManagedReference
     List<TeamMemberDTO> teamMembers;
 
-    @JsonManagedReference
-    private ProjectEntity projectDev;
+    @JsonManagedReference(value="projectDev")
+    private ProjectDTO projectDev;
 
-    @JsonManagedReference
-    private ProjectEntity projectValidation;
+    @JsonManagedReference(value="projectValidation")
+    private ProjectDTO projectValidation;
+    
     public TeamDTO() {
     }
 
