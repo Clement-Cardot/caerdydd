@@ -33,11 +33,11 @@ public class TeamEntity {
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "id_team")
     List<TeamMemberEntity> teamMembers;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_project_dev")
     private ProjectEntity projectDev;
 
