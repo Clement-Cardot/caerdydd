@@ -1,0 +1,49 @@
+<p>define-specialty works!</p>
+<div>
+  <select [(ngModel)]="specialty1" class="form-control" id="DropdownOptions">
+    <option
+      *ngFor="let opt of ngOptions"
+      [selected]="opt === ngDropdown"
+      [value]="opt"
+    >
+      {{ opt }}
+    </option>
+  </select>
+  <button
+    *ngIf="afficheBouton"
+    (click)="afficherContenu()"
+    (click)="cacherBouton()"
+  >
+    +
+  </button>
+  <div *ngIf="afficheContenu">
+    <select [(ngModel)]="specialty2">
+      <option
+        *ngFor="let opt of ngOptions"
+        [selected]="opt === ngDropdown"
+        [value]="opt"
+      >
+        {{ opt }}
+      </option>
+    </select>
+    <button
+      *ngIf="afficheBouton2"
+      (click)="afficherContenu2()"
+      (click)="cacherBouton2()"
+    >
+      +
+    </button>
+    <div *ngIf="afficheContenu2">
+      <select [(ngModel)]="specialty3">
+        <option
+          *ngFor="let opt of ngOptions"
+          [selected]="opt === ngDropdown"
+          [value]="opt"
+        >
+          {{ opt }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<button (click)="onSubmit()">Valider</button>

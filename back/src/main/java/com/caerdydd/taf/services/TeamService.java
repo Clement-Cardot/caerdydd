@@ -79,7 +79,7 @@ public class TeamService {
         // Check if the user is already in a team
         if (userService.getUserById(idUser).getTeamMember() != null) {
             Integer idTeamAlreadyIn = userService.getUserById(idUser).getTeamMember().getTeam().getIdTeam();
-            logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} but is already in team {}", idTeam, idUser, idTeamAlreadyIn);
+            logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} but is already in team {}", idUser, idTeam, idTeamAlreadyIn);
             throw new CustomRuntimeException("User is already in a team");
         }
 

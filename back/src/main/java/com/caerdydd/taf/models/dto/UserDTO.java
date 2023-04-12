@@ -27,10 +27,10 @@ public class UserDTO {
     @JsonManagedReference
     private List<RoleDTO> roleEntities;
 
+    @JsonManagedReference
+    private TeachingStaffDTO teachingStaff;
+
     @JsonBackReference
     private TeamMemberDTO teamMember;
     
-    // @JsonBackReference
-    // private TeachingStaffDTO teachingStaff;
-
 }
