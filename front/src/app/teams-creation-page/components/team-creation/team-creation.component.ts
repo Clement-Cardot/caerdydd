@@ -25,12 +25,11 @@ export class TeamCreationComponent implements OnInit {
   }
 
   createTeams() {
-    console.log("Create teams");
     if(this.teamCreationForm.invalid){
       return;
     } else {
-      this.apiTeamService.(this.teamCreationForm.value.nbTeams).subscribe(response => {
-        console.log("Response : " + response);
+      this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(response => {
+        console.log("Team Creation Response : " + JSON.stringify(response));
       });
     }
   }

@@ -41,22 +41,22 @@ export class ApiTeamService {
         );
     }
 
-    applyForTeam(teamId: number, userId: number): Observable<User> {
-        const url = `${this.baseUrl}/${teamId}/${userId}`;	
-        return this.http.put(url, {})
+    createTeams(nbTeam:number): Observable<Team[]> {
+        const url = `${this.baseUrl}/${nbTeam}`;
+        return this.http.put<any[]>(url, {})
         .pipe(
-            map((data: any) => this.userAdapter.adapt(data))
+            map((data: any[]) => data.map((item) => this.teamAdapter.adapt(item)))
         )
         .pipe(
             catchError(this.handleError)
         );
     }
 
-    createTeams(nbTeam:number): Observable<Team[]> {
-        const url = `${this.baseUrl}/${nbTeam}`;
-        return this.http.put<any>(url, {})
+    applyForTeam(teamId: number, userId: number): Observable<User> {
+        const url = `${this.baseUrl}/${teamId}/${userId}`;	
+        return this.http.put(url, {})
         .pipe(
-            map((data: any[]) => data.map((item) => this.teamAdapter.adapt(item)))
+            map((data: any) => this.userAdapter.adapt(data))
         )
         .pipe(
             catchError(this.handleError)
