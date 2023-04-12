@@ -6,9 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./define-specialty.component.scss'],
 })
 export class DefineSpecialtyComponent implements OnInit {
-  ngOptions = ['Infrastructure', 'Développement', ' Modélisation'];
-
-  ngDropdown = this.ngOptions[0];
+  ngOptions = [
+    { value: 'Infrastructure', viewValue: 'Infrastructure' },
+    { value: 'Développement', viewValue: 'Développement' },
+    { value: 'Modélisation', viewValue: 'Modélisation' },
+  ];
 
   specialty1!: string;
 

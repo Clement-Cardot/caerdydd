@@ -3,6 +3,8 @@ package com.caerdydd.taf.controllers;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,11 @@ import com.caerdydd.taf.models.dto.TeachingStaffDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
 
-
 @RestController
 @RequestMapping("/api/users/teaching_staff")
 public class TeachingStaffController {
+
+  private static final Logger logger = LogManager.getLogger(TeamController.class);
 
   @Autowired
   private TeachingStaffService teachingStaffService;
@@ -27,16 +30,20 @@ public class TeachingStaffController {
 
     @GetMapping("")
     public ResponseEntity<List<TeachingStaffDTO>> getAllTeachingStaff() {
+      logger.info("Process request : Get all teaching staff");
+
         try {
             List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
             return new ResponseEntity<>(teachingStaffs, HttpStatus.OK);
         } catch (NoSuchElementException e) {
+            logger.error("Unexpected Exception : {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping("/{idUser}")
-    public ResponseEntity<HttpStatus> submitSpecialty(@PathVariable Integer idUser) {
+    public ResponseEntity<TeachingStaffDTO> submitSpecialty(@PathVariable Integer idUser) {
+      logger.info("Process request : Define a specialty with user {}", idUser);
       try {
         teachingStaffService.defineSpecialty(idUser);
         return new ResponseEntity<>(HttpStatus.OK);
