@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit  {
     } else {
       this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(response => {
         if(response) {
+            this.coreService.setLoginFalse();
             this.userDataService.setCurrentUser(response);
             console.log("Current User is : " + this.userDataService.getCurrentUser().login);
             this.router.navigateByUrl("dashboard");
