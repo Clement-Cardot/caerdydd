@@ -34,6 +34,9 @@ public class UserDTO {
     @JsonManagedReference
     private List<RoleDTO> roles = new ArrayList<>();
 
+    @JsonManagedReference
+    private TeachingStaffDTO teachingStaff;
+
     @JsonBackReference
     private TeamMemberDTO teamMember;
     

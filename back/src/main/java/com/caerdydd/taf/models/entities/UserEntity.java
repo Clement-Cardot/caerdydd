@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.MapsId;
+import javax.persistence.JoinColumn;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -37,6 +39,11 @@ public class UserEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private TeamMemberEntity teamMember;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id_user")
+    private UserEntity user;
 
     // @OneToOne(mappedBy = "user")
     // @PrimaryKeyJoinColumn

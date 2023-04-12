@@ -49,8 +49,10 @@ import { DevProjectModule } from './dev-project/dev-project.module';
     NotationModule,
     ConsultingPageModule,
     PlanificationPageModule,
-    DevProjectModule
+    DevProjectModule,
+    TeamsPageModule,
+    TeachingStaffPageModule,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
