@@ -2,6 +2,8 @@ package com.caerdydd.taf.models.dto;
 
 import java.util.List;
 import org.springframework.stereotype.Component;
+
+import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -22,12 +24,16 @@ public class TeamDTO {
     private String filePathFinalScopeStatement;
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
-    private Integer idProjectDev;
-    private Integer idProjectValidation;
 
     @JsonManagedReference
     List<TeamMemberDTO> teamMembers;
 
+    @JsonManagedReference(value="projectDev")
+    private ProjectDTO projectDev;
+
+    @JsonManagedReference(value="projectValidation")
+    private ProjectDTO projectValidation;
+    
     public TeamDTO() {
     }
 
@@ -42,8 +48,8 @@ public class TeamDTO {
                 + ", teamValidationMark=" + teamValidationMark + ", testBookLink=" + testBookLink
                 + ", filePathScopeStatement=" + filePathScopeStatement + ", filePathFinalScopeStatement="
                 + filePathFinalScopeStatement + ", filePathScopeStatementAnalysis=" + filePathScopeStatementAnalysis
-                + ", filePathReport=" + filePathReport + ", idProjectDev=" + idProjectDev + ", idProjectValidation="
-                + idProjectValidation + ", teamMembers=" + teamMembers + "]";
+                + ", filePathReport=" + filePathReport + ", idProjectDev=" + projectDev.getIdProject() + ", idProjectValidation="
+                + projectValidation.getIdProject() + ", teamMembers=" + teamMembers + "]";
     }
 
 }
