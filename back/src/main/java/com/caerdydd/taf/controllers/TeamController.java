@@ -72,4 +72,19 @@ public class TeamController {
             }
         }
     }
+
+    @PutMapping("/createTeams/{nbTeams}}")
+    public ResponseEntity<HttpStatus> createTeams(@PathVariable Integer nbTeams) {
+        try {
+            teamService.createTeams(nbTeams);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals("Can't create teams")) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+    }
 }

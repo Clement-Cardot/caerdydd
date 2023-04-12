@@ -102,4 +102,19 @@ public class TeamService {
         logger.info("Modifications saved !");
     }
 
+    public void createTeams(Integer nbTeams) throws CustomRuntimeException{
+        if(nbTeams % 2 == 0) { 
+            for (int i = 0; i < nbTeams; i++) {
+                TeamDTO team = new TeamDTO();
+                team.setName("Team " + i);
+                //TO-DO : création paires d'équipes
+                saveTeam(team);
+            }
+        }
+        else {
+            logger.warn("ILLEGAL API USE : Can't create an odd number of teams");
+            throw new CustomRuntimeException("Can't create an odd number of teams");
+        }
+    }
+
 }
