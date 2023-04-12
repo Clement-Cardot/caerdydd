@@ -60,8 +60,8 @@ public class ProjectService {
         ProjectDTO[] projects = new ProjectDTO[nbProjects];
         for(int i = 0; i < nbProjects; i++) {
             ProjectDTO project = new ProjectDTO();
-            project.setName("Project " + i+1);
-            project.setDescription("Description " + i+1);
+            project.setName("Project " + (i+1));
+            project.setDescription("Description " + (i+1));
             project.setIsValidated(false);
             projects[i] = saveProject(project);
         }

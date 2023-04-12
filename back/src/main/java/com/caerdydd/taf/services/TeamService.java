@@ -88,7 +88,7 @@ public class TeamService {
         ProjectDTO[] projects = projectService.createProjects(nbTeams);
         for (int i = 0; i < nbTeams; i++) {
             TeamDTO team = new TeamDTO();
-            team.setName("Team " + i+1);
+            team.setName("Team " + (i+1));
             team.setProjectDev(projects[i]);
             projects[i].setTeamDev(team);
             if (i % 2 == 0) {
