@@ -8,6 +8,7 @@ const websiteName = " - Taf"
 
 const routes: Routes = [
   { path: '',title: 'Login' + websiteName, component: LoginComponent },
+  { path: 'dashboard',title: 'Dashboard' + websiteName, component: DashboardComponent },
   { path: 'teams',title: 'Teams' + websiteName, component: AllTeamsListComponent },
   { path: 'dashboard',title: 'Dashboard' + websiteName, component: DashboardComponent },
 ];

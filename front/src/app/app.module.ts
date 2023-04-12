@@ -33,7 +33,8 @@ import { SidenavModule } from './sidenav/sidenav.module';
     BrowserAnimationsModule,
     LoginPageModule,
     TeamsPageModule,
-    SidenavModule
+    SidenavModule,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent],
 })

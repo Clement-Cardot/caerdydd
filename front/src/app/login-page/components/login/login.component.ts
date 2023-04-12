@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, Ng
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiAuthService } from 'src/app/core/services/api-auth.service';
-import { User } from 'src/app/core/data/models/user.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreServiceService } from 'src/app/core/services/core-service.service';
 
