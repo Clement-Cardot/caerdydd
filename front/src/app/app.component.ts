@@ -15,22 +15,9 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private coreService: CoreServiceService) {}
 
-  ngOnInit(): void {
-    if(this.router.url === "/") {
-      this.coreService.setLoginTrue();
-    }
-    console.log(this.router.url);
-    this.isOnLoginPage();
-    console.log(this.coreService.getLogin());
-  }
+  ngOnInit(): void {}
 
   public getLoginStatut(): boolean {
     return this.coreService.getLogin();
-  }
-
-  private isOnLoginPage(): void {
-    
-    // console.log(this.activatedRoute.snapshot.paramMap.get('url'));
-
   }
 }

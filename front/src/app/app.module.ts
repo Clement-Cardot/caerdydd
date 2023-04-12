@@ -24,6 +24,6 @@ import {TeamsPageModule } from './teams-page/teams-page.module';
     SidenavModule,
     TeamsPageModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

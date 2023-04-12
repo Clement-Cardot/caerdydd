@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, Ng
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LogInService } from '../../services/log-in.service';
+import { CoreServiceService } from 'src/app/core/services/core-service.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit  {
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private logInService: LogInService) {
+    private logInService: LogInService,
+    private coreService: CoreServiceService) {
   }
 
   ngOnInit() {
@@ -34,19 +36,18 @@ export class LoginComponent implements OnInit  {
       username: this.usernameFormControl,
       password: this.passwordFormControl
     });
-    this.activatedRoute.url.subscribe(url => {
-      console.log(url)
-    });
+    if (this.router.url == "/") {
+      this.coreService.setLoginTrue();
+    };
   }
 
   loggingIn(): void {
     if(this.loginForm.invalid){
       return;
     } else {
-      this.logInService.signIn(this.loginForm.value).subscribe(data => {
+      this.logInService.getLoginValidation(this.loginForm.value).subscribe(data => {
           if(data) {
             this.router.navigateByUrl("dashboard");
-            console.log("twd");
           } else {
             this.router.navigateByUrl("error");
           }
