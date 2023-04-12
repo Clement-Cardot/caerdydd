@@ -17,7 +17,12 @@ export class TeamListComponent {
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {  }
 
   applyInTeam(idTeam: number) {
-    this.apiTeamService.applyForTeam(idTeam, this.userDataService.getCurrentUser().id).subscribe((response) => {
+    let currentUser = this.userDataService.getCurrentUser();
+    if (currentUser == null) {
+      console.log("User is not connected");
+      return;
+    }
+    this.apiTeamService.applyForTeam(idTeam, currentUser.id).subscribe((response) => {
       console.log(response);
       this.userDataService.setCurrentUser(response);
       this.update();
@@ -26,7 +31,12 @@ export class TeamListComponent {
 
   isCurrentUserAStudent() {
     let isStudent = false;
-    this.userDataService.getCurrentUser().roles.forEach(role => {
+    let currentUser = this.userDataService.getCurrentUser();
+    if (currentUser == null) {
+      console.log("User is not connected");
+      return false;
+    }
+    currentUser.roles.forEach(role => {
       if(role.role == "STUDENT_ROLE"){
         console.log("User is Student");
         isStudent = true;

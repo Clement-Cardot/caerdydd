@@ -3,7 +3,6 @@ import { ApiUserService } from './core/services/api-user.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
-import { CoreServiceService } from './core/services/core-service.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +12,7 @@ import { CoreServiceService } from './core/services/core-service.service';
 export class AppComponent implements OnInit {
   title = 'TAF';
 
-  constructor(private router: Router, private coreService: CoreServiceService, private activatedRoute: ActivatedRoute, private userDataService: UserDataService, private apiUserService: ApiUserService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private userDataService: UserDataService, private apiUserService: ApiUserService) {
     router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       map(e => {
@@ -25,13 +24,14 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {}
 
   public getLoginStatut(): boolean {
-    return this.coreService.getLogin();
+    return !this.userDataService.isLoggedIn();
   }
 
   refreshCurrentUser() {
     console.log("refreshCurrentUser");
-    if(this.userDataService.getCurrentUser().id != null) {
-      this.apiUserService.getUserById(this.userDataService.getCurrentUser().id)
+    let currentUser = this.userDataService.getCurrentUser();
+    if(currentUser != null && currentUser.id != null) {
+      this.apiUserService.getUserById(currentUser.id)
               .subscribe( user => 
                 this.userDataService.setCurrentUser(user),
               );

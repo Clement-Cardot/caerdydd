@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { User, UserAdapter } from "../data/models/user.model";
+import { Role } from "../data/models/role.model";
 
 @Injectable()
 export class UserDataService {
@@ -9,10 +10,10 @@ export class UserDataService {
     ) {}
 
     // Getters and setters
-    public getCurrentUser(): User {
+    public getCurrentUser(): User | null{
         let data = localStorage.getItem("currentUser");
         if (data == null) {
-            data = "";
+            return null;
         }
         return this.userAdapter.adapt(JSON.parse(data));
     }
@@ -20,6 +21,22 @@ export class UserDataService {
     public setCurrentUser(user: User): void {
         this.clearCurrentUser();
         localStorage.setItem("currentUser", JSON.stringify(user));
+    }
+
+    public getCurrentUserRoles(): Role[] | null{
+        let currentUser = this.getCurrentUser();
+        if (currentUser == null) {
+            return null;
+        }
+        return currentUser.roles;
+    }
+
+    public isLoggedIn(): boolean {
+        let currentUser = this.getCurrentUser();
+        if (currentUser == null) {
+            return false;
+        }
+        return currentUser.id != null;
     }
 
     public clearCurrentUser(): void {

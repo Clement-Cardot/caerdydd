@@ -4,7 +4,6 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiAuthService } from 'src/app/core/services/api-auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreServiceService } from 'src/app/core/services/core-service.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -29,8 +28,7 @@ export class LoginComponent implements OnInit  {
     private formBuilder: FormBuilder,
     private apiAuthService: ApiAuthService,
     private userDataService: UserDataService,
-    private activatedRoute: ActivatedRoute,
-    private coreService: CoreServiceService) {
+    private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -39,7 +37,7 @@ export class LoginComponent implements OnInit  {
       password: this.passwordFormControl
     });
     if (this.router.url == "/") {
-      this.coreService.setLoginTrue();
+      this.userDataService.clearCurrentUser();
     };
   }
 
@@ -49,9 +47,8 @@ export class LoginComponent implements OnInit  {
     } else {
       this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(response => {
         if(response) {
-            this.coreService.setLoginFalse();
             this.userDataService.setCurrentUser(response);
-            console.log("Current User is : " + this.userDataService.getCurrentUser().login);
+            console.log("Current User is : " + response.login);
             this.router.navigateByUrl("dashboard");
         } else {
             this.router.navigateByUrl("error");
