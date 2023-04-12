@@ -1,5 +1,6 @@
 package com.caerdydd.taf.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -78,29 +79,30 @@ public class TeamService {
         return modelMapper.map(response, TeamDTO.class);
     }
 
-    public void createTeams(Integer nbTeams) throws CustomRuntimeException{
-        if(nbTeams % 2 == 0) { 
-            ProjectDTO[] projects = projectService.createProjects(nbTeams);
-            for (int i = 0; i < nbTeams; i++) {
-                TeamDTO team = new TeamDTO();
-                team.setName("Team " + i+1);
-                team.setProjectDev(projects[i]);
-                projects[i].setTeamDev(team);
-                if (i % 2 == 0) {
-                    team.setProjectValidation(projects[i+1]);
-                    projects[i+1].setTeamValidation(team);
-                }
-                else {
-                    team.setProjectValidation(projects[i-1]);
-                    projects[i-1].setTeamValidation(team);
-                }
-                saveTeam(team);
-            }
-        }
-        else {
+    public List<TeamDTO> createTeams(Integer nbTeams) throws CustomRuntimeException{
+        if(nbTeams % 2 != 0) {
             logger.warn("ILLEGAL API USE : Can't create an odd number of teams");
             throw new CustomRuntimeException("Can't create an odd number of teams");
         }
+        List<TeamDTO> teams = new ArrayList<>();
+        ProjectDTO[] projects = projectService.createProjects(nbTeams);
+        for (int i = 0; i < nbTeams; i++) {
+            TeamDTO team = new TeamDTO();
+            team.setName("Team " + i+1);
+            team.setProjectDev(projects[i]);
+            projects[i].setTeamDev(team);
+            if (i % 2 == 0) {
+                team.setProjectValidation(projects[i+1]);
+                projects[i+1].setTeamValidation(team);
+            }
+            else {
+                team.setProjectValidation(projects[i-1]);
+                projects[i-1].setTeamValidation(team);
+            }
+            saveTeam(team);
+            teams.add(team);
+        }
+        return teams;
     }
 
     public UserDTO applyInATeam(Integer idTeam, Integer idUser) throws CustomRuntimeException {

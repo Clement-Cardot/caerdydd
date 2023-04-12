@@ -79,12 +79,12 @@ public class TeamController {
         }
     }
 
-    @PutMapping("/createTeams/{nbTeams}")
-    public ResponseEntity<HttpStatus> createTeams(@PathVariable Integer nbTeams) {
+    @PutMapping("/{nbTeams}")
+    public ResponseEntity<List<TeamDTO>> createTeams(@PathVariable Integer nbTeams) {
         logger.info("Entrée Methode");
         try {
-            teamService.createTeams(nbTeams);
-            return new ResponseEntity<>(HttpStatus.OK);
+            List<TeamDTO> response = teamService.createTeams(nbTeams);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if(e.getMessage().equals("Can't create teams")) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
