@@ -10,13 +10,11 @@ import { ConsultingCalendarComponent } from './consulting-page/consulting-calend
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
 import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
 import { ErrorComponent } from './error/component/error/error.component';
-import { ProjectListComponent } from './page-validate-subject/components/projects-list/projects-list.component';
 import { ProjectFileComponent } from './dev-project/component/project-file/project-file.component';
+import { ProjectListComponent } from './page-validate-subject/components/projects-list/projects-list.component';
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
 
-
-const websiteName = " - Taf"
-
+const websiteName = ' - Taf';
 const routes: Routes = [
   { path: '', title: 'Login' + websiteName, component: LoginComponent },
 
@@ -53,6 +51,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

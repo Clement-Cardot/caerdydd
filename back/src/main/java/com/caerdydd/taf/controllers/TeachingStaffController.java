@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,4 +39,23 @@ public class TeachingStaffController {
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
+
+    @PutMapping("/{idUser}")
+    public ResponseEntity<HttpStatus> submitSpecialty(@PathVariable Integer idUser) {
+      try {
+        teachingStaffService.defineSpecialty(idUser);
+        return new ResponseEntity<>(HttpStatus.OK);
+      }  catch (CustomRuntimeException e) {
+        switch (e.getMessage()) {
+        case "Can't define a specialty for an other teaching staff":
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        case "Teaching staff already has a specialty":
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        case "Teaching staff user not found":
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        default:
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+  }
 }
