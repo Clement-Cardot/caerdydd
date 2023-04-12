@@ -79,7 +79,7 @@ public class TeamController {
         }
     }
 
-    @PutMapping("/createTeams/{nbTeams}}")
+    @PutMapping("/createTeams/{nbTeams}")
     public ResponseEntity<HttpStatus> createTeams(@PathVariable Integer nbTeams) {
         try {
             teamService.createTeams(nbTeams);
@@ -90,6 +90,9 @@ public class TeamController {
             }
             else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } 
+    }
 
     @PutMapping("/{idTeam}/{idUser}")
     public ResponseEntity<UserDTO> applyInATeam(@PathVariable Integer idTeam, @PathVariable Integer idUser) {

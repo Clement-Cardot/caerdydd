@@ -1,5 +1,7 @@
 package com.caerdydd.taf.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,8 @@ import com.caerdydd.taf.services.UserService;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+  private static final Logger logger = LogManager.getLogger(TeamController.class);
+
   @Autowired
   AuthenticationManager authenticationManager;
 
@@ -45,6 +49,7 @@ public class AuthController {
 
   @PostMapping("/login")
   public ResponseEntity<UserDTO> login(@RequestBody UserDTO requestUser) {
+    logger.info("Process request : Login user : {} password : {}", requestUser.getLogin(), requestUser.getPassword());
 
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(requestUser.getLogin(), requestUser.getPassword()));
