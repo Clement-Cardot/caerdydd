@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./team-creation.component.scss']
 })
 export class TeamCreationComponent {
+  
+    constructor() { }
 
+    createTeams(nbTeams:any) {
+      console.log(nbTeams);
+    }
 }
