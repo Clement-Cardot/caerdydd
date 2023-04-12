@@ -1,32 +1,33 @@
 package com.caerdydd.taf.controllers;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
+import com.caerdydd.taf.exceptions.ResourceNotFoundException;
+import com.caerdydd.taf.models.dto.ProjectDTO;
+import com.caerdydd.taf.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.caerdydd.taf.models.dto.ProjectDTO;
-import com.caerdydd.taf.services.ProjectService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/teams/{teamId}/projects")
 public class ProjectController {
-    @Autowired
-    ProjectService projectService;
 
-    @GetMapping("")
-    public ResponseEntity<List<ProjectDTO>> list() {
-        try {
-            List<ProjectDTO> projects = projectService.listAllProjects();
-            return new ResponseEntity<>(projects, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+
+    @Autowired
+    private ProjectService projectService;
+
     
+
+    @PutMapping("/{projectId}")
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer teamId,
+                                                     @PathVariable Integer projectId,
+                                                     @RequestBody ProjectDTO projectDTO,
+                                                     @RequestParam Integer userId) throws ResourceNotFoundException {
+
+        projectDTO.setIdProject(projectId);
+
+        ProjectDTO updatedProjectDTO = projectService.updateProject(teamId, userId, projectDTO);
+
+        return new ResponseEntity<>(updatedProjectDTO, HttpStatus.OK);
+    }
 }

@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 @Component
 public class ProjectDTO {
-
-    private Integer id;
+    private Integer idProject;
     private String name;
     private String description;
-    private String is_validated;
-    private String id_jury;
-    
+
+
+//@JsonBackReference
+//private JuryDTO jury;
 }
