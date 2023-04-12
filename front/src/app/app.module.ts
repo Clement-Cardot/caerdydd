@@ -54,7 +54,7 @@ import { TeachingStaffPageModule } from './teaching-staff-page/teaching-staff-pa
     DevProjectModule,
     ProjectsPageModule,
     TeamsPageModule,
-    TeachingStaffPageModule,
+    DefineSpecialtyComponent,
   ],
   bootstrap: [AppComponent],
 })

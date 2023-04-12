@@ -41,7 +41,8 @@ public class TeachingStaffController {
     }
 
     @PutMapping("/{idUser}")
-    public ResponseEntity<HttpStatus> submitSpecialty(@PathVariable Integer idUser) {
+    public ResponseEntity<TeachingStaffDTO> submitSpecialty(@PathVariable Integer idUser) {
+      logger.info("Process request : Define a specialty with user {}", idUser);
       try {
         teachingStaffService.defineSpecialty(idUser);
         return new ResponseEntity<>(HttpStatus.OK);
