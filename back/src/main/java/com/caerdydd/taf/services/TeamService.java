@@ -82,7 +82,7 @@ public class TeamService {
     public List<TeamDTO> createTeams(Integer nbTeams) throws CustomRuntimeException{
         if(nbTeams % 2 != 0) {
             logger.warn("ILLEGAL API USE : Can't create an odd number of teams");
-            throw new CustomRuntimeException("Can't create an odd number of teams");
+            throw new CustomRuntimeException(CustomRuntimeException.NB_TEAMS_SHOULD_BE_EVEN);
         }
         List<TeamDTO> teams = new ArrayList<>();
         ProjectDTO[] projects = projectService.createProjects(nbTeams);

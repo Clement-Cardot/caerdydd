@@ -81,7 +81,7 @@ public class TeamController {
 
     @PutMapping("/{nbTeams}")
     public ResponseEntity<List<TeamDTO>> createTeams(@PathVariable Integer nbTeams) {
-        logger.info("Entrée Methode");
+        logger.info("Process request : Create {} teams", nbTeams);
         try {
             List<TeamDTO> response = teamService.createTeams(nbTeams);
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -89,9 +89,8 @@ public class TeamController {
             if(e.getMessage().equals("Can't create teams")) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+            logger.error("Unexpected Exception : {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         } 
     }
 
