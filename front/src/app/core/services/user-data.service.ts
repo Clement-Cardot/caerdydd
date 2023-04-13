@@ -1,65 +1,32 @@
 import { Injectable } from "@angular/core";
 import { User, UserAdapter } from "../data/models/user.model";
-import { Role } from "../data/models/role.model";
-import { Observable } from "rxjs/internal/Observable";
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable()
 export class UserDataService {
-    currentUser$!: Observable<User>;
-    currentUserRole$!: Observable<string[]>
+    currentUser: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
     constructor(
         private userAdapter: UserAdapter
     ) {}
 
     // Getters and setters
-    public getCurrentUser(): Observable<User> | null{
-        if (this.currentUser$ != null){
-            return this.currentUser$;
+    public getCurrentUser(): BehaviorSubject<User | null> {
+        let data = localStorage.getItem("currentUser");
+        if (data == null) {
+            return this.currentUser;
         }
-        else {
-            let data = localStorage.getItem("currentUser");
-            if (data == null) {
-                return null;
-            }
-            this.setCurrentUser(this.userAdapter.adapt(JSON.parse(data)));            
-            return this.currentUser$;
-        }
+        this.setCurrentUser(this.userAdapter.adapt(JSON.parse(data)));            
+        return this.currentUser;
     }
 
     public setCurrentUser(user: User): void {
-        this.clearCurrentUser();
-
-        this.currentUser$ = new Observable(observer => {
-            observer.next(user);
-            observer.complete();
-        });
-
-        this.currentUserRole$ = new Observable(observer => {
-            observer.next(user.roles.map((role: Role) => role.role));
-            observer.complete();
-        });
-
+        this.currentUser.next(user);
         localStorage.setItem("currentUser", JSON.stringify(user));
     }
 
-    public getCurrentUserRoles(): Observable<string[]> | null{
-        let currentUser = this.getCurrentUser();
-        if (currentUser == null) {
-            return null;
-        }
-        return this.currentUserRole$;
-    }
-
-    public isLoggedIn(): boolean {
-        let currentUser = this.getCurrentUser();
-        if (currentUser == null) {
-            return false;
-        }
-        return this.getCurrentUser != null;
-    }
-
     public clearCurrentUser(): void {
+        this.currentUser.next(null);
         localStorage.removeItem("currentUser");
     }
 
