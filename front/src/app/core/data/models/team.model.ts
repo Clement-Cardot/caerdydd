@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { TeamMember, TeamMemberAdapter } from "./team-member.model";
 import { Adapter } from "../adapter";
+import { Project, ProjectAdapter } from "./project.model";
 
 
 export class Team {
@@ -17,7 +18,9 @@ export class Team {
         public idProjectDev: number,
         public idProjectValidation: number,
 
-        public teamMembers: TeamMember[]
+        public teamMembers: TeamMember[],
+        public projectDev: Project,
+        public projectValidation: Project
     ) {}
 }
 
@@ -26,15 +29,16 @@ export class Team {
 })
 export class TeamAdapter implements Adapter<Team> {
 
-    constructor(private teamMemberAdapter: TeamMemberAdapter) { }
+    constructor(private teamMemberAdapter: TeamMemberAdapter, private projectAdapter: ProjectAdapter) { }
     
         adapt(item: any): Team {
             let teamMemberList: TeamMember[] = [];
-            item.teamMembers.forEach((teamMember: any) => {
-                teamMemberList.push(this.teamMemberAdapter.adapt(teamMember));
-            });
-            
-            return new Team(
+            if (item.teamMembers != null){
+                item.teamMembers.forEach((teamMember: any) => {
+                    teamMemberList.push(this.teamMemberAdapter.adapt(teamMember));
+                });
+            }
+            let response = new Team(
                 item.idTeam,
                 item.name,
                 item.teamWorkMark,
@@ -46,7 +50,11 @@ export class TeamAdapter implements Adapter<Team> {
                 item.filePathReport,
                 item.idProjectDev,
                 item.idProjectValidation,
-                teamMemberList
+                teamMemberList,
+                this.projectAdapter.adapt(item.projectDev),
+                this.projectAdapter.adapt(item.projectValidation)
             );
+            console.log(response);
+            return response;
         }
     }

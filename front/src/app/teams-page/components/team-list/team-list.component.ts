@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { Team } from 'src/app/core/data/models/team.model';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
+import { User } from 'src/app/core/data/models/user.model';
 
 @Component({
   selector: 'app-team-list',
@@ -9,30 +10,45 @@ import { ApiTeamService } from 'src/app/core/services/api-team.service';
   styleUrls: ['./team-list.component.scss']
 })
 
-export class TeamListComponent {
+export class TeamListComponent implements OnInit {
   @Input() team!: Team;
   @Output() applyEvent = new EventEmitter<number>();
+
   displayedColumns: string[] = ['id', 'name', 'surname', 'speciality'];
 
+  currentUser!: User | null;
+
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {  }
+  
+  
+  ngOnInit(): void {
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+                                      this.currentUser = user;
+                                    });
+  }
 
   applyInTeam(idTeam: number) {
-    this.apiTeamService.applyForTeam(idTeam, this.userDataService.getCurrentUser().id).subscribe((response) => {
-      console.log(response);
-      this.userDataService.setCurrentUser(response);
+    if (this.currentUser == null) {
+      console.log("User is not connected");
+      return;
+    }
+    this.apiTeamService.applyForTeam(idTeam, this.currentUser.id).subscribe((userResponse) => {
+      console.log(userResponse);
+      this.userDataService.setCurrentUser(userResponse);
       this.update();
-    });
+      }
+    );
   }
 
   isCurrentUserAStudent() {
-    let isStudent = false;
-    this.userDataService.getCurrentUser().roles.forEach(role => {
-      if(role.role == "STUDENT_ROLE"){
-        console.log("User is Student");
-        isStudent = true;
-      }
-    });
-    return isStudent;
+    if (this.currentUser == null) {
+      console.log("User is not connected");
+      return false;
+    }
+    if (this.currentUser.getRoles().includes("STUDENT_ROLE")){
+      return true;
+    }
+    return false; 
   }
 
   update(){

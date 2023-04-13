@@ -79,6 +79,21 @@ public class TeamController {
         }
     }
 
+    @PutMapping("/{nbTeams}")
+    public ResponseEntity<List<TeamDTO>> createTeams(@PathVariable Integer nbTeams) {
+        logger.info("Process request : Create {} teams", nbTeams);
+        try {
+            List<TeamDTO> response = teamService.createTeams(nbTeams);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals("Can't create teams")) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            logger.error("Unexpected Exception : {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        } 
+    }
+
     @PutMapping("/{idTeam}/{idUser}")
     public ResponseEntity<UserDTO> applyInATeam(@PathVariable Integer idTeam, @PathVariable Integer idUser) {
         logger.info("Process request : Apply in team: {} with user {}", idTeam, idUser);

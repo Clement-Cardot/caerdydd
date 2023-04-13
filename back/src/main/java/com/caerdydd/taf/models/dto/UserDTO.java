@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class UserDTO {
     private String password;
     private String email;
     private String speciality;
-
+    
     @JsonManagedReference
     private List<RoleDTO> roles;
 

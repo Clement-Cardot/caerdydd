@@ -22,9 +22,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import com.caerdydd.taf.models.dto.ProjectDTO;
 import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.caerdydd.taf.models.entities.TeamEntity;
 import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.models.entities.UserEntity;
@@ -47,7 +49,12 @@ public class TeamMemberServiceTest {
     public void testListAllTeamMembers_Nominal() {
         // Mock teamMemberRepository.findAll() method
         List<TeamMemberEntity> mockedAnswer = new ArrayList<TeamMemberEntity>();
-        TeamEntity team = new TeamEntity(1, "Team A");
+        TeamEntity team = new TeamEntity(
+                                        1, 
+                                        "Team A",
+                                        new ProjectEntity("Project A", "Description 1"),
+                                        new ProjectEntity("Project B", "Description 2")
+                                    );
         UserEntity user1 = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
         UserEntity user2 = new UserEntity(2, "firstname2", "lastname2", "login2", "password2", "email2", "CSS");
         
@@ -57,7 +64,12 @@ public class TeamMemberServiceTest {
 
         // Define the expected answer
         List<TeamMemberDTO> expectedAnswer = new ArrayList<TeamMemberDTO>();
-        TeamDTO expectedTeam = new TeamDTO(1, "Team A");
+        TeamDTO expectedTeam = new TeamDTO(
+                                        1, 
+                                        "Team A",
+                                        new ProjectDTO("Project A", "Description 1"),
+                                        new ProjectDTO("Project B", "Description 2")
+                                    );
         UserDTO expectedUser1 = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
         UserDTO expectedUser2 = new UserDTO(2, "firstname2", "lastname2", "login2", "password2", "email2", "CSS");
         expectedAnswer.add(new TeamMemberDTO(expectedUser1, expectedTeam));
@@ -118,13 +130,23 @@ public class TeamMemberServiceTest {
     @Test
     public void testGetTeamMembersById_Nominal(){
         // Mock teamMemberRepository.findById() method
-        TeamEntity team = new TeamEntity(1, "Team A");
+        TeamEntity team = new TeamEntity(
+                                        1, 
+                                        "Team A",
+                                        new ProjectEntity("Project A", "Description 1"),
+                                        new ProjectEntity("Project B", "Description 2")
+                                    );
         UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
         Optional<TeamMemberEntity> mockedAnswer = Optional.of(new TeamMemberEntity(user, team));
         when(teamMemberRepository.findById(1)).thenReturn(mockedAnswer);
 
         // Define the expected answer
-        TeamDTO expectedTeam = new TeamDTO(1, "Team A");
+        TeamDTO expectedTeam = new TeamDTO(
+                                        1, 
+                                        "Team A",
+                                        new ProjectDTO("Project A", "Description 1"),
+                                        new ProjectDTO("Project B", "Description 2")
+                                    );
         UserDTO expectedUser = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
         TeamMemberDTO expectedAnswer = new TeamMemberDTO(expectedUser, expectedTeam);
 
@@ -175,13 +197,23 @@ public class TeamMemberServiceTest {
     @Test
     public void testSaveTeamMember_Nominal(){
         // Mock teamMemberRepository.save() method
-        TeamEntity team = new TeamEntity(1, "Team A");
+        TeamEntity team = new TeamEntity(
+                                    1, 
+                                    "Team A",
+                                    new ProjectEntity("Project A", "Description 1"),
+                                    new ProjectEntity("Project B", "Description 2")
+                                );
         UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
         TeamMemberEntity mockedAnswer = new TeamMemberEntity(user, team);
         when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenReturn(mockedAnswer);
 
         // Prepare the input
-        TeamDTO inputTeam = new TeamDTO(1, "Team A");
+        TeamDTO inputTeam = new TeamDTO(
+                                    1, 
+                                    "Team A",
+                                    new ProjectDTO("Project A", "Description 1"),
+                                    new ProjectDTO("Project B", "Description 2")
+                                );
         UserDTO inputUser = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
         TeamMemberDTO teamMemberToSave = new TeamMemberDTO(inputUser, inputTeam);
         // Call the method to test

@@ -82,7 +82,7 @@ public class SecurityConfig{
                 .build();
     }
 
-    public Boolean checkCurrentUser(Integer id) throws CustomRuntimeException{
+    public Boolean checkCurrentUser(Integer id) throws CustomRuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentLogin = authentication.getName();
         UserDTO user = userService.getUserById(id);
@@ -90,7 +90,7 @@ public class SecurityConfig{
         return user.getLogin().equals(currentLogin);
     }
 
-    public UserDTO getCurrentUser() throws CustomRuntimeException{
+    public UserDTO getCurrentUser() throws CustomRuntimeException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentLogin = authentication.getName();
         return userService.getUserByLogin(currentLogin);

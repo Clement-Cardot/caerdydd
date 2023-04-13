@@ -15,6 +15,7 @@ public class CustomRuntimeException extends Exception{
     public static final String SERVICE_ERROR = "Unexpected error, check database connection";
     public static final String USER_IS_NOT_A_STUDENT = "Requested user is not a student";
     public static final String USER_IS_NOT_A_OPTION_LEADER = "Requested user is not a option leader";
+    public static final String NB_TEAMS_SHOULD_BE_EVEN = "The number of teams should be even";
 
 
     public CustomRuntimeException(String message) {

@@ -13,6 +13,10 @@ export class User {
         public speciality: string,
         public roles: Role[]
     ) { }
+
+    getRoles(): string[] {
+        return this.roles.map((role: Role) => role.role);
+    }
 }
 
 @Injectable({

@@ -2,10 +2,14 @@ package com.caerdydd.taf.models.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -18,6 +22,7 @@ import lombok.Setter;
 public class TeamEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTeam;
     private String name;
     private Integer teamWorkMark;
@@ -27,25 +32,44 @@ public class TeamEntity {
     private String filePathFinalScopeStatement;
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
-    private Integer idProjectDev;
-    private Integer idProjectValidation;
 
     @OneToMany
     @JoinColumn(name = "id_team")
     List<TeamMemberEntity> teamMembers;
 
-    // @OneToOne
-    // private ProjectEntity projectDev;
+    @OneToOne
+    @JoinColumn(name = "id_project_dev")
+    private ProjectEntity projectDev;
 
-    // @OneToOne
-    // private ProjectEntity projectValidation;
+    @OneToOne
+    @JoinColumn(name = "id_project_validation")
+    private ProjectEntity projectValidation;
 
     public TeamEntity() {
     }
 
-    public TeamEntity(Integer idTeam, String name) {
+    public TeamEntity(Integer idTeam, String name, ProjectEntity projectDev, ProjectEntity projectValidation) {
         this.idTeam = idTeam;
         this.name = name;
+        this.projectDev = projectDev;
+        this.projectValidation = projectValidation;
+    }
+
+    public TeamEntity(Integer idTeam, String name, Integer teamWorkMark, Integer teamValidationMark, String testBookLink,
+            String filePathScopeStatement, String filePathFinalScopeStatement, String filePathScopeStatementAnalysis,
+            String filePathReport, ProjectEntity projectDev, ProjectEntity projectValidation) {
+
+        this.idTeam = idTeam;
+        this.name = name;
+        this.teamWorkMark = teamWorkMark;
+        this.teamValidationMark = teamValidationMark;
+        this.testBookLink = testBookLink;
+        this.filePathScopeStatement = filePathScopeStatement;
+        this.filePathFinalScopeStatement = filePathFinalScopeStatement;
+        this.filePathScopeStatementAnalysis = filePathScopeStatementAnalysis;
+        this.filePathReport = filePathReport;
+        this.projectDev=projectDev;
+        this.projectValidation=projectValidation;
     }
 
     @Override
@@ -54,8 +78,8 @@ public class TeamEntity {
                 + ", teamValidationMark=" + teamValidationMark + ", testBookLink=" + testBookLink
                 + ", filePathScopeStatement=" + filePathScopeStatement + ", filePathFinalScopeStatement="
                 + filePathFinalScopeStatement + ", filePathScopeStatementAnalysis=" + filePathScopeStatementAnalysis
-                + ", filePathReport=" + filePathReport + ", idProjectDev=" + idProjectDev + ", idProjectValidation="
-                + idProjectValidation + ", teamMembers=" + teamMembers + "]";
+                + ", filePathReport=" + filePathReport + ", idProjectDev=" + projectDev.getIdProject() + ", idProjectValidation="
+                + projectValidation.getIdProject() + ", teamMembers=" + teamMembers + "]";
     }
 
 }

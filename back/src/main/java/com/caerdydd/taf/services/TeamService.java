@@ -1,5 +1,6 @@
 package com.caerdydd.taf.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.ProjectDTO;
 import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
@@ -34,6 +36,9 @@ public class TeamService {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -72,6 +77,32 @@ public class TeamService {
         TeamEntity response = teamRepository.save(teamEntity);
 
         return modelMapper.map(response, TeamDTO.class);
+    }
+
+    public List<TeamDTO> createTeams(Integer nbTeams) throws CustomRuntimeException{
+        if(nbTeams % 2 != 0) {
+            logger.warn("ILLEGAL API USE : Can't create an odd number of teams");
+            throw new CustomRuntimeException(CustomRuntimeException.NB_TEAMS_SHOULD_BE_EVEN);
+        }
+        List<TeamDTO> teams = new ArrayList<>();
+        ProjectDTO[] projects = projectService.createProjects(nbTeams);
+        for (int i = 0; i < nbTeams; i++) {
+            TeamDTO team = new TeamDTO();
+            team.setName("Team " + (i+1));
+            team.setProjectDev(projects[i]);
+            projects[i].setTeamDev(team);
+            if (i % 2 == 0) {
+                team.setProjectValidation(projects[i+1]);
+                projects[i+1].setTeamValidation(team);
+            }
+            else {
+                team.setProjectValidation(projects[i-1]);
+                projects[i-1].setTeamValidation(team);
+            }
+            saveTeam(team);
+            teams.add(team);
+        }
+        return teams;
     }
 
     public UserDTO applyInATeam(Integer idTeam, Integer idUser) throws CustomRuntimeException {
