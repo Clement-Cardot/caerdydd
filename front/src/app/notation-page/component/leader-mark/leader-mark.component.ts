@@ -25,31 +25,26 @@ export class LeaderMarkComponent implements OnInit {
 	
 	@Input() team!: Team;
 
-	teamMark!: number;
-	validationMark!: number;
-	idTeamString: any; 
-	idTeam : number = 0;
-	bonusPenaltySum: number = 0;
-
 	panelOpenState = false;
 
 	constructor(private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService) {
 	}
 
 	ngOnInit(): void {
-		this.getAllData();
 	}
 
-	calculateFinalMark(student: TeamMember): number {
-		return student.individualMark + this.teamMark +
-			this.validationMark + student.bonusPenalty;
+	calculateFinalMark(teamMember: TeamMember): number {
+		return teamMember.individualMark 
+				+ this.team.teamWorkMark 
+				+ this.team.teamValidationMark 
+				+ teamMember.bonusPenalty;
 	}
 	
-	getMinValue(student: TeamMember): number {
-		if (this.calculateFinalMark(student) - student.bonusPenalty >= 4) {
+	getMinValue(teamMember: TeamMember): number {
+		if (this.calculateFinalMark(teamMember) - teamMember.bonusPenalty >= 4) {
 			return -4;
 		} else {
-			return -(this.calculateFinalMark(student) - student.bonusPenalty);
+			return -(this.calculateFinalMark(teamMember) - teamMember.bonusPenalty);
 		}
 	}
 	
@@ -62,21 +57,13 @@ export class LeaderMarkComponent implements OnInit {
 	}
 	
 	getSumBonus(): number {
-		this.bonusPenaltySum = 0;
+		let bonusPenaltySum = 0;
 
 		this.team.teamMembers.forEach((student) => {
-			this.bonusPenaltySum += student.bonusPenalty;
+			bonusPenaltySum += student.bonusPenalty;
 		});
 
-		return this.bonusPenaltySum;
-	}
-
-	getAllData(){
-		this.apiTeamService. getTeam(this.idTeam)
-			.subscribe(data => {
-				this.team = data;
-				}
-			);
+		return bonusPenaltySum;
 	}
 
 	saveBonus(){
