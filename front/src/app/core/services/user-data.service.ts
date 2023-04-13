@@ -23,12 +23,12 @@ export class UserDataService {
         localStorage.setItem("currentUser", JSON.stringify(user));
     }
 
-    public getCurrentUserRoles(): Role[] | null{
+    public getCurrentUserRoles(): string[] | null{
         let currentUser = this.getCurrentUser();
         if (currentUser == null) {
             return null;
         }
-        return currentUser.roles;
+        return currentUser.roles.map((role: Role) => role.role);
     }
 
     public isLoggedIn(): boolean {

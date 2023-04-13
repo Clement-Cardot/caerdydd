@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit  {
   }
 
   redirectDependingOnUserRole() {
-    let currentUserRoles = this.userDataService.getCurrentUser()?.roles.map((role: Role) => role.role);
+    let currentUserRoles = this.userDataService.getCurrentUserRoles();
     if (currentUserRoles == null || currentUserRoles == undefined || currentUserRoles.length == 0) {
       this.router.navigateByUrl("/");
     }
