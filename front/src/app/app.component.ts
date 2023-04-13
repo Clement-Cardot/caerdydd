@@ -12,7 +12,7 @@ import { User } from './core/data/models/user.model';
 })
 export class AppComponent implements OnInit {
   title = 'TAF';
-  currentUser!: User;
+  currentUser: User | null = null;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private userDataService: UserDataService, private apiUserService: ApiUserService) {
     router.events.pipe(
@@ -23,20 +23,13 @@ export class AppComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
-
-  public getLoginStatut(): boolean {
-    return !this.userDataService.isLoggedIn();
+  ngOnInit(): void {
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+      this.currentUser = user;
+    });
   }
 
-  // refreshCurrentUser() {
-  //   console.log("refreshCurrentUser");
-  //   let currentUser = this.userDataService.getCurrentUser();
-  //   if(currentUser != null && currentUser.id != null) {
-  //     this.apiUserService.getUserById(currentUser.id)
-  //             .subscribe( user => 
-  //               this.userDataService.setCurrentUser(user),
-  //             );
-  //   }
-  // }
+  isLoggedIn(): boolean {
+    return this.currentUser != null;
+  }
 }

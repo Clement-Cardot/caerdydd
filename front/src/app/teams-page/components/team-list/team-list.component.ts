@@ -13,20 +13,18 @@ import { User } from 'src/app/core/data/models/user.model';
 export class TeamListComponent implements OnInit {
   @Input() team!: Team;
   @Output() applyEvent = new EventEmitter<number>();
+
   displayedColumns: string[] = ['id', 'name', 'surname', 'speciality'];
-  currentUser!: User;
-  currentUserRole!: string[];
+
+  currentUser!: User | null;
 
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {  }
   
   
   ngOnInit(): void {
-    this.userDataService.getCurrentUser()?.subscribe((user) => {
-      this.currentUser = user;
-    });
-    this.userDataService.getCurrentUserRoles()?.subscribe((roles) => {
-      this.currentUserRole = roles;
-    });
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+                                      this.currentUser = user;
+                                    });
   }
 
   applyInTeam(idTeam: number) {
@@ -34,11 +32,12 @@ export class TeamListComponent implements OnInit {
       console.log("User is not connected");
       return;
     }
-    this.apiTeamService.applyForTeam(idTeam, this.currentUser.id).subscribe((response) => {
-      console.log(response);
-      this.userDataService.setCurrentUser(response);
+    this.apiTeamService.applyForTeam(idTeam, this.currentUser.id).subscribe((userResponse) => {
+      console.log(userResponse);
+      this.userDataService.setCurrentUser(userResponse);
       this.update();
-    });
+      }
+    );
   }
 
   isCurrentUserAStudent() {
@@ -46,12 +45,10 @@ export class TeamListComponent implements OnInit {
       console.log("User is not connected");
       return false;
     }
-    if (this.currentUserRole.includes("STUDENT_ROLE")){
+    if (this.currentUser.getRoles().includes("STUDENT_ROLE")){
       return true;
     }
-
-    return false;
-    
+    return false; 
   }
 
   update(){

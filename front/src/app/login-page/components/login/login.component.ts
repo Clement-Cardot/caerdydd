@@ -4,7 +4,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiAuthService } from 'src/app/core/services/api-auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Role } from 'src/app/core/data/models/role.model';
+import { User } from 'src/app/core/data/models/user.model';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit  {
   usernameFormControl = new FormControl('', [Validators.required]);
   passwordFormControl = new FormControl('', [Validators.required]);
 
-  currentUserRoles!: string[];
+  currentUser!: User | null;
 
   constructor(private router: Router,
     private formBuilder: FormBuilder,
@@ -48,40 +48,45 @@ export class LoginComponent implements OnInit  {
     if(this.loginForm.invalid){
       return;
     } else {
-      this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(response => {
-        if(response) {
-            this.userDataService.setCurrentUser(response);
-            this.userDataService.getCurrentUserRoles()?.subscribe((roles) => {
-              this.currentUserRoles = roles;
-            });
-            console.log("Current User is : " + response.login);
-            this.redirectDependingOnUserRole();
-            
-        } else {
-            this.router.navigateByUrl("/");
-        }
-      });
+      this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(userResponse => {
+            if(userResponse) {
+
+                this.userDataService.setCurrentUser(userResponse);
+                this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+                  this.currentUser = user;
+                });
+
+                console.log("Current User is : " + userResponse.login);
+                this.redirectDependingOnUserRole();
+                
+            } else {
+                this.router.navigateByUrl("/");
+            }
+          }
+        );
     }
   }
 
   redirectDependingOnUserRole() {
-    if (this.currentUserRoles == null || this.currentUserRoles == undefined || this.currentUserRoles.length == 0) {
-      this.router.navigateByUrl("/");
-    }
-    else if (this.currentUserRoles.includes("OPTION_LEADER_ROLE")) {
-      this.router.navigateByUrl("teams-creation");
-    }
-    else if (this.currentUserRoles.includes("TEAM_LEADER_ROLE")) {
-      this.router.navigateByUrl("teams-creation");
-    }
-    else if (this.currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
-      this.router.navigateByUrl("teams"); // TODO : redirect to specific team page
-    }
-    else if (this.currentUserRoles.includes("STUDENT_ROLE")) {
-      this.router.navigateByUrl("teams");
-    }
-    else {
-      this.router.navigateByUrl("dashboard");
+    if (this.currentUser != null) {
+      if (this.currentUser.getRoles() == null || this.currentUser.getRoles() == undefined || this.currentUser.getRoles().length == 0) {
+        this.router.navigateByUrl("/");
+      }
+      else if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
+        this.router.navigateByUrl("teams-creation");
+      }
+      else if (this.currentUser.getRoles().includes("TEAM_LEADER_ROLE")) {
+        this.router.navigateByUrl("teams-creation");
+      }
+      else if (this.currentUser.getRoles().includes("TEAM_MEMBER_ROLE")) {
+        this.router.navigateByUrl("teams"); // TODO : redirect to specific team page
+      }
+      else if (this.currentUser.getRoles().includes("STUDENT_ROLE")) {
+        this.router.navigateByUrl("teams");
+      }
+      else {
+        this.router.navigateByUrl("dashboard");
+      }
     }
   }
 }
