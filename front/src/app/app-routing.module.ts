@@ -12,20 +12,20 @@ import { RoleGuard } from './core/guards/role.guard';
 const websiteName = " - Taf"
 
 const routes: Routes = [
-  { path: '',title: 'Login' + websiteName, component: LoginComponent },
+  { path: '', title: 'Login' + websiteName, component: LoginComponent },
 
   // Main Pagee
-  { path: 'dashboard',title: 'Dashboard' + websiteName, component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', title: 'Dashboard' + websiteName, component: DashboardComponent, canActivate: [AuthGuard] },
 
   // Teams pages
-  { path: 'teams',title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },
-  { path: 'teams-creation',title: 'Création d\'équipes' + websiteName, component: TeamCreationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
+  { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },
+  { path: 'teams-creation', title: 'Création d\'équipes' + websiteName, component: TeamCreationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
   
   // Projects pages
-  { path: 'projectD',title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
+  { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
 
   // Notation pages
-  { path: 'marks',title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
+  { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
