@@ -6,6 +6,7 @@ import { ProjectDescriptionComponent } from './project-description-page/componen
 import { AllTeamsListComponent } from './teams-page/components/all-teams-list/all-teams-list.component';
 import { TeamCreationComponent } from './teams-creation-page/components/team-creation/team-creation.component';
 import { NotationComponent } from './notation-page/component/notation/notation.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const websiteName = " - Taf"
 
