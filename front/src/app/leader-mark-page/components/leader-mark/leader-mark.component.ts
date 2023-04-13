@@ -25,7 +25,7 @@ export class LeaderMarkComponent {
 
 	teamMark!: number;
 	validationMark!: number;
-	teams!: Team[];
+	team!: Team;
 	idTeamString: any; 
 	idTeam : number = 0;
 	bonusPenaltySum: number = 0;
@@ -63,7 +63,7 @@ export class LeaderMarkComponent {
 	getSumBonus(): number {
 		this.bonusPenaltySum = 0;
 
-		this.teams[this.idTeam - 1].teamMembers.forEach((student) => {
+		this.team.teamMembers.forEach((student) => {
 			this.bonusPenaltySum += student.bonusPenalty;
 		});
 
@@ -71,17 +71,17 @@ export class LeaderMarkComponent {
 	}
 
 	getAllData(){
-		this.apiTeamService.getAllTeams()
+		this.apiTeamService. getTeam(this.idTeam)
 			.subscribe(data => {
-				this.teams = data;
-				this.teamMark = this.teams[this.idTeam - 1].teamWorkMark;
-				this.validationMark = this.teams[this.idTeam - 1].teamValidationMark;
+				this.team = data;
+				this.teamMark = this.team.teamWorkMark;
+				this.validationMark = this.team.teamValidationMark;
 			  }
 			);
 	}
 
 	saveBonus(){
-		this.teams[this.idTeam - 1].teamMembers.forEach(teamMember => {
+		this.team.teamMembers.forEach(teamMember => {
 			this.apiTeamMemberService.setBonusTeamMember(teamMember.user.id, teamMember.bonusPenalty).subscribe((response) => {
 				console.log(response);
 			  });
