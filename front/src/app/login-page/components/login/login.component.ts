@@ -63,20 +63,17 @@ export class LoginComponent implements OnInit  {
     let currentUserRoles = this.userDataService.getCurrentUser()?.roles.map((role: Role) => role.role);
     if (currentUserRoles == null || currentUserRoles == undefined || currentUserRoles.length == 0) {
       this.router.navigateByUrl("/");
-    }
-    else if (currentUserRoles.includes("OPTION_LEADER_ROLE")) {
+    } else if (currentUserRoles.includes("PLANNING_ROLE")) {
+      this.router.navigateByUrl("planning");
+    } else if (currentUserRoles.includes("OPTION_LEADER_ROLE")) {
       this.router.navigateByUrl("teams-creation");
-    }
-    else if (currentUserRoles.includes("TEAM_LEADER_ROLE")) {
+    } else if (currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
       this.router.navigateByUrl("teams-creation");
-    }
-    else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
-      this.router.navigateByUrl("teams"); // TODO : redirect to specific team page
-    }
-    else if (currentUserRoles.includes("STUDENT_ROLE")) {
+    } else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
       this.router.navigateByUrl("teams");
-    }
-    else {
+    } else if (currentUserRoles.includes("STUDENT_ROLE")) {
+      this.router.navigateByUrl("teams");
+    } else {
       this.router.navigateByUrl("dashboard");
     }
   }
