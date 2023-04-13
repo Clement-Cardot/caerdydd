@@ -34,27 +34,27 @@ mobileQuery: MediaQueryList;
     let currentUserRoles = this.userDataService.getCurrentUserRoles();
     if (currentUserRoles == null) {
       this.router.navigateByUrl("/");
-      return;
     }
-    if (currentUserRoles.includes("OPTION_LEADER_ROLE")) {
+    else if (currentUserRoles.includes("OPTION_LEADER_ROLE")) {
+      this.navLink.push("Dashboard");
+      this.navLink.push("Admin Panel")
+      this.navLink.push("Profil");
+      this.navLink.push("Equipes");
+      this.navLink.push("Notifications");
+    }
+    else if (currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Profil");
       this.navLink.push("Equipes");
       this.navLink.push("Notifications");
     }
-    if (currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
-      this.navLink.push("Dashboard");
-      this.navLink.push("Profil");
-      this.navLink.push("Equipes");
-      this.navLink.push("Notifications");
-    }
-    if (currentUserRoles.includes("PLANNING_ROLE")) {
+    else if (currentUserRoles.includes("PLANNING_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Profil");
       this.navLink.push("Planiification");
       this.navLink.push("Notifications");
     }
-    if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
+    else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Profil");
       this.navLink.push("Mon équipe");
@@ -62,11 +62,10 @@ mobileQuery: MediaQueryList;
       this.navLink.push("Projet Validation");
       this.navLink.push("Notifications");
     }
-    if (currentUserRoles.includes("STUDENT_ROLE")) {
+    else if (currentUserRoles.includes("STUDENT_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Profil");
       this.navLink.push("Equipes");
-      this.navLink.push("Notifications");
     }
   }
 
