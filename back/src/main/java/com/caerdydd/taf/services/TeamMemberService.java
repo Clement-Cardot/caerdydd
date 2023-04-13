@@ -56,4 +56,29 @@ public class TeamMemberService {
 
         return modelMapper.map(response, TeamMemberDTO.class);
     }
+
+    public TeamMemberDTO setBonusPenaltyById(Integer id, Integer bonusPenalty) throws CustomRuntimeException {
+        TeamMemberDTO teamMember = getTeamMemberById(id);
+        teamMember.setBonusPenalty(bonusPenalty);
+        TeamMemberDTO response = updateTeamMember(teamMember);
+        return response;
+    }
+
+    public TeamMemberDTO updateTeamMember(TeamMemberDTO teamMember) throws CustomRuntimeException {
+        TeamMemberEntity teamMemberEntity = modelMapper.map(teamMember, TeamMemberEntity.class);
+        
+        Optional<TeamMemberEntity> optionalUser = teamMemberRepository.findById(teamMemberEntity.getIdUser());
+        if (optionalUser.isEmpty()){
+            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
+        }
+
+        TeamMemberEntity response = null;
+        try {
+            response = teamMemberRepository.save(teamMemberEntity);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+
+        return modelMapper.map(response, TeamMemberDTO.class);
+    }
 }

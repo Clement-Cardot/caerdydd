@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +40,19 @@ public class TeamMemberController {
         try {
             TeamMemberDTO user = teamMemberService.getTeamMemberById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/bonus/{id}/{bonus}")
+    public ResponseEntity<TeamMemberDTO> setBonusPenalty(@PathVariable Integer id, @PathVariable Integer bonus) {
+        try {
+            TeamMemberDTO teamMember = teamMemberService.setBonusPenaltyById(id, bonus);
+            return new ResponseEntity<>(teamMember, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if(e.getMessage().equals(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

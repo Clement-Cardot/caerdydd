@@ -1,17 +1,17 @@
 <h1>{{idTeam}}</h1>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table [dataSource]="teams[idTeam-1].teamMembers" class="mat-elevation-z8">
 
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Nom</th>
-    <td mat-cell *matCellDef="let element">{{element.name}}</td>
+    <td mat-cell *matCellDef="let element">{{element.user.firstname}}</td>
   </ng-container>
 
   <!-- Firstname Column -->
   <ng-container matColumnDef="firstname">
     <th mat-header-cell *matHeaderCellDef>Prénom</th>
-    <td mat-cell *matCellDef="let element">{{element.firstname}}</td>
+    <td mat-cell *matCellDef="let element">{{element.user.lastname}}</td>
   </ng-container>
 
   <!-- IndividualMark Column -->
@@ -23,29 +23,29 @@
   <!-- TeamMark Column -->
   <ng-container matColumnDef="teamMark">
     <th mat-header-cell *matHeaderCellDef>Note du travail d'équipe</th>
-    <td mat-cell *matCellDef="let element">{{element.teamMark}}</td>
+    <td mat-cell *matCellDef="let element">{{teamMark}}</td>
   </ng-container>
 
   <!-- ValidationMark Column -->
   <ng-container matColumnDef="validationMark">
     <th mat-header-cell *matHeaderCellDef>Note validation</th>
-    <td mat-cell *matCellDef="let element">{{element.validationMark}}</td>
+    <td mat-cell *matCellDef="let element">{{validationMark}}</td>
   </ng-container>
 
   <!-- Bonus/Malus Column -->
   <ng-container matColumnDef="bonusMalus">
     <th mat-header-cell *matHeaderCellDef>Bonus/Malus</th>
     <td mat-cell *matCellDef="let element">
-      <input type="number" [(ngModel)]="element.bonusMalus" 
+      <input type="number" [(ngModel)]="element.bonusPenalty" 
       min="{{getMinValue(element)}}" max="{{getMaxValue(element)}}"
-      (ngModelChange)="updateFinalMark(element)" onkeydown="return false">
+      (ngModelChange)="calculateFinalMark(element)" onkeydown="return false">
     </td>
   </ng-container>
 
   <!-- FinalMark Column -->
   <ng-container matColumnDef="FinalMark">
     <th mat-header-cell *matHeaderCellDef>Note finale</th>
-    <td mat-cell *matCellDef="let element">{{element.finalMark}}</td>
+    <td mat-cell *matCellDef="let element">{{calculateFinalMark(element)}}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -53,7 +53,7 @@
 </table>
 
 <!-- Button to send data to DB -->
-<button mat-raised-button color="primary" [disabled]="getSumBonus() != 0">Valider</button>
+<button mat-raised-button color="primary" [disabled]="getSumBonus() != 0" (click)="saveBonus()">Valider</button>
 <mat-error *ngIf="getSumBonus() != 0">
   Pour valider, la somme des bonus/malus de l'équipe doit être 0, actuellement elle est de {{getSumBonus()}}
 </mat-error>
