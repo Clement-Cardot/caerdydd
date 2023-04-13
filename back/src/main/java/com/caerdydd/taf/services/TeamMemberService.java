@@ -3,6 +3,8 @@ package com.caerdydd.taf.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.transaction.Transactional;
 
@@ -10,20 +12,26 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.security.SecurityConfig;
 
 @Service
 @Transactional
 public class TeamMemberService {
-    
+    private static final Logger logger = LogManager.getLogger(TeamService.class);
+
     @Autowired
     private TeamMemberRepository teamMemberRepository;
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    SecurityConfig securityConfig;
     
     public List<TeamMemberDTO> listAllTeamMembers() throws CustomRuntimeException {
         try {
@@ -58,6 +66,11 @@ public class TeamMemberService {
     }
 
     public TeamMemberDTO setBonusPenaltyById(Integer id, Integer bonusPenalty) throws CustomRuntimeException {
+        if(securityConfig.getCurrentUser().getRoles().stream().noneMatch(role -> role.getRole().equals(RoleDTO.OPTION_LEADER_ROLE))){
+            logger.warn("ILLEGAL API USE : Current user is not a option leader");
+            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_STUDENT);
+        }
+
         TeamMemberDTO teamMember = getTeamMemberById(id);
         teamMember.setBonusPenalty(bonusPenalty);
         TeamMemberDTO response = updateTeamMember(teamMember);
