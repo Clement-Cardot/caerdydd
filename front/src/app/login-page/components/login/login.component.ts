@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit  {
             this.userDataService.setCurrentUser(response);
             console.log("Current User is : " + response.login);
             this.redirectDependingOnUserRole();
-            
+
         } else {
             this.router.navigateByUrl("/");
         }
