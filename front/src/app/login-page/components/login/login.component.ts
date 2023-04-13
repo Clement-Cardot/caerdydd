@@ -71,20 +71,17 @@ export class LoginComponent implements OnInit  {
     if (this.currentUser != null) {
       if (this.currentUser.getRoles() == null || this.currentUser.getRoles() == undefined || this.currentUser.getRoles().length == 0) {
         this.router.navigateByUrl("/");
-      }
-      else if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
+      } else if (this.currentUser.getRoles().includes("PLANNING_ROLE")) {
+        this.router.navigateByUrl("planning");
+      } else if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
         this.router.navigateByUrl("teams-creation");
-      }
-      else if (this.currentUser.getRoles().includes("TEAM_LEADER_ROLE")) {
+      } else if (this.currentUser.getRoles().includes("TEACHING_STAFF_ROLE")) {
         this.router.navigateByUrl("teams-creation");
-      }
-      else if (this.currentUser.getRoles().includes("TEAM_MEMBER_ROLE")) {
-        this.router.navigateByUrl("teams"); // TODO : redirect to specific team page
-      }
-      else if (this.currentUser.getRoles().includes("STUDENT_ROLE")) {
+      } else if (this.currentUser.getRoles().includes("TEAM_MEMBER_ROLE")) {
         this.router.navigateByUrl("teams");
-      }
-      else {
+      } else if (this.currentUser.getRoles().includes("STUDENT_ROLE")) {
+        this.router.navigateByUrl("teams");
+      } else {
         this.router.navigateByUrl("dashboard");
       }
     }
