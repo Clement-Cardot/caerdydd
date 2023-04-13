@@ -22,7 +22,7 @@ export class RoleGuard {
   }
 
   canActivateByRole(role: string): boolean {
-    let currentUserRoles = this.userDataService.getCurrentUser()?.roles.map((role: Role) => role.role);
+    let currentUserRoles = this.userDataService.getCurrentUser()?.getValue()?.roles.map((role: Role) => role.role);
     if (currentUserRoles == null || currentUserRoles == undefined || currentUserRoles.length == 0) {
       this.router.navigateByUrl("/");
     } else if (currentUserRoles.includes(role)) {

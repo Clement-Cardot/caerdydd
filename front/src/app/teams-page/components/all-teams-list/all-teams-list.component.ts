@@ -13,7 +13,7 @@ export class AllTeamsListComponent{
   teams!: Team[];
 
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {
-    // setInterval(() => { this.getData() },  5000 );
+    setInterval(() => { this.getAllData() },  5000 );
   }
 
   ngOnInit(): void {

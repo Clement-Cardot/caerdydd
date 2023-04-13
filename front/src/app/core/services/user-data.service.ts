@@ -25,6 +25,10 @@ export class UserDataService {
         localStorage.setItem("currentUser", JSON.stringify(user));
     }
 
+    public isLoggedIn(): boolean {
+        return this.currentUser.value != null;
+    }
+
     public clearCurrentUser(): void {
         this.currentUser.next(null);
         localStorage.removeItem("currentUser");
