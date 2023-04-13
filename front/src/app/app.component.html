@@ -1,3 +1,3 @@
-<app-login *ngIf="this.getLoginStatut()"></app-login>
-<app-sidenav *ngIf="!this.getLoginStatut()"></app-sidenav>
+<app-login *ngIf="isLoggedIn() === false"></app-login>
+<app-sidenav *ngIf="isLoggedIn() === true"></app-sidenav>
 

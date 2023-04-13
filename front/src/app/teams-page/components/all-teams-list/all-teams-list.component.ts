@@ -3,8 +3,6 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { Team } from 'src/app/core/data/models/team.model';
 
-
-
 @Component({
   selector: 'app-all-teams-list',
   templateUrl: './all-teams-list.component.html',
@@ -13,6 +11,7 @@ import { Team } from 'src/app/core/data/models/team.model';
 
 export class AllTeamsListComponent{
   teams!: Team[];
+
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {
     // setInterval(() => { this.getData() },  5000 );
   }
