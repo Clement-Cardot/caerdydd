@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { TeamMember } from 'src/app/core/data/models/team-member.model';
@@ -12,7 +12,7 @@ import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.serv
 	styleUrls: ['./leader-mark.component.scss']
 })
 
-export class LeaderMarkComponent {
+export class LeaderMarkComponent implements OnInit {
 	displayedColumns = [
 		'name',
 		'firstname',
@@ -22,17 +22,18 @@ export class LeaderMarkComponent {
 		'bonusMalus',
 		'FinalMark'
 	  ];
+	
+	@Input() team!: Team;
 
 	teamMark!: number;
 	validationMark!: number;
-	team!: Team;
 	idTeamString: any; 
 	idTeam : number = 0;
 	bonusPenaltySum: number = 0;
 
-	constructor(private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService, private route: ActivatedRoute) {
-		this.idTeamString = this.route.snapshot.paramMap.get('idTeam');
-		this.idTeam = parseInt(this.idTeamString);
+	panelOpenState = false;
+
+	constructor(private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService) {
 	}
 
 	ngOnInit(): void {
@@ -74,9 +75,7 @@ export class LeaderMarkComponent {
 		this.apiTeamService. getTeam(this.idTeam)
 			.subscribe(data => {
 				this.team = data;
-				this.teamMark = this.team.teamWorkMark;
-				this.validationMark = this.team.teamValidationMark;
-			  }
+				}
 			);
 	}
 

@@ -58,6 +58,7 @@ mobileQuery: MediaQueryList;
         this.navLink.push("Admin Panel")
         this.navLink.push("Profil");
         this.navLink.push("Equipes");
+        this.navLink.push("Notes");
         this.navLink.push("Notifications");
       }
       else if (this.currentUser.getRoles().includes("TEACHING_STAFF_ROLE")) {
@@ -97,6 +98,9 @@ mobileQuery: MediaQueryList;
         break;
       case "Equipes":
         this.router.navigateByUrl("/teams");
+        break;
+      case "Notes":
+        this.router.navigateByUrl("/marks");
         break;
       case "Notification":
         this.router.navigateByUrl("/notifications");

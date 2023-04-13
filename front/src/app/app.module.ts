@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
-import { LeaderMarkPageModule } from './leader-mark-page/leader-mark-page.module';
 import { CoreModule } from './core/core.module';
 import { TeamsCreationPageModule } from './teams-creation-page/teams-creation-page.module';
 import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
@@ -16,6 +15,7 @@ import { ApiAuthService } from './core/services/api-auth.service';
 import { ApiTeamService } from './core/services/api-team.service';
 import { ApiUserService } from './core/services/api-user.service';
 import { SidenavModule } from './sidenav/sidenav.module';
+import { NotationModule } from './notation-page/notation.module';
 
 @NgModule({
   declarations: [
@@ -34,12 +34,12 @@ import { SidenavModule } from './sidenav/sidenav.module';
     HttpClientModule,
     BrowserAnimationsModule,
     LoginPageModule,
-    LeaderMarkPageModule,
     TeamsCreationPageModule,
     ProjectDescriptionPageModule,
     PageValidateSubjectModule,
     SidenavModule,
-    TeamsPageModule
+    TeamsPageModule,
+    NotationModule
   ],
   bootstrap: [AppComponent],
 })

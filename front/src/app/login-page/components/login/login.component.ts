@@ -73,10 +73,10 @@ export class LoginComponent implements OnInit  {
         this.router.navigateByUrl("/");
       }
       else if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
-        this.router.navigateByUrl("teams-creation");
+        this.router.navigateByUrl("teams/creation");
       }
       else if (this.currentUser.getRoles().includes("TEAM_LEADER_ROLE")) {
-        this.router.navigateByUrl("teams-creation");
+        this.router.navigateByUrl("teams/creation");
       }
       else if (this.currentUser.getRoles().includes("TEAM_MEMBER_ROLE")) {
         this.router.navigateByUrl("teams"); // TODO : redirect to specific team page
