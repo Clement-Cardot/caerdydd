@@ -25,6 +25,8 @@ export class LoginComponent implements OnInit  {
   usernameFormControl = new FormControl('', [Validators.required]);
   passwordFormControl = new FormControl('', [Validators.required]);
 
+  currentUserRoles!: string[];
+
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private apiAuthService: ApiAuthService,
@@ -49,6 +51,9 @@ export class LoginComponent implements OnInit  {
       this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(response => {
         if(response) {
             this.userDataService.setCurrentUser(response);
+            this.userDataService.getCurrentUserRoles()?.subscribe((roles) => {
+              this.currentUserRoles = roles;
+            });
             console.log("Current User is : " + response.login);
             this.redirectDependingOnUserRole();
             
@@ -60,20 +65,19 @@ export class LoginComponent implements OnInit  {
   }
 
   redirectDependingOnUserRole() {
-    let currentUserRoles = this.userDataService.getCurrentUserRoles();
-    if (currentUserRoles == null || currentUserRoles == undefined || currentUserRoles.length == 0) {
+    if (this.currentUserRoles == null || this.currentUserRoles == undefined || this.currentUserRoles.length == 0) {
       this.router.navigateByUrl("/");
     }
-    else if (currentUserRoles.includes("OPTION_LEADER_ROLE")) {
+    else if (this.currentUserRoles.includes("OPTION_LEADER_ROLE")) {
       this.router.navigateByUrl("teams-creation");
     }
-    else if (currentUserRoles.includes("TEAM_LEADER_ROLE")) {
+    else if (this.currentUserRoles.includes("TEAM_LEADER_ROLE")) {
       this.router.navigateByUrl("teams-creation");
     }
-    else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
+    else if (this.currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
       this.router.navigateByUrl("teams"); // TODO : redirect to specific team page
     }
-    else if (currentUserRoles.includes("STUDENT_ROLE")) {
+    else if (this.currentUserRoles.includes("STUDENT_ROLE")) {
       this.router.navigateByUrl("teams");
     }
     else {

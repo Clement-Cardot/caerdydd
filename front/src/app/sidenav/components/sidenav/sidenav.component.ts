@@ -1,7 +1,8 @@
 import {MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { Role } from 'src/app/core/data/models/role.model';
+import { User } from 'src/app/core/data/models/user.model';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 
 @Component({
@@ -9,9 +10,10 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss']
 })
-export class SidenavComponent implements OnInit  {
+export class SidenavComponent implements OnInit, OnChanges {
 mobileQuery: MediaQueryList;
   pageName!: String;
+  currentUserRoles!: string[];
   fillerNav = Array.from({length: 5}, (_, i) => `Nav Item ${i + 1}`);
 
   navLink = new Array<string>;
@@ -30,31 +32,48 @@ mobileQuery: MediaQueryList;
   }
 
   ngOnInit(): void {
-    this.pageName = "Accueil"
-    let currentUserRoles = this.userDataService.getCurrentUserRoles();
-    if (currentUserRoles == null) {
+    this.pageName = "Accueil";
+    this.userDataService.getCurrentUserRoles()?.subscribe(data => {
+      this.currentUserRoles = data;
+    });
+    this.update();
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  ngOnChanges(): void {
+    console.log("Init navbar On Change")
+    this.update();
+  }
+
+  update() {
+    this.navLink = new Array<string>;
+
+    if (this.currentUserRoles == null) {
       this.router.navigateByUrl("/");
     }
-    else if (currentUserRoles.includes("OPTION_LEADER_ROLE")) {
+    else if (this.currentUserRoles.includes("OPTION_LEADER_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Admin Panel")
       this.navLink.push("Profil");
       this.navLink.push("Equipes");
       this.navLink.push("Notifications");
     }
-    else if (currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
+    else if (this.currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Profil");
       this.navLink.push("Equipes");
       this.navLink.push("Notifications");
     }
-    else if (currentUserRoles.includes("PLANNING_ROLE")) {
+    else if (this.currentUserRoles.includes("PLANNING_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Profil");
-      this.navLink.push("Planiification");
+      this.navLink.push("Planification");
       this.navLink.push("Notifications");
     }
-    else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
+    else if (this.currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Profil");
       this.navLink.push("Mon équipe");
@@ -62,15 +81,11 @@ mobileQuery: MediaQueryList;
       this.navLink.push("Projet Validation");
       this.navLink.push("Notifications");
     }
-    else if (currentUserRoles.includes("STUDENT_ROLE")) {
+    else if (this.currentUserRoles.includes("STUDENT_ROLE")) {
       this.navLink.push("Dashboard");
       this.navLink.push("Profil");
       this.navLink.push("Equipes");
     }
-  }
-
-  ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
   switchPage(pageName: string) {
