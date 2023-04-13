@@ -1,6 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { Component, Input } from '@angular/core';
 import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { Team } from 'src/app/core/data/models/team.model';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
@@ -12,7 +10,7 @@ import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.serv
 	styleUrls: ['./leader-mark.component.scss']
 })
 
-export class LeaderMarkComponent implements OnInit {
+export class LeaderMarkComponent {
 	displayedColumns = [
 		'name',
 		'firstname',
@@ -28,9 +26,6 @@ export class LeaderMarkComponent implements OnInit {
 	panelOpenState = false;
 
 	constructor(private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService) {
-	}
-
-	ngOnInit(): void {
 	}
 
 	calculateFinalMark(teamMember: TeamMember): number {
