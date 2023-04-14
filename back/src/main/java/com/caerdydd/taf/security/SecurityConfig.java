@@ -74,8 +74,7 @@ public class SecurityConfig{
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                //.anyRequest().authenticated()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 
                 .and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
