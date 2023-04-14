@@ -111,6 +111,7 @@ deploy-dev:
       - taf.war
   only:
     - dev
+    - dev_mise_en_prod
 
 deploy-prod:
   stage: deploy
