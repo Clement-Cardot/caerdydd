@@ -38,7 +38,7 @@ java-build:
   script:
     - cd back
     - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
-    - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS clean package -DskipTests=true
+    - mvn -q $MAVEN_CLI_OPTS $MAVEN_OPTS clean package -DskipTests=true
   artifacts:
     name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
     paths:
@@ -54,7 +54,7 @@ junit-test:
   script:
     - cd back
     - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
-    - mvn compile test
+    - mvn -q compile test
   artifacts:
     reports:
       junit: back/target/surefire-reports/TEST*.xml
@@ -75,8 +75,8 @@ quality-dev:
   script:
     - cd back
     - cp ./target/site/jacoco/jacoco.xml ./jacoco.xml
-    - mvn clean install -DskipTests=true
-    - mvn validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
+    - mvn -q clean install -DskipTests=true
+    - mvn -q validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
   cache:
     paths:
       - .m2/repository
@@ -89,8 +89,8 @@ quality-prod:
   script:
     - cd back
     - cp ./target/site/jacoco/jacoco.xml ./jacoco.xml
-    - mvn clean install -DskipTests=true
-    - mvn validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=66a042836678156de40eac28c940b009324df42c
+    - mvn -q clean install -DskipTests=true
+    - mvn -q validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=66a042836678156de40eac28c940b009324df42c
   cache:
     paths:
       - .m2/repository
