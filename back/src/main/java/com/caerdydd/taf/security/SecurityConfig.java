@@ -71,12 +71,21 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .cors().and().csrf().disable()
+
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
+
+                .authorizeRequests()
+                    .antMatchers("/api/auth/login").permitAll()
+                    .antMatchers("/*").permitAll()
+                    .antMatchers("/assets/**").permitAll()
+                    .anyRequest().authenticated()
                 
-                .and().authenticationProvider(authenticationProvider())
+                .and()
+                
+                .authenticationProvider(authenticationProvider())
+
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 
                 .build();

@@ -37,7 +37,3 @@ INSERT INTO team (name, id_project_dev, id_project_validation) VALUES
 ('Equipe 6', 6, 5),
 ('Equipe 7', 7, 8),
 ('Equipe 8', 8, 7);
-
-INSERT INTO team_member (id_user, individual_mark, bonus_penalty, id_team) VALUES
-(1, 5, 0, 1),
-(2, 7, 0, 1);
