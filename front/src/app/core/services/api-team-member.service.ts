@@ -11,7 +11,7 @@ import { User, UserAdapter } from "../data/models/user.model";
     providedIn: "root"
 })
 export class ApiTeamMemberService {
-    private baseUrl = "http://localhost:4200/api/teamMembers";
+    private baseUrl = "http://localhost:8080/taf/api/teamMembers";
 
     constructor(
         private http: HttpClient, 

@@ -16,6 +16,7 @@ import { ApiTeamService } from './core/services/api-team.service';
 import { ApiUserService } from './core/services/api-user.service';
 import { SidenavModule } from './sidenav/sidenav.module';
 import { NotationModule } from './notation-page/notation.module';
+import { HashLocationStrategy, LocationStrategy  } from '@angular/common'; 
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { NotationModule } from './notation-page/notation.module';
     UserDataService,
     ApiAuthService,
     ApiTeamService,
-    ApiUserService
+    ApiUserService,
+    { provide : LocationStrategy, useClass: HashLocationStrategy}
   ],
   imports: [
     CoreModule,

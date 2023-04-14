@@ -10,7 +10,7 @@ import { map } from "rxjs";
     providedIn: "root"
 })
 export class ApiUserService {
-    private baseUrl = "http://localhost:4200/api/users";
+    private baseUrl = "http://localhost:8080/taf/api/users";
 
     constructor(private http: HttpClient, private adapter: UserAdapter) {
     }
