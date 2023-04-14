@@ -4,10 +4,10 @@
 echo "Step 1 --> Build Front-end"
 cd front
 # Replace ip adress in api services
-sed -i "s,localhost:8080,172.24.1.10:8080/taf,g" src/app/core/services/api-auth.service.ts
-sed -i 's,localhost:8080,172.24.1.10:8080/taf,g' src/app/core/services/api-team.service.ts
-sed -i 's,localhost:8080,172.24.1.10:8080/taf,g' src/app/core/services/api-user.service.ts
-sed -i 's,localhost:8080,172.24.1.10:8080/taf,g' src/app/core/services/api-team-member.service.ts
+sed -i "s,localhost:8080,172.24.1.11:8080/taf,g" src/app/core/services/api-auth.service.ts
+sed -i 's,localhost:8080,172.24.1.11:8080/taf,g' src/app/core/services/api-team.service.ts
+sed -i 's,localhost:8080,172.24.1.11:8080/taf,g' src/app/core/services/api-user.service.ts
+sed -i 's,localhost:8080,172.24.1.11:8080/taf,g' src/app/core/services/api-team-member.service.ts
 
 # Compile
 npm install
