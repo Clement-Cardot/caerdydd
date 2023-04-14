@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit  {
   matcher = new MyErrorStateMatcher();
   usernameFormControl = new FormControl('', [Validators.required]);
   passwordFormControl = new FormControl('', [Validators.required]);
+  public showPassword: boolean = false;
 
   currentUser!: User | null;
 
@@ -58,7 +59,7 @@ export class LoginComponent implements OnInit  {
 
                 console.log("Current User is : " + userResponse.login);
                 this.redirectDependingOnUserRole();
-                
+
             } else {
                 this.router.navigateByUrl("/");
             }
@@ -85,5 +86,9 @@ export class LoginComponent implements OnInit  {
         this.router.navigateByUrl("dashboard");
       }
     }
+  }
+
+  public togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 }
