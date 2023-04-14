@@ -101,6 +101,7 @@ deploy-dev:
   stage: deploy
   image: maven:3.8.1-jdk-11
   script:
+    - chmod +x Build_DEV.sh
     - ./Build_DEV.sh
   cache:
     paths:
@@ -115,6 +116,7 @@ deploy-prod:
   stage: deploy
   image: maven:3.8.1-jdk-11
   script:
+    - chmod +x Build_PROD.sh
     - ./Build_PROD.sh
   cache:
     paths:
