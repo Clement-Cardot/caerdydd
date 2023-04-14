@@ -96,3 +96,31 @@ quality-prod:
       - .m2/repository
   only:
     - master
+
+deploy-dev:
+  stage: deploy
+  image: maven:3.8.1-jdk-11
+  script:
+    - ./Build_DEV.sh
+  cache:
+    paths:
+      - .m2/repository
+  artifacts:
+    paths:
+      - taf.war
+  only:
+    - dev
+
+deploy-prod:
+  stage: deploy
+  image: maven:3.8.1-jdk-11
+  script:
+    - ./Build_PROD.sh
+  cache:
+    paths:
+      - .m2/repository
+  artifacts:
+    paths:
+      - taf.war
+  only:
+    - prod
