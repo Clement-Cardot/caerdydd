@@ -2,7 +2,7 @@
 
 # 1. Build Front-end
 echo "Step 1 --> Build Front-end"
-cd ../front/
+cd front
 # Replace ip adress in api services
 sed -i "s,localhost:8080,172.24.1.10:8080/taf,g" src/app/core/services/api-auth.service.ts
 sed -i 's,localhost:8080,172.24.1.10:8080/taf,g' src/app/core/services/api-team.service.ts
@@ -18,7 +18,7 @@ cp -r dist/front/* ../back/src/main/resources/static/
 
 # 2. Build Back-end
 echo "Step 2 --> Build Back-end"
-cd back
+cd ../back
 
 # Modify application.properties
 sed -i 's,spring.datasource.username = root,spring.datasource.username = webuser,g' src/main/resources/application.properties
