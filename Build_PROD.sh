@@ -3,10 +3,6 @@
 # 1. Build Front-end
 echo "Step 1 --> Build Front-end"
 
-# Install tools
-apt install npm -y
-npm install -g @angular/cli
-
 cd front
 # Replace ip adress in api services
 sed -i "s,localhost:8080,172.24.1.11:8080/taf,g" src/app/core/services/api-auth.service.ts
