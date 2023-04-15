@@ -154,7 +154,7 @@ java-deploy-dev:
 
 # Déploiement sur le serveur de prod
 angular-deploy-prod:
-  stage: ddeploy-angular
+  stage: deploy-angular
   image: node:16.19.1-alpine3.17
   script:
     - cd front
