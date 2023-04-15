@@ -9,8 +9,8 @@ stages:
   - deploy-java
 
 variables:
-  MAVEN_OPTS: "-q --log-file $CI_PROJECT_DIR/mvn.log -Dhttp.proxyHost=192.168.4.8 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=192.168.4.8 -Dhttps.proxyPort=3128 -Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
-  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+  MAVEN_OPTS: "-Dhttp.proxyHost=192.168.4.8 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=192.168.4.8 -Dhttps.proxyPort=3128 -Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+  MAVEN_CLI_OPTS: "-q --log-file $CI_PROJECT_DIR/mvn.log --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 before_script:
   - export https_proxy=http://192.168.4.8:3128/
@@ -55,7 +55,7 @@ junit-test:
   script:
     - cd back
     - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
-    - mvn compile test
+    - mvn $MAVEN_CLI_OPTS compile test
   artifacts:
     reports:
       junit: back/target/surefire-reports/TEST*.xml
@@ -77,9 +77,9 @@ quality-dev:
   script:
     - cd back
     - cp ./target/site/jacoco/jacoco.xml ./jacoco.xml
-    - mvn clean install -DskipTests=true
-    - mvn dependency-check:check
-    - mvn validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
+    - mvn $MAVEN_CLI_OPTS clean install -DskipTests=true
+    - mvn $MAVEN_CLI_OPTS dependency-check:check
+    - mvn $MAVEN_CLI_OPTS validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
@@ -94,9 +94,9 @@ quality-prod:
   script:
     - cd back
     - cp ./target/site/jacoco/jacoco.xml ./jacoco.xml
-    - mvn clean install -DskipTests=true
-    - mvn dependency-check:check
-    - mvn validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=66a042836678156de40eac28c940b009324df42c
+    - mvn $MAVEN_CLI_OPTS clean install -DskipTests=true
+    - mvn $MAVEN_CLI_OPTS dependency-check:check
+    - mvn $MAVEN_CLI_OPTS validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=66a042836678156de40eac28c940b009324df42c
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
@@ -138,7 +138,7 @@ java-deploy-dev:
     - cd back
     - sed -i 's,spring.datasource.username = root,spring.datasource.username = webuser,g' src/main/resources/application.properties
     - sed -i 's,spring.datasource.password = root,spring.datasource.password = LOPk2DWnqj2oRtRm,g' src/main/resources/application.properties
-    - mvn clean package
+    - mvn $MAVEN_CLI_OPTS clean package
   dependencies:
     - angular-deploy-dev
   cache:
@@ -184,7 +184,7 @@ java-deploy-prod:
     - cd back
     - sed -i 's,spring.datasource.username = root,spring.datasource.username = webuser,g' src/main/resources/application.properties
     - sed -i 's,spring.datasource.password = root,spring.datasource.password = LOPk2DWnqj2oRtRm,g' src/main/resources/application.properties
-    - mvn clean package
+    - mvn $MAVEN_CLI_OPTS clean package
   dependencies:
     - angular-deploy-prod
   cache:
