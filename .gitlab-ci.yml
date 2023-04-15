@@ -5,7 +5,8 @@ stages:
   - build
   - test
   - sonar
-  - deploy
+  - deploy-angular
+  - deploy-java
 
 variables:
   MAVEN_OPTS: "-q --log-file $CI_PROJECT_DIR/mvn.log -Dhttp.proxyHost=192.168.4.8 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=192.168.4.8 -Dhttps.proxyPort=3128 -Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
@@ -106,7 +107,7 @@ quality-prod:
 
 # Déploiement sur le serveur de dev
 angular-deploy-dev:
-  stage: deploy
+  stage: deploy-angular
   image: node:16.19.1-alpine3.17
   script:
     - cd front
@@ -130,7 +131,7 @@ angular-deploy-dev:
     - gitlab-ci
 
 java-deploy-dev:
-  stage: deploy
+  stage: deploy-java
   image: maven:3.8.1-jdk-11
   script:
     - cp -r front/dist/front/* /back/src/main/resources/static/
@@ -153,7 +154,7 @@ java-deploy-dev:
 
 # Déploiement sur le serveur de prod
 angular-deploy-prod:
-  stage: deploy
+  stage: ddeploy-angular
   image: node:16.19.1-alpine3.17
   script:
     - cd front
@@ -176,7 +177,7 @@ angular-deploy-prod:
     - master
 
 java-deploy-prod:
-  stage: deploy
+  stage: deploy-java
   image: maven:3.8.1-jdk-11
   script:
     - cp -r front/dist/front/* /back/src/main/resources/static/
