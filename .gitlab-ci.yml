@@ -138,7 +138,7 @@ java-deploy-dev:
   stage: deploy-java
   image: maven:3.8.1-jdk-11
   script:
-    - cp -r front/dist/front/* /back/src/main/resources/static/
+    - cp -r front/dist/front/* back/src/main/resources/static/
     - cd back
     - sed -i 's,spring.datasource.username = root,spring.datasource.username = webuser,g' src/main/resources/application.properties
     - sed -i 's,spring.datasource.password = root,spring.datasource.password = LOPk2DWnqj2oRtRm,g' src/main/resources/application.properties
@@ -184,7 +184,7 @@ java-deploy-prod:
   stage: deploy-java
   image: maven:3.8.1-jdk-11
   script:
-    - cp -r front/dist/front/* /back/src/main/resources/static/
+    - cp -r front/dist/front/* back/src/main/resources/static/
     - cd back
     - sed -i 's,spring.datasource.username = root,spring.datasource.username = webuser,g' src/main/resources/application.properties
     - sed -i 's,spring.datasource.password = root,spring.datasource.password = LOPk2DWnqj2oRtRm,g' src/main/resources/application.properties
