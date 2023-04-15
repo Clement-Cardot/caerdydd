@@ -42,12 +42,12 @@ java-build:
   artifacts:
     name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
     paths:
-      - $CI_PROJECT_DIR/.m2/repository
+      - $CI_PROJECT_DIR/mvn.log
+      - back/target/taf.war
     expire_in: 1 hrs
   cache:
     paths:
-      - .m2/repository
-      - $CI_PROJECT_DIR/mvn.log
+      - $CI_PROJECT_DIR/.m2/repository
 
 junit-test:
   stage: test
@@ -61,10 +61,10 @@ junit-test:
       junit: back/target/surefire-reports/TEST*.xml
     paths:
       - back/target/site/jacoco
+      - $CI_PROJECT_DIR/mvn.log
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
-      - $CI_PROJECT_DIR/mvn.log
 
 # Tests d'intégrations
 # robotframework-test:
@@ -80,10 +80,12 @@ quality-dev:
     - mvn $MAVEN_CLI_OPTS clean install -DskipTests=true
     - mvn $MAVEN_CLI_OPTS dependency-check:check
     - mvn $MAVEN_CLI_OPTS validate sonar:sonar -Dsonar.projectName=Team3_DevBranch -Dsonar.projectKey=Team3_DevBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=f7545cc5cdd47846233306d2ee6e1430e1233fd3
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/mvn.log
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
-      - $CI_PROJECT_DIR/mvn.log
   only:
     - dev
     - gitlab-ci
@@ -97,10 +99,12 @@ quality-prod:
     - mvn $MAVEN_CLI_OPTS clean install -DskipTests=true
     - mvn $MAVEN_CLI_OPTS dependency-check:check
     - mvn $MAVEN_CLI_OPTS validate sonar:sonar -Dsonar.projectName=Team3_MasterBranch -Dsonar.projectKey=Team3_MasterBranch_Project -Dsonar.host.url=http://172.24.1.1:9000/sonar -Dsonar.login=66a042836678156de40eac28c940b009324df42c
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/mvn.log
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
-      - $CI_PROJECT_DIR/mvn.log
   only:
     - master
 
@@ -144,10 +148,10 @@ java-deploy-dev:
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
-      - $CI_PROJECT_DIR/mvn.log
   artifacts:
     paths:
       - back/target/taf.war
+      - $CI_PROJECT_DIR/mvn.log
   only:
     - dev
     - gitlab-ci
@@ -190,9 +194,9 @@ java-deploy-prod:
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
-      - $CI_PROJECT_DIR/mvn.log
   artifacts:
     paths:
       - back/target/taf.war
+      - $CI_PROJECT_DIR/mvn.log
   only:
     - master
