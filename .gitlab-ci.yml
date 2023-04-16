@@ -27,7 +27,6 @@ angular-build:
   artifacts:
     paths:
       - front/dist
-    expire_in: 1 hrs
   cache:
     paths:
       - front/node_modules
@@ -44,7 +43,6 @@ java-build:
     paths:
       - $CI_PROJECT_DIR/mvn.log
       - back/target/taf.war
-    expire_in: 1 hrs
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
@@ -156,6 +154,7 @@ java-deploy-dev:
     paths:
       - back/target/taf.war
       - $CI_PROJECT_DIR/mvn.log
+    expire_in: never
   only:
     - dev
     - gitlab-ci
@@ -202,5 +201,6 @@ java-deploy-prod:
     paths:
       - back/target/taf.war
       - $CI_PROJECT_DIR/mvn.log
+    expire_in: never
   only:
     - master
