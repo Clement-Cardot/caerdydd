@@ -154,7 +154,7 @@ java-deploy-dev:
     paths:
       - back/target/taf.war
       - $CI_PROJECT_DIR/mvn.log
-    expire_in: never
+    expire_in: 2 mos
   only:
     - dev
     - gitlab-ci
@@ -201,6 +201,6 @@ java-deploy-prod:
     paths:
       - back/target/taf.war
       - $CI_PROJECT_DIR/mvn.log
-    expire_in: never
+    expire_in: 2 mos
   only:
     - master
