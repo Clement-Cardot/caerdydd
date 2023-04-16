@@ -1,0 +1,35 @@
+:
+:
+:
+:
+in team, 01 TEAM MEMBER, 06 TEAM
+TEAM MEMBER: id_user, speciality, individual_mark, bonus_penalty
+ROLE: id_role, role
+
+PRESENTATION: id_presentation, type, datetime_begin, datetime_end, room, jury_a_notes, jury_b_notes
+presented by, 11 PROJECT, 11 PRESENTATION
+team dev, 11 PROJECT, 11 TEAM
+TEAM: id_team, name, team_work_mark, team_validation_mark, test_book_link, file_path_scope_statement, file_path_final_scope_statement, file_path_scope_statement_analysis, file_path_report
+reserved, 03 TEAM, 01 CONSULTING
+CONSULTING : id_consulting, datetime_begin, datetime_end, speciality, notes, is_validated, is_reserved
+is team member, 01 USER, 11 TEAM MEMBER
+has role, 11 ROLE, 0N USER
+
+:
+evaluate, 0N JURY, 01 PROJECT
+PROJECT: id_project, name, description, is_validated
+team validate, 11 PROJECT, 11 TEAM
+:
+assigned consulting, 0N TEACHING_STAFF, 0N CONSULTING
+USER : id_user, firstname, lastname, login, password, email, speciality
+received, 0N USER, 11 NOTIFICATION
+NOTIFICATION : id_notification, message, link
+
+directed by, 01 PRESENTATION, 0N JURY
+JURY: id_jury
+:
+jury member, 02 JURY, 0N TEACHING_STAFF
+:
+TEACHING_STAFF : id_user, is_infrastructure_specialist, is_development_specialist, is_modeling_specialist, is_option_leader, is_subject_validator
+is teaching staff, 01 USER, 11 TEACHING_STAFF
+:
