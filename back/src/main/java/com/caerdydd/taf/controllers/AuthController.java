@@ -3,16 +3,9 @@ package com.caerdydd.taf.controllers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,70 +13,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.repositories.RoleRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
-import com.caerdydd.taf.security.jwt.JwtUtils;
-import com.caerdydd.taf.services.UserService;
+import com.caerdydd.taf.services.AuthService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-  private static final Logger logger = LogManager.getLogger(TeamController.class);
+  private static final Logger logger = LogManager.getLogger(AuthController.class);
 
   @Autowired
-  AuthenticationManager authenticationManager;
-
-  @Autowired
-  UserService userService;
-
-  @Autowired
-  RoleRepository roleRepository;
-
-  @Autowired
-  PasswordEncoder encoder;
-
-  @Autowired
-  JwtUtils jwtUtils;
+  AuthService authService;
 
   @PostMapping("/login")
   public ResponseEntity<UserDTO> login(@RequestBody UserDTO requestUser) {
     logger.info("Process request : Login user : {} password : {}", requestUser.getLogin(), requestUser.getPassword());
-
-    Authentication authentication = authenticationManager
-        .authenticate(new UsernamePasswordAuthenticationToken(requestUser.getLogin(), requestUser.getPassword()));
-
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-    
-    try {
-      UserDTO response = userService.getUserByLogin(userDetails.getUsername());
-      HttpHeaders headers = new HttpHeaders();
-      headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
-
-      return new ResponseEntity<>(
-        response,
-        headers,
-        HttpStatus.OK
-      );
+    try{
+      return authService.loginUser(requestUser.getLogin(), requestUser.getPassword());
     } catch (CustomRuntimeException e) {
       if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
       }
+      if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
+      if (e.getMessage().equals(CustomRuntimeException.USER_PASSWORD_NOT_MATCH)) {
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+      }
 
-      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
     
   }
 
   @PostMapping("/logout")
   public ResponseEntity<String> logoutUser() {
-    ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-    return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-        .body("You've been signed out!");
+    logger.info("Process request : Logout user : {}", SecurityContextHolder.getContext().getAuthentication().getName());
+    try{
+      return authService.logoutUser();
+    } catch (CustomRuntimeException e) {
+      if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
+      return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+    }
   }
 }
