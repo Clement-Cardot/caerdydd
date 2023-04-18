@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
 import { LoginComponent } from './login-page/components/login/login.component';
 import { ProjectDescriptionComponent } from './project-description-page/components/project-description/project-description.component';
 import { AllTeamsListComponent } from './teams-page/components/all-teams-list/all-teams-list.component';
-import { TeamCreationComponent } from './teams-page/components/team-creation/team-creation.component';
 import { NotationComponent } from './notation-page/component/notation/notation.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { ConsultingCalendarComponent } from './consulting-page/consulting-calendar/consulting-calendar.component';
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
-import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
 import { ProjectFileComponent } from './dev-project/component/project-file/project-file.component';
+import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
+import { ViewValidateSubjectsComponent } from './page-validate-subject/components/view-validate-subjects/view-validate-subjects.component';
+import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
 
 const websiteName = " - Taf"
 
@@ -42,7 +42,7 @@ const routes: Routes = [
 
   // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
-
+  { path: 'valide',title: 'Valide Subject' + websiteName, component: ViewValidateSubjectsComponent },
 ];
 
 @NgModule({
