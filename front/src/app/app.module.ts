@@ -19,6 +19,7 @@ import { NotationModule } from './notation-page/notation.module';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { ConsultingPageModule } from './consulting-page/consulting-page.module';
 import { PlanificationPageModule } from './planification-page/planification-page.module';
+import { ApiProjectService } from './core/services/api-project.service';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { PlanificationPageModule } from './planification-page/planification-page
     ApiAuthService,
     ApiTeamService,
     ApiUserService,
+    ApiProjectService,
     { provide : LocationStrategy, useClass: HashLocationStrategy}
   ],
   imports: [
