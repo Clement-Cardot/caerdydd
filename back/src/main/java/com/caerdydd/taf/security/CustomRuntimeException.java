@@ -1,8 +1,5 @@
 package com.caerdydd.taf.security;
 
-import lombok.Getter;
-
-@Getter
 public class CustomRuntimeException extends Exception{
 
     // Default Messages
@@ -13,6 +10,7 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_NOT_FOUND = "User not found";
     public static final String TEAM_NOT_FOUND = "Team not found";
     public static final String TEAM_MEMBER_NOT_FOUND = "Team member not found";
+    public static final String PROJECT_NOT_FOUND = "Can't found project";
 
     // Already exist messages
     public static final String USER_ALREADY_EXISTS = "User already exist";
@@ -35,6 +33,7 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_MEMBER_IMPOSSIBLE_TOTAL_MARK = "The total mark of the team member is under 0 or above 20";
     public static final String TEAM_MEMBER_INCORRECT_BONUS_PENALTY = "The bonus of the team member is under -4 or above 4";
     public static final String USER_ID_SHOULD_BE_NULL = "User id should be null";
+    public static final String USER_NOT_IN_ASSOCIATED_TEAM = "User is not associated in a team";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
