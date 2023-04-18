@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
 import { LoginComponent } from './login-page/components/login/login.component';
 import { ProjectDescriptionComponent } from './project-description-page/components/project-description/project-description.component';
 import { AllTeamsListComponent } from './teams-page/components/all-teams-list/all-teams-list.component';
-import { TeamCreationComponent } from './teams-creation-page/components/team-creation/team-creation.component';
-import { NotationComponent } from './notation-page/component/notation/notation.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
+import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
+import { NotationComponent } from './notation-page/component/notation/notation.component';
+import { ViewValidateSubjectsComponent } from './page-validate-subject/components/view-validate-subjects/view-validate-subjects.component';
+import { TeamCreationComponent } from './teams-creation-page/components/team-creation/team-creation.component';
 
 const websiteName = " - Taf"
 
@@ -26,6 +27,9 @@ const routes: Routes = [
 
   // Notation pages
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
+
+  // Test
+  { path: 'valide',title: 'Valide Subject' + websiteName, component: ViewValidateSubjectsComponent },
 ];
 
 @NgModule({
