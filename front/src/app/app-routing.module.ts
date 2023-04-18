@@ -9,8 +9,13 @@ const websiteName = " - Taf"
 
 const routes: Routes = [
   { path: '',title: 'Login' + websiteName, component: LoginComponent },
-  { path: 'projectD',title: 'Project-description' + websiteName, component: ProjectDescriptionComponent },
-@NgModule({
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
+  { path: 'valide',title: 'Valide Subject' + websiteName, component: ViewValidateSubjectsComponent }
+];
+
+  @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+  })
+  
+  export class AppRoutingModule { }
+  
