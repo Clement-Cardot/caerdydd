@@ -78,6 +78,8 @@ public class SecurityConfig{
 
                 .authorizeRequests()
                     .antMatchers("/api/auth/login").permitAll()
+                    // Avoid swagger to be locked by spring security
+                    .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui/**", "/webjars/**","/swagger-resources/configuration/ui").permitAll()
                     .antMatchers("/*").permitAll()
                     .antMatchers("/assets/**").permitAll()
                     .anyRequest().authenticated()
