@@ -13,6 +13,10 @@ front/bazel-out
 front/node_modules
 front/.angular
 
+### Test API ###
+test-api/target/
+
+
 # System files
 .DS_Store
 Thumbs.db
