@@ -13,100 +13,87 @@
 
 package io.swagger.client.api;
 
+import io.swagger.client.ApiClient;
+import io.swagger.client.ApiException;
 import io.swagger.client.model.TeamDTO;
 import io.swagger.client.model.TeamMemberDTO;
 import io.swagger.client.model.UserDTO;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * API tests for TeamControllerApi
  */
 public class TeamControllerApiTest {
 
-    private final TeamControllerApi api = new TeamControllerApi();
+    static final Logger logger = Logger.getLogger(TeamControllerApiTest.class.getName());
+
+    private final ApiClient apiClient = new ApiClient();
+    private final TeamControllerApi api = new TeamControllerApi(apiClient);
+    private final ApiTestingTools apiTestingTools = new ApiTestingTools(apiClient);
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        apiTestingTools.logout();
+    }
 
     
-    /**
-     * applyInATeam
-     *
-     * 
-     *
-     * @throws Exception
-     *          if the Api call fails
-     */
     @Test
-    public void applyInATeamUsingPUTTest() throws Exception {
-        Integer idTeam = null;
-        Integer idUser = null;
-        UserDTO response = api.applyInATeamUsingPUT(idTeam, idUser);
+    public void testApplyInATeam_Nominal() throws Exception {
 
-        // TODO: test validations
+        apiTestingTools.login("jdupont", "jdupont");
+
+        Integer idTeam = 1;
+        Integer idUser = 1;
+        UserDTO response = null;
+        TeamDTO team = null;
+        try {
+            response = api.applyInATeamUsingPUT(idTeam, idUser);
+            team = api.getTeamByIdUsingGET(idTeam);
+        } catch (ApiException e) {
+            fail("API Exception :" + e.getCode());
+        }
+
+        assertEquals(1, response.getId());
+        assertEquals("TEAM_MEMBER_ROLE", response.getRoles().get(0).getRole());
+        List<UserDTO> users = team.getTeamMembers().stream().map(teamMember -> teamMember.getUser()).collect(Collectors.toList());
+        assertTrue(users.contains(response));
     }
     
-    /**
-     * createTeams
-     *
-     * 
-     *
-     * @throws Exception
-     *          if the Api call fails
-     */
+
     @Test
-    public void createTeamsUsingPUTTest() throws Exception {
+    public void testCreateTeams_Nominal() throws Exception {
         Integer nbTeams = null;
         List<TeamDTO> response = api.createTeamsUsingPUT(nbTeams);
 
         // TODO: test validations
     }
-    
-    /**
-     * getAllTeamMembersOfTeamById
-     *
-     * 
-     *
-     * @throws Exception
-     *          if the Api call fails
-     */
+
     @Test
-    public void getAllTeamMembersOfTeamByIdUsingGETTest() throws Exception {
+    public void testGetAllTeamMembersOfTeamById_Nominal() throws Exception {
         Integer idTeam = null;
         List<TeamMemberDTO> response = api.getAllTeamMembersOfTeamByIdUsingGET(idTeam);
 
         // TODO: test validations
     }
     
-    /**
-     * getAllTeams
-     *
-     * 
-     *
-     * @throws Exception
-     *          if the Api call fails
-     */
     @Test
-    public void getAllTeamsUsingGETTest() throws Exception {
+    public void testGetAllTeams_Nominal() throws Exception {
         List<TeamDTO> response = api.getAllTeamsUsingGET();
 
         // TODO: test validations
     }
-    
-    /**
-     * getTeamById
-     *
-     * 
-     *
-     * @throws Exception
-     *          if the Api call fails
-     */
+
     @Test
-    public void getTeamByIdUsingGETTest() throws Exception {
+    public void testGetTeamById_Nominal() throws Exception {
         Integer idTeam = null;
         TeamDTO response = api.getTeamByIdUsingGET(idTeam);
 

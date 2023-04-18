@@ -14,16 +14,13 @@
 package io.swagger.client.api;
 
 import io.swagger.client.ApiClient;
-import io.swagger.client.ApiResponse;
+import io.swagger.client.ApiException;
 import io.swagger.client.model.UserDTO;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -35,7 +32,7 @@ public class AuthControllerApiTest {
 
     private final ApiClient apiClient = new ApiClient();
     private final AuthControllerApi api = new AuthControllerApi(apiClient);
-    
+
     @Test
     public void testLogin_Nominal() throws Exception {
         // Define Input
@@ -44,39 +41,58 @@ public class AuthControllerApiTest {
         requestUser.setPassword("jdupont");
 
         // Call API
-        ApiResponse<UserDTO> response = api.loginUsingPOSTWithHttpInfo(requestUser);
-
-        assertEquals(200, response.getStatusCode());
-        assertEquals(1, response.getData().getId());
-    }
-
-    @Test
-    public void testLogin_() throws Exception {
-        // Define Input
-        UserDTO requestUser = new UserDTO();
-        requestUser.setLogin("jdupont");
-        requestUser.setPassword("jdupont");
-
-        // Call API
-        UserDTO response = api.loginUsingPOST(requestUser);
+        UserDTO response = null;
+        try {
+            response = api.loginUsingPOST(requestUser);
+        } catch (ApiException e) {
+            fail("API Exception :" + e.getCode());
+        }
 
         assertEquals(1, response.getId());
     }
-    
-    /**
-     * logoutUser
-     *
-     * 
-     *
-     * @throws Exception
-     *          if the Api call fails
-     */
-    @Test
-    public void logoutUserUsingPOSTTest() throws Exception {
-        
-        Object response = api.logoutUserUsingPOST();
 
-        // TODO: test validations
+    @Test
+    public void testLogin_Unauthorized() throws Exception {
+        // Define Input
+        UserDTO requestUser = new UserDTO();
+        requestUser.setLogin("jdupont");
+        requestUser.setPassword("wrongPassword");
+
+        // Call API
+        try {
+            api.loginUsingPOST(requestUser);
+            fail("API Exception expected");
+        } catch (ApiException e) {
+            assertEquals(401, e.getCode());
+        }
+    }
+    
+    @Test
+    public void testLogout_Nominal() throws Exception {
+
+        testLogin_Nominal();
+
+        // Call API
+        String response = null;
+        try {
+            response = api.logoutUserUsingPOST();
+        } catch (ApiException e) {
+            fail("API Exception :" + e.getCode());
+        }
+        
+        assertEquals("You've been signed out!", response);
+    }
+
+    @Test
+    public void testLogout_NotConnected() throws Exception {
+
+        // Call API
+        try {
+            api.logoutUserUsingPOST();
+            fail("API Exception expected");
+        } catch (ApiException e) {
+            assertEquals(401, e.getCode());
+        }
     }
     
 }

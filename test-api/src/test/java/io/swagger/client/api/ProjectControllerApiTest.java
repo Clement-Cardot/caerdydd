@@ -13,34 +13,34 @@
 
 package io.swagger.client.api;
 
+import io.swagger.client.ApiClient;
 import io.swagger.client.model.ProjectDTO;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * API tests for ProjectControllerApi
  */
 public class ProjectControllerApiTest {
 
-    private final ProjectControllerApi api = new ProjectControllerApi();
+    static final Logger logger = Logger.getLogger(ProjectControllerApiTest.class.getName());
 
+    private final ApiClient apiClient = new ApiClient();
+    private final ProjectControllerApi api = new ProjectControllerApi();
+    private final ApiTestingTools apiTestingTools = new ApiTestingTools(apiClient);
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        apiTestingTools.logout();
+    }
     
-    /**
-     * updateProject
-     *
-     * 
-     *
-     * @throws Exception
-     *          if the Api call fails
-     */
     @Test
-    public void updateProjectUsingPUTTest() throws Exception {
+    public void testUpdateProject() throws Exception {
         ProjectDTO projectDTO = null;
         Integer projectId = null;
         Integer teamId = null;
