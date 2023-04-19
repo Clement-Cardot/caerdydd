@@ -24,6 +24,7 @@ import com.caerdydd.taf.services.TeamService;
 public class TeamController {
 
     private static final Logger logger = LogManager.getLogger(TeamController.class);
+    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
 
     @Autowired
     private TeamService teamService;
@@ -38,7 +39,7 @@ public class TeamController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            logger.error("Unexpected Exception : {}", e.getMessage());
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
@@ -56,7 +57,7 @@ public class TeamController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            logger.error("Unexpected Exception : {}", e.getMessage());
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
@@ -74,7 +75,7 @@ public class TeamController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            logger.error("Unexpected Exception : {}", e.getMessage());
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
@@ -89,7 +90,7 @@ public class TeamController {
             if(e.getMessage().equals("Can't create teams")) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            logger.error("Unexpected Exception : {}", e.getMessage());
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         } 
     }
@@ -115,7 +116,7 @@ public class TeamController {
             case CustomRuntimeException.SERVICE_ERROR:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             default:
-                logger.error("Unexpected Exception : {}", e.getMessage());
+                logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                 return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }

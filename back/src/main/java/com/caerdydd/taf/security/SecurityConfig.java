@@ -34,12 +34,6 @@ public class SecurityConfig{
     DataSource dataSource;
 
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
-
-    @Autowired
-    CustomUserDetailService userDetailsService;
-
-    @Autowired
     UserService userService;
 
     @Bean
@@ -48,7 +42,7 @@ public class SecurityConfig{
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailService userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(userDetailsService);
@@ -68,7 +62,7 @@ public class SecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthEntryPointJwt unauthorizedHandler) throws Exception {
         return http
                 .cors().and().csrf().disable()
 
