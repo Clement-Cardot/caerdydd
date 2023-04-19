@@ -31,6 +31,9 @@ const routes: Routes = [
   // Notation pages
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
 
+  // Subject page
+  { path: 'subjects',title: 'Subjects' + websiteName, component: ViewValidateSubjectsComponent },
+
   // Teams pages
   { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },
   /* TODO */ { path: 'my-team', title: 'Teams' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
@@ -42,7 +45,7 @@ const routes: Routes = [
 
   // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
-  { path: 'valide',title: 'Valide Subject' + websiteName, component: ViewValidateSubjectsComponent },
+  
 ];
 
 @NgModule({
