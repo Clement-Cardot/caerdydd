@@ -28,8 +28,8 @@ const routes: Routes = [
   // Notation pages
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
 
-  // Test
-  { path: 'valide',title: 'Valide Subject' + websiteName, component: ViewValidateSubjectsComponent },
+  // Subject page
+  { path: 'subjects',title: 'Subjects' + websiteName, component: ViewValidateSubjectsComponent }
 ];
 
 @NgModule({
