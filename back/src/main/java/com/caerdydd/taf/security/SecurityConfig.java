@@ -62,7 +62,7 @@ public class SecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthEntryPointJwt unauthorizedHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthEntryPointJwt unauthorizedHandler, CustomUserDetailService userDetailsService) throws Exception {
         return http
                 .cors().and().csrf().disable()
 
@@ -80,7 +80,7 @@ public class SecurityConfig{
                 
                 .and()
                 
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(authenticationProvider(userDetailsService))
 
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 
