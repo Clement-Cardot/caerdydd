@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'projectD',title: 'Project-description' + websiteName, component: ProjectDescriptionComponent }
 ];
 @NgModule({
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
