@@ -249,7 +249,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testUpdate_UserAlreadyExists() throws CustomRuntimeException{
+    public void testUpdate_UserNotFound() throws CustomRuntimeException{
         // Mock userService.updateUser() method
         UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.updateUser(any(UserDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
