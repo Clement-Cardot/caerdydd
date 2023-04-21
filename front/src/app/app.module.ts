@@ -8,8 +8,10 @@ import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
 import { TeamsCreationPageModule } from './teams-creation-page/teams-creation-page.module';
 import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
-import { PageValidateSubjectModule } from './page-validate-subject/page-validate-subject.module';
-import {TeamsPageModule } from './teams-page/teams-page.module';
+
+
+import { ProjectsPageModule } from './page-validate-subject/page-validate-subject.module';
+import { TeamsPageModule } from './teams-page/teams-page.module';
 import { UserDataService } from './core/services/user-data.service';
 import { ApiAuthService } from './core/services/api-auth.service';
 import { ApiTeamService } from './core/services/api-team.service';
@@ -38,10 +40,11 @@ import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
     LoginPageModule,
     TeamsCreationPageModule,
     ProjectDescriptionPageModule,
-    PageValidateSubjectModule,
     SidenavModule,
     TeamsPageModule,
-    NotationModule
+    NotationModule,
+    ProjectsPageModule,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent],
 })

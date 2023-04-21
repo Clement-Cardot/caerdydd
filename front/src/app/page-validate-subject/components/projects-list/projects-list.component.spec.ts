@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewValidateSubjectsComponent } from './view-validate-subjects.component';
+import { ProjectListComponent } from './projects-list.component';
 
 describe('ViewValidateSubjectsComponent', () => {
-  let component: ViewValidateSubjectsComponent;
-  let fixture: ComponentFixture<ViewValidateSubjectsComponent>;
+  let component: ProjectListComponent;
+  let fixture: ComponentFixture<ProjectListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewValidateSubjectsComponent ]
+      declarations: [ ProjectListComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ViewValidateSubjectsComponent);
+    fixture = TestBed.createComponent(ProjectListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

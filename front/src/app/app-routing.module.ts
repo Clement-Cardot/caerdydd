@@ -7,8 +7,8 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
 import { NotationComponent } from './notation-page/component/notation/notation.component';
-import { ViewValidateSubjectsComponent } from './page-validate-subject/components/view-validate-subjects/view-validate-subjects.component';
 import { TeamCreationComponent } from './teams-creation-page/components/team-creation/team-creation.component';
+import { ProjectListComponent } from './page-validate-subject/components/projects-list/projects-list.component';
 
 const websiteName = " - Taf"
 
@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
 
   // Subject page
-  { path: 'subjects',title: 'Subjects' + websiteName, component: ViewValidateSubjectsComponent }
+  { path: 'subjects',title: 'Subjects' + websiteName, component: ProjectListComponent}
 ];
 
 @NgModule({
