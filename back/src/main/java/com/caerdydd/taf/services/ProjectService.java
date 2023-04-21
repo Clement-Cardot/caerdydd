@@ -64,7 +64,7 @@ public class ProjectService {
         for(int i = nbProjectsInitial; i < nbProjectsInitial + nbProjects; i++) {
             ProjectDTO project = new ProjectDTO();
             project.setIdProject(i+1);
-            project.setName("Project " + (i+1));
+            project.setName("Projet " + (i+1));
             project.setDescription("Description " + (i+1));
             project.setIsValidated(false);
             projects.add(saveProject(project));

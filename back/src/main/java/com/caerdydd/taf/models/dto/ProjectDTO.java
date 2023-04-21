@@ -31,6 +31,18 @@ public class ProjectDTO {
         this.isValidated = false;
     }
 
+    @Override
+    public String toString() {
+        return "ProjectDTO [" +
+                "idProject=" + idProject +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", isValidated=" + isValidated +
+                ", idTeamDev=" + teamDev +
+                ", idTeamValidation=" + teamValidation +
+                ']';
+    }
+
 
 
 

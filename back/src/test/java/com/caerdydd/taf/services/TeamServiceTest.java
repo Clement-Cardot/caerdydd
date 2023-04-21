@@ -685,7 +685,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void testCreateTeams_Nominal_With_Teams() throws CustomRuntimeException {
+    void testCreateTeams_NominalWithTeams() throws CustomRuntimeException {
         // Mock securityConfig.getCurrentUser() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -766,7 +766,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void testCreateTeams_Nominal_Without_Teams() throws CustomRuntimeException {
+    void testCreateTeams_NominalWithoutTeams() throws CustomRuntimeException {
         // Mock securityConfig.getCurrentUser() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -834,7 +834,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void testCreateTeams_User_Is_Not_An_Option_Leader() throws CustomRuntimeException{
+    void testCreateTeams_UserIsNotAnOptionLeader() throws CustomRuntimeException{
         // Mock securityCongif.getCurrentUser method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -870,7 +870,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void testCreateTeams_Service_Error() throws CustomRuntimeException {
+    void testCreateTeams_ServiceError() throws CustomRuntimeException {
         // Mock securityConfig.getCurrentUser() method
         when(securityConfig.getCurrentUser()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
