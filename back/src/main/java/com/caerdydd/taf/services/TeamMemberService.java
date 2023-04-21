@@ -82,10 +82,7 @@ public class TeamMemberService {
 
         TeamMemberDTO teamMember = getTeamMemberById(id);
         teamMember.setBonusPenalty(bonusPenalty);
-        System.out.println("bonusPenalty before update: " + teamMember.getBonusPenalty());
-        TeamMemberDTO response = updateTeamMember(teamMember);
-        System.out.println("bonusPenalty after update: " + response.getBonusPenalty());
-        return response;
+        return updateTeamMember(teamMember);
     }
 
     public TeamMemberDTO updateTeamMember(TeamMemberDTO teamMember) throws CustomRuntimeException {
