@@ -12,7 +12,7 @@ import { MyErrorStateMatcher } from 'src/app/login-page/components/login/login.c
 export class TeamCreationComponent implements OnInit {
   teamCreationForm!: FormGroup;
   matcher = new MyErrorStateMatcher();
-  nbTeamsFormControl = new FormControl('', [Validators.required, Validators.pattern("^\d*[02468]$")]);
+  nbTeamsFormControl = new FormControl('', Validators.required);
   teams!: Team[];
 
   constructor(

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -79,18 +80,20 @@ public class TeamController {
         }
     }
 
-    @PutMapping("/{nbTeams}")
-    public ResponseEntity<List<TeamDTO>> createTeams(@PathVariable Integer nbTeams) {
-        logger.info("Process request : Create {} teams", nbTeams);
+    @PutMapping("/createTeams")
+    public ResponseEntity<List<TeamDTO>> createTeams(@RequestBody Integer nbTeamsPairs) {
+        logger.info("Process request : Create {} teams", nbTeamsPairs*2);
         try {
-            List<TeamDTO> response = teamService.createTeams(nbTeams);
+            List<TeamDTO> response = teamService.createTeams(nbTeamsPairs);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            if(e.getMessage().equals("Can't create teams")) {
+            if(e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-            logger.error("Unexpected Exception : {}", e.getMessage());
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            else {
+                logger.error("Unexpected Exception : {}", e.getMessage());
+                return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
         } 
     }
 
