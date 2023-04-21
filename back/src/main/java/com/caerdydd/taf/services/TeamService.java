@@ -87,25 +87,29 @@ public class TeamService {
         return modelMapper.map(response, TeamDTO.class);
     }
 
-    public List<TeamDTO> createTeams(Integer nbTeams) throws CustomRuntimeException{
-        if(nbTeams % 2 != 0) {
-            logger.warn("ILLEGAL API USE : Can't create an odd number of teams");
-            throw new CustomRuntimeException(CustomRuntimeException.NB_TEAMS_SHOULD_BE_EVEN);
+    public List<TeamDTO> createTeams(Integer nbTeamsPairs) throws CustomRuntimeException{
+        // Check if the user is an OptionLeader
+        UserDTO user = securityConfig.getCurrentUser();
+        if(user.getRoles().stream().noneMatch(role -> role.getRole().equals(RoleDTO.OPTION_LEADER_ROLE))){
+            logger.warn("ILLEGAL API USE : Current user : {} tried to create teams but is not an Option Leader", user.getId());
+            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER);
         }
+        int nbTeams = nbTeamsPairs * 2;
         List<TeamDTO> teams = new ArrayList<>();
-        ProjectDTO[] projects = projectService.createProjects(nbTeams);
+        List<ProjectDTO> projects = projectService.createProjects(nbTeams);
+        int nbTeamsInitial = this.listAllTeams().size();
         for (int i = 0; i < nbTeams; i++) {
             TeamDTO team = new TeamDTO();
-            team.setName("Team " + (i+1));
-            team.setProjectDev(projects[i]);
-            projects[i].setTeamDev(team);
+            team.setName("Équipe " + (nbTeamsInitial + i + 1));
+            team.setProjectDev(projects.get(i));
+            projects.get(i).setTeamDev(team);
             if (i % 2 == 0) {
-                team.setProjectValidation(projects[i+1]);
-                projects[i+1].setTeamValidation(team);
+                team.setProjectValidation(projects.get(i+1));
+                projects.get(i+1).setTeamValidation(team);
             }
             else {
-                team.setProjectValidation(projects[i-1]);
-                projects[i-1].setTeamValidation(team);
+                team.setProjectValidation(projects.get(i-1));
+                projects.get(i-1).setTeamValidation(team);
             }
             saveTeam(team);
             teams.add(team);

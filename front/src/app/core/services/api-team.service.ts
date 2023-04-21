@@ -42,9 +42,9 @@ export class ApiTeamService {
         );
     }
 
-    createTeams(nbTeam:number): Observable<Team[]> {
-        const url = `${this.baseUrl}/${nbTeam}`;
-        return this.http.put<any[]>(url, {})
+    createTeams(nbTeamsPairs:number): Observable<Team[]> {
+        const url = `${this.baseUrl}/createTeams`;
+        return this.http.put<any[]>(url, nbTeamsPairs)
         .pipe(
             map((data: any[]) => data.map((item) => this.teamAdapter.adapt(item)))
         )
