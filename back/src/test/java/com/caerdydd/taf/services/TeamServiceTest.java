@@ -27,6 +27,7 @@ import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.caerdydd.taf.models.entities.TeamEntity;
+import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
@@ -250,12 +251,13 @@ class TeamServiceTest {
         when(userService.updateUser(any(UserDTO.class))).then(AdditionalAnswers.returnsFirstArg());
 
         // Mock teamRepository.findById() method
-        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(
-                                                                    1, 
-                                                                    "Team A",
-                                                                    new ProjectEntity("Project A", "Description 1"),
-                                                                    new ProjectEntity("Project B", "Description 2")
-                                                                ));
+        TeamEntity mockedTeam = new TeamEntity(1, 
+                                               "Team A",
+                                               new ProjectEntity("Project A", "Description 1"),
+                                               new ProjectEntity("Project B", "Description 2")
+                                            );
+        mockedTeam.setTeamMembers(new ArrayList<TeamMemberEntity>());
+        Optional<TeamEntity> mockedAnswer = Optional.of(mockedTeam);
         when(teamRepository.findById(1)).thenReturn(mockedAnswer);
 
         // Mock Securityconfig.checkCurrentUser() method
@@ -263,6 +265,8 @@ class TeamServiceTest {
 
         // Mock roleService.deleteRole() method
         Mockito.doNothing().when(roleService).deleteRole(any(RoleDTO.class));
+
+        // Mock 
 
         // Define the expected answer
         UserDTO expectedAnswer = mockedUser;
@@ -285,6 +289,114 @@ class TeamServiceTest {
         verify(securityConfig, times(1)).checkCurrentUser(1);
 
         assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    public void applyInATeamTest_TeamIsFull() throws CustomRuntimeException {
+        // Mock userService.getUserById() method
+        UserDTO mockedUser = new UserDTO();
+        mockedUser.setId(1);
+        mockedUser.setFirstname("jean");
+        mockedUser.setLastname("dupont");
+        mockedUser.setEmail("jdupont@reseau.eseo.fr");
+        mockedUser.setLogin("jdupont");
+        mockedUser.setPassword("$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q");
+
+        RoleDTO mockedRole = new RoleDTO();
+        mockedRole.setIdRole(1);
+        mockedRole.setRole("STUDENT_ROLE");
+        mockedRole.setUser(mockedUser);
+
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
+        when(userService.getUserById(1)).thenReturn(mockedUser);
+        // Mock teamRepository.findById() method
+        TeamEntity mockedTeam = new TeamEntity(1, 
+                                               "Team A",
+                                               new ProjectEntity("Project A", "Description 1"),
+                                               new ProjectEntity("Project B", "Description 2")
+                                            );
+        mockedTeam.setTeamMembers(new ArrayList<TeamMemberEntity>());
+        mockedTeam.getTeamMembers().add(new TeamMemberEntity());
+        mockedTeam.getTeamMembers().add(new TeamMemberEntity());
+        mockedTeam.getTeamMembers().add(new TeamMemberEntity());
+        mockedTeam.getTeamMembers().add(new TeamMemberEntity());
+        mockedTeam.getTeamMembers().add(new TeamMemberEntity());
+        mockedTeam.getTeamMembers().add(new TeamMemberEntity());
+        Optional<TeamEntity> mockedAnswer = Optional.of(mockedTeam);
+        when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+
+        // Mock Securityconfig.checkCurrentUser() method
+        when(securityConfig.checkCurrentUser(1)).thenReturn(true);
+
+        // Define the expected answer
+        UserDTO expectedAnswer = mockedUser;
+        TeamMemberDTO teamMember = new TeamMemberDTO();
+        teamMember.setUser(expectedAnswer);
+        
+        // Call the method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamService.applyInATeam(1, 1);
+        });
+
+        // Verify the result        
+        assertEquals(CustomRuntimeException.TEAM_IS_FULL, exception.getMessage());
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(0)).updateUser(any(UserDTO.class));
+        verify(roleService, times(0)).deleteRole(any(RoleDTO.class));
+        verify(teamRepository, times(1)).findById(1);
+        verify(securityConfig, times(1)).checkCurrentUser(1);
+    }
+
+    @Test
+    public void applyInATeamTest_TeamHasAlready2CSS() throws CustomRuntimeException {
+        // Mock userService.getUserById() method
+        UserDTO mockedUser = new UserDTO();
+        mockedUser.setId(1);
+        mockedUser.setFirstname("jean");
+        mockedUser.setLastname("dupont");
+        mockedUser.setEmail("jdupont@reseau.eseo.fr");
+        mockedUser.setLogin("jdupont");
+        mockedUser.setPassword("$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q");
+
+        RoleDTO mockedRole = new RoleDTO();
+        mockedRole.setIdRole(1);
+        mockedRole.setRole("STUDENT_ROLE");
+        mockedRole.setUser(mockedUser);
+
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
+        when(userService.getUserById(1)).thenReturn(mockedUser);
+        // Mock teamRepository.findById() method
+        Optional<TeamEntity> mockedAnswer = Optional.of(new TeamEntity(1, 
+                                               "Team A",
+                                               new ProjectEntity("Project A", "Description 1"),
+                                               new ProjectEntity("Project B", "Description 2")
+                                            ));
+        when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+        when(teamService.isTeamFull(any(TeamDTO.class))).thenReturn(false);
+        when(teamService.checkSpecialityRatio(any(TeamDTO.class))).thenReturn(true);
+
+        // Mock Securityconfig.checkCurrentUser() method
+        when(securityConfig.checkCurrentUser(1)).thenReturn(true);
+
+        // Define the expected answer
+        UserDTO expectedAnswer = mockedUser;
+        TeamMemberDTO teamMember = new TeamMemberDTO();
+        teamMember.setUser(expectedAnswer);
+        
+        // Call the method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamService.applyInATeam(1, 1);
+        });
+
+        // Verify the result        
+        assertEquals(CustomRuntimeException.TEAM_IS_FULL, exception.getMessage());
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(0)).updateUser(any(UserDTO.class));
+        verify(roleService, times(0)).deleteRole(any(RoleDTO.class));
+        verify(teamRepository, times(1)).findById(1);
+        verify(securityConfig, times(1)).checkCurrentUser(1);
     }
 
     @Test
