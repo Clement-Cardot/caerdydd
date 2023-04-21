@@ -301,6 +301,84 @@ public class TeamControllerTest {
     }
 
     @Test
+    void testApplyInATeam_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_UserIsNotAStudent() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_STUDENT));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_TeamIsFull() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_IS_FULL));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_TeamAlreadyHas2CSS() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_ALREADY_HAS_2_CSS));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_TeamAlreadyHas4LD() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_ALREADY_HAS_4_LD));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
+    }
+
+    @Test
+    void testApplyInATeam_UserAlreadyInATeam() throws CustomRuntimeException {
+        // Mock teamService.applyInATeam() method
+        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_ALREADY_IN_A_TEAM));
+
+        // Call the method to test
+        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
+
+        // Verify the result
+        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
+        assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
+    }
+
+    @Test
     void testApplyInATeam_TeamNotFound() throws CustomRuntimeException {
         // Mock teamService.applyInATeam() method
         when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
@@ -324,32 +402,6 @@ public class TeamControllerTest {
         // Verify the result
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
-    }
-
-    @Test
-    void testApplyInATeam_UserAlreadyInATeam() throws CustomRuntimeException {
-        // Mock teamService.applyInATeam() method
-        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_ALREADY_IN_A_TEAM));
-
-        // Call the method to test
-        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
-
-        // Verify the result
-        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
-        assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
-    }
-
-    @Test
-    void testApplyInATeam_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
-        // Mock teamService.applyInATeam() method
-        when(teamService.applyInATeam(1, 1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER));
-
-        // Call the method to test
-        ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);
-
-        // Verify the result
-        verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
-        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
     }
 
     @Test
