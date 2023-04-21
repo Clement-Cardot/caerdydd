@@ -110,9 +110,9 @@ public class TeamController {
             case CustomRuntimeException.TEAM_IS_FULL:
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             case CustomRuntimeException.TEAM_ALREADY_HAS_2_CSS:
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            case CustomRuntimeException.TEAM_ALREADY_HAS_2_LD:
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            case CustomRuntimeException.TEAM_ALREADY_HAS_4_LD:
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.USER_ALREADY_IN_A_TEAM:
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.USER_NOT_FOUND:
