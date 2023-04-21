@@ -10,13 +10,13 @@ import { map } from "rxjs";
     providedIn: "root"
 })
 export class ApiAuthService {
-    private baseUrl = "http://localhost:8080/api/auth";
+    private baseUrl = "http://localhost:4200/api/auth";
 
     constructor(private http: HttpClient, private adapter: UserAdapter) {
     }
-    
+
     tryToLogIn(login: string, password: string): Observable<User> {
-        const url = `${this.baseUrl}/login`;	
+        const url = `${this.baseUrl}/login`;
         return this.http.post(url, { login, password })
         .pipe(
             map((data: any) => this.adapter.adapt(data))

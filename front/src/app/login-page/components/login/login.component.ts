@@ -18,7 +18,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit  {
+export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
   matcher = new MyErrorStateMatcher();
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit  {
 
                 console.log("Current User is : " + userResponse.login);
                 this.redirectDependingOnUserRole();
-                
+
             } else {
                 this.router.navigateByUrl("/");
             }

@@ -8,6 +8,7 @@ import { TeamCreationComponent } from './teams-creation-page/components/team-cre
 import { NotationComponent } from './notation-page/component/notation/notation.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
+import { TeamFileComponent } from './teams-page/components/team-file/team-file.component';
 
 const websiteName = " - Taf"
 
@@ -19,8 +20,9 @@ const routes: Routes = [
 
   // Teams pages
   { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },
+  { path: 'file', title: 'Teams' + websiteName, component: TeamFileComponent, canActivate: [AuthGuard] },
   { path: 'teams-creation', title: 'Création d\'équipes' + websiteName, component: TeamCreationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
-  
+
   // Projects pages
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
 

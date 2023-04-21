@@ -10,13 +10,13 @@ import { map } from "rxjs";
     providedIn: "root"
 })
 export class ApiUserService {
-    private baseUrl = "http://localhost:8080/api/users";
+    private baseUrl = "http://localhost:4200/api/users";
 
     constructor(private http: HttpClient, private adapter: UserAdapter) {
     }
-    
+
     getUserById(id: number): Observable<User> {
-        const url = `${this.baseUrl}/${id}`;	
+        const url = `${this.baseUrl}/${id}`;
         return this.http.get(url)
         .pipe(
             map((data: any) => this.adapter.adapt(data))

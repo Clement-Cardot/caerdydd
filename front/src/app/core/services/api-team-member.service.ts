@@ -11,16 +11,16 @@ import { User, UserAdapter } from "../data/models/user.model";
     providedIn: "root"
 })
 export class ApiTeamMemberService {
-    private baseUrl = "http://localhost:8080/api/teamMembers";
+    private baseUrl = "http://localhost:4200/api/teamMembers";
 
     constructor(
-        private http: HttpClient, 
-        private teamMemberAdapter: TeamMemberAdapter, 
+        private http: HttpClient,
+        private teamMemberAdapter: TeamMemberAdapter,
         private userAdapter: UserAdapter
         ) {
     }
-    
-    getAllTeamMembers(): Observable<TeamMember[]> {	
+
+    getAllTeamMembers(): Observable<TeamMember[]> {
         return this.http.get<any[]>(this.baseUrl)
         .pipe(
             map((data: any[]) => data.map((item) => this.teamMemberAdapter.adapt(item)))
@@ -42,7 +42,7 @@ export class ApiTeamMemberService {
     }
 
     setBonusTeamMember(teamMemberId: number, bonus: number): Observable<TeamMember> {
-        const url = `${this.baseUrl}/bonus/${teamMemberId}/${bonus}`;	
+        const url = `${this.baseUrl}/bonus/${teamMemberId}/${bonus}`;
         return this.http.post(url, null)
         .pipe(
             map((data: any) => this.teamMemberAdapter.adapt(data))
