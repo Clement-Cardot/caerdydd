@@ -15,9 +15,9 @@ export class ApiUserService {
 
     constructor(private http: HttpClient, private userAdapter: UserAdapter) {
     }
-    
+
     getUserById(id: number): Observable<User> {
-        const url = `${this.baseUrl}/${id}`;	
+        const url = `${this.baseUrl}/${id}`;
         return this.http.get(url)
         .pipe(
             map((data: any) => this.userAdapter.adapt(data))

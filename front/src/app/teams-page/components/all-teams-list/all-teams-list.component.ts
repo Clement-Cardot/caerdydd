@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { Team } from 'src/app/core/data/models/team.model';
@@ -9,7 +9,7 @@ import { Team } from 'src/app/core/data/models/team.model';
   styleUrls: ['./all-teams-list.component.scss']
 })
 
-export class AllTeamsListComponent{
+export class AllTeamsListComponent implements OnInit {
   teams!: Team[];
 
   refresh: any;

@@ -15,9 +15,9 @@ export class ApiAuthService {
 
     constructor(private http: HttpClient, private adapter: UserAdapter) {
     }
-    
+
     tryToLogIn(login: string, password: string): Observable<User> {
-        const url = `${this.baseUrl}/login`;	
+        const url = `${this.baseUrl}/login`;
         return this.http.post(url, { login, password })
         .pipe(
             map((data: any) => this.adapter.adapt(data))
