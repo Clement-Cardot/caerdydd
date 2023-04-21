@@ -432,17 +432,19 @@ public class TeamControllerTest {
 
     @Test
     void testCreateTeams_Nominal() throws CustomRuntimeException {
-        // Mock teamService.createTeams(2) method
-        ProjectDTO project1 = new ProjectDTO("Projet 1", "Projet 1");
-        ProjectDTO project2 = new ProjectDTO("Projet 2", "Projet 2");
-        TeamDTO team1 = new TeamDTO(1, "Equipe 1", project1, project2);
-        TeamDTO team2 = new TeamDTO(2, "Equipe 2", project2, project1);
+        // Mock teamService.createTeams(1) method
+        ProjectDTO project1 = new ProjectDTO("Projet 1", "Description 1");
+        ProjectDTO project2 = new ProjectDTO("Projet 2", "Description 2");
+        TeamDTO team1 = new TeamDTO(1, "Équipe 1", project1, project2);
+        TeamDTO team2 = new TeamDTO(2, "Équipe 2", project2, project1);
         List<TeamDTO> mockedAnswer = new ArrayList<TeamDTO>();
         mockedAnswer.add(team1);
         mockedAnswer.add(team2);
-        when(teamService.createTeams(2)).thenReturn(mockedAnswer);
+        when(teamService.createTeams(1)).thenReturn(mockedAnswer);
+
         // Call the method to test
-        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(2);
+        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(1);
+
         // Verify the result
         verify(teamService, times(1)).createTeams(anyInt());
         assertEquals(mockedAnswer.toString(), result.getBody().toString());
@@ -450,12 +452,12 @@ public class TeamControllerTest {
     }
 
     @Test
-    void testCreateTeams_EvenNumber() throws CustomRuntimeException {
-        // Mock teamService.createTeams(2) method
-        when(teamService.createTeams(3)).thenThrow(new CustomRuntimeException(CustomRuntimeException.NB_TEAMS_SHOULD_BE_EVEN));
+    void testCreateTeams_Not_An_Option_Leader() throws CustomRuntimeException {
+        // Mock teamService.createTeams(1) method
+        when(teamService.createTeams(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER));
 
         // Call the method to test
-        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(3);
+        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(1);
 
         // Verify the result
         verify(teamService, times(1)).createTeams(anyInt());
@@ -463,16 +465,28 @@ public class TeamControllerTest {
     }
 
     @Test
-    void testCreateTeams_UnexpectedError() throws CustomRuntimeException { 
-        // Mock teamService.createTeams(2) method
-        when(teamService.createTeams(2)).thenThrow(new CustomRuntimeException("Unexpected error"));
+    void testCreateTeams_Service_Error() throws CustomRuntimeException {
+        // Mock teamService.createTeams(1) method
+        when(teamService.createTeams(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
         // Call the method to test
-        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(2);
+        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(1);
+
+        // Verify the result
+        verify(teamService, times(1)).createTeams(anyInt());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
+    }
+
+    @Test
+    void testCreateTeams_UnexpectedError() throws CustomRuntimeException {
+        // Mock teamService.createTeams(1) method
+        when(teamService.createTeams(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(1);
 
         // Verify the result
         verify(teamService, times(1)).createTeams(anyInt());
         assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
     }
-
 }

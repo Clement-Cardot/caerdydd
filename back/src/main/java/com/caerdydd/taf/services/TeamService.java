@@ -88,16 +88,15 @@ public class TeamService {
     }
 
     public List<TeamDTO> createTeams(Integer nbTeamsPairs) throws CustomRuntimeException{
-        // Check if the user is an OptionLeader
-        UserDTO user = securityConfig.getCurrentUser();
-        if(user.getRoles().stream().noneMatch(role -> role.getRole().equals(RoleDTO.OPTION_LEADER_ROLE))){
-            logger.warn("ILLEGAL API USE : Current user : {} tried to create teams but is not an Option Leader", user.getId());
-            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER);
-        }
+        // Check if the user is an option leader
+        userServiceRules.checkUserRole(securityConfig.getCurrentUser(), "OPTION_LEADER_ROLE");
+
+        //If everyting is ok, create the teams and projects
         int nbTeams = nbTeamsPairs * 2;
         List<TeamDTO> teams = new ArrayList<>();
         List<ProjectDTO> projects = projectService.createProjects(nbTeams);
         int nbTeamsInitial = this.listAllTeams().size();
+
         for (int i = 0; i < nbTeams; i++) {
             TeamDTO team = new TeamDTO();
             team.setName("Équipe " + (nbTeamsInitial + i + 1));
