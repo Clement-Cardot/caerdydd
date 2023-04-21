@@ -4,3 +4,14 @@ export class Project {
     description!: string;
     is_validated!: boolean;
 }
+
+export class ProjectDev {
+
+}
+
+export class ProjectAdapter implements Adapter<Project> {
+
+    adapt(item: any): Project {
+        return new Project();
+    }
+}
