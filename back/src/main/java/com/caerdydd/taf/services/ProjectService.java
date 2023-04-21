@@ -45,6 +45,22 @@ public class ProjectService {
         }
     }
 
+    public ProjectDTO getProjectById(Integer projectId) throws CustomRuntimeException {
+        Optional<ProjectEntity> optionalProject;
+        try {
+            optionalProject = projectRepository.findById(projectId);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    
+        if (optionalProject.isEmpty()) {
+            throw new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND);
+        }
+    
+        ProjectEntity projectEntity = optionalProject.get();
+        return modelMapper.map(projectEntity, ProjectDTO.class);
+    }
+
     public ProjectDTO saveProject(ProjectDTO project) {
         ProjectEntity projectEntity = modelMapper.map(project, ProjectEntity.class);
 
