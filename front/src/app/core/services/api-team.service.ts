@@ -15,13 +15,13 @@ export class ApiTeamService {
     private baseUrl = environment.apiURL + "/teams";
 
     constructor(
-        private http: HttpClient, 
-        private teamAdapter: TeamAdapter, 
+        private http: HttpClient,
+        private teamAdapter: TeamAdapter,
         private userAdapter: UserAdapter
         ) {
     }
-    
-    getAllTeams(): Observable<Team[]> {	
+
+    getAllTeams(): Observable<Team[]> {
         return this.http.get<any[]>(this.baseUrl)
         .pipe(
             map((data: any[]) => data.map((item) => this.teamAdapter.adapt(item)))
@@ -54,7 +54,7 @@ export class ApiTeamService {
     }
 
     applyForTeam(teamId: number, userId: number): Observable<User> {
-        const url = `${this.baseUrl}/${teamId}/${userId}`;	
+        const url = `${this.baseUrl}/${teamId}/${userId}`;
         return this.http.put(url, {})
         .pipe(
             map((data: any) => this.userAdapter.adapt(data))

@@ -4,6 +4,7 @@ import { TeamListComponent } from './components/team-list/team-list.component';
 import { AllTeamsListComponent } from './components/all-teams-list/all-teams-list.component';
 import { TeamCreationComponent } from './components/team-creation/team-creation.component';
 import {MaterialModule} from '../material.module';
+import { TeamFileComponent } from './components/team-file/team-file.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
@@ -11,7 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   declarations: [
     TeamListComponent,
     AllTeamsListComponent,
-    TeamCreationComponent
+    TeamCreationComponent,
+    TeamFileComponent
   ],
   imports: [
     CommonModule,
