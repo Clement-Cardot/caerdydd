@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -26,6 +27,9 @@ public class TeamMemberService {
 
     @Autowired
     private TeamMemberRepository teamMemberRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -66,14 +70,21 @@ public class TeamMemberService {
     }
 
     public TeamMemberDTO setBonusPenaltyById(Integer id, Integer bonusPenalty) throws CustomRuntimeException {
+        if(securityConfig.getCurrentUser() == null) {
+            logger.warn("ILLEGAL API USE: Current user is null");
+            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
+        }
+        
         if(securityConfig.getCurrentUser().getRoles().stream().noneMatch(role -> role.getRole().equals(RoleDTO.OPTION_LEADER_ROLE))){
             logger.warn("ILLEGAL API USE : Current user is not a option leader");
-            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_STUDENT);
+            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_OPTION_LEADER);
         }
 
         TeamMemberDTO teamMember = getTeamMemberById(id);
         teamMember.setBonusPenalty(bonusPenalty);
+        System.out.println("bonusPenalty before update: " + teamMember.getBonusPenalty());
         TeamMemberDTO response = updateTeamMember(teamMember);
+        System.out.println("bonusPenalty after update: " + response.getBonusPenalty());
         return response;
     }
 
@@ -81,7 +92,7 @@ public class TeamMemberService {
         TeamMemberEntity teamMemberEntity = modelMapper.map(teamMember, TeamMemberEntity.class);
         
         Optional<TeamMemberEntity> optionalUser = teamMemberRepository.findById(teamMemberEntity.getIdUser());
-        if (optionalUser.isEmpty()){
+        if (optionalUser.isEmpty()) {
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
 

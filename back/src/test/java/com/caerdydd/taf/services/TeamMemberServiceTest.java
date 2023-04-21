@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -16,13 +17,16 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+
 import com.caerdydd.taf.models.dto.ProjectDTO;
+import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
@@ -32,6 +36,7 @@ import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.models.entities.UserEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.security.SecurityConfig;
 
 @ExtendWith(MockitoExtension.class)
 public class TeamMemberServiceTest {
@@ -41,6 +46,9 @@ public class TeamMemberServiceTest {
 
     @Mock
     private TeamMemberRepository teamMemberRepository;
+    
+    @Mock
+    private SecurityConfig securityConfig;
 
     @Spy
     private ModelMapper modelMapper;
@@ -222,5 +230,80 @@ public class TeamMemberServiceTest {
         // Verify the result
         verify(teamMemberRepository, times(1)).save(any(TeamMemberEntity.class));
         assertEquals(teamMemberToSave.toString(), response.toString());
+    }
+
+    @Test
+    public void testSetBonusTeamMember_Nominal() throws CustomRuntimeException {
+        // Mock teamMemberRepository.save() method
+        UserDTO currentUser = new UserDTO(2, "firstname2", "lastname2", "login2", "password2", "email2", "LD");
+        when(securityConfig.getCurrentUser()).thenReturn(currentUser);
+        RoleDTO role = new RoleDTO(1, RoleDTO.OPTION_LEADER_ROLE, currentUser);
+        currentUser.setRoles(Collections.singletonList(role));
+
+        TeamEntity team = new TeamEntity();
+        UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+
+        TeamMemberEntity teamMember = new TeamMemberEntity(user, team);
+        teamMember.setBonusPenalty((-2));
+
+        ArgumentCaptor<TeamMemberEntity> captor = ArgumentCaptor.forClass(TeamMemberEntity.class);
+        when(teamMemberRepository.save(captor.capture())).thenReturn(teamMember);
+
+        Optional<TeamMemberEntity> mockedTeamMember = Optional.of(teamMember);
+        when(teamMemberRepository.findById(mockedTeamMember.get().getIdUser())).thenReturn(mockedTeamMember);
+        mockedTeamMember.get().setBonusPenalty(0); // set bonus penalty to 0 initially
+
+        teamMemberService.setBonusPenaltyById(mockedTeamMember.get().getIdUser(), -2);
+        assertEquals(-2, captor.getValue().getBonusPenalty());
+    }
+
+
+    @Test
+    public void testSetBonusTeamMember_CurrentUserTeam() throws CustomRuntimeException{
+        RoleDTO role = new RoleDTO();
+        role.setRole(RoleDTO.STUDENT_ROLE);
+
+        // set up mock user for the security config
+        UserDTO currentUser = new UserDTO(2, "firstname2", "lastname2", "login2", "password2", "email2", "LD");
+        when(securityConfig.getCurrentUser()).thenReturn(currentUser);
+        currentUser.setRoles(Collections.singletonList(role));
+
+        // Call the method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamMemberService.setBonusPenaltyById(1, 1);
+        });
+
+        // Verify the result
+        assertEquals(CustomRuntimeException.USER_IS_NOT_A_OPTION_LEADER, exception.getMessage());
+    }
+
+    @Test
+    public void testSetBonusTeamMember_CurrentUserTeamMember() throws CustomRuntimeException{
+        RoleDTO role = new RoleDTO();
+        role.setRole(RoleDTO.TEAM_MEMBER_ROLE);
+
+        // set up mock user for the security config
+        UserDTO currentUser = new UserDTO(2, "firstname2", "lastname2", "login2", "password2", "email2", "LD");
+        when(securityConfig.getCurrentUser()).thenReturn(currentUser);
+        currentUser.setRoles(Collections.singletonList(role));
+
+        // Call the method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamMemberService.setBonusPenaltyById(1, 1);
+        });
+
+        // Verify the result
+        assertEquals(CustomRuntimeException.USER_IS_NOT_A_OPTION_LEADER, exception.getMessage());
+    }
+
+    @Test
+    public void testSetBonusTeamMember_UnknownCurrentUser() throws CustomRuntimeException{
+        // Call the method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamMemberService.setBonusPenaltyById(1, 1);
+        });
+
+        // Verify the result
+        assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
     }
 }
