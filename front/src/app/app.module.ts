@@ -16,7 +16,14 @@ import { ApiTeamService } from './core/services/api-team.service';
 import { ApiUserService } from './core/services/api-user.service';
 import { SidenavModule } from './sidenav/sidenav.module';
 import { NotationModule } from './notation-page/notation.module';
-import { HashLocationStrategy, LocationStrategy  } from '@angular/common'; 
+import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/moment';
+import * as moment from 'moment';
+
+export function momentAdapterFactory() {
+  return adapterFactory(moment);
+}; 
 
 @NgModule({
   declarations: [
@@ -41,7 +48,8 @@ import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
     PageValidateSubjectModule,
     SidenavModule,
     TeamsPageModule,
-    NotationModule
+    NotationModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory })
   ],
   bootstrap: [AppComponent],
 })
