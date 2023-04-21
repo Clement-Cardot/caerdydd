@@ -88,11 +88,15 @@ public class TeamController {
             List<TeamDTO> response = teamService.createTeams(nbTeamsPairs);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            if(e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER)) {
+            switch(e.getMessage()) {
+            case CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER:
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            case CustomRuntimeException.SERVICE_ERROR:
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            default:
+                logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
-            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         } 
     }
 
