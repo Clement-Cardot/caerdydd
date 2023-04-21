@@ -22,7 +22,8 @@ import com.caerdydd.taf.security.SecurityConfig;
 @Service
 @Transactional
 public class TeamMemberService {
-    private static final Logger logger = LogManager.getLogger(TeamService.class);
+    
+    private static final Logger logger = LogManager.getLogger(TeamMemberService.class);
 
     @Autowired
     private TeamMemberRepository teamMemberRepository;
