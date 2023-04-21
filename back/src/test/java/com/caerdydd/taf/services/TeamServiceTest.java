@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -684,6 +685,87 @@ class TeamServiceTest {
     }
 
     @Test
+    void testCreateTeams_Nominal_With_Teams() throws CustomRuntimeException {
+        // Mock securityConfig.getCurrentUser() method
+        UserDTO mockedUser = new UserDTO();
+        mockedUser.setId(1);
+        mockedUser.setFirstname("jean");
+        mockedUser.setLastname("dupont");
+        mockedUser.setEmail("jdupont@reseau.eseo.fr");
+        mockedUser.setLogin("jdupont");
+        mockedUser.setPassword("$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q");
+
+        RoleDTO mockedRole = new RoleDTO();
+        mockedRole.setIdRole(1);
+        mockedRole.setRole("OPTION_LEADER_ROLE");
+        mockedRole.setUser(mockedUser);
+
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
+
+        when(securityConfig.getCurrentUser()).thenReturn(mockedUser);
+
+        // Mock userServiceRules.checkUserRole() method
+        doNothing().when(userServiceRules).checkUserRole(any(UserDTO.class), anyString());
+
+        // Mock projectService.createProjects(2, 2) method
+        ProjectDTO mockedProject1 = new ProjectDTO("Project 3", "Description 3");
+        ProjectDTO mockedProject2 = new ProjectDTO("Project 4", "Description 4");
+        List<ProjectDTO> mocketProjects = new ArrayList<ProjectDTO>();
+        mocketProjects.add(mockedProject1);
+        mocketProjects.add(mockedProject2);
+        when(projectService.createProjects(2, 2)).thenReturn(mocketProjects);
+
+        // Mock teamRepository.findAll() method
+        List<TeamEntity> mockedAnswer = new ArrayList<TeamEntity>();
+        mockedAnswer.add(new TeamEntity(
+            1, 
+            "Équipe 1", 
+            new ProjectEntity("Projet 1", "Description 1"), 
+            new ProjectEntity("Projet 2", "Description 2")
+        ));
+        mockedAnswer.add(
+            new TeamEntity(
+                2, 
+                "Équipe 2",
+                new ProjectEntity("Projet 2", "Description 2"),
+                new ProjectEntity("Projet 1", "Description 1")
+            ));
+        when(teamRepository.findAll()).thenReturn(mockedAnswer);
+
+        // Mock teamRepository.save() method
+        when(teamRepository.save(any(TeamEntity.class))).then(AdditionalAnswers.returnsFirstArg());
+
+        // Define the expected answer
+        List<TeamDTO> expectedAnswer = new ArrayList<TeamDTO>();
+        expectedAnswer.add(new TeamDTO(
+            3, 
+            "Équipe 3", 
+            new ProjectDTO("Projet 3", "Description 3"), 
+            new ProjectDTO("Projet 4", "Description 4")
+        ));
+        expectedAnswer.add(new TeamDTO(
+            4, 
+            "Équipe 4", 
+            new ProjectDTO("Projet 4", "Description 4"), 
+            new ProjectDTO("Projet 3", "Description 3")
+        ));
+
+        // Call the method to test
+        List<TeamDTO> result = teamService.createTeams(1);
+
+        // Verify the result
+        verify(securityConfig, times(1)).getCurrentUser();
+        verify(userServiceRules, times(1)).checkUserRole(any(UserDTO.class), anyString());
+        verify(projectService, times(1)).createProjects(2, 2);
+        verify(teamRepository, times(1)).findAll();
+        verify(teamRepository, times(2)).save(any(TeamEntity.class));
+        
+        assertEquals(2, result.size());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
     void testCreateTeams_Nominal_Without_Teams() throws CustomRuntimeException {
         // Mock securityConfig.getCurrentUser() method
         UserDTO mockedUser = new UserDTO();
@@ -704,54 +786,56 @@ class TeamServiceTest {
 
         when(securityConfig.getCurrentUser()).thenReturn(mockedUser);
 
-        // Mock projectService.createTeams() method
+        // Mock userServiceRules.checkUserRole() method
+        doNothing().when(userServiceRules).checkUserRole(any(UserDTO.class), anyString());
+
+        // Mock projectService.createProjects(2, 2) method
+        ProjectDTO mockedProject1 = new ProjectDTO("Project 1", "Description 1");
+        ProjectDTO mockedProject2 = new ProjectDTO("Project 2", "Description 2");
         List<ProjectDTO> mocketProjects = new ArrayList<ProjectDTO>();
-        mocketProjects.add(new ProjectDTO("Project A", "Description 1"));
-        mocketProjects.add(new ProjectDTO("Project B", "Description 2"));
-        when(projectService.createProjects(2)).thenReturn(mocketProjects);
+        mocketProjects.add(mockedProject1);
+        mocketProjects.add(mockedProject2);
+        when(projectService.createProjects(2, 0)).thenReturn(mocketProjects);
 
-        // Mock teamService.listAllTeams() method
-        when(teamService.listAllTeams()).thenReturn(new ArrayList<TeamDTO>());
+        // Mock teamRepository.findAll() method
+        List<TeamEntity> mockedAnswer = new ArrayList<TeamEntity>();
+        when(teamRepository.findAll()).thenReturn(mockedAnswer);
 
-        // Mock teamService.saveTeam() method
-        TeamDTO mockedTeam1 = new TeamDTO(1, "Équipe 1", 
-            new ProjectDTO("Project A", "Description 1"), 
-            new ProjectDTO("Project B", "Description 2"));
-        TeamDTO mockedTeam2 = new TeamDTO(2, "Équipe 2", 
-            new ProjectDTO("Project B", "Description 2"), 
-            new ProjectDTO("Project A", "Description 1"));
-        when(teamService.saveTeam(mockedTeam1)).thenReturn(mockedTeam1);
-        when(teamService.saveTeam(mockedTeam2)).thenReturn(mockedTeam2);
-        
-        //when(teamService.saveTeam(any(TeamDTO.class))).then(AdditionalAnswers.returnsFirstArg());
+        // Mock teamRepository.save() method
+        when(teamRepository.save(any(TeamEntity.class))).then(AdditionalAnswers.returnsFirstArg());
 
         // Define the expected answer
         List<TeamDTO> expectedAnswer = new ArrayList<TeamDTO>();
-        expectedAnswer.add(new TeamDTO(1, "Équipe 1", 
-            new ProjectDTO("Project A", "Description 1"), 
-            new ProjectDTO("Project B", "Description 2")));
-        expectedAnswer.add(new TeamDTO(2, "Équipe 2", 
-            new ProjectDTO("Project B", "Description 2"), 
-            new ProjectDTO("Project A", "Description 1")));
-        
+        expectedAnswer.add(new TeamDTO(
+            1, 
+            "Équipe 1", 
+            new ProjectDTO("Projet 1", "Description 1"), 
+            new ProjectDTO("Projet 2", "Description 2")
+        ));
+        expectedAnswer.add(new TeamDTO(
+            2, 
+            "Équipe 2", 
+            new ProjectDTO("Projet 2", "Description 2"), 
+            new ProjectDTO("Projet 1", "Description 1")
+        ));
+
         // Call the method to test
-        List<TeamDTO> result = teamService.createTeams(2);
+        List<TeamDTO> result = teamService.createTeams(1);
 
         // Verify the result
         verify(securityConfig, times(1)).getCurrentUser();
-        verify(projectService, times(1)).createProjects(2);
-        verify(teamService, times(2)).saveTeam(any(TeamDTO.class));
-        verify(teamService, times(1)).listAllTeams();
-        assertEquals(expectedAnswer, result);
+        verify(userServiceRules, times(1)).checkUserRole(any(UserDTO.class), anyString());
+        verify(projectService, times(1)).createProjects(2, 0);
+        verify(teamRepository, times(1)).findAll();
+        verify(teamRepository, times(2)).save(any(TeamEntity.class));
         
+        assertEquals(2, result.size());
+        assertEquals(expectedAnswer.toString(), result.toString());
     }
 
     @Test
-    void testCreateTeams_With_Teams() throws CustomRuntimeException {}
-
-    @Test
-    void testCreateTeams_User_Is_Not_Option_Leader() throws CustomRuntimeException {
-        // Mock securityConfig.getCurrentUser() method
+    void testCreateTeams_User_Is_Not_An_Option_Leader() throws CustomRuntimeException{
+        // Mock securityCongif.getCurrentUser method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
         mockedUser.setFirstname("jean");
@@ -767,16 +851,37 @@ class TeamServiceTest {
 
         mockedUser.setRoles(new ArrayList<RoleDTO>());
         mockedUser.getRoles().add(mockedRole);
-
+    
         when(securityConfig.getCurrentUser()).thenReturn(mockedUser);
 
+        // Mock userServiceRules.checkUserRole() method
+        doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER))
+            .when(userServiceRules).checkUserRole(any(UserDTO.class), anyString());
+        
         // Call the method to test
-        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            teamService.createTeams(2);
+        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+            teamService.createTeams(1);
         });
 
         // Verify the result
         verify(securityConfig, times(1)).getCurrentUser();
+        verify(userServiceRules, times(1)).checkUserRole(any(UserDTO.class), anyString());
         assertEquals(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER, exception.getMessage());
     }
+
+    @Test
+    void testCreateTeams_Service_Error() throws CustomRuntimeException {
+        // Mock securityConfig.getCurrentUser() method
+        when(securityConfig.getCurrentUser()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call the method to test
+        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+            teamService.createTeams(1);
+        });
+
+        // Verify the result
+        verify(securityConfig, times(1)).getCurrentUser();
+        assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
+    }
+
 }
