@@ -31,15 +31,10 @@ public class ProjectDTO {
         this.description = description;
     }
 
+
     @Override
     public String toString() {
-        return "ProjectDTO [" +
-                "idProject=" + idProject +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", isValidated=" + isValidated +
-                ", idTeamDev=" + teamDev +
-                ", idTeamValidation=" + teamValidation +
-                ']';
+        return "ProjectDTO [idProject=" + idProject + ", name=" + name + ", description=" + description
+                + ", isValidated=" + isValidated + "]";
     }
 }
