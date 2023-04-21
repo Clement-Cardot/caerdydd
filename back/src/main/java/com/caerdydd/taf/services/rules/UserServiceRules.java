@@ -30,7 +30,6 @@ public class UserServiceRules {
                 default:
                     throw new CustomRuntimeException("Unexpected role value: " + role);
             }
-            
         }
     }
 
@@ -38,5 +37,9 @@ public class UserServiceRules {
         if(!Objects.equals(user.getId(), securityConfig.getCurrentUser().getId())){
             throw new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER);
         }
+    }
+
+    public void checkCurrentUserRole(String role) throws CustomRuntimeException {
+        checkUserRole(securityConfig.getCurrentUser(), role);
     }
 }

@@ -2,6 +2,8 @@ package com.caerdydd.taf.controllers;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +21,32 @@ import com.caerdydd.taf.services.ConsultingService;
 @RequestMapping("api/consulting")
 public class ConsultingController {
 
+    private static final Logger logger = LogManager.getLogger(ConsultingController.class);
+    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
+
     @Autowired
     private ConsultingService consultingService;
 
     @PostMapping("/upload")
-    public ResponseEntity<List<ConsultingDTO>> uploadConsulting(@RequestParam("file") MultipartFile file) throws CustomRuntimeException {
-        List<ConsultingDTO> savedConsultingDTOs = consultingService.uploadConsultings(file);
-        return new ResponseEntity<>(savedConsultingDTOs, HttpStatus.OK);
+    public ResponseEntity<List<ConsultingDTO>> uploadConsulting(@RequestParam("file") MultipartFile file) {
+        logger.info("Process request : Upload consulting");
+        try {
+            List<ConsultingDTO> savedConsultingDTOs = consultingService.uploadConsultings(file);
+            return new ResponseEntity<>(savedConsultingDTOs, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.FILE_EXCEPTION)) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } 
+            if (e.getMessage().equals(CustomRuntimeException.FILE_IS_EMPTY)) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.INCORRECT_FILE_FORMAT)) {
+                return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+        
     }
     
 }
