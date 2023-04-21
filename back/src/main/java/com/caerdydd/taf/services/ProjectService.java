@@ -7,6 +7,9 @@ import com.caerdydd.taf.models.entities.TeamEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,14 +59,14 @@ public class ProjectService {
         return modelMapper.map(response, ProjectDTO.class);
     }
 
-    public ProjectDTO[] createProjects(Integer nbProjects) {
-        ProjectDTO[] projects = new ProjectDTO[nbProjects];
+    public List<ProjectDTO> createProjects(Integer nbProjects) {
+        List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
         for(int i = 0; i < nbProjects; i++) {
             ProjectDTO project = new ProjectDTO();
             project.setName("Project " + (i+1));
             project.setDescription("Description " + (i+1));
             project.setIsValidated(false);
-            projects[i] = saveProject(project);
+            projects.add(saveProject(project));
         }
         return projects;
     }

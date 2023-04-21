@@ -429,4 +429,50 @@ public class TeamControllerTest {
         verify(teamService, times(1)).applyInATeam(anyInt(), anyInt());
         assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
     }
+
+    @Test
+    void testCreateTeams_Nominal() throws CustomRuntimeException {
+        // Mock teamService.createTeams(2) method
+        ProjectDTO project1 = new ProjectDTO("Projet 1", "Projet 1");
+        ProjectDTO project2 = new ProjectDTO("Projet 2", "Projet 2");
+        TeamDTO team1 = new TeamDTO(1, "Equipe 1", project1, project2);
+        TeamDTO team2 = new TeamDTO(2, "Equipe 2", project2, project1);
+        List<TeamDTO> mockedAnswer = new ArrayList<TeamDTO>();
+        mockedAnswer.add(team1);
+        mockedAnswer.add(team2);
+        when(teamService.createTeams(2)).thenReturn(mockedAnswer);
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(2);
+        // Verify the result
+        verify(teamService, times(1)).createTeams(anyInt());
+        assertEquals(mockedAnswer.toString(), result.getBody().toString());
+
+    }
+
+    @Test
+    void testCreateTeams_EvenNumber() throws CustomRuntimeException {
+        // Mock teamService.createTeams(2) method
+        when(teamService.createTeams(3)).thenThrow(new CustomRuntimeException(CustomRuntimeException.NB_TEAMS_SHOULD_BE_EVEN));
+
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(3);
+
+        // Verify the result
+        verify(teamService, times(1)).createTeams(anyInt());
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
+    @Test
+    void testCreateTeams_UnexpectedError() throws CustomRuntimeException { 
+        // Mock teamService.createTeams(2) method
+        when(teamService.createTeams(2)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(2);
+
+        // Verify the result
+        verify(teamService, times(1)).createTeams(anyInt());
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
+    }
+
 }

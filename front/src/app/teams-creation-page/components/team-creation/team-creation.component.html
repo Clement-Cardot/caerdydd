@@ -1,18 +1,15 @@
 <div id="teamCreationComponent">
 
     <h1>Création d'équipe</h1>
-    <p>Sélectionner un nombre pair d'équipes à créer</p>
+    <p>Sélectionner un nombre de paires d'équipes à créer</p>
 
     <form id="teamCreationForm" [formGroup]="teamCreationForm" (ngSubmit)="createTeams()">
 
         <mat-form-field class="inputForm" appearance="fill" color="accent">
-            <mat-label class="labelForm">Nombre d'équipe</mat-label>
-            <input matInput  type="number" placeholder="Nombre d'équipes" [formControl]="nbTeamsFormControl"/>
+            <mat-label class="labelForm">Nombre de paires</mat-label>
+            <input matInput  type="number" min="0" onkeydown="return false" [formControl]="nbTeamsFormControl"/>
             <mat-error *ngIf="nbTeamsFormControl.hasError('required')">
                 Un nombre d'équipe est <strong>requis</strong>
-            </mat-error>
-            <mat-error *ngIf="nbTeamsFormControl.hasError('pattern')">
-                Le nombre doit être <strong>pair</strong>
             </mat-error>
         </mat-form-field>
 
