@@ -2,6 +2,8 @@ package com.caerdydd.taf.controllers;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +20,15 @@ import com.caerdydd.taf.services.TeamMemberService;
 @RestController
 @RequestMapping("/api/teamMembers")
 public class TeamMemberController {
+
+    private static final Logger logger = LogManager.getLogger(TeamMemberController.class);
     
     @Autowired
     private TeamMemberService teamMemberService;
 
     @GetMapping("")
     public ResponseEntity<List<TeamMemberDTO>> list() {
+        logger.info("Process request : List all team members");
         try {
             List<TeamMemberDTO> users = teamMemberService.listAllTeamMembers();
             return new ResponseEntity<>(users, HttpStatus.OK);
@@ -37,6 +42,7 @@ public class TeamMemberController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TeamMemberDTO> get(@PathVariable Integer id) {
+        logger.info("Process request : Get team member by id : {}", id);
         try {
             TeamMemberDTO user = teamMemberService.getTeamMemberById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -50,6 +56,7 @@ public class TeamMemberController {
 
     @PostMapping("/bonus/{id}/{bonus}")
     public ResponseEntity<TeamMemberDTO> setBonusPenalty(@PathVariable Integer id, @PathVariable Integer bonus) {
+        logger.info("Process request : Set bonus/penalty for team member by id : {}", id);
         try {
             TeamMemberDTO teamMember = teamMemberService.setBonusPenaltyById(id, bonus);
             return new ResponseEntity<>(teamMember, HttpStatus.OK);
