@@ -37,6 +37,7 @@ public class CustomRuntimeException extends Exception{
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
     public static final String FILE_EXCEPTION = "File exception";
+    public static final String FILE_IS_EMPTY = "File is empty";
 
 
     public CustomRuntimeException(String message) {
