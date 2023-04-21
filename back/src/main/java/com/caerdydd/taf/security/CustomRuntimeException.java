@@ -19,6 +19,9 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_PASSWORD_NOT_MATCH = "Login or password is incorrect";
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
     public static final String FILE_EXCEPTION = "File exception";
+    public static final String TEAM_IS_FULL = "The team is full";
+    public static final String TEAM_ALREADY_HAS_2_CSS = "The team already has 2 CSS";
+    public static final String TEAM_ALREADY_HAS_2_LD = "The team already has 2 LD";
 
 
     public CustomRuntimeException(String message) {
