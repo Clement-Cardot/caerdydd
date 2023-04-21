@@ -12,7 +12,7 @@ import { environment } from "../../../environments/environment";
     providedIn: "root"
 })
 export class ApiTeamService {
-    private baseUrl = environment.apiURL + "/api/teams";
+    private baseUrl = environment.apiURL + "/teams";
 
     constructor(
         private http: HttpClient, 
