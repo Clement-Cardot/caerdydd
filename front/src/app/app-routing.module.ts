@@ -8,6 +8,7 @@ import { TeamCreationComponent } from './teams-creation-page/components/team-cre
 import { NotationComponent } from './notation-page/component/notation/notation.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
+import { ConsultingCalendarComponent } from './consulting-page/consulting-calendar/consulting-calendar.component';
 
 const websiteName = " - Taf"
 
@@ -26,6 +27,9 @@ const routes: Routes = [
 
   // Notation pages
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
+
+  // Consulting pages
+  { path: 'consulting', title: 'Consulting' + websiteName, component: ConsultingCalendarComponent },
 ];
 
 @NgModule({
