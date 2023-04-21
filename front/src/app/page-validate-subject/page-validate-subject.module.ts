@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BoxValidateSubjectComponent } from './components/box-validate-subject/box-validate-subject.component';
 import { MatCardModule } from '@angular/material/card';
 import { BrowserModule } from '@angular/platform-browser';
-import { ViewValidateSubjectsComponent } from './components/view-validate-subjects/view-validate-subjects.component';
+import { BoxProjectComponent } from './components/box-project/box-project.component';
+import { ProjectListComponent } from './components/projects-list/projects-list.component';
 
 
 @NgModule({
   declarations: [
-    BoxValidateSubjectComponent,
-    ViewValidateSubjectsComponent
+    BoxProjectComponent,
+    ProjectListComponent
   ],
   imports: [
     CommonModule,
@@ -17,4 +17,4 @@ import { ViewValidateSubjectsComponent } from './components/view-validate-subjec
     MatCardModule
   ]
 })
-export class PageValidateSubjectModule { }
+export class ProjectsPageModule { }
