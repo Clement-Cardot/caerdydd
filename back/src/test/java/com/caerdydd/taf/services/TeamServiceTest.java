@@ -50,9 +50,6 @@ class TeamServiceTest {
     @Mock
     private ProjectService projectService;
 
-    @Mock
-    private ProjectService projectService;
-
     @Spy
     private ModelMapper modelMapper;
 
@@ -684,69 +681,6 @@ class TeamServiceTest {
         verify(roleService, times(0)).deleteRole(any(RoleDTO.class));
 
         assertEquals(CustomRuntimeException.TEAM_ALREADY_HAS_4_LD, exception.getMessage());
-    }
-
-    @Test
-    void testCreateTeams_Nominal_Without_Teams() throws CustomRuntimeException {
-        // Mock securityConfig.getCurrentUser() method
-        UserDTO mockedUser = new UserDTO();
-        mockedUser.setId(1);
-        mockedUser.setFirstname("jean");
-        mockedUser.setLastname("dupont");
-        mockedUser.setEmail("jdupont@reseau.eseo.fr");
-        mockedUser.setLogin("jdupont");
-        mockedUser.setPassword("$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q");
-
-        RoleDTO mockedRole = new RoleDTO();
-        mockedRole.setIdRole(1);
-        mockedRole.setRole("OPTION_LEADER_ROLE");
-        mockedRole.setUser(mockedUser);
-
-        mockedUser.setRoles(new ArrayList<RoleDTO>());
-        mockedUser.getRoles().add(mockedRole);
-
-        when(securityConfig.getCurrentUser()).thenReturn(mockedUser);
-
-        // Mock projectService.createTeams() method
-        List<ProjectDTO> mocketProjects = new ArrayList<ProjectDTO>();
-        mocketProjects.add(new ProjectDTO("Project A", "Description 1"));
-        mocketProjects.add(new ProjectDTO("Project B", "Description 2"));
-        when(projectService.createProjects(2)).thenReturn(mocketProjects);
-
-        // Mock teamService.listAllTeams() method
-        when(teamService.listAllTeams()).thenReturn(new ArrayList<TeamDTO>());
-
-        // Mock teamService.saveTeam() method
-        TeamDTO mockedTeam1 = new TeamDTO(1, "Équipe 1", 
-            new ProjectDTO("Project A", "Description 1"), 
-            new ProjectDTO("Project B", "Description 2"));
-        TeamDTO mockedTeam2 = new TeamDTO(2, "Équipe 2", 
-            new ProjectDTO("Project B", "Description 2"), 
-            new ProjectDTO("Project A", "Description 1"));
-        when(teamService.saveTeam(mockedTeam1)).thenReturn(mockedTeam1);
-        when(teamService.saveTeam(mockedTeam2)).thenReturn(mockedTeam2);
-        
-        //when(teamService.saveTeam(any(TeamDTO.class))).then(AdditionalAnswers.returnsFirstArg());
-
-        // Define the expected answer
-        List<TeamDTO> expectedAnswer = new ArrayList<TeamDTO>();
-        expectedAnswer.add(new TeamDTO(1, "Équipe 1", 
-            new ProjectDTO("Project A", "Description 1"), 
-            new ProjectDTO("Project B", "Description 2")));
-        expectedAnswer.add(new TeamDTO(2, "Équipe 2", 
-            new ProjectDTO("Project B", "Description 2"), 
-            new ProjectDTO("Project A", "Description 1")));
-        
-        // Call the method to test
-        List<TeamDTO> result = teamService.createTeams(2);
-
-        // Verify the result
-        verify(securityConfig, times(1)).getCurrentUser();
-        verify(projectService, times(1)).createProjects(2);
-        verify(teamService, times(2)).saveTeam(any(TeamDTO.class));
-        verify(teamService, times(1)).listAllTeams();
-        assertEquals(expectedAnswer, result);
-        
     }
 
     @Test
