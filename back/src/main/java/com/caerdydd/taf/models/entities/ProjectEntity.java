@@ -2,8 +2,6 @@ package com.caerdydd.taf.models.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -22,19 +20,6 @@ public class ProjectEntity {
     private String description;
     private Boolean isValidated;
 
-    private Integer idJury;
-
-    @OneToOne(mappedBy = "projectDev")
-    private TeamEntity teamDev;
-
-    @OneToOne(mappedBy = "projectValidation")
-    private TeamEntity teamValidation;
-
-//    @OneToOne
-//    @JoinColumn(name = "id_jury")
-//    private JuryEntity jury;
-
-
     public ProjectEntity() {
     }
 
@@ -49,5 +34,10 @@ public class ProjectEntity {
         this.description=description;
     }
 
-
+    public ProjectEntity(Integer idProject, String name, String description, Boolean isValidated) {
+        this.idProject=idProject;
+        this.name=name;
+        this.description=description;
+        this.isValidated=isValidated;
+    }
 }
