@@ -1,4 +1,4 @@
-export class ValidateSubject {
+export class Project {
     team!: string;
     subject!: string;
     description!: string;
