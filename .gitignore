@@ -4,6 +4,7 @@
 
 ### API ###
 back/target/
+back/src/main/resources/static/
 
 ### front ###
 front/dist
