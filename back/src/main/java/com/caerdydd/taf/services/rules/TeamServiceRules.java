@@ -1,11 +1,13 @@
 package com.caerdydd.taf.services.rules;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 
+@Component
 public class TeamServiceRules {
 
     @Autowired
