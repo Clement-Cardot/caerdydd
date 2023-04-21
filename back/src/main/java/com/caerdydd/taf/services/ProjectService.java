@@ -59,10 +59,11 @@ public class ProjectService {
         return modelMapper.map(response, ProjectDTO.class);
     }
 
-    public List<ProjectDTO> createProjects(Integer nbProjects) {
+    public List<ProjectDTO> createProjects(Integer nbProjects, Integer nbProjectsInitial) {
         List<ProjectDTO> projects = new ArrayList<ProjectDTO>();
-        for(int i = 0; i < nbProjects; i++) {
+        for(int i = nbProjectsInitial; i < nbProjectsInitial + nbProjects; i++) {
             ProjectDTO project = new ProjectDTO();
+            project.setIdProject(i+1);
             project.setName("Project " + (i+1));
             project.setDescription("Description " + (i+1));
             project.setIsValidated(false);

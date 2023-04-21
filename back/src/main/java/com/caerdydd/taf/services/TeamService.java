@@ -93,22 +93,24 @@ public class TeamService {
 
         //If everyting is ok, create the teams and projects
         int nbTeams = nbTeamsPairs * 2;
-        List<TeamDTO> teams = new ArrayList<>();
-        List<ProjectDTO> projects = projectService.createProjects(nbTeams);
         int nbTeamsInitial = this.listAllTeams().size();
+        List<TeamDTO> teams = new ArrayList<>();
+        List<ProjectDTO> projects = projectService.createProjects(nbTeams, nbTeamsInitial);
+        
 
-        for (int i = 0; i < nbTeams; i++) {
+        for (int i = nbTeamsInitial; i < nbTeamsInitial + nbTeams; i++) {
             TeamDTO team = new TeamDTO();
-            team.setName("Équipe " + (nbTeamsInitial + i + 1));
-            team.setProjectDev(projects.get(i));
-            projects.get(i).setTeamDev(team);
+            team.setIdTeam(i + 1);
+            team.setName("Équipe " + (i + 1));
+            team.setProjectDev(projects.get(i-nbTeamsInitial));
+            projects.get(i-nbTeamsInitial).setTeamDev(team);
             if (i % 2 == 0) {
-                team.setProjectValidation(projects.get(i+1));
-                projects.get(i+1).setTeamValidation(team);
+                team.setProjectValidation(projects.get(i+1-nbTeamsInitial));
+                projects.get(i+1-nbTeamsInitial).setTeamValidation(team);
             }
             else {
-                team.setProjectValidation(projects.get(i-1));
-                projects.get(i-1).setTeamValidation(team);
+                team.setProjectValidation(projects.get(i-1-nbTeamsInitial));
+                projects.get(i-1-nbTeamsInitial).setTeamValidation(team);
             }
             saveTeam(team);
             teams.add(team);
