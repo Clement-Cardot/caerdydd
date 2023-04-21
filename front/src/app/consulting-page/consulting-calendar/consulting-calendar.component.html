@@ -1,0 +1,18 @@
+
+<label class="btn btn-default">
+    <input type="file" (change)="selectFile($event)"/>
+</label>
+
+<button class="btn btn-success" (click)="upload()">
+    Upload
+</button>
+
+<mwl-calendar-week-view 
+    [viewDate]="viewDate" 
+    [events]="events"
+    [dayEndHour]="18"
+    [dayStartHour]="7"
+    [locale]="'fr'"
+    [excludeDays]="[0,6]">
+    
+</mwl-calendar-week-view>
