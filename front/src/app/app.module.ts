@@ -9,7 +9,7 @@ import { CoreModule } from './core/core.module';
 import { TeamsCreationPageModule } from './teams-creation-page/teams-creation-page.module';
 import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
 import { PageValidateSubjectModule } from './page-validate-subject/page-validate-subject.module';
-import {TeamsPageModule } from './teams-page/teams-page.module';
+import { TeamsPageModule } from './teams-page/teams-page.module';
 import { UserDataService } from './core/services/user-data.service';
 import { ApiAuthService } from './core/services/api-auth.service';
 import { ApiTeamService } from './core/services/api-team.service';
@@ -17,13 +17,7 @@ import { ApiUserService } from './core/services/api-user.service';
 import { SidenavModule } from './sidenav/sidenav.module';
 import { NotationModule } from './notation-page/notation.module';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/moment';
-import * as moment from 'moment';
-
-export function momentAdapterFactory() {
-  return adapterFactory(moment);
-}; 
+import { ConsultingPageModule } from './consulting-page/consulting-page.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +43,7 @@ export function momentAdapterFactory() {
     SidenavModule,
     TeamsPageModule,
     NotationModule,
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory })
+    ConsultingPageModule
   ],
   bootstrap: [AppComponent],
 })
