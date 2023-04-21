@@ -19,6 +19,13 @@ import { NotationModule } from './notation-page/notation.module';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { ConsultingPageModule } from './consulting-page/consulting-page.module';
 import { PlanificationPageModule } from './planification-page/planification-page.module';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/moment';
+import * as moment from 'moment';
+
+export function momentAdapterFactory() {
+  return adapterFactory(moment);
+}; 
 
 @NgModule({
   declarations: [
@@ -45,7 +52,8 @@ import { PlanificationPageModule } from './planification-page/planification-page
     TeamsPageModule,
     NotationModule,
     ConsultingPageModule,
-    PlanificationPageModule
+    PlanificationPageModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory })
   ],
   bootstrap: [AppComponent],
 })
