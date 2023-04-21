@@ -101,8 +101,4 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public Boolean checkUserRole(UserDTO user, String role) throws CustomRuntimeException {
-        UserDTO userDTO = getUserById(user.getId());
-        return userDTO.getRoles().stream().anyMatch(r -> r.getRole().equals(role));
-    }
 }
