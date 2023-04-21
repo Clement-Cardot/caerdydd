@@ -5,6 +5,7 @@
 ### API ###
 back/target/
 back/src/main/resources/static/
+**.war
 
 ### front ###
 front/dist
