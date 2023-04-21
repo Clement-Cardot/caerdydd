@@ -105,6 +105,14 @@ public class TeamController {
             switch (e.getMessage()) {
             case CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER:
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            case CustomRuntimeException.USER_IS_NOT_A_STUDENT:
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            case CustomRuntimeException.TEAM_IS_FULL:
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            case CustomRuntimeException.TEAM_ALREADY_HAS_2_CSS:
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            case CustomRuntimeException.TEAM_ALREADY_HAS_2_LD:
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             case CustomRuntimeException.USER_ALREADY_IN_A_TEAM:
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.USER_NOT_FOUND:

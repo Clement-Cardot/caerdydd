@@ -17,6 +17,9 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_IS_NOT_A_OPTION_LEADER = "Requested user is not a option leader";
     public static final String NB_TEAMS_SHOULD_BE_EVEN = "The number of teams should be even";
     public static final String USER_PASSWORD_NOT_MATCH = "Login or password is incorrect";
+    public static final String TEAM_IS_FULL = "The team is full";
+    public static final String TEAM_ALREADY_HAS_2_CSS = "The team already has 2 CSS";
+    public static final String TEAM_ALREADY_HAS_2_LD = "The team already has 2 LD";
 
 
     public CustomRuntimeException(String message) {
