@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { FileInput } from 'ngx-material-file-input';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.service';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-team-file',
