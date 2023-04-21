@@ -21,6 +21,8 @@ import com.caerdydd.taf.models.entities.TeamEntity;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.TeamServiceRules;
+import com.caerdydd.taf.services.rules.UserServiceRules;
 
 @Service
 @Transactional
@@ -45,6 +47,12 @@ public class TeamService {
 
     @Autowired
     SecurityConfig securityConfig;
+
+    @Autowired
+    private TeamServiceRules teamServiceRules;
+
+    @Autowired
+    private UserServiceRules userServiceRules;
     
     public List<TeamDTO> listAllTeams() throws CustomRuntimeException {
         try {
@@ -107,36 +115,20 @@ public class TeamService {
 
     public UserDTO applyInATeam(Integer idTeam, Integer idUser) throws CustomRuntimeException {
         // Check if the user and the team exists
-        UserDTO user;
-        TeamDTO team;
-        try {
-            user = userService.getUserById(idUser);
-            team = getTeamById(idTeam);
-        } catch (CustomRuntimeException e) {
-            logger.warn("User {} or Team {} not found", idUser, idTeam);
-            throw e;
-        }
+        UserDTO user = userService.getUserById(idUser);
+        TeamDTO team  = this.getTeamById(idTeam);
 
         // Check if the user is a Student
-        if(Boolean.TRUE.equals(userService.checkUserRole(user, "STUDENT_ROLE"))){
-            logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} but is not a student", idUser, idTeam);
-            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_STUDENT);
-        }
+        userServiceRules.checkUserRole(user, "STUDENT_ROLE");
 
         // Check if the current user is the same as the user to update
-        if(Boolean.FALSE.equals(securityConfig.checkCurrentUser(idUser))){
-            logger.warn("ILLEGAL API USE : Current user is not Request User");
-            throw new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER);
-        }
+        userServiceRules.checkCurrentUser(user);
 
-        // Check if the team is not full
-        if(Boolean.TRUE.equals(isTeamFull(team))){
-            logger.warn("ILLEGAL API USE : Team {} is full", idTeam);
-            throw new CustomRuntimeException(CustomRuntimeException.TEAM_IS_FULL);
-        }
+        // Check if the team is full
+        teamServiceRules.checkTeamIsFull(team);
 
         // check if the speciality ratio is respected (2CSS/4LD)
-        checkSpecialityRatio(team);
+        teamServiceRules.checkSpecialityRatio(team);
 
         // If everythings OK : create the user role "team_member" and create a new team member entity
         logger.info("Create role of User {} : team_member", idUser);
@@ -171,20 +163,4 @@ public class TeamService {
         return response;
     }
 
-    public Boolean isTeamFull(TeamDTO team) {
-        return team.getTeamMembers().size() == 6;
-    }
-
-    // check if the speciality ratio is respected (2CSS/4LD)
-    public Boolean checkSpecialityRatio(TeamDTO team) throws CustomRuntimeException{
-        if(team.getTeamMembers().stream().filter(teamMember -> teamMember.getUser().getSpeciality().equals("CSS")).count() == 2 
-                && (securityConfig.getCurrentUser().getSpeciality().equals("CSS"))){
-                throw new CustomRuntimeException(CustomRuntimeException.TEAM_ALREADY_HAS_2_CSS);
-        }
-        if(team.getTeamMembers().stream().filter(teamMember -> teamMember.getUser().getSpeciality().equals("LD")).count() == 2 
-                && (securityConfig.getCurrentUser().getSpeciality().equals("LD"))){
-                throw new CustomRuntimeException(CustomRuntimeException.TEAM_ALREADY_HAS_2_LD);
-        }
-        return true;
-    }
 }
