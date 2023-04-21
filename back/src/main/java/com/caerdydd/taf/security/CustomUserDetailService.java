@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.services.UserService;
 
@@ -27,7 +28,7 @@ public class CustomUserDetailService implements UserDetailsService{
             user = userService.getUserByLogin(login);
             return User.withUsername(login)
                     .password(user.getPassword())
-                    .authorities(user.getRoles().stream().map(r -> r.getRole()).toArray(String[]::new))
+                    .authorities(user.getRoles().stream().map(RoleDTO::getRole).toArray(String[]::new))
                     .build();
         } catch (CustomRuntimeException e) {
             logger.error(e);

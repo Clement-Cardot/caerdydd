@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -42,7 +41,6 @@ public class ProjectEntity {
     }
 
     public ProjectEntity(String name, String description) {
-        this.idProject=idProject;
         this.name=name;
         this.description=description;
     }

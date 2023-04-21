@@ -16,7 +16,7 @@ import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.AuthService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -32,9 +32,6 @@ public class AuthController {
     try{
       return authService.loginUser(requestUser.getLogin(), requestUser.getPassword());
     } catch (CustomRuntimeException e) {
-      if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-      }
       if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       }
@@ -49,14 +46,10 @@ public class AuthController {
 
   @PostMapping("/logout")
   public ResponseEntity<String> logoutUser() {
-    logger.info("Process request : Logout user : {}", SecurityContextHolder.getContext().getAuthentication().getName());
+    logger.info("Process request : Logout user");
     try{
       return authService.logoutUser();
-    } catch (CustomRuntimeException e) {
-      if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-
+    } catch (Exception e) {
       return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
   }

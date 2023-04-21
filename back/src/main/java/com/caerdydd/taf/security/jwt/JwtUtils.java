@@ -43,7 +43,7 @@ public class JwtUtils {
   }
 
   public ResponseCookie getCleanJwtCookie() {
-    return ResponseCookie.from(jwtCookie, null)
+    return ResponseCookie.from(jwtCookie, "Expired")
                         .path("/")
                         .build();
   }
