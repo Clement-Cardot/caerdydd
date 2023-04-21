@@ -33,6 +33,10 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_ALREADY_HAS_2_CSS = "The team already has 2 CSS";
     public static final String TEAM_ALREADY_HAS_4_LD = "The team already has 4 LD";
 
+    // File messages
+    public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
+    public static final String FILE_EXCEPTION = "File exception";
+
 
     public CustomRuntimeException(String message) {
         super(message);
