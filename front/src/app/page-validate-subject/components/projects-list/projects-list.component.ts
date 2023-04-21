@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../../../core/data/models/project.model';
-import { ProjectService } from '../../../core/services/project.service';
+import { ProjectService } from '../../../core/services/api-project.service';
 
 @Component({
   selector: 'app-view-validate-subjects',
