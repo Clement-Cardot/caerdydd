@@ -69,7 +69,7 @@ public class ProjectController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            logger.error("Unexpected Exception : {}", e.getMessage());
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }

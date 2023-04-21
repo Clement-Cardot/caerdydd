@@ -15,7 +15,7 @@ public class ProjectDTO {
     private Integer idProject;
     private String name;
     private String description;
-    private Boolean isValidated;
+    private Boolean isValidated = false;
 
     @JsonBackReference(value="projectDev")
     private TeamDTO teamDev;
@@ -29,7 +29,6 @@ public class ProjectDTO {
     public ProjectDTO(String name, String description) {
         this.name = name;
         this.description = description;
-        this.isValidated = false;
     }
 
     @Override
@@ -42,12 +41,5 @@ public class ProjectDTO {
                 ", idTeamDev=" + teamDev +
                 ", idTeamValidation=" + teamValidation +
                 ']';
-    }
-
-
-    @Override
-    public String toString() {
-        return "ProjectDTO [idProject=" + idProject + ", name=" + name + ", description=" + description
-                + ", isValidated=" + isValidated + "]";
     }
 }
