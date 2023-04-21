@@ -130,6 +130,28 @@ public class TeamService {
         // check if the speciality ratio is respected (2CSS/4LD)
         teamServiceRules.checkSpecialityRatio(team);
 
+        // Check if the team is not full
+        if(team.getTeamMembers().size() == 6){
+            logger.warn("ILLEGAL API USE : Team {} is full", idTeam);
+            throw new CustomRuntimeException(CustomRuntimeException.TEAM_IS_FULL);
+        }
+
+        // check if the speciality ratio is respected (2CSS/4LD)
+        if(team.getTeamMembers().stream().filter(teamMember -> teamMember.getUser().getSpeciality().equals("CSS")).count() == 2 
+                && (securityConfig.getCurrentUser().getSpeciality().equals("CSS"))){
+
+                logger.warn("ILLEGAL API USE : Team {} already has 2 CSS", idTeam);
+                throw new CustomRuntimeException(CustomRuntimeException.TEAM_ALREADY_HAS_2_CSS);
+            
+        }
+        if(team.getTeamMembers().stream().filter(teamMember -> teamMember.getUser().getSpeciality().equals("LD")).count() == 2 
+                && (securityConfig.getCurrentUser().getSpeciality().equals("LD"))){
+                    
+                logger.warn("ILLEGAL API USE : Team {} already has 2 LD", idTeam);
+                throw new CustomRuntimeException(CustomRuntimeException.TEAM_ALREADY_HAS_2_LD);
+            
+        }
+
         // If everythings OK : create the user role "team_member" and create a new team member entity
         logger.info("Create role of User {} : team_member", idUser);
         RoleDTO newRole = new RoleDTO();
