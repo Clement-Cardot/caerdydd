@@ -10,8 +10,8 @@ import { ConsultingCalendarComponent } from './consulting-page/consulting-calend
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
 import { ProjectFileComponent } from './dev-project/component/project-file/project-file.component';
 import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
-import { ViewValidateSubjectsComponent } from './page-validate-subject/components/view-validate-subjects/view-validate-subjects.component';
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
+import { ProjectListComponent } from './page-validate-subject/components/projects-list/projects-list.component';
 
 const websiteName = " - Taf"
 
@@ -32,7 +32,7 @@ const routes: Routes = [
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
 
   // Subject page
-  { path: 'subjects',title: 'Subjects' + websiteName, component: ViewValidateSubjectsComponent },
+  { path: 'subjects',title: 'Subjects' + websiteName, component: ProjectListComponent },
 
   // Teams pages
   { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },

@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { ValidateSubject } from "../models/validate-subjects.model";
+import { Project } from "../../core/data/models/project.model";
 
 @Injectable({
     providedIn: 'root'
 })
-export class ValidateSubjectService {
-    boxValidateSubject: ValidateSubject[] = [
+export class ProjectService {
+    boxValidateSubject: Project[] = [
         {
             team: "Team 1",
             subject: "Emergency Management Assisant",
@@ -38,7 +38,7 @@ export class ValidateSubjectService {
         }
     ]
 
-    getAllValidateSubject(): ValidateSubject[] {
+    getAllValidateSubject(): Project[] {
         return this.boxValidateSubject;
     }
 }

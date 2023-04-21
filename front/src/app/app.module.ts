@@ -7,7 +7,8 @@ import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
 import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
-import { PageValidateSubjectModule } from './page-validate-subject/page-validate-subject.module';
+
+import { ProjectsPageModule } from './page-validate-subject/page-validate-subject.module';
 import { TeamsPageModule } from './teams-page/teams-page.module';
 import { UserDataService } from './core/services/user-data.service';
 import { ApiAuthService } from './core/services/api-auth.service';
@@ -41,13 +42,14 @@ import { DevProjectModule } from './dev-project/dev-project.module';
     BrowserAnimationsModule,
     LoginPageModule,
     ProjectDescriptionPageModule,
-    PageValidateSubjectModule,
     SidenavModule,
     TeamsPageModule,
     NotationModule,
     ConsultingPageModule,
     PlanificationPageModule,
-    DevProjectModule
+    DevProjectModule,
+    ProjectsPageModule,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent],
 })
