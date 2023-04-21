@@ -36,22 +36,22 @@ class ProjectServiceTest {
     @Mock
     private ProjectRepository projectRepository;
     
-    // @Test
-    // void testSaveProject_Nominal() {
-    //     // Mock projectRepository.save() method
-    //     ProjectEntity mockedAnswer = new ProjectEntity("Projet A", "Description 1");
-    //     when(projectRepository.save(any(ProjectEntity.class))).thenReturn(mockedAnswer);
+    @Test
+    void testSaveProject_Nominal() {
+        // Mock projectRepository.save() method
+        ProjectEntity mockedAnswer = new ProjectEntity("Projet A", "Description 1");
+        when(projectRepository.save(any(ProjectEntity.class))).thenReturn(mockedAnswer);
 
-    //     // Prepare the input
-    //     ProjectDTO projectToSave = new ProjectDTO("Projet A", "Description 1");
+        // Prepare the input
+        ProjectDTO projectToSave = new ProjectDTO("Projet A", "Description 1");
         
-    //     // Call the method to test
-    //     ProjectDTO result = projectService.saveProject(projectToSave);
+        // Call the method to test
+        ProjectDTO result = projectService.saveProject(projectToSave);
 
-    //     // Check the result
-    //     verify(projectRepository, times(1)).save(any(ProjectEntity.class));
-    //     assertEquals(projectToSave.toString(), result.toString());
-    // }
+        // Check the result
+        verify(projectRepository, times(1)).save(any(ProjectEntity.class));
+        assertEquals(projectToSave.toString(), result.toString());
+    }
 
     @Test
     void testCreateProject_Nominal() throws CustomRuntimeException {

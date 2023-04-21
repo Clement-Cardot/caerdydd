@@ -43,6 +43,7 @@ public class ProjectEntity {
     public ProjectEntity(String name, String description) {
         this.name=name;
         this.description=description;
+        this.isValidated=false;
     }
 
 
