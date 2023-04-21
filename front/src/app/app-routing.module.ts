@@ -10,8 +10,8 @@ import { PlanificationPageComponent } from './planification-page/planification-p
 import { DevProjectComponent } from './dev-project/component/dev-project.component';
 import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
 import { NotationComponent } from './notation-page/component/notation/notation.component';
-import { ViewValidateSubjectsComponent } from './page-validate-subject/components/view-validate-subjects/view-validate-subjects.component';
 import { TeamCreationComponent } from './teams-creation-page/components/team-creation/team-creation.component';
+import { ProjectListComponent } from './page-validate-subject/components/projects-list/projects-list.component';
 
 const websiteName = " - Taf"
 
@@ -33,7 +33,7 @@ const routes: Routes = [
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
 
   // Subject page
-  { path: 'subjects',title: 'Subjects' + websiteName, component: ViewValidateSubjectsComponent },
+  { path: 'subjects',title: 'Subjects' + websiteName, component: ProjectListComponent },
 
   // Teams pages
   { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },

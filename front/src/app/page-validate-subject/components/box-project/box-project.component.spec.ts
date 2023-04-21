@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BoxValidateSubjectComponent } from './box-validate-subject.component';
+import { BoxValidateSubjectComponent } from './box-project.component';
 
 describe('BoxValidateSubjectComponent', () => {
   let component: BoxValidateSubjectComponent;
