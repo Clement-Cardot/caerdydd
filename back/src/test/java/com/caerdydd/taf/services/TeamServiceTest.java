@@ -286,8 +286,6 @@ class TeamServiceTest {
         // Mock UserService.updateUser() method
         when(userService.updateUser(any(UserDTO.class))).thenReturn(mockedUser);
 
-        // Mock 
-
         // Define the expected answer
         UserDTO expectedAnswer = mockedUser;
         TeamMemberDTO teamMember = new TeamMemberDTO();
