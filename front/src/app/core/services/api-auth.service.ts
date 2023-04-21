@@ -5,12 +5,13 @@ import { Observable } from "rxjs/internal/Observable";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
+import { environment } from "../../../environments/environment";
 
 @Injectable({
     providedIn: "root"
 })
 export class ApiAuthService {
-    private baseUrl = "http://localhost:8080/api/auth";
+    private baseUrl = environment.apiURL + "/auth";
 
     constructor(private http: HttpClient, private adapter: UserAdapter) {
     }

@@ -119,11 +119,7 @@ angular-deploy-dev:
     - cd front
     - npm install
     - npm install -g @angular/cli
-    - sed -i "s,localhost:8080,172.24.1.10:8080/taf,g" src/app/core/services/api-auth.service.ts
-    - sed -i 's,localhost:8080,172.24.1.10:8080/taf,g' src/app/core/services/api-team.service.ts
-    - sed -i 's,localhost:8080,172.24.1.10:8080/taf,g' src/app/core/services/api-user.service.ts
-    - sed -i 's,localhost:8080,172.24.1.10:8080/taf,g' src/app/core/services/api-team-member.service.ts
-    - ng build --base-href "."
+    - ng build --configuration=development --base-href "."
   dependencies: []
   artifacts:
     paths:
@@ -142,9 +138,7 @@ java-deploy-dev:
   script:
     - cp -r front/dist/front/* back/src/main/resources/static/
     - cd back
-    - sed -i 's,spring.datasource.username = root,spring.datasource.username = webuser,g' src/main/resources/application.properties
-    - sed -i 's,spring.datasource.password = root,spring.datasource.password = LOPk2DWnqj2oRtRm,g' src/main/resources/application.properties
-    - mvn --log-file $CI_PROJECT_DIR/mvn.log $MAVEN_CLI_OPTS clean package
+    - mvn --log-file $CI_PROJECT_DIR/mvn.log $MAVEN_CLI_OPTS clean package -P dev -DskipTests=true
   dependencies:
     - angular-deploy-dev
   cache:
@@ -167,11 +161,7 @@ angular-deploy-prod:
     - cd front
     - npm install
     - npm install -g @angular/cli
-    - sed -i "s,localhost:8080,172.24.1.11:8080/taf,g" src/app/core/services/api-auth.service.ts
-    - sed -i 's,localhost:8080,172.24.1.11:8080/taf,g' src/app/core/services/api-team.service.ts
-    - sed -i 's,localhost:8080,172.24.1.11:8080/taf,g' src/app/core/services/api-user.service.ts
-    - sed -i 's,localhost:8080,172.24.1.11:8080/taf,g' src/app/core/services/api-team-member.service.ts
-    - ng build --base-href "."
+    - ng build --configuration=production --base-href "."
   dependencies: []
   artifacts:
     paths:
@@ -189,9 +179,7 @@ java-deploy-prod:
   script:
     - cp -r front/dist/front/* back/src/main/resources/static/
     - cd back
-    - sed -i 's,spring.datasource.username = root,spring.datasource.username = webuser,g' src/main/resources/application.properties
-    - sed -i 's,spring.datasource.password = root,spring.datasource.password = LOPk2DWnqj2oRtRm,g' src/main/resources/application.properties
-    - mvn --log-file $CI_PROJECT_DIR/mvn.log $MAVEN_CLI_OPTS clean package
+    - mvn --log-file $CI_PROJECT_DIR/mvn.log $MAVEN_CLI_OPTS clean package -P prod -DskipTests=true
   dependencies:
     - angular-deploy-prod
   cache:

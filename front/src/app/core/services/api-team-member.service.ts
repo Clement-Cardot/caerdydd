@@ -6,12 +6,13 @@ import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
 import { TeamMember, TeamMemberAdapter } from "../data/models/team-member.model";
 import { User, UserAdapter } from "../data/models/user.model";
+import { environment } from "../../../environments/environment";
 
 @Injectable({
     providedIn: "root"
 })
 export class ApiTeamMemberService {
-    private baseUrl = "http://localhost:8080/api/teamMembers";
+    private baseUrl = environment.apiURL + "/teamMembers";
 
     constructor(
         private http: HttpClient, 
