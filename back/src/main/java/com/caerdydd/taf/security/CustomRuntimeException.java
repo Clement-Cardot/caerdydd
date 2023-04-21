@@ -32,10 +32,11 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_IS_FULL = "The team is full";
     public static final String TEAM_ALREADY_HAS_2_CSS = "The team already has 2 CSS";
     public static final String TEAM_ALREADY_HAS_4_LD = "The team already has 4 LD";
-
-    // Règles métiers Bonus/Malus <- A traduire en anglais ^^
     public static final String TEAM_MEMBER_IMPOSSIBLE_TOTAL_MARK = "The total mark of the team member is under 0 or above 20";
     public static final String TEAM_MEMBER_INCORRECT_BONUS_PENALTY = "The bonus of the team member is under -4 or above 4";
+    // File messages
+    public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
+    public static final String FILE_EXCEPTION = "File exception";
 
 
     public CustomRuntimeException(String message) {
