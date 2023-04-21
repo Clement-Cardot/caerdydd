@@ -50,3 +50,8 @@ export class ApiProjectService {
         return throwError(() => new Error('Something bad happened; please try again later.'));
     }
 }
+
+    getAllValidateSubject(): Project[] {
+        return this.boxValidateSubject;
+    }
+}
