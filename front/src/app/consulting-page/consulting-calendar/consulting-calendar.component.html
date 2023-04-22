@@ -16,6 +16,12 @@
 </div>
 <br/>
 
+<mat-form-field>
+    <ngx-mat-file-input [formControl]="fileControl" [multiple]="false" [accept]="'.csv'" [color]="'primary'">
+      <!-- <mat-icon ngxMatFileInputIcon>folder</mat-icon> -->
+    </ngx-mat-file-input>
+</mat-form-field>
+
 <mwl-calendar-week-view 
     [viewDate]="viewDate" 
     [events]="events"
