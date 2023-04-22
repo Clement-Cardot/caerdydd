@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
 
   // Consulting pages
-  { path: 'consulting', title: 'Consulting' + websiteName, component: ConsultingCalendarComponent },
+  { path: 'consulting', title: 'Consulting' + websiteName, component: ConsultingCalendarComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['PLANNING_ROLE']} },
 ];
 
 @NgModule({
