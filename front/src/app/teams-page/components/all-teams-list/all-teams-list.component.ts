@@ -12,12 +12,20 @@ import { Team } from 'src/app/core/data/models/team.model';
 export class AllTeamsListComponent{
   teams!: Team[];
 
+  refresh: any;
+
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {
-    setInterval(() => { this.getAllData() },  5000 );
   }
 
   ngOnInit(): void {
     this.getAllData();
+    this.refresh = setInterval(() => { this.getAllData() },  5000 );
+  }
+
+  ngOnDestroy(): void {
+    if (this.refresh) {
+      clearInterval(this.refresh);
+    }
   }
 
   getAllData(){
