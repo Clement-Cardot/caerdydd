@@ -11,7 +11,9 @@ export class ConsultingCalendarComponent implements OnInit {
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
 
+  fileControl: any;
   file!: File;
+  
 
   constructor(private apiConsultingService: ApiConsultingService) { }
 

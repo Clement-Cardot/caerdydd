@@ -4,6 +4,9 @@ import { ConsultingCalendarComponent } from './consulting-calendar/consulting-ca
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 
 export function momentAdapterFactory() {
@@ -16,7 +19,10 @@ export function momentAdapterFactory() {
   ],
   imports: [
     CommonModule,
+    MatFormFieldModule,
     ReactiveFormsModule,
+    NgxMatFileInputModule,
+    MatIconModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory })
   ]
 })
