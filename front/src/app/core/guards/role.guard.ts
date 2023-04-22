@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { UserDataService } from '../services/user-data.service';
-import { Role } from '../data/models/role.model';
+import { User } from '../data/models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoleGuard {
 
-  constructor(private router: Router, private userDataService: UserDataService) {}
+  currentUser: User | null = null;
+
+  constructor(private router: Router, private userDataService: UserDataService) {
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+      this.currentUser = user;
+    });
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let roles = route.data['roles'] as Array<string>;
@@ -22,10 +28,10 @@ export class RoleGuard {
   }
 
   canActivateByRole(role: string): boolean {
-    let currentUserRoles = this.userDataService.getCurrentUser()?.getValue()?.roles.map((role: Role) => role.role);
-    if (currentUserRoles == null || currentUserRoles == undefined || currentUserRoles.length == 0) {
-      this.router.navigateByUrl("/");
-    } else if (currentUserRoles.includes(role)) {
+    if (this.currentUser == null || this.currentUser.getRoles() == null || this.currentUser.getRoles() == undefined || this.currentUser.getRoles().length == 0) {
+      return false;
+    }
+    else if (this.currentUser.getRoles().includes(role)) {
       return true;
     }
     return false;

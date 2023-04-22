@@ -51,13 +51,12 @@ export class LoginComponent implements OnInit  {
     } else {
       this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(userResponse => {
             if(userResponse) {
-
                 this.userDataService.setCurrentUser(userResponse);
                 this.userDataService.getCurrentUser().subscribe((user: User | null) => {
                   this.currentUser = user;
                 });
 
-                console.log("Current User is : " + userResponse.login);
+                console.log("Current User is : " + this.currentUser?.login);
                 this.redirectDependingOnUserRole();
 
             } else {
@@ -73,7 +72,7 @@ export class LoginComponent implements OnInit  {
       if (this.currentUser.getRoles() == null || this.currentUser.getRoles() == undefined || this.currentUser.getRoles().length == 0) {
         this.router.navigateByUrl("/");
       } else if (this.currentUser.getRoles().includes("PLANNING_ROLE")) {
-        this.router.navigateByUrl("planning");
+        this.router.navigateByUrl("consulting");
       } else if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
         this.router.navigateByUrl("teams-creation");
       } else if (this.currentUser.getRoles().includes("TEACHING_STAFF_ROLE")) {
