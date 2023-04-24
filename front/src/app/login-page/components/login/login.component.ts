@@ -57,33 +57,13 @@ export class LoginComponent implements OnInit  {
                 });
 
                 console.log("Current User is : " + this.currentUser?.login);
-                this.redirectDependingOnUserRole();
+                this.router.navigateByUrl("dashboard");
 
             } else {
                 this.router.navigateByUrl("/");
             }
           }
         );
-    }
-  }
-
-  redirectDependingOnUserRole() {
-    if (this.currentUser != null) {
-      if (this.currentUser.getRoles() == null || this.currentUser.getRoles() == undefined || this.currentUser.getRoles().length == 0) {
-        this.router.navigateByUrl("/");
-      } else if (this.currentUser.getRoles().includes("PLANNING_ROLE")) {
-        this.router.navigateByUrl("consulting");
-      } else if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
-        this.router.navigateByUrl("teams-creation");
-      } else if (this.currentUser.getRoles().includes("TEACHING_STAFF_ROLE")) {
-        this.router.navigateByUrl("teams-creation");
-      } else if (this.currentUser.getRoles().includes("TEAM_MEMBER_ROLE")) {
-        this.router.navigateByUrl("teams");
-      } else if (this.currentUser.getRoles().includes("STUDENT_ROLE")) {
-        this.router.navigateByUrl("teams");
-      } else {
-        this.router.navigateByUrl("dashboard");
-      }
     }
   }
 

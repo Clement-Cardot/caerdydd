@@ -9,27 +9,38 @@ import { NotationComponent } from './notation-page/component/notation/notation.c
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { ConsultingCalendarComponent } from './consulting-page/consulting-calendar/consulting-calendar.component';
+import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
 
 const websiteName = " - Taf"
 
 const routes: Routes = [
   { path: '', title: 'Login' + websiteName, component: LoginComponent },
 
-  // Main Pagee
+  // Main Page
   { path: 'dashboard', title: 'Dashboard' + websiteName, component: DashboardComponent, canActivate: [AuthGuard] },
+
+  // Administration page
+  /* TODO */ { path: 'administration', title: 'Administration' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
+  { path: 'teams-creation', title: 'Création d\'équipes' + websiteName, component: TeamCreationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
+
+  // Planification pages
+  { path: 'planning', title: 'Planification' + websiteName, component: PlanificationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['PLANNING_ROLE']}},
+  { path: 'consultings', title: 'Consultings' + websiteName, component: ConsultingCalendarComponent, canActivate: [AuthGuard] },
+
+  // Notation pages
+  { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
 
   // Teams pages
   { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },
-  { path: 'teams-creation', title: 'Création d\'équipes' + websiteName, component: TeamCreationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
+  /* TODO */ { path: 'my-team', title: 'Teams' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
   
   // Projects pages
+  /* TODO */ { path: 'dev-project', title: 'Projet de Développement' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
+  /* TODO */ { path: 'validation-project', title: 'Projet de Validation' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
+
+  // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
-
-  // Notation pages
-  { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
-
-  // Consulting pages
-  { path: 'consulting', title: 'Consulting' + websiteName, component: ConsultingCalendarComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['PLANNING_ROLE']} },
+ 
 ];
 
 @NgModule({
