@@ -21,7 +21,7 @@ angular-build:
   image: node:16.19.1-alpine3.17
   script:
     - cd front
-    - npm install
+    - npm install --legacy-peer-deps
     - npm install -g @angular/cli
     - ng build
   artifacts:
@@ -118,7 +118,7 @@ angular-deploy-dev:
   image: node:16.19.1-alpine3.17
   script:
     - cd front
-    - npm install
+    - npm install --legacy-peer-deps
     - npm install -g @angular/cli
     - ng build --configuration=development --base-href "."
   dependencies: []
@@ -160,7 +160,7 @@ angular-deploy-prod:
   image: node:16.19.1-alpine3.17
   script:
     - cd front
-    - npm install
+    - npm install --legacy-peer-deps
     - npm install -g @angular/cli
     - ng build --configuration=production --base-href "."
   dependencies: []
