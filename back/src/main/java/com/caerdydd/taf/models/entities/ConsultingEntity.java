@@ -1,6 +1,6 @@
 package com.caerdydd.taf.models.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,8 +22,8 @@ public class ConsultingEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Integer idConsulting;
-        private Date datetimeBegin;
-        private Date datetimeEnd;
+        private LocalDateTime  datetimeBegin;
+        private LocalDateTime  datetimeEnd;
         private String speciality;
         private String notes;
         private Boolean isValidated;
@@ -36,7 +36,7 @@ public class ConsultingEntity {
         public ConsultingEntity() {
         }
 
-        public ConsultingEntity(Integer idConsulting, Date datetimeBegin, Date datetimeEnd){
+        public ConsultingEntity(Integer idConsulting, LocalDateTime datetimeBegin, LocalDateTime datetimeEnd){
                 this.idConsulting = idConsulting;
                 this.datetimeBegin = datetimeBegin;
                 this.datetimeEnd = datetimeEnd;

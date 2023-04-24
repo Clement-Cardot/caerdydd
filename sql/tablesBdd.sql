@@ -84,8 +84,8 @@ CREATE TABLE team (
 
 CREATE TABLE consulting (
     id_consulting INT NOT NULL AUTO_INCREMENT,
-    datetime_begin DATE NOT NULL,
-    datetime_end DATE NOT NULL,
+    datetime_begin DATETIME NOT NULL,
+    datetime_end DATETIME NOT NULL,
     speciality ENUM('infrastructure', 'development', 'modeling'),
     notes VARCHAR(250),
     is_validated BOOLEAN NOT NULL,

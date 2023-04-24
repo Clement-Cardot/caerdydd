@@ -1,6 +1,6 @@
 package com.caerdydd.taf.models.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
@@ -19,11 +19,11 @@ public class ConsultingDTO {
 
     @CsvDate("yyyyMMdd\'T\'HHmmss")
     @CsvBindByPosition(position = 0)
-    private Date datetimeBegin;
+    private LocalDateTime  datetimeBegin;
 
     @CsvDate("yyyyMMdd\'T\'HHmmss")
     @CsvBindByPosition(position = 1)
-    private Date datetimeEnd;
+    private LocalDateTime  datetimeEnd;
 
     private String speciality;
     private String notes;
@@ -36,7 +36,7 @@ public class ConsultingDTO {
     public ConsultingDTO() {
     }
 
-    public ConsultingDTO(Date datetimeBegin, Date datetimeEnd) {
+    public ConsultingDTO(LocalDateTime  datetimeBegin, LocalDateTime  datetimeEnd) {
         this.datetimeBegin = datetimeBegin;
         this.datetimeEnd = datetimeEnd;
         this.isValidated = false;
