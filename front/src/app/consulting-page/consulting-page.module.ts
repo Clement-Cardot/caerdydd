@@ -1,17 +1,14 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConsultingCalendarComponent } from './consulting-calendar/consulting-calendar.component';
-import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { CalendarDateFormatter, CalendarModule, CalendarNativeDateFormatter, DateAdapter, DateFormatterParams } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
-import { NgxMatFileInputModule } from '@angular-material-components/file-input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material.module';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
-}; 
+};
 
 @NgModule({
   declarations: [
@@ -19,11 +16,14 @@ export function momentAdapterFactory() {
   ],
   imports: [
     CommonModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    NgxMatFileInputModule,
-    MatIconModule,
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory })
+    MaterialModule,
+    CalendarModule.
+    forRoot({ 
+        provide: DateAdapter, useFactory: momentAdapterFactory
+    })
+  ],
+  providers: [
+    {provide: CalendarDateFormatter, useClass: CalendarNativeDateFormatter}
   ]
 })
 export class ConsultingPageModule { }

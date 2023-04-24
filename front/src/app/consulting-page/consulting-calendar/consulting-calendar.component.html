@@ -1,17 +1,20 @@
-
-<label class="btn btn-default">
-    <input type="file" (change)="selectFile($event)"/>
-</label>
-
-<button mat-fab color="primary" (click)="upload()">
-    <mat-icon>upload</mat-icon>
-</button>
-
-<mat-form-field>
-    <ngx-mat-file-input [formControl]="fileControl" [multiple]="false" [accept]="'.csv'" [color]="'primary'">
-      <!-- <mat-icon ngxMatFileInputIcon>folder</mat-icon> -->
-    </ngx-mat-file-input>
-</mat-form-field>
+<div class="row-text-center">
+    <div class="col-md-4">
+        <h3>{{ viewDate | calendarDate:('week' + 'ViewTitle'):'fr':0:[0,6] }}</h3>
+    </div>
+    <div class="btn-group">
+        <button mat-fab mwlCalendarPreviousView [view]="'week'" [(viewDate)]="viewDate" color="primary">
+            <mat-icon style="transform: scale(1.8);">keyboard_arrow_left</mat-icon>
+        </button>
+        <button mat-fab mwlCalendarToday [(viewDate)]="viewDate" color="primary">
+            <mat-icon>today</mat-icon>
+        </button>
+        <button mat-fab mwlCalendarNextView [view]="'week'" [(viewDate)]="viewDate" color="primary">
+            <mat-icon style="transform: scale(1.8);">keyboard_arrow_right</mat-icon>
+        </button>
+    </div>
+</div>
+<br/>
 
 <mwl-calendar-week-view 
     [viewDate]="viewDate" 
@@ -19,6 +22,9 @@
     [dayEndHour]="18"
     [dayStartHour]="7"
     [locale]="'fr'"
-    [excludeDays]="[0,6]">
-    
+    [excludeDays]="[0,6]"
+    [hourSegments]="1"
+    [hourSegmentHeight]="40"
+    [minimumEventHeight]="20"
+    >
 </mwl-calendar-week-view>
