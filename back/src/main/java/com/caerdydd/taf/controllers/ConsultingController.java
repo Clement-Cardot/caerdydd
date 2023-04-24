@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,18 @@ public class ConsultingController {
     @Autowired
     private ConsultingService consultingService;
 
+    @GetMapping("")
+    public ResponseEntity<List<ConsultingDTO>> getAllConsultings() {
+        logger.info("Process request : Get all consultings");
+        try {
+            List<ConsultingDTO> consultingDTOs = consultingService.listAllConsultings();
+            return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
     @PostMapping("/upload")
     public ResponseEntity<List<ConsultingDTO>> uploadConsulting(@RequestParam("file") MultipartFile file) {
         logger.info("Process request : Upload consulting");
@@ -34,6 +47,7 @@ public class ConsultingController {
             List<ConsultingDTO> savedConsultingDTOs = consultingService.uploadConsultings(file);
             return new ResponseEntity<>(savedConsultingDTOs, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
+            logger.warn(e.getMessage());
             if (e.getMessage().equals(CustomRuntimeException.FILE_EXCEPTION)) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             } 
@@ -43,7 +57,6 @@ public class ConsultingController {
             if (e.getMessage().equals(CustomRuntimeException.INCORRECT_FILE_FORMAT)) {
                 return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             }
-            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
         
