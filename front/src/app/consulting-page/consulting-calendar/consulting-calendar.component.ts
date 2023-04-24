@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CalendarEvent } from 'angular-calendar';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
 
@@ -7,27 +7,30 @@ import { ApiConsultingService } from 'src/app/core/services/api-consulting.servi
   templateUrl: './consulting-calendar.component.html',
   styleUrls: ['./consulting-calendar.component.scss']
 })
-export class ConsultingCalendarComponent implements OnInit {
+export class ConsultingCalendarComponent implements OnInit, OnDestroy {
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
 
-  fileControl: any;
-  file!: File;
+  refresh: any;
   
 
   constructor(private apiConsultingService: ApiConsultingService) { }
 
   ngOnInit() {
-  
+    this.updateConsultings();
+    this.refresh = setInterval(() => { this.updateConsultings() },  5000 );
   }
 
-  selectFile(event: any) {
-    this.file = event.target.files.item(0);
+  ngOnDestroy() {
+    if (this.refresh) {
+      clearInterval(this.refresh);
+    }
   }
 
-  upload() {
-    this.apiConsultingService.upload(this.file).subscribe(data => {
-      this.events = data
+  updateConsultings() {
+    this.apiConsultingService.getAllConsultings().subscribe(data => {
+      console.log(data);
+      this.events = data;
     });
   }
 
