@@ -18,6 +18,17 @@ export class ApiConsultingService {
         private consultingAdapter: ConsultingAdapter
         ) {
     }
+
+    getAllConsultings(): Observable<Consulting[]> {
+        const url = this.baseUrl;
+        return this.http.get<any>(url)
+        .pipe(
+            map((data: any[]) => data.map((item) => this.consultingAdapter.adapt(item)))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
     
     upload(file: File): Observable<Consulting[]> {
         const formData: FormData = new FormData();
