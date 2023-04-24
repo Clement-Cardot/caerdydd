@@ -102,6 +102,7 @@ public class TeamController {
             UserDTO updatedUser = teamService.applyInATeam(idTeam, idUser);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
+            logger.warn(e.getMessage());
             switch (e.getMessage()) {
             case CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER:
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -116,15 +117,12 @@ public class TeamController {
             case CustomRuntimeException.USER_ALREADY_IN_A_TEAM:
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.USER_NOT_FOUND:
-                logger.warn("User not found", e);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case CustomRuntimeException.TEAM_NOT_FOUND:
-                logger.warn("Team not found", e);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case CustomRuntimeException.SERVICE_ERROR:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             default:
-                logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                 return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
