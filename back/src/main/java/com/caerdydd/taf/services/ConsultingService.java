@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,6 +34,16 @@ public class ConsultingService {
 
     @Autowired
     private UserServiceRules userServiceRules;
+
+    public List<ConsultingDTO> listAllConsultings() throws CustomRuntimeException {
+        try {
+            return consultingRepository.findAll().stream()
+                        .map(consulting -> modelMapper.map(consulting, ConsultingDTO.class))
+                        .collect(Collectors.toList()) ;
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
 
     public ConsultingDTO saveConsulting(ConsultingDTO consulting) {
         ConsultingEntity consultingEntity = modelMapper.map(consulting, ConsultingEntity.class);
