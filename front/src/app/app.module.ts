@@ -18,6 +18,7 @@ import { SidenavModule } from './sidenav/sidenav.module';
 import { NotationModule } from './notation-page/notation.module';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { ConsultingPageModule } from './consulting-page/consulting-page.module';
+import { PlanificationPageModule } from './planification-page/planification-page.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ConsultingPageModule } from './consulting-page/consulting-page.module';
     SidenavModule,
     TeamsPageModule,
     NotationModule,
-    ConsultingPageModule
+    ConsultingPageModule,
+    PlanificationPageModule
   ],
   bootstrap: [AppComponent],
 })
