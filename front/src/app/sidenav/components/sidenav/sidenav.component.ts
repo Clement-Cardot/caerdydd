@@ -11,7 +11,7 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
 })
 export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 mobileQuery: MediaQueryList;
-  pageName!: String;
+  pageName!: string;
   
   fillerNav = Array.from({length: 5}, (_, i) => `Nav Item ${i + 1}`);
   navLink = new Array<string>;
@@ -53,37 +53,40 @@ mobileQuery: MediaQueryList;
       if (this.currentUser.getRoles() == null) {
         this.router.navigateByUrl("/");
       }
-      else if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
-        this.navLink.push("Dashboard");
-        this.navLink.push("Admin Panel")
-        this.navLink.push("Profil");
+      // Global
+      this.navLink.push("Dashboard");
+
+      // Option Leader
+      if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
+        this.navLink.push("Administration");
         this.navLink.push("Equipes");
         this.navLink.push("Notes");
-        this.navLink.push("Notifications");
       }
-      else if (this.currentUser.getRoles().includes("TEACHING_STAFF_ROLE")) {
-        this.navLink.push("Dashboard");
-        this.navLink.push("Profil");
-        this.navLink.push("Equipes");
-        this.navLink.push("Notifications");
-      }
-      else if (this.currentUser.getRoles().includes("PLANNING_ROLE")) {
-        this.navLink.push("Dashboard");
-        this.navLink.push("Profil");
+
+      // Planning
+      if (this.currentUser.getRoles().includes("PLANNING_ROLE")) {
         this.navLink.push("Planification");
-        this.navLink.push("Notifications");
       }
-      else if (this.currentUser.getRoles().includes("TEAM_MEMBER_ROLE")) {
-        this.navLink.push("Dashboard");
-        this.navLink.push("Profil");
+
+      // All except Student
+      if (!this.currentUser.getRoles().includes("STUDENT_ROLE")) {
+        this.navLink.push("Consultings");
+      }
+
+      // Teaching Staff
+      if (this.currentUser.getRoles().includes("TEACHING_STAFF_ROLE")) {
+        this.navLink.push("Equipes");
+      }
+
+      // Team Member
+      if (this.currentUser.getRoles().includes("TEAM_MEMBER_ROLE")) {
         this.navLink.push("Mon équipe");
-        this.navLink.push("Projet DEV");
+        this.navLink.push("Projet Développement");
         this.navLink.push("Projet Validation");
-        this.navLink.push("Notifications");
       }
-      else if (this.currentUser.getRoles().includes("STUDENT_ROLE")) {
-        this.navLink.push("Dashboard");
-        this.navLink.push("Profil");
+
+      // Student
+      if (this.currentUser.getRoles().includes("STUDENT_ROLE")) {
         this.navLink.push("Equipes");
       }
     }
@@ -93,28 +96,28 @@ mobileQuery: MediaQueryList;
     console.log(pageName);
     this.pageName = pageName;
     switch (pageName) {
-      case "Profil":
-        this.router.navigateByUrl("/profil");
+      case "Dashboard":
+        this.router.navigateByUrl("/dashboard");
         break;
-      case "Equipes":
-        this.router.navigateByUrl("/teams");
+      case "Administration":
+        this.router.navigateByUrl("/administration");
+        break;
+      case "Planification":
+        this.router.navigateByUrl("/planning");
+        break;
+      case "Consultings":
+        this.router.navigateByUrl("/consultings");
         break;
       case "Notes":
         this.router.navigateByUrl("/marks");
         break;
-      case "Notification":
-        this.router.navigateByUrl("/notifications");
-        break;
-      case "Dashboard":
-        this.router.navigateByUrl("/dashboard");
-        break;
-      case "Planiification":
-        this.router.navigateByUrl("/planning");
+      case "Equipes":
+        this.router.navigateByUrl("/teams");
         break;
       case "Mon équipe":
         this.router.navigateByUrl("/my-team");
         break;
-      case "Projet DEV":
+      case "Projet Développement":
         this.router.navigateByUrl("/dev-project");
         break;
       case "Projet Validation":
