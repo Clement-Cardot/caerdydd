@@ -48,9 +48,6 @@ public class ConsultingController {
             return new ResponseEntity<>(savedConsultingDTOs, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             logger.warn(e.getMessage());
-            if (e.getMessage().equals(CustomRuntimeException.FILE_EXCEPTION)) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            } 
             if (e.getMessage().equals(CustomRuntimeException.FILE_IS_EMPTY)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
