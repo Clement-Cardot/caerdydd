@@ -18,6 +18,7 @@ import com.caerdydd.taf.models.dto.ConsultingDTO;
 import com.caerdydd.taf.models.entities.ConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.services.rules.FileRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -34,6 +35,9 @@ public class ConsultingService {
 
     @Autowired
     private UserServiceRules userServiceRules;
+
+    @Autowired
+    private FileRules fileRules;
 
     public List<ConsultingDTO> listAllConsultings() throws CustomRuntimeException {
         try {
@@ -59,16 +63,10 @@ public class ConsultingService {
         userServiceRules.checkCurrentUserRole("PLANNING_ROLE");
 
         // Verify that file is not empty
-        if (consultingFile.isEmpty() || consultingFile.getOriginalFilename() == null) {
-            logger.warn("File is empty");
-            throw new CustomRuntimeException(CustomRuntimeException.FILE_IS_EMPTY);
-        }
+        fileRules.checkFileIsNotEmpty(consultingFile);
 
         // Verify that file is a .csv
-        if (!consultingFile.getOriginalFilename().endsWith(".csv")){
-            logger.warn("File is not a .csv");
-            throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
-        }
+        fileRules.checkFileIsCSV(consultingFile);
             
         // Read file and save consultings
         List<ConsultingDTO> consultingsFromFile = readCsvFile(consultingFile);
@@ -84,7 +82,7 @@ public class ConsultingService {
         return consultingsSaved;
     }
 
-    private List<ConsultingDTO> readCsvFile(MultipartFile file) throws CustomRuntimeException {
+    List<ConsultingDTO> readCsvFile(MultipartFile file) throws CustomRuntimeException {
         try {
             Reader reader = new InputStreamReader(file.getInputStream());
             List<ConsultingDTO> consultings = new CsvToBeanBuilder<ConsultingDTO>(reader).withType(ConsultingDTO.class).build().parse();
@@ -92,8 +90,11 @@ public class ConsultingService {
             return consultings;
         } catch (IllegalStateException | IOException e) {
             logger.warn("Error reading file: {}", e.getMessage());
-            throw new CustomRuntimeException(CustomRuntimeException.FILE_EXCEPTION);
-        }
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        } catch (RuntimeException e){
+            logger.warn("Error reading file: {}", e.getMessage());
+            throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
+        } 
         
     }
         
