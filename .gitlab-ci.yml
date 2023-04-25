@@ -27,6 +27,7 @@ angular-build:
   artifacts:
     paths:
       - front/dist
+    expire_in: 1 day
   cache:
     paths:
       - front/node_modules
@@ -43,6 +44,8 @@ java-build:
     paths:
       - $CI_PROJECT_DIR/mvn.log
       - back/target/taf.war
+    expire_in: 1 day
+    when: always
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
@@ -61,6 +64,8 @@ junit-test:
     paths:
       - back/target/site/jacoco
       - $CI_PROJECT_DIR/mvn.log
+    expire_in: 1 day
+    when: always
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
@@ -84,6 +89,8 @@ quality-dev:
       - $CI_PROJECT_DIR/mvn_clean_install.log
       - $CI_PROJECT_DIR/mvn_dependency_check.log
       - $CI_PROJECT_DIR/mvn_sonar.log
+    expire_in: 1 day
+    when: always
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
@@ -105,6 +112,8 @@ quality-prod:
       - $CI_PROJECT_DIR/mvn_clean_install.log
       - $CI_PROJECT_DIR/mvn_dependency_check.log
       - $CI_PROJECT_DIR/mvn_sonar.log
+    expire_in: 1 day
+    when: always
   cache:
     paths:
       - $CI_PROJECT_DIR/.m2/repository
@@ -149,7 +158,8 @@ java-deploy-dev:
     paths:
       - back/target/taf.war
       - $CI_PROJECT_DIR/mvn.log
-    expire_in: 2 mos
+    expire_in: 5 days
+    when: always
   only:
     - dev
     - gitlab-ci
@@ -190,6 +200,7 @@ java-deploy-prod:
     paths:
       - back/target/taf.war
       - $CI_PROJECT_DIR/mvn.log
-    expire_in: 2 mos
+    expire_in: 5 days
+    when: always
   only:
     - master
