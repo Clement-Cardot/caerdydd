@@ -1,9 +1,13 @@
 package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -263,17 +267,14 @@ public class TeamMemberServiceTest {
         RoleDTO role = new RoleDTO();
         role.setRole(RoleDTO.STUDENT_ROLE);
 
-        // set up mock user for the security config
         UserDTO currentUser = new UserDTO(2, "firstname2", "lastname2", "login2", "password2", "email2", "LD");
         when(securityConfig.getCurrentUser()).thenReturn(currentUser);
         currentUser.setRoles(Collections.singletonList(role));
 
-        // Call the method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
             teamMemberService.setBonusPenaltyById(1, 1);
         });
 
-        // Verify the result
         assertEquals(CustomRuntimeException.USER_IS_NOT_A_OPTION_LEADER, exception.getMessage());
     }
 
@@ -282,28 +283,77 @@ public class TeamMemberServiceTest {
         RoleDTO role = new RoleDTO();
         role.setRole(RoleDTO.TEAM_MEMBER_ROLE);
 
-        // set up mock user for the security config
         UserDTO currentUser = new UserDTO(2, "firstname2", "lastname2", "login2", "password2", "email2", "LD");
         when(securityConfig.getCurrentUser()).thenReturn(currentUser);
         currentUser.setRoles(Collections.singletonList(role));
 
-        // Call the method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
             teamMemberService.setBonusPenaltyById(1, 1);
         });
 
-        // Verify the result
         assertEquals(CustomRuntimeException.USER_IS_NOT_A_OPTION_LEADER, exception.getMessage());
     }
 
     @Test
-    public void testSetBonusTeamMember_UnknownCurrentUser() throws CustomRuntimeException{
-        // Call the method to test
-        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            teamMemberService.setBonusPenaltyById(1, 1);
-        });
+    public void testUpdateTeamMember_Nominal() {
+        TeamDTO teamDTO = new TeamDTO();
+        UserDTO userDTO = new UserDTO(1, "firstname3", "lastname3", "login3", "password3", "email3", "J2EE");
 
-        // Verify the result
+        TeamMemberDTO input = new TeamMemberDTO(userDTO, teamDTO);
+
+        int teamMemberId = 1;
+        TeamMemberEntity teamMemberEntity = new TeamMemberEntity(
+            new UserEntity(teamMemberId, "firstname3", "lastname3", "login3", "password3", "email3", "J2EE"),
+            new TeamEntity()
+        );
+        when(teamMemberRepository.findById(teamMemberId)).thenReturn(Optional.of(teamMemberEntity));
+        when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenReturn(teamMemberEntity);
+
+        TeamMemberDTO result = new TeamMemberDTO();
+        try {
+            result = teamMemberService.updateTeamMember(input);
+        } catch (CustomRuntimeException e) {
+            fail();
+        }
+
+        verify(teamMemberRepository, times(1)).findById(teamMemberId);
+        verify(teamMemberRepository, times(1)).save(any(TeamMemberEntity.class));
+        assertEquals(input.toString(), result.toString());
+    }
+
+    @Test
+    void testUpdateTeamMemberUserNotFound() {
+        TeamDTO teamDTO = new TeamDTO();
+        UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+
+        TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
+        
+        when(teamMemberRepository.findById(1)).thenReturn(Optional.empty());
+        
+        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+            teamMemberService.updateTeamMember(teamMemberDTO);
+        });
         assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateTeamMember_ServiceError() throws Exception {
+        TeamDTO teamDTO = new TeamDTO();
+        UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+
+        TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
+
+        TeamEntity team = new TeamEntity();
+        UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+
+        TeamMemberEntity teamMemberEntity = new TeamMemberEntity(user, team);
+
+        when(teamMemberRepository.findById(teamMemberEntity.getIdUser())).thenReturn(Optional.of(teamMemberEntity));
+        when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenThrow(new RuntimeException());
+
+        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
+            teamMemberService.updateTeamMember(teamMemberDTO);
+        });
+        assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
     }
 }
