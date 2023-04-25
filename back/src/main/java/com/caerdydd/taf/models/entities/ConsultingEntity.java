@@ -26,8 +26,8 @@ public class ConsultingEntity {
         private LocalDateTime  datetimeEnd;
         private String speciality;
         private String notes;
-        private Boolean isValidated;
-        private Boolean isReserved;
+        private Boolean isValidated = false;
+        private Boolean isReserved = false;
         
         @ManyToOne
         @JoinColumn(name = "id_team")
@@ -36,12 +36,9 @@ public class ConsultingEntity {
         public ConsultingEntity() {
         }
 
-        public ConsultingEntity(Integer idConsulting, LocalDateTime datetimeBegin, LocalDateTime datetimeEnd){
-                this.idConsulting = idConsulting;
+        public ConsultingEntity(LocalDateTime datetimeBegin, LocalDateTime datetimeEnd){
                 this.datetimeBegin = datetimeBegin;
                 this.datetimeEnd = datetimeEnd;
-                this.isValidated = false;
-                this.isReserved = false;
         }
 
         @Override
