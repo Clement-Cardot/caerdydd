@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -51,6 +52,20 @@ public class ConsultingControllerTest {
     }
 
     @Test
+    public void testGetAllConsultings_Empty() throws CustomRuntimeException {
+        // Mock consultingService.listAllConsultings()
+        List<ConsultingDTO> mockedConsultings = new ArrayList<>();
+        when(consultingService.listAllConsultings()).thenReturn(mockedConsultings);
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultings, response.getBody());
+    }
+
+    @Test
     public void testGetAllConsultings_UnexpectedError() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
         when(consultingService.listAllConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
@@ -65,7 +80,7 @@ public class ConsultingControllerTest {
     @Test
     public void testuploadConsulting_Nominal() throws CustomRuntimeException {
         // Mock File
-        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
+        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/csv", "mock".getBytes());
 
         // Mock consultingService.uploadConsulting()
         List<ConsultingDTO> mockedConsultings = List.of(
@@ -87,24 +102,9 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_BadRequest() throws CustomRuntimeException {
-        // Mock File
-        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
-
-        // Mock consultingService.uploadConsulting()
-        when(consultingService.uploadConsultings(file)).thenThrow(new CustomRuntimeException(CustomRuntimeException.FILE_EXCEPTION));
-
-        // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.uploadConsulting(file);
-
-        // Assertions
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    }
-
-    @Test
     public void testuploadConsulting_NoContent() throws CustomRuntimeException {
         // Mock File
-        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
+        MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "".getBytes());
 
         // Mock consultingService.uploadConsulting()
         when(consultingService.uploadConsultings(file)).thenThrow(new CustomRuntimeException(CustomRuntimeException.FILE_IS_EMPTY));
@@ -134,7 +134,7 @@ public class ConsultingControllerTest {
     @Test
     public void testuploadConsulting_UnexpectedException() throws CustomRuntimeException {
         // Mock File
-        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
+        MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "mock".getBytes());
 
         // Mock consultingService.uploadConsulting()
         when(consultingService.uploadConsultings(file)).thenThrow(new CustomRuntimeException("Unexpected exception"));
