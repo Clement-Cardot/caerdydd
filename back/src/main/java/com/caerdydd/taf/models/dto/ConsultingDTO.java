@@ -27,8 +27,8 @@ public class ConsultingDTO {
 
     private String speciality;
     private String notes;
-    private Boolean isValidated;
-    private Boolean isReserved;
+    private Boolean isValidated = false;
+    private Boolean isReserved = false;
 
     //@JsonIdentityReference
     private TeamDTO team;
@@ -39,8 +39,6 @@ public class ConsultingDTO {
     public ConsultingDTO(LocalDateTime  datetimeBegin, LocalDateTime  datetimeEnd) {
         this.datetimeBegin = datetimeBegin;
         this.datetimeEnd = datetimeEnd;
-        this.isValidated = false;
-        this.isReserved = false;
     }
 
     @Override
