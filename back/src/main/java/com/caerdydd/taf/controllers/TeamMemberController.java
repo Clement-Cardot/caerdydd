@@ -33,10 +33,10 @@ public class TeamMemberController {
             List<TeamMemberDTO> users = teamMemberService.listAllTeamMembers();
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            if(e.getMessage().equals(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND)) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if(e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -47,10 +47,13 @@ public class TeamMemberController {
             TeamMemberDTO user = teamMemberService.getTeamMemberById(id);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            if(e.getMessage().equals(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND)) {
+            if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -64,7 +67,10 @@ public class TeamMemberController {
             if(e.getMessage().equals(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 }
