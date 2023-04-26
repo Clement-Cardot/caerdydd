@@ -4,36 +4,24 @@ import { Observable } from "rxjs/internal/Observable";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
-import { Project, ProjectAdapter } from "../data/models/project.models";
+import { TeamMember, TeamMemberAdapter } from "../data/models/team-member.model";
 
 @Injectable({
     providedIn: "root"
 })
-export class ApiProjectService {
-    private baseUrl = "http://localhost:4200/api/projects";
+export class ApiTeamMemberService {
+    private baseUrl = "http://localhost:4200/api/team-members";
 
     constructor(
-        private http: HttpClient, 
-        private projectAdapter: ProjectAdapter
-        ) {
-    }
+        private http: HttpClient,
+        private teamMemberAdapter: TeamMemberAdapter
+    ) {}
 
-    getProjectById(projectId: number): Observable<Project> {
-        const url = `${this.baseUrl}/${projectId}`;
+    getTeamMemberById(teamMemberId: number): Observable<TeamMember> {
+        const url = `${this.baseUrl}/${teamMemberId}`;
         return this.http.get<any>(url)
         .pipe(
-            map((data: any) => this.projectAdapter.adapt(data))
-        )
-        .pipe(
-            catchError(this.handleError)
-        );
-    }
-    
-    updateProject(projectId: number, project: Project): Observable<Project> {
-        const url = `${this.baseUrl}/${projectId}`;
-        return this.http.put<any>(url, project)
-        .pipe(
-            map((data: any) => this.projectAdapter.adapt(data))
+            map((data: any) => this.teamMemberAdapter.adapt(data))
         )
         .pipe(
             catchError(this.handleError)

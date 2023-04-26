@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +21,20 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @PostMapping("/updateProject")
-    public ResponseEntity<ProjectDTO> updateProject(@RequestBody ProjectDTO projectDTO) throws CustomRuntimeException {
+    @PutMapping("/{projectId}")
+    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer projectId, @RequestBody ProjectDTO projectDTO) throws CustomRuntimeException {
+        projectDTO.setIdProject(projectId);
         ProjectDTO updatedProject = projectService.updateProject(projectDTO);
         return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+}
+
+
+    @GetMapping("/{projectId}")
+    public ResponseEntity<ProjectDTO> getProject(@PathVariable Integer projectId) throws CustomRuntimeException {
+        ProjectDTO project = projectService.getProjectById(projectId);
+        return new ResponseEntity<>(project, HttpStatus.OK);
     }
+
 
     @ExceptionHandler(CustomRuntimeException.class)
     public ResponseEntity<String> handleCustomRuntimeException(CustomRuntimeException e) {
