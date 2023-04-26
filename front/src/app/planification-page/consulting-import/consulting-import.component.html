@@ -14,9 +14,15 @@
                     [accept]="'.csv'">
                 </ngx-mat-file-input>
                 <mat-icon matSuffix>attachment</mat-icon>
+
                 <mat-error *ngIf="fileFormControl.hasError('required')">
                     Vous devez choisir un fichier
                 </mat-error>
+
+                <mat-error *ngIf="fileFormControl.hasError('apiError')">
+                    {{errorMessage}}
+                </mat-error>
+
             </mat-form-field>
 
             <button mat-fab color="primary">
