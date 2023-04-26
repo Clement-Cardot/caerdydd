@@ -85,21 +85,27 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true
+            },
+            "default": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "default"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {
-              "browserTarget": "front:build:production"
-            },
-            "development": {
-              "browserTarget": "front:build:development"
+            "default": {
+              "browserTarget": "front:build:default"
             }
           },
-          "defaultConfiguration": "development",
+          "defaultConfiguration": "default",
           "options": {
             "browserTarget": "front:build",
             "proxyConfig": "src/proxy.conf.json"
