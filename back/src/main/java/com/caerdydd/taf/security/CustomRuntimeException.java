@@ -32,6 +32,7 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_IS_FULL = "The team is full";
     public static final String TEAM_ALREADY_HAS_2_CSS = "The team already has 2 CSS";
     public static final String TEAM_ALREADY_HAS_4_LD = "The team already has 4 LD";
+    public static final String USER_ID_SHOULD_BE_NULL = "User id should be null";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";

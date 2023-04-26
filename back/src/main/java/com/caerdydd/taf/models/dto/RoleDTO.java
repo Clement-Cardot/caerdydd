@@ -27,6 +27,11 @@ public class RoleDTO {
     public RoleDTO() {
     }
 
+    public RoleDTO(String role, UserDTO user) {
+        this.role = role;
+        this.user = user;
+    }
+
     public RoleDTO(Integer idRole, String role, UserDTO user) {
         this.idRole = idRole;
         this.role = role;

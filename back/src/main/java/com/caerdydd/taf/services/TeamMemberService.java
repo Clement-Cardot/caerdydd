@@ -18,6 +18,7 @@ import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.UserServiceRules;
 
 @Service
 @Transactional
@@ -32,7 +33,7 @@ public class TeamMemberService {
     private ModelMapper modelMapper;
 
     @Autowired
-    SecurityConfig securityConfig;
+    UserServiceRules userServiceRules;
     
     public List<TeamMemberDTO> listAllTeamMembers() throws CustomRuntimeException {
         try {
@@ -67,10 +68,9 @@ public class TeamMemberService {
     }
 
     public TeamMemberDTO setBonusPenaltyById(Integer id, Integer bonusPenalty) throws CustomRuntimeException {
-        if(securityConfig.getCurrentUser().getRoles().stream().noneMatch(role -> role.getRole().equals(RoleDTO.OPTION_LEADER_ROLE))){
-            logger.warn("ILLEGAL API USE : Current user is not a option leader");
-            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_STUDENT);
-        }
+
+        // Check if the current user is a option leader
+        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
 
         TeamMemberDTO teamMember = getTeamMemberById(id);
         teamMember.setBonusPenalty(bonusPenalty);
