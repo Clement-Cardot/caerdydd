@@ -17,10 +17,21 @@ export class ApiProjectService {
         private projectAdapter: ProjectAdapter
         ) {
     }
+
+    getProjectById(projectId: number): Observable<Project> {
+        const url = `${this.baseUrl}/${projectId}`;
+        return this.http.get<any>(url)
+        .pipe(
+            map((data: any) => this.projectAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
     
-    updateProject(project: Project): Observable<Project> {
-        const url = `${this.baseUrl}/updateProject`;
-        return this.http.post<any>(url, project)
+    updateProject(projectId: number, project: Project): Observable<Project> {
+        const url = `${this.baseUrl}/${projectId}`;
+        return this.http.put<any>(url, project)
         .pipe(
             map((data: any) => this.projectAdapter.adapt(data))
         )
