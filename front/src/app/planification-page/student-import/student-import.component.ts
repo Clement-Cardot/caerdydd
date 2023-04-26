@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileInput } from 'ngx-material-file-input';
-import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
+import { User } from 'src/app/core/data/models/user.model';
 import { ApiUserService } from 'src/app/core/services/api-user.service';
 
 @Component({
@@ -14,12 +15,13 @@ export class StudentImportComponent {
 
   studentsForm!: FormGroup;
   fileFormControl = new FormControl('', [Validators.required]);
-  error: string = "test";
+
+  errorMessage!: string;
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
-    private apiUserService: ApiUserService
+    private apiUserService: ApiUserService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -29,17 +31,38 @@ export class StudentImportComponent {
   }
 
   upload() {
+    this.fileFormControl.setErrors({'apiError': null});
+    this.fileFormControl.updateValueAndValidity();
     if(this.studentsForm.invalid){
       console.log("Invalid form");
     } else {
       const file_form: FileInput = this.studentsForm.get('file')?.value;
       const file = file_form.files[0];
-      console.log(file);
       this.apiUserService.uploadStudents(file).subscribe(
-        data => {console.log(data)},
-        err => {this.error = err},
+        data => {this.showSuccess(data)},
+        error => {this.showError(error)},
       );
-      this.router.navigateByUrl("/consulting");
+    }
+  }
+  
+  showSuccess(data : User[]) {
+    let nbStudents = data.length;
+    this._snackBar.open(nbStudents + " étudiants ont bien été importés", "Fermer", {
+      duration: 5000,
+    });
+  }
+
+  showError(error: { status: number; }) {
+    this.fileFormControl.setErrors({apiError: true});
+    switch (error.status) {
+      case 415:
+        this.errorMessage = "Le fichier n'est pas au bon format";
+        break;
+      case 500:
+        this.errorMessage = "Une erreur est survenue, veuillez contacter l'administrateur";
+        break;
+      default:
+        this.errorMessage = "Une erreur est survenue, veuillez contacter l'administrateur";
     }
   }
 
