@@ -103,7 +103,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_NoContent() throws CustomRuntimeException, IOException {
+    public void testuploadConsulting_EmptyFile() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "".getBytes());
 
@@ -114,7 +114,7 @@ public class ConsultingControllerTest {
         ResponseEntity<List<ConsultingDTO>> response = consultingController.uploadConsulting(file);
 
         // Assertions
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.getStatusCode());
     }
 
     @Test

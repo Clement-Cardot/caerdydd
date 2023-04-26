@@ -17,9 +17,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.services.StudentService;
 import com.caerdydd.taf.services.UserService;
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -29,6 +32,9 @@ public class UserControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private StudentService studentService;
 
     @Test
     public void testList_Nominal() throws CustomRuntimeException{
@@ -297,6 +303,77 @@ public class UserControllerTest {
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());
         verify(userService, times(1)).updateUser(any(UserDTO.class));
+    }
+
+    @Test
+    public void testUploadStudent_Nominal() throws CustomRuntimeException{
+        // Mock userService.updateUser() method
+        MultipartFile mockedFile = new MockMultipartFile("file", "test.csv", "text/csv", "test data".getBytes());
+        List<UserDTO> mockedAnswer = List.of(
+            new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD"),
+            new UserDTO("firstName2", "lastName2", "login2", "password2", "email2", "LD")
+        );
+        when(studentService.uploadStudents(any(MultipartFile.class))).thenReturn(mockedAnswer);
+
+        // Call the method to test
+        ResponseEntity<List<UserDTO>> result = userController.uploadStudents(mockedFile);
+
+        // Check the result
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(mockedAnswer.size(), result.getBody().size());
+        assertEquals(mockedAnswer.get(0).getFirstname(), result.getBody().get(0).getFirstname());
+    }
+
+    @Test
+    public void testUploadStudent_EmptyFile() throws CustomRuntimeException{
+        // Mock userService.updateUser() method
+        MultipartFile mockedFile = new MockMultipartFile("file", "test.txt", "text/plain", "".getBytes());
+        when(studentService.uploadStudents(any(MultipartFile.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.FILE_IS_EMPTY));
+
+        // Call the method to test
+        ResponseEntity<List<UserDTO>> result = userController.uploadStudents(mockedFile);
+
+        // Check the result
+        assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, result.getStatusCode());
+    }
+
+    @Test
+    public void testUploadStudent_IncorrectFormat() throws CustomRuntimeException{
+        // Mock userService.updateUser() method
+        MultipartFile mockedFile = new MockMultipartFile("file", "test.txt", "text/plain", "".getBytes());
+        when(studentService.uploadStudents(any(MultipartFile.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT));
+
+        // Call the method to test
+        ResponseEntity<List<UserDTO>> result = userController.uploadStudents(mockedFile);
+
+        // Check the result
+        assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, result.getStatusCode());
+    }
+
+    @Test
+    public void testUploadStudent_ServiceError() throws CustomRuntimeException{
+        // Mock userService.updateUser() method
+        MultipartFile mockedFile = new MockMultipartFile("file", "test.txt", "text/plain", "".getBytes());
+        when(studentService.uploadStudents(any(MultipartFile.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call the method to test
+        ResponseEntity<List<UserDTO>> result = userController.uploadStudents(mockedFile);
+
+        // Check the result
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
+    }
+
+    @Test
+    public void testUploadStudent_UnexpectedError() throws CustomRuntimeException{
+        // Mock userService.updateUser() method
+        MultipartFile mockedFile = new MockMultipartFile("file", "test.txt", "text/plain", "".getBytes());
+        when(studentService.uploadStudents(any(MultipartFile.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Call the method to test
+        ResponseEntity<List<UserDTO>> result = userController.uploadStudents(mockedFile);
+
+        // Check the result
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
     }
 
 }
