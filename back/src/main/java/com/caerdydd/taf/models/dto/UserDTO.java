@@ -19,17 +19,16 @@ import lombok.Setter;
 public class UserDTO {
 
     private Integer id;
-    @CsvBindByPosition(position = 0)
+    @CsvBindByPosition(position = 0, required = true)
     private String firstname;
-    @CsvBindByPosition(position = 1)
+    @CsvBindByPosition(position = 1, required = true)
     private String lastname;
-    @CsvBindByPosition(position = 2)
+    @CsvBindByPosition(position = 2, required = true)
     private String login;
-    @CsvBindByPosition(position = 3)
     private String password;
-    @CsvBindByPosition(position = 4)
+    @CsvBindByPosition(position = 3, required = true)
     private String email;
-    @CsvBindByPosition(position = 5)
+    @CsvBindByPosition(position = 4, required = true)
     private String speciality;
     
     @JsonManagedReference

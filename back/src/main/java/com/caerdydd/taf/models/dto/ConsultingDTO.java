@@ -18,11 +18,11 @@ public class ConsultingDTO {
     private Integer idConsulting;
 
     @CsvDate("yyyyMMdd\'T\'HHmmss")
-    @CsvBindByPosition(position = 0)
+    @CsvBindByPosition(position = 0, required = true)
     private LocalDateTime  datetimeBegin;
 
     @CsvDate("yyyyMMdd\'T\'HHmmss")
-    @CsvBindByPosition(position = 1)
+    @CsvBindByPosition(position = 1, required = true)
     private LocalDateTime  datetimeEnd;
 
     private String speciality;
