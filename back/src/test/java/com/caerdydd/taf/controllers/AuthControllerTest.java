@@ -31,7 +31,7 @@ public class AuthControllerTest {
     @Test
     public void testLoginUser_Nominal() throws CustomRuntimeException{
         // Mock authService.loginUser()
-        UserDTO userDTO = new UserDTO(1, "firstname", "lastname", "login", "password", "email", "LD");
+        UserDTO userDTO = new UserDTO("firstname", "lastname", "login", "password", "email", "LD");
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE,  "JSESSIONID=1234567890");
         when(authService.loginUser(any(), any())).thenReturn(new ResponseEntity<UserDTO>(userDTO, headers, HttpStatus.OK));
