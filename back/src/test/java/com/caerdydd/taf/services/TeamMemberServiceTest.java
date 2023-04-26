@@ -41,6 +41,7 @@ import com.caerdydd.taf.models.entities.UserEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.TeamMemberServiceRules;
 
 @ExtendWith(MockitoExtension.class)
 public class TeamMemberServiceTest {
@@ -50,6 +51,9 @@ public class TeamMemberServiceTest {
 
     @Mock
     private TeamMemberRepository teamMemberRepository;
+
+    @Mock
+    private TeamMemberServiceRules teamMemberServiceRules;
     
     @Mock
     private SecurityConfig securityConfig;
@@ -248,7 +252,9 @@ public class TeamMemberServiceTest {
         UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
 
         TeamMemberEntity teamMember = new TeamMemberEntity(user, team);
-        teamMember.setBonusPenalty((-2));
+
+        int bonusToAdd = -2;
+        teamMember.setBonusPenalty((bonusToAdd));
 
         ArgumentCaptor<TeamMemberEntity> captor = ArgumentCaptor.forClass(TeamMemberEntity.class);
         when(teamMemberRepository.save(captor.capture())).thenReturn(teamMember);
@@ -257,8 +263,10 @@ public class TeamMemberServiceTest {
         when(teamMemberRepository.findById(mockedTeamMember.get().getIdUser())).thenReturn(mockedTeamMember);
         mockedTeamMember.get().setBonusPenalty(0); // set bonus penalty to 0 initially
 
-        teamMemberService.setBonusPenaltyById(mockedTeamMember.get().getIdUser(), -2);
-        assertEquals(-2, captor.getValue().getBonusPenalty());
+        teamMemberService.setBonusPenaltyById(mockedTeamMember.get().getIdUser(), bonusToAdd);
+
+        verify(teamMemberServiceRules, times(1)).checkTeamMemberBonusValue(bonusToAdd);
+        assertEquals(bonusToAdd, captor.getValue().getBonusPenalty());
     }
 
 

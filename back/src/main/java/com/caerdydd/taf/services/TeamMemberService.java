@@ -19,6 +19,7 @@ import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.TeamMemberServiceRules;
 
 @Service
 @Transactional
@@ -29,7 +30,7 @@ public class TeamMemberService {
     private TeamMemberRepository teamMemberRepository;
 
     @Autowired
-    private UserService userService;
+    private TeamMemberServiceRules teamMemberServiceRules;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -80,7 +81,14 @@ public class TeamMemberService {
             throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER);
         }
 
+        // Check if the value of the bonus is correct.
+        teamMemberServiceRules.checkTeamMemberBonusValue(bonusPenalty);
+
         TeamMemberDTO teamMember = getTeamMemberById(id);
+
+        // Check if the total mark is possible
+        teamMemberServiceRules.checkTeamMemberMarkAfterBonus(teamMember, bonusPenalty);
+
         teamMember.setBonusPenalty(bonusPenalty);
         return updateTeamMember(teamMember);
     }
