@@ -1,5 +1,6 @@
 package com.caerdydd.taf.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -46,10 +47,10 @@ public class ConsultingController {
         try {
             List<ConsultingDTO> savedConsultingDTOs = consultingService.uploadConsultings(file);
             return new ResponseEntity<>(savedConsultingDTOs, HttpStatus.OK);
-        } catch (CustomRuntimeException e) {
+        } catch (CustomRuntimeException | IOException e) {
             logger.warn(e.getMessage());
             if (e.getMessage().equals(CustomRuntimeException.FILE_IS_EMPTY)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             }
             if (e.getMessage().equals(CustomRuntimeException.INCORRECT_FILE_FORMAT)) {
                 return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);

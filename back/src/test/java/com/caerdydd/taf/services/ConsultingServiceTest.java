@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +131,7 @@ public class ConsultingServiceTest {
 
     // UploadConsultings
     @Test
-    public void testuploadConsulting_Nominal() throws CustomRuntimeException {
+    public void testuploadConsulting_Nominal() throws CustomRuntimeException, IOException {
         // Mock userServiceRules.checkCurrentUserRole()
         doNothing().when(userServiceRules).checkCurrentUserRole(any(String.class));
 
@@ -249,7 +250,7 @@ public class ConsultingServiceTest {
 
     // ReadCsvFile
     @Test
-    public void testReadCsvFile_Nominal() throws CustomRuntimeException {
+    public void testReadCsvFile_Nominal() throws CustomRuntimeException, IOException {
         // Mock file
         MultipartFile mockedFile = new MockMultipartFile("file", "testcsv", "text/csv", "20230421T080000,20230421T082000".getBytes());
 
@@ -268,7 +269,7 @@ public class ConsultingServiceTest {
     }
 
     @Test
-    public void testReadCsvFile_FileIsEmpty() throws CustomRuntimeException {
+    public void testReadCsvFile_FileIsEmpty() throws CustomRuntimeException, IOException {
         // Mock file
         MultipartFile mockedFile = new MockMultipartFile("file", "testcsv", "text/csv", "".getBytes());
 
