@@ -31,7 +31,7 @@ export class ApiTeamMemberService {
         );
     }
 
-    getTeamMember(teamMemberId: number): Observable<TeamMember> {
+    getTeamMemberById(teamMemberId: number): Observable<TeamMember> {
         const url = `${this.baseUrl}/${teamMemberId}`;
         return this.http.get<any>(url)
         .pipe(
