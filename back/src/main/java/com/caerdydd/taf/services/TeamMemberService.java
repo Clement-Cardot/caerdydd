@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -23,13 +22,10 @@ import com.caerdydd.taf.security.SecurityConfig;
 @Service
 @Transactional
 public class TeamMemberService {
-    private static final Logger logger = LogManager.getLogger(TeamService.class);
+    private static final Logger logger = LogManager.getLogger(TeamMemberService.class);
 
     @Autowired
     private TeamMemberRepository teamMemberRepository;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -77,7 +73,7 @@ public class TeamMemberService {
         
         if(securityConfig.getCurrentUser().getRoles().stream().noneMatch(role -> role.getRole().equals(RoleDTO.OPTION_LEADER_ROLE))){
             logger.warn("ILLEGAL API USE : Current user is not a option leader");
-            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_OPTION_LEADER);
+            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER);
         }
 
         TeamMemberDTO teamMember = getTeamMemberById(id);

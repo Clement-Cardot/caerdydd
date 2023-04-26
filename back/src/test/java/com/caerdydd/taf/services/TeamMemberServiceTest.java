@@ -5,9 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -275,7 +272,7 @@ public class TeamMemberServiceTest {
             teamMemberService.setBonusPenaltyById(1, 1);
         });
 
-        assertEquals(CustomRuntimeException.USER_IS_NOT_A_OPTION_LEADER, exception.getMessage());
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER, exception.getMessage());
     }
 
     @Test
@@ -291,7 +288,7 @@ public class TeamMemberServiceTest {
             teamMemberService.setBonusPenaltyById(1, 1);
         });
 
-        assertEquals(CustomRuntimeException.USER_IS_NOT_A_OPTION_LEADER, exception.getMessage());
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER, exception.getMessage());
     }
 
     @Test
