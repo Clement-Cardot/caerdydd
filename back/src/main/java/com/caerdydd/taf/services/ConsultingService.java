@@ -73,8 +73,6 @@ public class ConsultingService {
         List<ConsultingDTO> consultingsSaved = new ArrayList<>();
 
         for (ConsultingDTO consulting : consultingsFromFile) {
-            consulting.setIsReserved(false);
-            consulting.setIsValidated(false);
             ConsultingDTO consultingSaved = saveConsulting(consulting);
             consultingsSaved.add(consultingSaved);
         }

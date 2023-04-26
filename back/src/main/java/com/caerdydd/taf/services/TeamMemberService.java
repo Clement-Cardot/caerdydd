@@ -12,13 +12,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
-import com.caerdydd.taf.security.SecurityConfig;
 import com.caerdydd.taf.services.rules.TeamMemberServiceRules;
+import com.caerdydd.taf.services.rules.UserServiceRules;
 
 @Service
 @Transactional
@@ -35,7 +34,7 @@ public class TeamMemberService {
     private ModelMapper modelMapper;
 
     @Autowired
-    SecurityConfig securityConfig;
+    UserServiceRules userServiceRules;
     
     public List<TeamMemberDTO> listAllTeamMembers() throws CustomRuntimeException {
         try {
@@ -70,15 +69,9 @@ public class TeamMemberService {
     }
 
     public TeamMemberDTO setBonusPenaltyById(Integer id, Integer bonusPenalty) throws CustomRuntimeException {
-        if(securityConfig.getCurrentUser() == null) {
-            logger.warn("ILLEGAL API USE: Current user is null");
-            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
-        }
-        
-        if(securityConfig.getCurrentUser().getRoles().stream().noneMatch(role -> role.getRole().equals(RoleDTO.OPTION_LEADER_ROLE))){
-            logger.warn("ILLEGAL API USE : Current user is not a option leader");
-            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER);
-        }
+
+        // Check if the current user is a option leader
+        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
 
         // Check if the value of the bonus is correct.
         teamMemberServiceRules.checkTeamMemberBonusValue(bonusPenalty);

@@ -34,6 +34,8 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_ALREADY_HAS_4_LD = "The team already has 4 LD";
     public static final String TEAM_MEMBER_IMPOSSIBLE_TOTAL_MARK = "The total mark of the team member is under 0 or above 20";
     public static final String TEAM_MEMBER_INCORRECT_BONUS_PENALTY = "The bonus of the team member is under -4 or above 4";
+    public static final String USER_ID_SHOULD_BE_NULL = "User id should be null";
+
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
     public static final String FILE_EXCEPTION = "File exception";

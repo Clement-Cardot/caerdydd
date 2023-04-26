@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import com.caerdydd.taf.security.CustomRuntimeException;
 @Service
 @Transactional
 public class UserService {
+
+    private static final Logger logger = LogManager.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -64,9 +68,8 @@ public class UserService {
     public UserDTO saveUser(UserDTO user) throws CustomRuntimeException {
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
         
-        Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
-        if (optionalUser.isPresent()){
-            throw new CustomRuntimeException(CustomRuntimeException.USER_ALREADY_EXISTS);
+        if (userEntity.getId() != null){
+            throw new CustomRuntimeException(CustomRuntimeException.USER_ID_SHOULD_BE_NULL);
         }
 
         UserEntity response = null;
