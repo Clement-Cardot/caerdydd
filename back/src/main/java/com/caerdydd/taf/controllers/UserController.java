@@ -105,6 +105,13 @@ public class UserController {
             List<UserDTO> savedUserDTO = studentService.uploadStudents(file);
             return new ResponseEntity<>(savedUserDTO, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
+            logger.warn(e.getMessage());
+            if (e.getMessage().equals(CustomRuntimeException.FILE_IS_EMPTY)) {
+                return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.INCORRECT_FILE_FORMAT)) {
+                return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+            }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }

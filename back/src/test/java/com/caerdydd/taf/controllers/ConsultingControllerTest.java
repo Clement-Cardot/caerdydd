@@ -3,6 +3,7 @@ package com.caerdydd.taf.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_Nominal() throws CustomRuntimeException {
+    public void testuploadConsulting_Nominal() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/csv", "mock".getBytes());
 
@@ -102,7 +103,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_NoContent() throws CustomRuntimeException {
+    public void testuploadConsulting_NoContent() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "".getBytes());
 
@@ -117,7 +118,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_UnsupportedMediaType() throws CustomRuntimeException {
+    public void testuploadConsulting_UnsupportedMediaType() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
 
@@ -132,7 +133,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_UnexpectedException() throws CustomRuntimeException {
+    public void testuploadConsulting_UnexpectedException() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "mock".getBytes());
 

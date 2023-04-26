@@ -57,7 +57,7 @@ public class ConsultingService {
         return modelMapper.map(response, ConsultingDTO.class);
     }
 
-    public List<ConsultingDTO> uploadConsultings(MultipartFile consultingFile) throws CustomRuntimeException {
+    public List<ConsultingDTO> uploadConsultings(MultipartFile consultingFile) throws CustomRuntimeException, IOException {
 
         // Verify that user is a Planning assistant
         userServiceRules.checkCurrentUserRole("PLANNING_ROLE");
@@ -80,16 +80,19 @@ public class ConsultingService {
         return consultingsSaved;
     }
 
-    List<ConsultingDTO> readCsvFile(MultipartFile file) throws CustomRuntimeException {
+    List<ConsultingDTO> readCsvFile(MultipartFile file) throws CustomRuntimeException, IOException {
+        Reader reader = Reader.nullReader();
         try {
-            Reader reader = new InputStreamReader(file.getInputStream());
+            reader = new InputStreamReader(file.getInputStream());
             List<ConsultingDTO> consultings = new CsvToBeanBuilder<ConsultingDTO>(reader).withType(ConsultingDTO.class).build().parse();
             reader.close();
             return consultings;
         } catch (IllegalStateException | IOException e) {
+            reader.close();
             logger.warn("Error reading file: {}", e.getMessage());
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } catch (RuntimeException e){
+            reader.close();
             logger.warn("Error reading file: {}", e.getMessage());
             throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
         } 

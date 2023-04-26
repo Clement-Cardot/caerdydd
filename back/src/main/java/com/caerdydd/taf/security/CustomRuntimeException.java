@@ -7,7 +7,7 @@ public class CustomRuntimeException extends Exception{
 
     // Default Messages
     public static final String DEFAULT_MESSAGE = "An error occured";
-    public static final String SERVICE_ERROR = "Unexpected error, check database connection";
+    public static final String SERVICE_ERROR = "Unexpected error";
     
     // Not found messages
     public static final String USER_NOT_FOUND = "User not found";

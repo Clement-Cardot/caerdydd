@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,9 +49,11 @@ public class StudentService {
         // Read file and save students
         List<UserDTO> studentsFromFile = readCsvFile(file);
         List<UserDTO> savedStudents = new ArrayList<>();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         for (UserDTO student : studentsFromFile) {
             RoleDTO studentRole = new RoleDTO( "STUDENT_ROLE", student);
             student.getRoles().add(studentRole);
+            student.setPassword(passwordEncoder.encode(student.getLogin()));
             UserDTO userSaved = userService.saveUser(student);
             savedStudents.add(userSaved);
         }
