@@ -5,11 +5,13 @@ import { ConsultingImportComponent } from './consulting-import/consulting-import
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MaterialModule } from '../material.module';
+import { StudentImportComponent } from './student-import/student-import.component';
 
 @NgModule({
   declarations: [
     PlanificationPageComponent,
-    ConsultingImportComponent
+    ConsultingImportComponent,
+    StudentImportComponent
   ],
   imports: [
     CommonModule,
