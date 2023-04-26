@@ -34,8 +34,8 @@ public class UserControllerTest {
     public void testList_Nominal() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         List<UserDTO> mockedAnswer = new ArrayList<UserDTO>();
-        mockedAnswer.add(new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD"));
-        mockedAnswer.add(new UserDTO(2, "firstName2", "lastName2", "login2", "password2", "email2", null));
+        mockedAnswer.add(new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD"));
+        mockedAnswer.add(new UserDTO("firstName2", "lastName2", "login2", "password2", "email2", null));
         when(userService.listAllUsers()).thenReturn(mockedAnswer);
 
         // Define the expected answer
@@ -101,7 +101,7 @@ public class UserControllerTest {
     @Test
     public void testGet_Nominal() throws CustomRuntimeException{
         // Mock userService.getUserById() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.getUserById(anyInt())).thenReturn(mockedAnswer);
 
         // Define the expected answer
@@ -166,7 +166,7 @@ public class UserControllerTest {
     @Test
     public void testAdd_Nominal() throws CustomRuntimeException{
         // Mock userService.saveUser() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.saveUser(any(UserDTO.class))).thenReturn(mockedAnswer);
 
         // Define the expected answer
@@ -183,7 +183,7 @@ public class UserControllerTest {
     @Test
     public void testAdd_UserAlreadyExists() throws CustomRuntimeException{
         // Mock userService.saveUser() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.saveUser(any(UserDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_ALREADY_EXISTS));
 
         // Define the expected answer
@@ -200,7 +200,7 @@ public class UserControllerTest {
     @Test
     public void testAdd_ServiceError() throws CustomRuntimeException{
         // Mock userService.saveUser() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.saveUser(any(UserDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
         // Define the expected answer
@@ -217,7 +217,7 @@ public class UserControllerTest {
     @Test
     public void testAdd_UnexpectedError() throws CustomRuntimeException{
         // Mock userService.saveUser() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.saveUser(any(UserDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
 
         // Define the expected answer
@@ -234,7 +234,7 @@ public class UserControllerTest {
     @Test
     public void testUpdate_Nominal() throws CustomRuntimeException{
         // Mock userService.updateUser() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.updateUser(any(UserDTO.class))).thenReturn(mockedAnswer);
 
         // Define the expected answer
@@ -251,7 +251,7 @@ public class UserControllerTest {
     @Test
     public void testUpdate_UserNotFound() throws CustomRuntimeException{
         // Mock userService.updateUser() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.updateUser(any(UserDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
 
         // Define the expected answer
@@ -268,7 +268,7 @@ public class UserControllerTest {
     @Test
     public void testUpdate_ServiceError() throws CustomRuntimeException{
         // Mock userService.updateUser() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.updateUser(any(UserDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
         // Define the expected answer
@@ -285,7 +285,7 @@ public class UserControllerTest {
     @Test
     public void testUpdate_UnexpectedError() throws CustomRuntimeException{
         // Mock userService.updateUser() method
-        UserDTO mockedAnswer = new UserDTO( 1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
         when(userService.updateUser(any(UserDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
 
         // Define the expected answer

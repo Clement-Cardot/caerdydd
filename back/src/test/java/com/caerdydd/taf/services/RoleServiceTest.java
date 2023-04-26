@@ -43,14 +43,14 @@ public class RoleServiceTest {
     public void testListAllRoles_Nominal(){
         // Mock teamRepository.findAll() method
         List<RoleEntity> mockedAnswer = new ArrayList<RoleEntity>();
-        mockedAnswer.add(new RoleEntity(1, "STUDENT_ROLE", new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD")));
-        mockedAnswer.add(new RoleEntity(2, "TEACHER_ROLE", new UserEntity(2, "firstname2", "lastname2", "login2", "password2", "email2", null)));
+        mockedAnswer.add(new RoleEntity(1, "STUDENT_ROLE", new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD")));
+        mockedAnswer.add(new RoleEntity(2, "TEACHER_ROLE", new UserEntity("firstname2", "lastname2", "login2", "password2", "email2", null)));
         when(roleRepository.findAll()).thenReturn(mockedAnswer);
 
         // Define the expected answer
         List<RoleDTO> expectedAnswer = new ArrayList<RoleDTO>();
-        expectedAnswer.add(new RoleDTO(1, "STUDENT_ROLE", new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD")));
-        expectedAnswer.add(new RoleDTO(2, "TEACHER_ROLE", new UserDTO(2, "firstname2", "lastname2", "login2", "password2", "email2", null)));
+        expectedAnswer.add(new RoleDTO(1, "STUDENT_ROLE", new UserDTO("firstname1", "lastname1", "login1", "password1", "email1", "LD")));
+        expectedAnswer.add(new RoleDTO(2, "TEACHER_ROLE", new UserDTO("firstname2", "lastname2", "login2", "password2", "email2", null)));
 
         // Call the method to test
         List<RoleDTO> result = new ArrayList<RoleDTO>();
@@ -107,11 +107,11 @@ public class RoleServiceTest {
     @Test
     public void testSaveRole_Nominal(){
         // Mock teamRepository.save() method
-        RoleEntity mockedAnswer = new RoleEntity(1, "STUDENT_ROLE", new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD"));
+        RoleEntity mockedAnswer = new RoleEntity(1, "STUDENT_ROLE", new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD"));
         when(roleRepository.save(any(RoleEntity.class))).thenReturn(mockedAnswer);
 
         // Define the expected answer
-        RoleDTO roleToSave = new RoleDTO(1, "STUDENT_ROLE", new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD"));
+        RoleDTO roleToSave = new RoleDTO(1, "STUDENT_ROLE", new UserDTO("firstname1", "lastname1", "login1", "password1", "email1", "LD"));
 
         // Call the method to test
         RoleDTO result = roleService.saveRole(roleToSave);

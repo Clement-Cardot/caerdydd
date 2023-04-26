@@ -192,8 +192,8 @@ public class TeamControllerTest {
                                 );
         List<TeamMemberDTO> teamMembers = new ArrayList<>();
 
-        UserDTO user1 = new UserDTO(1, "Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
-        UserDTO user2 = new UserDTO(2, "Firstname2", "Lastname2", "user2", "password2", "email2", "CSS");
+        UserDTO user1 = new UserDTO("Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
+        UserDTO user2 = new UserDTO("Firstname2", "Lastname2", "user2", "password2", "email2", "CSS");
         
         TeamMemberDTO teamMember1 = new TeamMemberDTO(user1, mockedAnswer);
         TeamMemberDTO teamMember2 = new TeamMemberDTO(user2, mockedAnswer);
@@ -290,7 +290,7 @@ public class TeamControllerTest {
     @Test
     void testApplyInATeam_Nominal() throws CustomRuntimeException {
         // Mock teamService.applyInATeam() method
-        UserDTO mockedAnswer = new UserDTO(1, "Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
+        UserDTO mockedAnswer = new UserDTO("Firstname1", "Lastname1", "user1", "password1", "email1", "LD");
         when(teamService.applyInATeam(1, 1)).thenReturn(mockedAnswer);
         // Call the method to test
         ResponseEntity<UserDTO> result = teamController.applyInATeam(1, 1);

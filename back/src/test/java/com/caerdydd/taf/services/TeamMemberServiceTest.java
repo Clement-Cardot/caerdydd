@@ -71,8 +71,8 @@ public class TeamMemberServiceTest {
                                         new ProjectEntity("Project A", "Description 1"),
                                         new ProjectEntity("Project B", "Description 2")
                                     );
-        UserEntity user1 = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
-        UserEntity user2 = new UserEntity(2, "firstname2", "lastname2", "login2", "password2", "email2", "CSS");
+        UserEntity user1 = new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD");
+        UserEntity user2 = new UserEntity("firstname2", "lastname2", "login2", "password2", "email2", "CSS");
         
         mockedAnswer.add(new TeamMemberEntity(user1,  team));
         mockedAnswer.add(new TeamMemberEntity(user2,  team));
@@ -86,8 +86,8 @@ public class TeamMemberServiceTest {
                                         new ProjectDTO("Project A", "Description 1"),
                                         new ProjectDTO("Project B", "Description 2")
                                     );
-        UserDTO expectedUser1 = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
-        UserDTO expectedUser2 = new UserDTO(2, "firstname2", "lastname2", "login2", "password2", "email2", "CSS");
+        UserDTO expectedUser1 = new UserDTO("firstname1", "lastname1", "login1", "password1", "email1", "LD");
+        UserDTO expectedUser2 = new UserDTO("firstname2", "lastname2", "login2", "password2", "email2", "CSS");
         expectedAnswer.add(new TeamMemberDTO(expectedUser1, expectedTeam));
         expectedAnswer.add(new TeamMemberDTO(expectedUser2, expectedTeam));
 
@@ -152,7 +152,7 @@ public class TeamMemberServiceTest {
                                         new ProjectEntity("Project A", "Description 1"),
                                         new ProjectEntity("Project B", "Description 2")
                                     );
-        UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+        UserEntity user = new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD");
         Optional<TeamMemberEntity> mockedAnswer = Optional.of(new TeamMemberEntity(user, team));
         when(teamMemberRepository.findById(1)).thenReturn(mockedAnswer);
 
@@ -163,7 +163,7 @@ public class TeamMemberServiceTest {
                                         new ProjectDTO("Project A", "Description 1"),
                                         new ProjectDTO("Project B", "Description 2")
                                     );
-        UserDTO expectedUser = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+        UserDTO expectedUser = new UserDTO("firstname1", "lastname1", "login1", "password1", "email1", "LD");
         TeamMemberDTO expectedAnswer = new TeamMemberDTO(expectedUser, expectedTeam);
 
         // Call the method to test
@@ -219,7 +219,7 @@ public class TeamMemberServiceTest {
                                     new ProjectEntity("Project A", "Description 1"),
                                     new ProjectEntity("Project B", "Description 2")
                                 );
-        UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+        UserEntity user = new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD");
         TeamMemberEntity mockedAnswer = new TeamMemberEntity(user, team);
         when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenReturn(mockedAnswer);
 
@@ -230,7 +230,7 @@ public class TeamMemberServiceTest {
                                     new ProjectDTO("Project A", "Description 1"),
                                     new ProjectDTO("Project B", "Description 2")
                                 );
-        UserDTO inputUser = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+        UserDTO inputUser = new UserDTO("firstname1", "lastname1", "login1", "password1", "email1", "LD");
         TeamMemberDTO teamMemberToSave = new TeamMemberDTO(inputUser, inputTeam);
         // Call the method to test
         TeamMemberDTO response = teamMemberService.saveTeamMember(teamMemberToSave);

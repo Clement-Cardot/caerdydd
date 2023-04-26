@@ -45,14 +45,14 @@ public class UserServiceTest {
     public void testListAllUsers_Nominal(){
         // Mock userRepository.findAll() method
         List<UserEntity> mockedAnswer = new ArrayList<UserEntity>();
-        mockedAnswer.add(new UserEntity(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD"));
-        mockedAnswer.add(new UserEntity(2, "firstName2", "lastName2", "login2", "password2", "email2", null));
+        mockedAnswer.add(new UserEntity("firstName1", "lastName1", "login1", "password1", "email1", "LD"));
+        mockedAnswer.add(new UserEntity("firstName2", "lastName2", "login2", "password2", "email2", null));
         when(userRepository.findAll()).thenReturn(mockedAnswer);
 
         // Define the expected answer
         List<UserDTO> expectedAnswer = new ArrayList<UserDTO>();
-        expectedAnswer.add(new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD"));
-        expectedAnswer.add(new UserDTO(2, "firstName2", "lastName2", "login2", "password2", "email2", null));
+        expectedAnswer.add(new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD"));
+        expectedAnswer.add(new UserDTO("firstName2", "lastName2", "login2", "password2", "email2", null));
 
         // Call the method to test
         List<UserDTO> result = new ArrayList<UserDTO>();
@@ -109,11 +109,11 @@ public class UserServiceTest {
     @Test
     public void testGetUserById_Nominal(){
         // Mock userRepository.findById() method
-        Optional<UserEntity> mockedAnswer = Optional.of(new UserEntity(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD"));
+        Optional<UserEntity> mockedAnswer = Optional.of(new UserEntity("firstName1", "lastName1", "login1", "password1", "email1", "LD"));
         when(userRepository.findById(1)).thenReturn(mockedAnswer);
 
         // Define the expected answer
-        UserDTO expectedAnswer = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO expectedAnswer = new UserDTO("firstName1", "lastName1", "login1", "password1", "email1", "LD");
 
         // Call the method to test
         UserDTO result = new UserDTO();
@@ -162,11 +162,11 @@ public class UserServiceTest {
     @Test
     public void testGetUserByLogin_Nominal(){
         // Mock userRepository.findByLogin() method
-        Optional<UserEntity> mockedAnswer = Optional.of(new UserEntity(1, "jean", "dupont", "jdupont", "password1", "email1", "LD"));
+        Optional<UserEntity> mockedAnswer = Optional.of(new UserEntity("jean", "dupont", "jdupont", "password1", "email1", "LD"));
         when(userRepository.findByLogin("jdupont")).thenReturn(mockedAnswer);
 
         // Define the expected answer
-        UserDTO expectedAnswer = new UserDTO(1, "jean", "dupont", "jdupont", "password1", "email1", "LD");
+        UserDTO expectedAnswer = new UserDTO("jean", "dupont", "jdupont", "password1", "email1", "LD");
 
         // Call the method to test
         UserDTO result = new UserDTO();
@@ -215,18 +215,18 @@ public class UserServiceTest {
     @Test
     public void testSaveUser_Nominal(){
         // Mock userRepository.save() method
-        UserEntity mockedAnswer = new UserEntity(1, "jean", "dupont", "jdupont", "password1", "email1", "LD");
+        UserEntity mockedAnswer = new UserEntity("jean", "dupont", "jdupont", "password1", "email1", "LD");
         when(userRepository.save(any(UserEntity.class))).thenReturn(mockedAnswer);
 
         // Define the expected answer
-        UserDTO userToSave = new UserDTO(1, "jean", "dupont", "jdupont", "password1", "email1", "LD");
+        UserDTO userToSave = new UserDTO("jean", "dupont", "jdupont", "password1", "email1", "LD");
 
         // Call the method to test
         UserDTO result= new UserDTO();
         try {
             result = userService.saveUser(userToSave);
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
 
         // Verify the result
