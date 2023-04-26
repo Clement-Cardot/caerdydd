@@ -1,8 +1,9 @@
 <div id="teamCreationComponent">
 
-    <h1>Création d'équipe</h1>
-    <p>Sélectionner un nombre de paires d'équipes à créer</p>
+    <h1 id="titleTeamCreation">Création d'équipe</h1>
+    <p id="textTeamCreation">Sélectionner un nombre de paires d'équipes à créer</p>
 
+    <div id="teamCreation">
     <form id="teamCreationForm" [formGroup]="teamCreationForm" (ngSubmit)="createTeams()">
 
         <mat-form-field class="inputForm" appearance="fill" color="accent">
@@ -16,11 +17,12 @@
         <button mat-raised-button color="primary" id="buttonCreateTeam">Générer les équipes</button>
     
     </form>
+    </div>
 
 
     <ul>
-        <li *ngFor="let team of teams">
-            <span>Equipe n° {{team.idTeam}} - {{team.name}} créée !</span>
+        <li id="listTeams" *ngFor="let team of teams">
+            <span id="team">{{team.name}} créée !</span>
         </li>
     </ul>
     
