@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.services.StudentService;
 import com.caerdydd.taf.services.UserService;
 
 @RestController
@@ -27,6 +29,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    StudentService studentService;
 
     @GetMapping("")
     public ResponseEntity<List<UserDTO>> list() {
@@ -91,5 +96,19 @@ public class UserController {
             }
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }        
+    }
+
+    @PostMapping("/upload/students")
+    public ResponseEntity<List<UserDTO>> uploadStudents(@RequestBody MultipartFile file) {
+        logger.info("Process request : Upload students from CSV");
+        try {
+            List<UserDTO> savedUserDTO = studentService.uploadStudents(file);
+            return new ResponseEntity<>(savedUserDTO, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
     }
 }
