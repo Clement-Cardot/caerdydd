@@ -6,17 +6,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    margin: 10px 350px;
 }
 
 #titleTeamCreation {
-    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px 0;
     font-size: 30px;
     font-weight: 500;
 }
 
-#textTeamCreation {
+#subtitleTeamCreation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 20px 0;
     font-size: 18px;
 }
@@ -26,15 +31,4 @@
     font-weight: 500;
     font-size: 14px;
     border-radius: 20px;
-}
-
-#listTeams {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-   list-style-type: none;
-}
-
-#team {
-    padding: 5px;
 }
