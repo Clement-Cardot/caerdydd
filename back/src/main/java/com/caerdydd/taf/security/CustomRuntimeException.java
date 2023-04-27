@@ -39,7 +39,6 @@ public class CustomRuntimeException extends Exception{
     public static final String FILE_EXCEPTION = "File exception";
     public static final String FILE_IS_EMPTY = "File is empty";
 
-
     public CustomRuntimeException(String message) {
         super(message);
     }
