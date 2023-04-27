@@ -25,7 +25,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<spring.profiles.active>local</spring.profiles.active>
+				<activatedProperties>local</activatedProperties>
 			</properties>
 		</profile>
 		<profile>
@@ -34,16 +34,16 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<spring.profiles.active>dev</spring.profiles.active>
+				<activatedProperties>dev</activatedProperties>
 			</properties>
 		</profile>
 		<profile>
 			<id>prod</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<spring.profiles.active>prod</spring.profiles.active>
+				<activatedProperties>prod</activatedProperties>
 			</properties>
 		</profile>
 	</profiles>
