@@ -14,16 +14,9 @@
             </mat-error>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" id="buttonCreateTeam">Générer les équipes</button>
+        <button mat-raised-button (click)="openSnackBar()" color="primary" id="buttonCreateTeam">Générer les équipes</button>
     
     </form>
     </div>
-
-
-    <ul>
-        <li id="listTeams" *ngFor="let team of teams">
-            <span id="team">{{team.name}} créée !</span>
-        </li>
-    </ul>
     
 </div>
