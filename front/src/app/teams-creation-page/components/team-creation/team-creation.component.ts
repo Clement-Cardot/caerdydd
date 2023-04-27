@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Team } from 'src/app/core/data/models/team.model';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { MyErrorStateMatcher } from 'src/app/login-page/components/login/login.component';
@@ -17,7 +18,8 @@ export class TeamCreationComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private apiTeamService: ApiTeamService
+    private apiTeamService: ApiTeamService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -35,5 +37,9 @@ export class TeamCreationComponent implements OnInit {
         this.teams = response;
       });
     }
+  }
+
+  openSnackBar() {
+    this._snackBar.open(this.teamCreationForm.value.nbTeams*2 + " équipes créées", "Fermer", {duration: 5000});
   }
 }
