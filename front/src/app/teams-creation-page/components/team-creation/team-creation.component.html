@@ -1,9 +1,10 @@
-<div id="teamCreationComponent">
+<mat-card id="teamCreationComponent">
+    <mat-card-header>
+        <mat-card-title id="titleTeamCreation">Création d'équipe</mat-card-title>
+        <mat-card-subtitle id="subtitleTeamCreation">Sélectionnez un nombre de paires d'équipes à créer</mat-card-subtitle>
+    </mat-card-header>
 
-    <h1 id="titleTeamCreation">Création d'équipe</h1>
-    <p id="textTeamCreation">Sélectionner un nombre de paires d'équipes à créer</p>
-
-    <div id="teamCreation">
+    <mat-card-content>
     <form id="teamCreationForm" [formGroup]="teamCreationForm" (ngSubmit)="createTeams()">
 
         <mat-form-field class="inputForm" appearance="fill" color="accent">
@@ -17,6 +18,6 @@
         <button mat-raised-button (click)="openSnackBar()" color="primary" id="buttonCreateTeam">Générer les équipes</button>
     
     </form>
-    </div>
+    </mat-card-content>
     
-</div>
+</mat-card>
