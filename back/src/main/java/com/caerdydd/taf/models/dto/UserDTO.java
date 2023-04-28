@@ -52,6 +52,16 @@ public class UserDTO {
         this.speciality = speciality;
     }
 
+    public UserDTO(Integer id, String firstname, String lastname, String login, String password, String email, String speciality) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.speciality = speciality;
+    }
+
     @Override
     public String toString() {
         return "UserDTO [email=" + email + ", firstname=" + firstname + ", lastname=" + lastname
