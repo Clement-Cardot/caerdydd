@@ -17,7 +17,7 @@
           <mat-label>Description du projet</mat-label>
           <input matInput type="text" formControlName="description" required>
           <mat-error *ngIf="projectForm.controls['description'].hasError('required')">
-            Le description est obligatoire.
+            La description est obligatoire.
           </mat-error>
           <mat-error *ngIf="projectForm.controls['description'].hasError('maxlength')">
             La description ne doit pas dépasser 250 caractères.

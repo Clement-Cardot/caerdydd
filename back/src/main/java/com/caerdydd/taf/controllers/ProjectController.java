@@ -1,13 +1,13 @@
 package com.caerdydd.taf.controllers;
 
-
 import com.caerdydd.taf.models.dto.ProjectDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ProjectService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,36 +19,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/projects")
 public class ProjectController {
 
+    private static final Logger logger = LogManager.getLogger(ProjectController.class);
+    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
+
     @Autowired
     private ProjectService projectService;
 
     @PutMapping("")
-    public ResponseEntity<ProjectDTO> updateProject(@RequestBody ProjectDTO projectDTO) throws CustomRuntimeException {
-        ProjectDTO updatedProject = projectService.updateProject(projectDTO);
-        return new ResponseEntity<>(updatedProject, HttpStatus.OK);
-}
-
-
-    @GetMapping("/{projectId}")
-    public ResponseEntity<ProjectDTO> getProject(@PathVariable Integer projectId) throws CustomRuntimeException {
-        ProjectDTO project = projectService.getProjectById(projectId);
-        return new ResponseEntity<>(project, HttpStatus.OK);
+    public ResponseEntity<ProjectDTO> updateProject(@RequestBody ProjectDTO projectDTO) {
+        try {
+            ProjectDTO updatedProject = projectService.updateProject(projectDTO);
+            return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
     }
 
-
-    @ExceptionHandler(CustomRuntimeException.class)
-    public ResponseEntity<String> handleCustomRuntimeException(CustomRuntimeException e) {
-        HttpStatus status;
-        String message = e.getMessage();
-
-        if (CustomRuntimeException.USER_NOT_FOUND.equals(message) || CustomRuntimeException.TEAM_NOT_FOUND.equals(message) || CustomRuntimeException.PROJECT_NOT_FOUND.equals(message) || CustomRuntimeException.TEAM_MEMBER_NOT_FOUND.equals(message)) {
-            status = HttpStatus.NOT_FOUND;
-        } else if (CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM.equals(message) || CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER.equals(message)) {
-            status = HttpStatus.FORBIDDEN;
-        } else {
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
+    @GetMapping("/{projectId}")
+    public ResponseEntity<ProjectDTO> getProject(@PathVariable Integer projectId) {
+        try {
+            ProjectDTO project = projectService.getProjectById(projectId);
+            return new ResponseEntity<>(project, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.PROJECT_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
-
-        return new ResponseEntity<>(message, status);
     }
 }
