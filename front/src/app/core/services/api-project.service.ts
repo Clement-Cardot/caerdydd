@@ -4,7 +4,7 @@ import { Observable } from "rxjs/internal/Observable";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
-import { Project, ProjectAdapter } from "../data/models/project.models";
+import { Project, ProjectAdapter } from "../data/models/project.model";
 
 @Injectable({
     providedIn: "root"
@@ -29,8 +29,8 @@ export class ApiProjectService {
         );
     }
     
-    updateProject(projectId: number, project: Project): Observable<Project> {
-        const url = `${this.baseUrl}/${projectId}`;
+    updateProject(project: Project): Observable<Project> {
+        const url = `${this.baseUrl}`;
         return this.http.put<any>(url, project)
         .pipe(
             map((data: any) => this.projectAdapter.adapt(data))

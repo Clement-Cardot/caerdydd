@@ -1,7 +1,6 @@
 package com.caerdydd.taf.controllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import com.caerdydd.taf.models.dto.ProjectDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ProjectService;
@@ -23,9 +22,8 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @PutMapping("/{projectId}")
-    public ResponseEntity<ProjectDTO> updateProject(@PathVariable Integer projectId, @RequestBody ProjectDTO projectDTO) throws CustomRuntimeException {
-        projectDTO.setIdProject(projectId);
+    @PutMapping("")
+    public ResponseEntity<ProjectDTO> updateProject(@RequestBody ProjectDTO projectDTO) throws CustomRuntimeException {
         ProjectDTO updatedProject = projectService.updateProject(projectDTO);
         return new ResponseEntity<>(updatedProject, HttpStatus.OK);
 }
