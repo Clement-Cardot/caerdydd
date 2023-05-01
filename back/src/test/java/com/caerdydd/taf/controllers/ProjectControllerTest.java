@@ -108,67 +108,105 @@ private ProjectService projectService;
 
 
 @Test
-public void testUpdateProject_Nominal() throws CustomRuntimeException {
+    public void testUpdateProject_Nominal() throws CustomRuntimeException {
+        ProjectDTO projectToUpdate = new ProjectDTO();
+        ProjectDTO updatedProject = new ProjectDTO();
+
+        when(projectService.updateProject(any(ProjectDTO.class))).thenReturn(updatedProject);
+
+        ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(updatedProject, HttpStatus.OK);
+
+        ResponseEntity<ProjectDTO> result = projectController.updateProject(projectToUpdate);
+
+        assertEquals(expectedAnswer, result);
+        verify(projectService, times(1)).updateProject(any(ProjectDTO.class));
+    }
+
+    @Test
+    public void testGetProject_Nominal() throws CustomRuntimeException {
+        Integer projectId = 1;
+        ProjectDTO project = new ProjectDTO();
+
+        when(projectService.getProjectById(projectId)).thenReturn(project);
+
+        ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(project, HttpStatus.OK);
+
+        ResponseEntity<ProjectDTO> result = projectController.getProject(projectId);
+
+        assertEquals(expectedAnswer, result);
+        verify(projectService, times(1)).getProjectById(projectId);
+    }
+
+    @Test
+public void testUpdateProject_ServiceError() throws CustomRuntimeException {
     ProjectDTO projectToUpdate = new ProjectDTO();
-    ProjectDTO updatedProject = new ProjectDTO();
 
-    when(projectService.updateProject(any(ProjectDTO.class))).thenReturn(updatedProject);
+    when(projectService.updateProject(any(ProjectDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
-    ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(updatedProject, HttpStatus.OK);
+    ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
     ResponseEntity<ProjectDTO> result = projectController.updateProject(projectToUpdate);
 
-    assertEquals(expectedAnswer.toString(), result.toString());
+    assertEquals(expectedAnswer, result);
     verify(projectService, times(1)).updateProject(any(ProjectDTO.class));
 }
 
 @Test
-public void testGetProject_Nominal() throws CustomRuntimeException {
+public void testUpdateProject_UnexpectedException() throws CustomRuntimeException {
+    ProjectDTO projectToUpdate = new ProjectDTO();
+
+    when(projectService.updateProject(any(ProjectDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+    ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+    ResponseEntity<ProjectDTO> result = projectController.updateProject(projectToUpdate);
+
+    assertEquals(expectedAnswer, result);
+    verify(projectService, times(1)).updateProject(any(ProjectDTO.class));
+}
+
+@Test
+public void testGetProject_ProjectNotFound() throws CustomRuntimeException {
     Integer projectId = 1;
-    ProjectDTO project = new ProjectDTO();
 
-    when(projectService.getProjectById(projectId)).thenReturn(project);
+    when(projectService.getProjectById(projectId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND));
 
-    ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(project, HttpStatus.OK);
+    ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     ResponseEntity<ProjectDTO> result = projectController.getProject(projectId);
 
-    assertEquals(expectedAnswer.toString(), result.toString());
+    assertEquals(expectedAnswer, result);
     verify(projectService, times(1)).getProjectById(projectId);
 }
 
 @Test
-public void testHandleCustomRuntimeException_NotFound() {
-    CustomRuntimeException exception = new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND);
+public void testGetProject_ServiceError() throws CustomRuntimeException {
+    Integer projectId = 1;
 
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    when(projectService.getProjectById(projectId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
-    ResponseEntity<String> result = projectController.handleCustomRuntimeException(exception);
+    ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    assertEquals(expectedAnswer.toString(), result.toString());
+    ResponseEntity<ProjectDTO> result = projectController.getProject(projectId);
+
+    assertEquals(expectedAnswer, result);
+    verify(projectService, times(1)).getProjectById(projectId);
 }
 
 @Test
-public void testHandleCustomRuntimeException_Forbidden() {
-    CustomRuntimeException exception = new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER);
+public void testGetProject_UnexpectedException() throws CustomRuntimeException {
+    Integer projectId = 1;
 
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    when(projectService.getProjectById(projectId)).thenThrow(new CustomRuntimeException("Unexpected error"));
 
-    ResponseEntity<String> result = projectController.handleCustomRuntimeException(exception);
+    ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
 
-    assertEquals(expectedAnswer.toString(), result.toString());
+    ResponseEntity<ProjectDTO> result = projectController.getProject(projectId);
+
+    assertEquals(expectedAnswer, result);
+    verify(projectService, times(1)).getProjectById(projectId);
 }
 
-@Test
-public void testHandleCustomRuntimeException_InternalServerError() {
-    CustomRuntimeException exception = new CustomRuntimeException("Unexpected error");
-
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-
-    ResponseEntity<String> result = projectController.handleCustomRuntimeException(exception);
-
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
 
 
 }
