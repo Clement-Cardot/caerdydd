@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
