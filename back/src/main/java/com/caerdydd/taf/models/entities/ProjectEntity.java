@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -26,19 +25,6 @@ public class ProjectEntity implements Serializable {
     private String description;
     private Boolean isValidated;
 
-    private Integer idJury;
-
-    @OneToOne(mappedBy = "projectDev")
-    private TeamEntity teamDev;
-
-    @OneToOne(mappedBy = "projectValidation")
-    private TeamEntity teamValidation;
-
-//    @OneToOne
-//    @JoinColumn(name = "id_jury")
-//    private JuryEntity jury;
-
-
     public ProjectEntity() {
     }
 
@@ -46,6 +32,13 @@ public class ProjectEntity implements Serializable {
         this.name=name;
         this.description=description;
         this.isValidated=false;
+    }
+
+    public ProjectEntity(Integer idProject, String name, String description, Boolean isValidated) {
+        this.idProject=idProject;
+        this.name=name;
+        this.description=description;
+        this.isValidated=isValidated;
     }
 
     @Override
@@ -71,6 +64,4 @@ public class ProjectEntity implements Serializable {
             && this.teamDev.equals(teamEntity.getTeamDev())
             && this.teamValidation.equals(teamEntity.getTeamValidation());
     }
-
-
 }
