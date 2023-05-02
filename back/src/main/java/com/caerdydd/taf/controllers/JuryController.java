@@ -19,6 +19,7 @@ import com.caerdydd.taf.security.CustomRuntimeException;
 public class JuryController {
 
     private static final Logger logger = LogManager.getLogger(JuryController.class);
+    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
 
     @Autowired
     private JuryService juryService;
@@ -36,6 +37,7 @@ public class JuryController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }

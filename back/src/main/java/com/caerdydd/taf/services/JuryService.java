@@ -2,6 +2,8 @@ package com.caerdydd.taf.services;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import com.caerdydd.taf.services.rules.UserServiceRules;
 @Service
 @Transactional
 public class JuryService {
+    private static final Logger logger = LogManager.getLogger(JuryService.class);
+
     @Autowired
     private JuryRepository juryRepository;
 
