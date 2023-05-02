@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 @Component
 public class ProjectDTO {
+
     private Integer idProject;
     private String name;
     private String description;
@@ -44,8 +45,9 @@ public class ProjectDTO {
     }
 
 
-
-
-//@JsonBackReference
-//private JuryDTO jury;
+    @Override
+    public String toString() {
+        return "ProjectDTO [idProject=" + idProject + ", name=" + name + ", description=" + description
+                + ", isValidated=" + isValidated + "]";
+    }
 }
