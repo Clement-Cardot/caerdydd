@@ -61,6 +61,11 @@ public class JuryService {
         
         // TODO verifier que un user est LD et l'autre CSS -> userRules
         // TODO verifier que le jury n'existe pas deja -> juryRules
+        /* TODO verifier les 2 users 
+        Optional<TeamMemberEntity> optionalUser = juryRepository.findById(teamMemberEntity.getIdUser());
+        if (optionalUser.isEmpty()) {
+            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
+        }*/
 
         JuryEntity response = null;
         try {
