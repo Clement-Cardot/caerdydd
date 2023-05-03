@@ -1,6 +1,6 @@
 <mat-card [style.background-color]="project.isValidated ? '#90ee90' : '#fff'">
     <mat-card-header>
-        <mat-card-title>Team</mat-card-title>
+        <mat-card-title>{{ project.teamName }}</mat-card-title>
     </mat-card-header>
     <mat-card-actions>
         <mat-card-title>{{ project.isValidated ? '✓' : '' }} {{ project.name }}</mat-card-title>
