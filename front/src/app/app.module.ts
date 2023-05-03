@@ -50,8 +50,7 @@ import { DevProjectModule } from './dev-project/dev-project.module';
     ConsultingPageModule,
     PlanificationPageModule,
     DevProjectModule,
-    TeamsPageModule,
-    DefineSpecialtyComponent,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent],
 })
