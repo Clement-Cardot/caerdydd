@@ -16,6 +16,7 @@ import com.caerdydd.taf.models.entities.JuryEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.UserServiceRules;
 
 @Service
 @Transactional
@@ -54,11 +55,8 @@ public class JuryService {
     public JuryDTO updateJury(JuryDTO juryDTO) throws CustomRuntimeException {
         JuryEntity juryEntity = modelMapper.map(juryDTO, JuryEntity.class);
         
-        /* TODO verifier les 2 users 
-        Optional<TeamMemberEntity> optionalUser = juryRepository.findById(teamMemberEntity.getIdUser());
-        if (optionalUser.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
-        }*/
+        // TODO verifier que un user est LD et l'autre CSS -> userRules
+        // TODO verifier que le jury n'existe pas deja -> juryRules
 
         JuryEntity response = null;
         try {
