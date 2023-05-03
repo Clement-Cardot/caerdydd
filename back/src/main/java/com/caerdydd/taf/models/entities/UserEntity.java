@@ -1,5 +1,6 @@
 package com.caerdydd.taf.models.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "user")
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +66,29 @@ public class UserEntity {
         this.password = password;
         this.email = email;
         this.speciality = speciality;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (o == null) {
+            return false;
+        }
+        if (o.getClass() != UserEntity.class) {
+            return false;
+        }
+        UserEntity userEntity = (UserEntity) o;
+        return this.id.equals(userEntity.getId())
+            && this.firstname.equals(userEntity.getFirstname())
+            && this.lastname.equals(userEntity.getLastname())
+            && this.login.equals(userEntity.getLogin())
+            && this.password.equals(userEntity.getPassword())
+            && this.email.equals(userEntity.getEmail())
+            && this.speciality.equals(userEntity.getSpeciality());
+    }
+
+    @Override
+    public int hashCode(){
+        return this.id.hashCode();
     }
 
 }
