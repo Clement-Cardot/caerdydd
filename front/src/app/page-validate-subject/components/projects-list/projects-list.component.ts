@@ -9,9 +9,20 @@ import { ApiProjectService } from '../../../core/services/api-project.service';
 })
 export class ProjectListComponent implements OnInit {
   projectList!: Project[];
+
+  refresh: any;
+
   constructor(private projectService: ApiProjectService) {}
 
-  ngOnInit() {
-    this.projectList = this.projectService.getAllValidateSubject();
+  ngOnInit(): void {
+    this.getAllData();
+  }
+
+  getAllData(){
+    this.projectService.getAllSubjects()
+        .subscribe(data => {
+            this.projectList = data;
+          }
+        );
   }
 }

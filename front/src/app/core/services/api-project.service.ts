@@ -50,8 +50,13 @@ export class ApiProjectService {
         return throwError(() => new Error('Something bad happened; please try again later.'));
     }
 
-    getAllValidateSubject(): Project[] {
-        // TODO
-        return [];
+    getAllSubjects(): Observable<Project[]> {
+        return this.http.get<any[]>(this.baseUrl)
+        .pipe(
+            map((data: any[]) => data.map((item) => this.projectAdapter.adapt(item)))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
     }
 }
