@@ -58,6 +58,9 @@ public class JuryService {
 
     public JuryDTO updateJury(JuryDTO juryDTO) throws CustomRuntimeException {
         JuryEntity juryEntity = modelMapper.map(juryDTO, JuryEntity.class);
+        
+        // TODO verifier que un user est LD et l'autre CSS -> userRules
+        // TODO verifier que le jury n'existe pas deja -> juryRules
 
         JuryEntity response = null;
         try {
