@@ -1,10 +1,10 @@
-<mat-card [style.background-color]="project.is_validated ? '#90ee90' : '#fff'">
+<mat-card [style.background-color]="project.isValidated ? '#90ee90' : '#fff'">
     <mat-card-header>
-        <mat-card-title>{{ project.team }}</mat-card-title>
+        <mat-card-title>Team</mat-card-title>
     </mat-card-header>
     <mat-card-actions>
-        <mat-card-title>{{ project.is_validated ? '✓' : '' }} {{ project.subject }}</mat-card-title>
+        <mat-card-title>{{ project.isValidated ? '✓' : '' }} {{ project.name }}</mat-card-title>
         <mat-card-subtitle>{{ project.description }}</mat-card-subtitle>
-        <button *ngIf="!project.is_validated" (click)="doValidateSubject()" mat-button>Valider le sujet</button>
+        <button *ngIf="!project.isValidated" (click)="doValidateSubject()" mat-button>Valider le sujet</button>
     </mat-card-actions>
 </mat-card>

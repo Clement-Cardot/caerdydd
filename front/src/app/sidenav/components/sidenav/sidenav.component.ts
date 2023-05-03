@@ -61,6 +61,7 @@ mobileQuery: MediaQueryList;
         this.navLink.push("Administration");
         this.navLink.push("Equipes");
         this.navLink.push("Notes");
+        this.navLink.push("Sujets");
       }
 
       // Planning
@@ -110,6 +111,9 @@ mobileQuery: MediaQueryList;
         break;
       case "Notes":
         this.router.navigateByUrl("/marks");
+        break;
+      case "Sujets":
+        this.router.navigateByUrl("/subjects");
         break;
       case "Equipes":
         this.router.navigateByUrl("/teams");
