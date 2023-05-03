@@ -3,7 +3,7 @@ import { Project } from '../../../core/data/models/project.model';
 import { ApiProjectService } from '../../../core/services/api-project.service';
 
 @Component({
-  selector: 'app-view-validate-subjects',
+  selector: 'app-project-list',
   templateUrl: './projects-list.component.html',
   styleUrls: ['./projects-list.component.scss']
 })
