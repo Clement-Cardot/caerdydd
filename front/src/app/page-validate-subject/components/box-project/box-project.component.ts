@@ -3,7 +3,7 @@ import { Project } from '../../../core/data/models/project.model';
 
 
 @Component({
-  selector: 'app-box-validate-subject',
+  selector: 'box-project',
   templateUrl: './box-project.component.html',
   styleUrls: ['./box-project.component.scss']
 })
@@ -12,6 +12,6 @@ export class BoxProjectComponent {
   constructor() { }
 
   doValidateSubject() {
-    this.project.is_validated = true;
+    this.project.isValidated = true;
   }
 }

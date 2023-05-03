@@ -32,7 +32,7 @@ const routes: Routes = [
   { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
 
   // Subject page
-  { path: 'subjects',title: 'Subjects' + websiteName, component: ProjectListComponent },
+  { path: 'subjects',title: 'Sujets' + websiteName, component: ProjectListComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
 
   // Teams pages
   { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },

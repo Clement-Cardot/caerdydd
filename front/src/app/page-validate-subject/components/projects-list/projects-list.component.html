@@ -1,4 +1,5 @@
 
 <div class="twoColumnDisplay">
-    <app-box-validate-subject *ngFor="let project of projectList" [project]="project"></app-box-validate-subject>
+    <h1>Sujets des projets des équipes</h1>
+    <box-project *ngFor="let project of projectList" [project]="project"></box-project>
 </div>

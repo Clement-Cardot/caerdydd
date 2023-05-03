@@ -1,5 +1,11 @@
 app-box-validate-subject {
     margin: 5px;
-    display: grid;
+    display: flex;
     justify-items: center;
+}
+
+h1 {
+    font-size: 2em;
+    text-align: center;
+    color: #1a1a1a;
 }
