@@ -33,3 +33,7 @@ jury member, 02 JURY, 0N TEACHING_STAFF
 TEACHING_STAFF : id_user, is_infrastructure_specialist, is_development_specialist, is_modeling_specialist, is_option_leader, is_subject_validator
 is teaching staff, 01 USER, 11 TEACHING_STAFF
 :
+
+:
+PLANNED_TIMING_CONSULTING : id_planned_timing, datetime_begin, datetime_end
+is available, 0N PLANNED_TIMING_CONSULTING, 0N TEACHING_STAFF : availability

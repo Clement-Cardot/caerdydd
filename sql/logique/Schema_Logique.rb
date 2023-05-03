@@ -102,7 +102,21 @@ entity ASSIGNMENT {
     - id_consulting [PK] [FK]
   }
 
-PRESENTATION -right-> JURY
+entity PLANNED_TIMING_CONSULTING {
+    + id_planned_timing_consulting [PK]
+    --
+    datetime_begin
+    datetime_end
+}
+
+entity PLANNED_TIMING_AVAILABILITY {
+    - id_planned_timing_consulting [PK] [FK]
+    - id_ts [PK] [FK]
+    --
+    available
+}
+
+PRESENTATION -down-> JURY
 JURY-down->TEACHING_STAFF
 ASSIGNMENT -down->TEACHING_STAFF
 ASSIGNMENT -left->CONSULTING
@@ -112,6 +126,10 @@ TEAM -left->PROJECT
 TEAM -left->PROJECT
 CONSULTING -up-> TEAM
 TEAM_MEMBER-left-> TEAM
+
+PLANNED_TIMING_AVAILABILITY -up-> PLANNED_TIMING_CONSULTING
+PLANNED_TIMING_AVAILABILITY -right-> TEACHING_STAFF
+
 TEAM_MEMBER -right-> USER
 NOTIFICATION -down-> USER
 TEACHING_STAFF -up-> USER
