@@ -1,5 +1,11 @@
-<mat-form-field appearance="fill">
+<!-- <mat-form-field appearance="fill">
   <label for="scope"></label>
   <input #fileInput type="file" id="file">
-</mat-form-field>
+</mat-form-field> -->
+
+<form [formGroup]="form" (submit)="onSubmit('teamScope')">
+    <p>Glissez et déposez un fichier ici</p>
+    <!-- <input type="file" (change)="onFileSelect($event)" accept=".pdf" [formControl]="file" /> -->
+  <button type="submit" [disabled]="!fileSelected">Upload</button>
+</form>
 
