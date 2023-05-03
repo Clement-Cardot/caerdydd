@@ -19,7 +19,6 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
   imports: [
     CommonModule,
     MaterialModule,
-    ReactiveFormsModule,
     FormsModule,
     ReactiveFormsModule,
     MaterialFileInputModule,
