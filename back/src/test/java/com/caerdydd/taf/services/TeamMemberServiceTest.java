@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,7 +40,6 @@ import com.caerdydd.taf.models.entities.TeamMemberEntity;
 import com.caerdydd.taf.models.entities.UserEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
-import com.caerdydd.taf.security.SecurityConfig;
 import com.caerdydd.taf.services.rules.TeamMemberServiceRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 
@@ -57,9 +54,6 @@ public class TeamMemberServiceTest {
 
     @Mock
     private TeamMemberServiceRules teamMemberServiceRules;
-    
-    @Mock
-    private SecurityConfig securityConfig;
 
     @Mock
     private UserServiceRules userServiceRules;
