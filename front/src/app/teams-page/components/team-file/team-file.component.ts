@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.service';
@@ -11,20 +12,31 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
 })
 export class TeamFileComponent implements OnInit {
 
-  selectedFiles!: FileList;
-  currentFile!: File;
-  progress = 0;
-  message = '';
+  form: FormGroup;
+  fileSelected = false;
 
-  fileInfos!: Observable<any>;
+  fileFormControl = new FormControl([Validators.required]);
 
-  constructor(private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService) {}
-
-  public ngOnInit():void {
-    this.fileInfos = this.uploadFileService.getFiles();
+  constructor(private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService, private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      file: this.fileFormControl
+    });
   }
 
-  // selectFile(event) {
-  //   this.selectedFiles = event.target.files;
-  // }
+  public ngOnInit():void {
+    // TODO document why this method 'ngOnInit' is empty
+  }
+
+
+
+  onFileSelect(event: any) {
+    this.fileSelected = event.target.files.length > 0;
+  }
+
+  onSubmit(fileType: string) {
+    const file = this.form.value.file;
+    console.log(file);
+    console.log(fileType);
+    this.uploadFileService.upload(file, 1, fileType);
+  }
 }

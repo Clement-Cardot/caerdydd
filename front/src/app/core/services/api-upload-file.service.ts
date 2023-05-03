@@ -12,11 +12,11 @@ export class ApiUploadFileService {
 
   constructor(private _http: HttpClient) { }
 
-  upload(file: File, team: Team, fileType: string): Observable<HttpEvent<any>> {
+  public upload(file: File, team: number, fileType: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
     formData.append('file', file);
-    formData.append('teamId', team.idTeam.toString());
+    formData.append('teamId', team.toString());
     formData.append('fileType', fileType);
 
     const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
