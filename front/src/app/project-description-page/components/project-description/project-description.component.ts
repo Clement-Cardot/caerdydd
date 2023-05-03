@@ -8,6 +8,7 @@ import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { Team } from 'src/app/core/data/models/team.model';
 import { User } from 'src/app/core/data/models/user.model';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-project-description',
@@ -24,7 +25,9 @@ export class ProjectDescriptionComponent implements OnInit {
     private apiProjectService: ApiProjectService,
     public userDataService: UserDataService,
     private apiTeamMemberService: ApiTeamMemberService,
-    private apiTeamService: ApiTeamService
+    private apiTeamService: ApiTeamService,
+    private location: Location 
+
   ) {
     
   }
@@ -81,6 +84,11 @@ export class ProjectDescriptionComponent implements OnInit {
           }
         );
     }
+  }
+
+  onSubmitAndGoBack() {
+    this.onSubmit();
+    this.location.back();
   }
 
   isCurrentUserAllowed(): boolean {
