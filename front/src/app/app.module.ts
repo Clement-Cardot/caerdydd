@@ -23,7 +23,6 @@ import { ApiProjectService } from './core/services/api-project.service';
 import { DevProjectModule } from './dev-project/dev-project.module';
 import { ErrorInterceptor } from './core/services/error.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TeachingStaffPageModule } from './teaching-staff-page/teaching-staff-page.module';
 
 @NgModule({
   declarations: [
@@ -54,7 +53,7 @@ import { TeachingStaffPageModule } from './teaching-staff-page/teaching-staff-pa
     DevProjectModule,
     ProjectsPageModule,
     TeamsPageModule,
-    DefineSpecialtyComponent,
+    TeamsPageModule
   ],
   bootstrap: [AppComponent],
 })
