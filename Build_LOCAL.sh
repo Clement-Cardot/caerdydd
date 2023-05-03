@@ -5,7 +5,7 @@ echo "Step 1 --> Build Front-end"
 cd front
 
 # Compile
-npm install
+npm install --legacy-peer-deps
 ng build --configuration=local --base-href "."
 
 # export to back folder
