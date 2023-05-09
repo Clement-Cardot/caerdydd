@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Team } from 'src/app/core/data/models/team.model';
@@ -15,6 +15,7 @@ export class TeamCreationComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   nbTeamsFormControl = new FormControl('', Validators.required);
   teams!: Team[];
+  @Output() componentDisplayed = new EventEmitter<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,6 +37,7 @@ export class TeamCreationComponent implements OnInit {
         console.log("Team Creation Response : " + JSON.stringify(response));
         this.teams = response;
       });
+      this.componentDisplayed.emit(false);
     }
   }
 
