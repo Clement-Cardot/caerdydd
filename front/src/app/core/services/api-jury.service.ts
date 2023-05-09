@@ -21,7 +21,7 @@ export class ApiJuryService {
 
     addJury(juryMemberLDId: number, juryMemberCSSId: number): Observable<Jury> {
         const url = `${this.baseUrl}/add/${juryMemberLDId}/${juryMemberCSSId}`;	
-        return this.http.post(url, null)
+        return this.http.put(url, null)
         .pipe(
             map((data: any) => this.juryAdapter.adapt(data))
         )

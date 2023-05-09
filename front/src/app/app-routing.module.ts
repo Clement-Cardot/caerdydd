@@ -45,7 +45,6 @@ const routes: Routes = [
 
   // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
-  
 ];
 
 @NgModule({
