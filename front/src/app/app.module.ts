@@ -19,6 +19,7 @@ import { NotationModule } from './notation-page/notation.module';
 import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
 import { ConsultingPageModule } from './consulting-page/consulting-page.module';
 import { PlanificationPageModule } from './planification-page/planification-page.module';
+import { JuryCreationModule } from './jury-creation/jury-creation.module';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { PlanificationPageModule } from './planification-page/planification-page
     TeamsPageModule,
     NotationModule,
     ConsultingPageModule,
-    PlanificationPageModule
+    PlanificationPageModule,
+    JuryCreationModule
   ],
   bootstrap: [AppComponent],
 })

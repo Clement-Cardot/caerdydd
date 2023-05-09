@@ -10,6 +10,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { ConsultingCalendarComponent } from './consulting-page/consulting-calendar/consulting-calendar.component';
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
+import { JuryCreationComponent } from './jury-creation/jury-creation/jury-creation.component';
 
 const websiteName = " - Taf"
 
@@ -41,6 +42,11 @@ const routes: Routes = [
   // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
  
+  // Notation pages
+  { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard] },
+
+  // Create jury pages (TEMPORARY)
+  { path: 'juries', title: 'Jury' + websiteName, component: JuryCreationComponent },
 ];
 
 @NgModule({

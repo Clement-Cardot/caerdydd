@@ -38,7 +38,7 @@ public class TeamEntity {
 
     @OneToOne
     @JoinColumn(name = "id_project_dev")
-    private ProjectEntity projectDev;
+    private ProjectEntity projectDev; 
 
     @OneToOne
     @JoinColumn(name = "id_project_validation")
