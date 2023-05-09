@@ -155,7 +155,7 @@ class ProjectServiceTest {
 }
 
 @Test
-    public void testUpdateProject_Nominal() throws CustomRuntimeException {
+    public void testUpdateProjectDescription_Nominal() throws CustomRuntimeException {
         Integer projectId = 1;
         Integer currentUserId = 2;
 
@@ -189,7 +189,7 @@ class ProjectServiceTest {
         when(projectRepository.save(projectEntity)).thenReturn(projectEntity);
         when(modelMapper.map(projectEntity, ProjectDTO.class)).thenReturn(projectDTO);
 
-        ProjectDTO actualProjectDTO = projectService.updateProject(projectDTO);
+        ProjectDTO actualProjectDTO = projectService.updateDescription(projectDTO);
 
         verify(projectRepository, times(1)).findById(projectId);
         verify(teamRepository, times(1)).findByProjectDevId(projectId);
@@ -200,7 +200,7 @@ class ProjectServiceTest {
     }
 
     @Test
-    public void testUpdateProject_ServiceError() {
+    public void testUpdateProjectDescription_ServiceError() {
         Integer projectId = 1;
 
         ProjectDTO projectDTO = new ProjectDTO();
@@ -210,11 +210,11 @@ class ProjectServiceTest {
 
         when(projectRepository.findById(projectId)).thenThrow(RuntimeException.class);
 
-        assertThrows(CustomRuntimeException.class, () -> projectService.updateProject(projectDTO));
+        assertThrows(CustomRuntimeException.class, () -> projectService.updateDescription(projectDTO));
     }
 
     @Test
-    public void testUpdateProject_ProjectNotFound() {
+    public void testUpdateProjectDescription_ProjectNotFound() {
         Integer projectId = 1;
 
         ProjectDTO projectDTO = new ProjectDTO();
@@ -224,11 +224,11 @@ class ProjectServiceTest {
 
         when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
 
-        assertThrows(CustomRuntimeException.class, () -> projectService.updateProject(projectDTO));
+        assertThrows(CustomRuntimeException.class, () -> projectService.updateDescription(projectDTO));
     }
 
     @Test
-    public void testUpdateProject_TeamNotFound() {
+    public void testUpdateProjectDescription_TeamNotFound() {
         Integer projectId = 1;
 
         ProjectDTO projectDTO = new ProjectDTO();
@@ -244,11 +244,11 @@ class ProjectServiceTest {
         when(projectRepository.findById(projectId)).thenReturn(Optional.of(projectEntity));
         when(teamRepository.findByProjectDevId(projectId)).thenReturn(Optional.empty());
 
-        assertThrows(CustomRuntimeException.class, () -> projectService.updateProject(projectDTO));
+        assertThrows(CustomRuntimeException.class, () -> projectService.updateDescription(projectDTO));
     }
 
     @Test
-    public void testUpdateProject_UserNotInAssociatedTeam() throws CustomRuntimeException {
+    public void testUpdateProjectDescription_UserNotInAssociatedTeam() throws CustomRuntimeException {
         Integer projectId = 1;
         Integer currentUserId = 2;
 
@@ -280,18 +280,6 @@ class ProjectServiceTest {
         when(teamRepository.findByProjectDevId(projectId)).thenReturn(Optional.of(teamEntity));
         when(securityConfig.getCurrentUser()).thenReturn(currentUserDTO);
 
-        assertThrows(CustomRuntimeException.class, () -> projectService.updateProject(projectDTO));
+        assertThrows(CustomRuntimeException.class, () -> projectService.updateDescription(projectDTO));
     }
-
-
-    
-
-
-
-
-
-
-    
-
-
 }
