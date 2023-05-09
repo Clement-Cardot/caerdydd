@@ -1,12 +1,14 @@
 package com.caerdydd.taf.services;
 
 import com.caerdydd.taf.models.dto.ProjectDTO;
+import com.caerdydd.taf.models.dto.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.caerdydd.taf.models.entities.TeamEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
-import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.UserServiceRules;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +34,10 @@ public class ProjectService {
     private TeamRepository teamRepository;
 
     @Autowired
-    SecurityConfig securityConfig;
+    private TeamMemberService teamMemberService;
+
+    @Autowired
+    UserServiceRules userServiceRules;
 
 
     public List<ProjectDTO> listAllProjects() throws CustomRuntimeException {
@@ -83,45 +88,50 @@ public class ProjectService {
     }
 
     public ProjectDTO updateProject(ProjectDTO projectDTO) throws CustomRuntimeException {
-        Integer projectId = projectDTO.getIdProject();
-        Optional<ProjectEntity> optionalProject;
+        ProjectEntity projectEntity = modelMapper.map(projectDTO, ProjectEntity.class);
+        
+        Optional<ProjectEntity> optionalUser = projectRepository.findById(projectEntity.getIdProject());
+        if (optionalUser.isEmpty()){
+            throw new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND);
+        }
+
+        ProjectEntity response = null;
         try {
-            optionalProject = projectRepository.findById(projectId);
+            response = projectRepository.save(projectEntity);
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
-    
-        if (optionalProject.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND);
-        }
-    
-        ProjectEntity projectEntity = optionalProject.get();
-    
-        // Get the team associated with the project
-        Optional<TeamEntity> optionalTeam = teamRepository.findByProjectDevId(projectId);
 
+        return modelMapper.map(response, ProjectDTO.class);
+    }
+    
+    public ProjectDTO updateValidation(ProjectDTO projectDTO) throws CustomRuntimeException {
+        // Verify if the current user is an option leader
+        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
+
+        return this.updateProject(projectDTO);
+    }
+
+    public ProjectDTO updateDescription(ProjectDTO projectDTO) throws CustomRuntimeException {
+        // Verify if the current user is a team member
+        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+
+        // Get current user
+        UserDTO currentUser = userServiceRules.getCurrentUser();
+
+        // Verify he is a member of the team
+        Optional<TeamEntity> optionalTeam = teamRepository.findById(projectDTO.getTeamDev().getIdTeam());
         if (optionalTeam.isEmpty()) {
             throw new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND);
         }
+        TeamEntity team = optionalTeam.get();
 
-        TeamEntity teamEntity = optionalTeam.get();
-    
-        // Verify if the current user is a member of the associated team with the project
-        Integer currentUserId = securityConfig.getCurrentUser().getId();
-        boolean isUserInAssociatedTeam = teamEntity.getTeamMembers().stream()
-                .anyMatch(teamMember -> teamMember.getUser().getId().equals(currentUserId));
-    
-        if (!isUserInAssociatedTeam) {
-            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM);
+        TeamMemberDTO teamMember = teamMemberService.getTeamMemberById(currentUser.getId());
+
+        if (!teamMember.getTeam().getIdTeam().equals(team.getIdTeam())) {
+            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_IN_A_TEAM);
         }
-    
-        projectEntity.setName(projectDTO.getName());
-        projectEntity.setDescription(projectDTO.getDescription());
-    
-        ProjectEntity updatedProjectEntity = projectRepository.save(projectEntity);
-    
-        return modelMapper.map(updatedProjectEntity, ProjectDTO.class);
+
+        return this.updateProject(projectDTO);
     }
-    
-    
 }
