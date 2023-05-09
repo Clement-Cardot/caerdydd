@@ -16,6 +16,10 @@ front/bazel-out
 front/node_modules
 front/.angular
 
+### Selenium ###
+selenium/taf_selenium/target
+selenium/target
+
 ### OTHER ###
 upload/
 gitStats/*.csv
