@@ -27,6 +27,7 @@ import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.caerdydd.taf.models.entities.TeamEntity;
 import com.caerdydd.taf.models.entities.TeamMemberEntity;
+import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
@@ -62,6 +63,9 @@ class TeamServiceTest {
 
     @Mock
     private UserServiceRules userServiceRules;
+
+    @Mock
+    private ProjectRepository projectRepository;
 
     // Test listAllTeams() method
 
@@ -883,5 +887,53 @@ class TeamServiceTest {
         verify(securityConfig, times(1)).getCurrentUser();
         assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
     }
+
+    @Test
+void testAddTestBookLink() {
+    // Mock teamRepository.findById() method
+    TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
+    Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
+    when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+
+    // Mock teamRepository.save() method
+    when(teamRepository.save(any(TeamEntity.class))).then(AdditionalAnswers.returnsFirstArg());
+
+    // Call the method to test
+    TeamDTO result = new TeamDTO();
+    try {
+        result = teamService.addTestBookLink(1, "https://testbook.com/testlink");
+    } catch (CustomRuntimeException e) {
+        fail();
+    }
+
+    // Verify the result
+    verify(teamRepository, times(1)).findById(1);
+    verify(teamRepository, times(1)).save(any(TeamEntity.class));
+    assertEquals("https://testbook.com/testlink", result.getTestBookLink());
+}
+
+@Test
+void testGetTestBookLinkDev() {
+    // Mock teamRepository.findById() method
+    TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
+    teamEntity.setTestBookLink("https://testbook.com/testlink");
+    Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
+    when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+
+    // Call the method to test
+    String result = "";
+    try {
+        result = teamService.getTestBookLinkDev(1);
+    } catch (CustomRuntimeException e) {
+        fail();
+    }
+
+    // Verify the result
+    verify(teamRepository, times(1)).findById(1);
+    assertEquals("https://testbook.com/testlink", result);
+}
+ 
+
+
 
 }

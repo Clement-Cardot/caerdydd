@@ -188,8 +188,5 @@ public class TeamService {
         TeamDTO pairedTeam = getTeamById(team.getProjectValidation().getIdProject());
         return pairedTeam.getTestBookLink();
     }
-    
-    
-    
 
 }
