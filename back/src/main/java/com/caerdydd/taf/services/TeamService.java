@@ -168,4 +168,28 @@ public class TeamService {
         return response;
     }
 
+
+    public TeamDTO addTestBookLink(Integer idTeam, String testBookLink) throws CustomRuntimeException {
+        TeamDTO teamDTO = getTeamById(idTeam);
+        TeamEntity teamEntity = modelMapper.map(teamDTO, TeamEntity.class); // Convertissez TeamDTO en TeamEntity
+        teamEntity.setTestBookLink(testBookLink);
+        teamRepository.save(teamEntity); // Enregistrez l'entité TeamEntity
+        return modelMapper.map(teamEntity, TeamDTO.class); // Convertissez l'entité TeamEntity mise à jour en TeamDTO et retournez-la
+    }
+    
+
+    public String getTestBookLinkDev(Integer idTeam) throws CustomRuntimeException {
+        TeamDTO team = getTeamById(idTeam);
+        return team.getTestBookLink();
+    }
+    
+    public String getTestBookLinkValidation(Integer idTeam) throws CustomRuntimeException {
+        TeamDTO team = getTeamById(idTeam);
+        TeamDTO pairedTeam = getTeamById(team.getProjectValidation().getIdProject());
+        return pairedTeam.getTestBookLink();
+    }
+    
+    
+    
+
 }
