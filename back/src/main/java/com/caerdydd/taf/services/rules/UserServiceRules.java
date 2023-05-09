@@ -42,4 +42,8 @@ public class UserServiceRules {
     public void checkCurrentUserRole(String role) throws CustomRuntimeException {
         checkUserRole(securityConfig.getCurrentUser(), role);
     }
+
+    public UserDTO getCurrentUser() throws CustomRuntimeException {
+        return securityConfig.getCurrentUser();
+    }
 }

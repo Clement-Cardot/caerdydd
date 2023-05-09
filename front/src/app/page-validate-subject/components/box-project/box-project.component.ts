@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Project } from '../../../core/data/models/project.model';
+import { ApiProjectService } from '../../../core/services/api-project.service';
 
 
 @Component({
@@ -9,9 +10,11 @@ import { Project } from '../../../core/data/models/project.model';
 })
 export class BoxProjectComponent {
   @Input() project!: Project;
-  constructor() { }
+  constructor(private projectService: ApiProjectService) { }
 
-  doValidateSubject() {
+  validateSubject() {
     this.project.isValidated = true;
+    console.log(this.project);
+    this.projectService.updateProjectValidation(this.project).subscribe(); // TODO call the write fonction
   }
 }

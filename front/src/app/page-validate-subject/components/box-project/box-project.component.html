@@ -5,6 +5,6 @@
     <mat-card-actions>
         <mat-card-title>{{ project.isValidated ? '✓' : '' }} {{ project.name }}</mat-card-title>
         <mat-card-subtitle>{{ project.description }}</mat-card-subtitle>
-        <button *ngIf="!project.isValidated" (click)="doValidateSubject()" mat-button>Valider le sujet</button>
+        <button *ngIf="!project.isValidated" (click)="validateSubject()" mat-button>Valider le sujet</button>
     </mat-card-actions>
 </mat-card>

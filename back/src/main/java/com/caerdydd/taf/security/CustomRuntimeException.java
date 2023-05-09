@@ -36,6 +36,7 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_MEMBER_INCORRECT_BONUS_PENALTY = "The bonus of the team member is under -4 or above 4";
     public static final String USER_ID_SHOULD_BE_NULL = "User id should be null";
     public static final String USER_NOT_IN_ASSOCIATED_TEAM = "User is not associated in a team";
+    public static final String USER_NOT_IN_A_TEAM = "User is not in a team";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";

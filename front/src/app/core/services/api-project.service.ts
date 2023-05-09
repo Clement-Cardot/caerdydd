@@ -29,8 +29,19 @@ export class ApiProjectService {
         );
     }
     
-    updateProject(project: Project): Observable<Project> {
-        const url = `${this.baseUrl}`;
+    updateProjectDescription(project: Project): Observable<Project> {
+        const url = `${this.baseUrl}/description`;
+        return this.http.put<any>(url, project)
+        .pipe(
+            map((data: any) => this.projectAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    updateProjectValidation(project: Project): Observable<Project> {
+        const url = `${this.baseUrl}/validation`;
         return this.http.put<any>(url, project)
         .pipe(
             map((data: any) => this.projectAdapter.adapt(data))
