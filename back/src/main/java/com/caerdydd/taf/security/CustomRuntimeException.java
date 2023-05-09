@@ -11,6 +11,8 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_NOT_FOUND = "Team not found";
     public static final String TEAM_MEMBER_NOT_FOUND = "Team member not found";
     public static final String PROJECT_NOT_FOUND = "Can't found project";
+    public static final String LINK_NOT_FOUND = "LINK_NOT_FOUND";
+
 
     // Already exist messages
     public static final String USER_ALREADY_EXISTS = "User already exist";
@@ -39,7 +41,10 @@ public class CustomRuntimeException extends Exception{
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
     public static final String FILE_EXCEPTION = "File exception";
     public static final String FILE_IS_EMPTY = "File is empty";
-
+    
+    // Invalid messages
+    public static final String INVALID_LINK = "The provided text is not a valid link";
+    
     public CustomRuntimeException(String message) {
         super(message);
     }

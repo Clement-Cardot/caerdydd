@@ -1,6 +1,10 @@
 package com.caerdydd.taf.controllers;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -132,4 +136,79 @@ public class TeamController {
             }
         }
     }
+
+    private boolean isValidLink(String link) {
+        try {
+            new URL(link).toURI();
+            return true;
+        } catch (MalformedURLException | URISyntaxException e) {
+            return false;
+        }
+    }
+    
+    @PutMapping("/{idTeam}/testBookLink")
+public ResponseEntity<TeamDTO> addTestBookLink(@PathVariable Integer idTeam,  @RequestBody Map<String, String> testBookLinkJson) {
+    String testBookLink = testBookLinkJson.get("testBookLink");
+    try {
+        if (!isValidLink(testBookLink)) {
+            throw new CustomRuntimeException(CustomRuntimeException.INVALID_LINK);
+        }
+        TeamDTO updatedTeam = teamService.addTestBookLink(idTeam, testBookLink);
+        return new ResponseEntity<>(updatedTeam, HttpStatus.OK);
+    } catch (CustomRuntimeException e) {
+        switch (e.getMessage()) {
+            case CustomRuntimeException.TEAM_NOT_FOUND:
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            case CustomRuntimeException.INVALID_LINK:
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            default:
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+
+@GetMapping("/{idTeam}/testBookLinkDev")
+public ResponseEntity<String> getTestBookLinkDev(@PathVariable Integer idTeam) {
+    try {
+        String testBookLinkDev = teamService.getTestBookLinkDev(idTeam);
+        if (testBookLinkDev == null) {
+            throw new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND);
+        }
+        return new ResponseEntity<>(testBookLinkDev, HttpStatus.OK);
+    } catch (CustomRuntimeException e) {
+        switch (e.getMessage()) {
+            case CustomRuntimeException.TEAM_NOT_FOUND:
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            case CustomRuntimeException.LINK_NOT_FOUND:
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            default:
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+
+@GetMapping("/{idTeam}/testBookLinkValidation")
+public ResponseEntity<String> getTestBookLinkValidation(@PathVariable Integer idTeam) {
+    try {
+        String testBookLinkValidation = teamService.getTestBookLinkValidation(idTeam);
+        if (testBookLinkValidation == null) {
+            throw new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND);
+        }
+        return new ResponseEntity<>(testBookLinkValidation, HttpStatus.OK);
+    } catch (CustomRuntimeException e) {
+        switch (e.getMessage()) {
+            case CustomRuntimeException.TEAM_NOT_FOUND:
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            case CustomRuntimeException.LINK_NOT_FOUND:
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            default:
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}
+
+
+
+
+
 }
