@@ -3,6 +3,7 @@ import { Role, RoleAdapter } from "./role.model";
 import { Adapter } from "../adapter";
 
 export class User {
+    teamId: null | undefined;
     constructor(
         public id: number,
         public firstname: string,
