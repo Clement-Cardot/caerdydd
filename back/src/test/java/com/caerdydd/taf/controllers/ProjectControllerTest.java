@@ -116,7 +116,7 @@ private ProjectService projectService;
 
         ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(updatedProject, HttpStatus.OK);
 
-        ResponseEntity<ProjectDTO> result = projectController.updateProject(projectToUpdate);
+        ResponseEntity<ProjectDTO> result = projectController.updateDescription(projectToUpdate);
 
         assertEquals(expectedAnswer, result);
         verify(projectService, times(1)).updateProject(any(ProjectDTO.class));
@@ -145,7 +145,7 @@ public void testUpdateProject_ServiceError() throws CustomRuntimeException {
 
     ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-    ResponseEntity<ProjectDTO> result = projectController.updateProject(projectToUpdate);
+    ResponseEntity<ProjectDTO> result = projectController.updateDescription(projectToUpdate);
 
     assertEquals(expectedAnswer, result);
     verify(projectService, times(1)).updateProject(any(ProjectDTO.class));
@@ -159,7 +159,7 @@ public void testUpdateProject_UnexpectedException() throws CustomRuntimeExceptio
 
     ResponseEntity<ProjectDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
 
-    ResponseEntity<ProjectDTO> result = projectController.updateProject(projectToUpdate);
+    ResponseEntity<ProjectDTO> result = projectController.updateDescription(projectToUpdate);
 
     assertEquals(expectedAnswer, result);
     verify(projectService, times(1)).updateProject(any(ProjectDTO.class));
