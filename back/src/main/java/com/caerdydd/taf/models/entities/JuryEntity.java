@@ -23,19 +23,19 @@ public class JuryEntity {
     
     @OneToOne
     @JoinColumn(name = "id_ts1")
-    private UserEntity juryMemberLD;
+    private UserEntity ts1;
 
     @OneToOne
     @JoinColumn(name = "id_ts2")
-    private UserEntity juryMemberCSS;
+    private UserEntity ts2;
 
 
     public JuryEntity() {
     }
 
-    public JuryEntity(UserEntity juryMemberLD, UserEntity juryMemberCSS) {
-        this.juryMemberLD = juryMemberLD;
-        this.juryMemberCSS = juryMemberCSS;
+    public JuryEntity(UserEntity ts1, UserEntity ts2) {
+        this.ts1 = ts1;
+        this.ts2 = ts2;
     }
 
 

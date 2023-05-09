@@ -12,6 +12,7 @@ import { ConsultingCalendarComponent } from './consulting-page/consulting-calend
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
 import { ProjectFileComponent } from './dev-project/component/team-file/project-file.component';
+import { JuryCreationComponent } from './jury-creation/jury-creation/jury-creation.component';
 
 const websiteName = " - Taf"
 
@@ -42,7 +43,7 @@ const routes: Routes = [
 
   // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
-
+  { path: 'juries', title: 'Jury' + websiteName, component: JuryCreationComponent },
 ];
 
 @NgModule({
