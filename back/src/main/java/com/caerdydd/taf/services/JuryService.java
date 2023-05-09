@@ -1,5 +1,7 @@
 package com.caerdydd.taf.services;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +14,9 @@ import com.caerdydd.taf.models.dto.JuryDTO;
 import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.JuryEntity;
+import com.caerdydd.taf.models.entities.UserEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
+import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 import com.caerdydd.taf.services.rules.JuryServiceRules;
@@ -25,6 +29,9 @@ public class JuryService {
 
     @Autowired
     private JuryRepository juryRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired 
     private UserService userService;
@@ -54,6 +61,18 @@ public class JuryService {
 
         JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
         return updateJury(juryDTO);
+    }
+
+    public JuryEntity getJuryByIdTs1AdnIdTs2(Integer idTs1, Integer idTs2){
+        Optional<UserEntity> optTs1 = userRepository.findById(idTs1);
+        Optional<UserEntity> optTs2 = userRepository.findById(idTs2);
+        
+        UserEntity ts1 = optTs1.orElseThrow(() -> new IllegalArgumentException("UserEntity not found for idTs1: " + idTs1));
+        UserEntity ts2 = optTs2.orElseThrow(() -> new IllegalArgumentException("UserEntity not found for idTs2: " + idTs2));
+
+        Optional<JuryEntity> result = juryRepository.findByTs1AndTs2(ts1, ts2);
+
+        return result.get();
     }
 
     public JuryDTO updateJury(JuryDTO juryDTO) throws CustomRuntimeException {
