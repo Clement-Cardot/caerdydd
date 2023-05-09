@@ -4,7 +4,7 @@ import { DashboardComponent } from './dashboard/component/dashboard/dashboard.co
 import { LoginComponent } from './login-page/components/login/login.component';
 import { ProjectDescriptionComponent } from './project-description-page/components/project-description/project-description.component';
 import { AllTeamsListComponent } from './teams-page/components/all-teams-list/all-teams-list.component';
-import { TeamCreationComponent } from './teams-creation-page/components/team-creation/team-creation.component';
+import { TeamCreationComponent } from './teams-page/components/team-creation/team-creation.component';
 import { NotationComponent } from './notation-page/component/notation/notation.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
@@ -21,7 +21,6 @@ const routes: Routes = [
 
   // Administration page
   /* TODO */ { path: 'administration', title: 'Administration' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
-  { path: 'teams-creation', title: 'Création d\'équipes' + websiteName, component: TeamCreationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
 
   // Planification pages
   { path: 'planning', title: 'Planification' + websiteName, component: PlanificationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['PLANNING_ROLE']}},

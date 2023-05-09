@@ -3,3 +3,18 @@ app-team-list {
     display: grid;
     justify-items: center;
 }
+
+#generateTeamsButton {
+    padding: 20px;
+    color: white;
+    font-weight: 500;
+    font-size: 20px;
+    border-radius: 20px;
+}
+
+#generateTeams {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}

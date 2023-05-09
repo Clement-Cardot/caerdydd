@@ -2,11 +2,25 @@
     margin: 5px 15px;
 }
 
+#teamCreationBox {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    padding: 25px 5%;
+}
+
 #teamCreationComponent {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px 350px;
+    justify-content: center;
+    width: 40%;
+}
+
+@media (max-width: 900px) {
+    #teamCreationComponent {
+        width: 80%;
+    }
 }
 
 #titleTeamCreation {
@@ -31,4 +45,14 @@
     font-weight: 500;
     font-size: 14px;
     border-radius: 20px;
+}
+
+#teamCreationForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inputForm {
+    margin-bottom: 30px;
 }
