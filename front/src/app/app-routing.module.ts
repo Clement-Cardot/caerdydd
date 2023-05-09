@@ -10,8 +10,8 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { ConsultingCalendarComponent } from './consulting-page/consulting-calendar/consulting-calendar.component';
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
-import { DevProjectComponent } from './dev-project/component/dev-project.component';
-import { TeamFileComponent } from './teams-page/components/team-file/team-file.component';
+import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
+import { TeamFileComponent } from './dev-project/component/team-file/team-file.component';
 
 const websiteName = " - Taf"
 
@@ -43,7 +43,7 @@ const routes: Routes = [
 
   // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
- 
+
 ];
 
 @NgModule({
