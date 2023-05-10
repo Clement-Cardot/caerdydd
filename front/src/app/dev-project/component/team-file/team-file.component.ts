@@ -7,6 +7,8 @@ import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.service';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
+import { User } from 'src/app/core/data/models/user.model';
 
 @Component({
   selector: 'app-team-file',
@@ -15,6 +17,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TeamFileComponent implements OnInit {
 
+  user!: User | null;
+
   importTSSform: FormGroup;
   fileSelected = false;
 
@@ -22,29 +26,35 @@ export class TeamFileComponent implements OnInit {
 
   errorMessage!: string;
 
-  constructor(private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService, private formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
+  constructor(private apiTeamMemberService: ApiTeamMemberService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService, private formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
     this.importTSSform = this.formBuilder.group({
       file: this.fileFormControl
     });
   }
 
   public ngOnInit():void {
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+      this.user = user;
+  });
   }
 
-  upload() {
-    this.fileFormControl.setErrors({'apiError': null});
-    this.fileFormControl.updateValueAndValidity();
-    if(this.importTSSform.invalid){
-      console.log("Invalid form");
-    } else {
-      const file_form: FileInput = this.importTSSform.get('file')?.value;
-      const file = file_form.files[0];
-      console.log(file);
-      this.uploadFileService.upload(file, 1, "teamScopeStatement").subscribe(
-        data => {this.showSuccess()},
-        error => {this.showError(error)},
-      );
+  upload(fileName: string) {
+    if (this.user != null) {
+      this.apiTeamMemberService.getTeamMemberById(this.user.id);
+      this.fileFormControl.setErrors({'apiError': null});
+      this.fileFormControl.updateValueAndValidity();
+      if(this.importTSSform.invalid){
+        console.log("Invalid form");
+      } else {
+        const file_form: FileInput = this.importTSSform.get('file')?.value;
+        const file = file_form.files[0];
+        this.uploadFileService.upload(file, 1, fileName).subscribe(
+          data => {this.showSuccess()},
+          error => {this.showError(error)},
+        );
+      }
     }
+
   }
 
   showSuccess() {

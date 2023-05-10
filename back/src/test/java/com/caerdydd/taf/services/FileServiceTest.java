@@ -2,6 +2,7 @@ package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 
@@ -33,12 +35,13 @@ public class FileServiceTest {
 
     @Test
     public void testSaveFile() throws IOException, CustomRuntimeException {
-
+        TeamDTO mockedAnswer = new TeamDTO(1, null, null, null);
+        when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.pdf", "text/plain", "some xml".getBytes());
 
         try {
-            fileService.saveFile(file, 0, "test");
+            fileService.saveFile(file, 1, "test");
         } catch (CustomRuntimeException e) {
             fail("Exception thrown: " + e.getMessage());
         }
