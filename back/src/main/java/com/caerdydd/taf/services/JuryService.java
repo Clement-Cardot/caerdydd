@@ -16,7 +16,6 @@ import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.JuryEntity;
 import com.caerdydd.taf.models.entities.UserEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
-import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 import com.caerdydd.taf.services.rules.JuryServiceRules;
@@ -25,13 +24,8 @@ import com.caerdydd.taf.services.rules.UserServiceRules;
 @Service
 @Transactional
 public class JuryService {
-    private static final Logger logger = LogManager.getLogger(JuryService.class);
-
     @Autowired
     private JuryRepository juryRepository;
-    
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired 
     private UserService userService;
