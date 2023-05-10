@@ -33,7 +33,8 @@ public class FileService {
             final String relativePath = "/upload/equipe";
             String fileExt = "." + file.getOriginalFilename().split("\\.")[1];
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + relativePath + id));
-            file.transferTo( new File(System.getProperty("user.dir") + relativePath + id + "/" + type + fileExt));
+            this.checkFileIsPDF(file);
+            file.transferTo(new File(System.getProperty("user.dir") + relativePath + id + "/" + type + fileExt));
             TeamDTO team = teamService.getTeamById(id);
             team.setFilePathScopeStatement(relativePath + id + "/" + type + fileExt);
             teamService.saveTeam(team);
@@ -43,5 +44,16 @@ public class FileService {
             logger.info("Could not store the file. Error: " + e.getMessage());
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } 
+    }
+
+    public void checkFileIsPDF(MultipartFile file) throws CustomRuntimeException {
+        try {
+            if (!file.getOriginalFilename().endsWith(".pdf")){
+                throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
+            }
+        } catch (NullPointerException e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+        
     }
 }

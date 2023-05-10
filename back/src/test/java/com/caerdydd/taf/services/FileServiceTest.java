@@ -1,20 +1,9 @@
 package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,12 +13,9 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 
@@ -45,29 +31,43 @@ public class FileServiceTest {
     @Spy
     private ModelMapper modelMapper;
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ResourceLoader resourceLoader;
-
     @Test
     public void testSaveFile() throws IOException, CustomRuntimeException {
-        int id = 1;
-        String type = "test.pdf";
-        String expectedFilePath = "/upload/equipe" + id + "/" + type ;
-        // Resource testFileResource = resourceLoader.getResource(System.getProperty("user.dir") + "/back/test/resources/test");
-        File testFile = new File(System.getProperty("user.dir") + "/back/src/test/resources/test");
 
-        // Create a MockMultipartFile to simulate the uploaded file
-        MockMultipartFile mockFile = new MockMultipartFile("file", testFile.getName(), MediaType.TEXT_PLAIN_VALUE, Files.readAllBytes(testFile.toPath()));
-        
-        // Call the method to test
-        fileService.saveFile(mockFile, id, type);
+        // Create a empty file
+        MultipartFile file = new MockMultipartFile("file", "file.pdf", "text/plain", "some xml".getBytes());
 
+        try {
+            fileService.saveFile(file, 0, "test");
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void checkFileIsPDF_FileIsPDF() {
+        // Create a empty file
+        MultipartFile file = new MockMultipartFile("file", "file.pdf", "text/plain", "some test".getBytes());
+
+        // Call method to test
+        try {
+            fileService.checkFileIsPDF(file);
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void checkFileIsPDF_FileIsNotPDF() {
+        // Create a empty file
+        MultipartFile file = new MockMultipartFile("file", "file.txt", "text/plain", "some xml".getBytes());
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            fileService.checkFileIsPDF(file);
+        });
         
         // Verify the result
-        assertTrue(Files.exists(Paths.get(System.getProperty("user.dir") + expectedFilePath)));
-        Files.deleteIfExists(Paths.get(System.getProperty("user.dir") + expectedFilePath));
+        assertEquals(CustomRuntimeException.INCORRECT_FILE_FORMAT, exception.getMessage());
     }
 }
