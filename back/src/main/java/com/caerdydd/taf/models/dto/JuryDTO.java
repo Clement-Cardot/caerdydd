@@ -2,7 +2,6 @@ package com.caerdydd.taf.models.dto;
 
 import org.springframework.stereotype.Component;
 
-import com.caerdydd.taf.models.entities.JuryEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -27,15 +26,6 @@ public class JuryDTO {
     public JuryDTO(UserDTO ts1, UserDTO ts2) {
         this.ts1 = ts1;
         this.ts2 = ts2;
-    }
-
-    public JuryEntity toJuryEntity(){
-        JuryEntity juryEntity = new JuryEntity();
-        juryEntity.setIdJury(this.idJury);
-        //juryEntity.setTs1(this.ts1);
-        //juryEntity.setTs2(this.ts2);
-
-        return juryEntity;
     }
 
     @Override
