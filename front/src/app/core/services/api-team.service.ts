@@ -64,6 +64,33 @@ export class ApiTeamService {
         );
     }
 
+    addTestBookLink(teamId: number, testBookLink: string): Observable<Team> {
+        const url = `${this.baseUrl}/${teamId}/testBookLink`;
+        return this.http.put<any>(url, { testBookLink: testBookLink })
+          .pipe(
+            map((data: any) => this.teamAdapter.adapt(data))
+          )
+          .pipe(
+            catchError(this.handleError)
+          );
+      }
+    
+      getTestBookLinkDev(teamId: number): Observable<string> {
+        const url = `${this.baseUrl}/${teamId}/testBookLinkDev`;
+        return this.http.get(url, { responseType: 'text' })
+          .pipe(
+            catchError(this.handleError)
+          );
+      }
+    
+      getTestBookLinkValidation(teamId: number): Observable<string> {
+        const url = `${this.baseUrl}/${teamId}/testBookLinkValidation`;
+        return this.http.get(url, { responseType: 'text' })
+          .pipe(
+            catchError(this.handleError)
+          );
+      }
+
     private handleError(error: HttpErrorResponse) {
         if (error.status === 0) {
             // A client-side or network error occurred. Handle it accordingly.
