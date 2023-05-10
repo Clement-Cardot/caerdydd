@@ -1,8 +1,4 @@
 INSERT INTO user (firstname, lastname, login, password, email, speciality) VALUES
-('Jean', 'Dupont', 'dupontje', ' $2a$12$yRuwRUuFVzPh266zYNVp7u0GImR4gl/AIxY3BA5iAdGprI9eEgZPq ', 'jean.dupont@reseau.eseo.fr', 'LD'),
-('Pierre', 'Durand', 'durandpi', ' $2a$12$ea2rzt2fTttenLVK7vDcSO7q8qFcuTxnpTcRuV9z4paiGRlVV.EkG ', 'pierre.durand@reseau.eseo.fr', 'CSS'),
-('Paul', 'Martin', 'martinpa', ' $2a$12$qyBeCbSsOwGd1qm6U43P3uMk9w9TnqN16yx/hd82EJSwRPEQNVAZi ', 'paul.martin@reseau.eseo.fr', 'LD'),
-('Jacques', 'Petit', 'petitje', ' $2a$12$BplGN3lGKKh6eD/JkmXeG.ZqMeLd.ooOFj29JnNjNSMkkHaMBOGn2 ', 'jacques.petit@reseau.eseo.fr', 'LD'),
 ('Sophie', 'Rousseau' , 'rousseauso', ' $2a$12$mWCdiM1cjZQdVBfNSlXPi.PaQDGPBdMv93xSTPHm5/9IdIXLgy3lK ', 'sophie.rousseau@eseo.fr', NULL),
 ('Fabien', 'Chell', 'chellfa', ' $2a$12$wQlnPDk6Fl5ilIJqJAeDpunRwtuTUL2oncjvZ8m9IUNJbjYlkCRgG ', 'fabien.chell@eseo.fr', NULL),
 ('Maissa', 'Abdallah', 'abdallahma', ' $2a$12$YQCz0lImJuMAtYe3U8U5xeryGId1W3YJBBZAJcAxlyh93D7oiPJpW ', 'maissa.abdallah@eseo.fr', NULL),
