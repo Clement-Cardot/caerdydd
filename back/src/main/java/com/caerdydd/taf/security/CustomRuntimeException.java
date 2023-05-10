@@ -46,6 +46,7 @@ public class CustomRuntimeException extends Exception{
     public static final String INVALID_LINK = "The provided text is not a valid link";
     
     // Rules for jury
+    public static final String JURY_NOT_FOUND = "Jury not found";
     public static final String JURY_ALREADY_EXISTS = "This jury already exists";
     public static final String TEACHING_STAFF_ARE_THE_SAME = "You cannot create a jury with only one teaching staff";
 
