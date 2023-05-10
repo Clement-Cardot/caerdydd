@@ -1,4 +1,4 @@
-<form id="consultingForm"  [formGroup]="importTSSform" (ngSubmit)="upload()">
+<form id="consultingForm"  [formGroup]="importTSSform" (ngSubmit)="upload('teamScopeStatement')">
   <label for="">Cahier des charges</label>
   <mat-form-field class="inputForm" appearance="fill">
     <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" [formControl]="fileFormControl" [accept]="'.pdf'">
