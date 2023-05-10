@@ -18,23 +18,3 @@ INSERT INTO role (id_user, role) VALUES
 INSERT INTO teaching_staff (id_user, is_infrastructure_specialist, is_development_specialist, is_modeling_specialist, is_option_leader, is_subject_validator) VALUES
 (5, 0, 1, 0, 0, 1),
 (6, 0, 0, 1, 1, 1);
-
-INSERT INTO project (name, description, is_validated) VALUES
-('Projet 1', 'Description du projet', 0),
-('Projet 2', 'Description du projet', 0),
-('Projet 3', 'Description du projet', 0),
-('Projet 4', 'Description du projet', 0),
-('Projet 5', 'Description du projet', 0),
-('Projet 6', 'Description du projet', 0),
-('Projet 7', 'Description du projet', 0),
-('Projet 8', 'Description du projet', 0);
-
-INSERT INTO team (name, id_project_dev, id_project_validation) VALUES
-('Equipe 1', 1, 2),
-('Equipe 2', 2, 1),
-('Equipe 3', 3, 4),
-('Equipe 4', 4, 3),
-('Equipe 5', 5, 6),
-('Equipe 6', 6, 5),
-('Equipe 7', 7, 8),
-('Equipe 8', 8, 7);
