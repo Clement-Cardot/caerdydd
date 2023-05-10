@@ -1,6 +1,10 @@
 package com.caerdydd.taf.selenium;
 
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+
+import java.time.Duration;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,12 +20,14 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.Dimension;
 
 public class TafTest {
     
     static WebDriver driver;
-    String websiteUrl = "http://172.24.1.10:8080/taf/#/";
+    String websiteUrl = "http://localhost:4200/#/";
 
 	@BeforeAll
 	public static void setupWebDriver() {
@@ -35,10 +41,6 @@ public class TafTest {
 		TafTest.driver.close();
 	}
 	
-	/**
-	 * This method tests the points 1 to 4 in the 
-	 * Validation Scenario Connect to OpenProject
-	 */
 	@Test
 	@Order(1)
 	public void openConnexionPage() {
@@ -47,31 +49,72 @@ public class TafTest {
 		driver.manage().window().setSize(new Dimension(1098, 875));
 		
 		//Assertions
-		Assertions.assertTrue(driver.findElement(By.id("loginBox")).isDisplayed());
+		Assertions.assertEquals("Login - Taf", driver.getTitle());
 	}
 	
+  	public void connexion(String username, String password) {
+		// Enter the username
+		driver.findElement(By.id("inputUsername")).sendKeys(username);
+		// Enter the password
+		driver.findElement(By.id("inputPassword")).sendKeys(password);
+		// Click on the submit button
+		driver.findElement(By.cssSelector(".mdc-button__label")).submit();
+		
+		new WebDriverWait(driver, Duration.ofSeconds(10))
+			.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")));
+
+		//Assertions
+		Assertions.assertEquals("Dashboard - Taf", driver.getTitle());
+  }
+
+	public void goToPage(String pageName) {
+		// Click on the page button
+		driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
+		// Click on the page button
+		driver.findElement(By.linkText(pageName)).click();
+		//Assertions
+		Assertions.assertEquals(pageName+" - Taf", driver.getTitle());
+	}
+
+	public void generateTeams(int teamPairsNumber) {
+		// Click on the "Créer des équipes" button
+		driver.findElement(By.cssSelector("#generateTeamsButton > .mdc-button__label")).click();
+		// Enter the number of team pairs
+		driver.findElement(By.id("inputNumberTeamPairs")).sendKeys("2");
+		// Click on the "Générer des équipes" button
+		driver.findElement(By.cssSelector("#buttonCreateTeam > .mdc-button__label")).click();
+		//Assertions
+		Assertions.assertTrue(driver.findElement(By.cssSelector(".mat-mdc-snack-bar-action > .mdc-button__label")).isDisplayed());
+	}
+
+	public void deconnexion() {
+		if(!driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).isDisplayed()) {
+			driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
+		}
+		// Click on the "Déconnexion" button
+		driver.findElement(By.cssSelector(".mdc-button__label")).click();
+		//Assertions
+		Assertions.assertEquals("Login - Taf", driver.getTitle());
+	}
+
+	public void applyInATeam(int numberTeam) {
+		driver.findElement(By.id("buttonJoinTeam")).click();
+		Assertions.assertTrue(driver.findElement(By.cssSelector(".mat-mdc-cell:nth-child(2)")).isDisplayed());
+		
+	}
+
 	@Test
 	@Order(2)
-	public void connect() {
-		driver.get("http://172.24.1.10:8080/taf/#/");
-		// 2 | setWindowSize | 1098x875 | 
-		driver.manage().window().setSize(new Dimension(1098, 875));
-		// 3 | click | id=mat-input-0 | 
-		driver.findElement(By.id("mat-input-0")).click();
-		// 4 | type | id=mat-input-0 | srousseau
-		driver.findElement(By.id("mat-input-0")).sendKeys("srousseau");
-		// 5 | click | id=mat-input-1 | 
-		driver.findElement(By.id("mat-input-1")).click();
-		// 6 | mouseOver | css=.mdc-button__label | 
-		{
-		WebElement element = driver.findElement(By.cssSelector(".mdc-button__label"));
-		Actions builder = new Actions(driver);
-		builder.moveToElement(element).perform();
-		}
-		// 7 | type | id=mat-input-1 | srousseau
-		driver.findElement(By.id("mat-input-1")).sendKeys("srousseau");
-		// 8 | click | css=.mdc-button__label | 
-		driver.findElement(By.cssSelector(".mdc-button__label")).click();
-
+	public void testEquipes() {
+		this.connexion("srousseau", "srousseau");
+		this.goToPage("Equipes");
+		this.generateTeams(2);
+		this.deconnexion();
+		this.connexion("pmartin", "pmartin");
+		this.goToPage("Equipes");
+		this.applyInATeam(2);
+		this.deconnexion();
 	}
+
+
 }

@@ -27,15 +27,15 @@ const routes: Routes = [
   { path: 'consultings', title: 'Consultings' + websiteName, component: ConsultingCalendarComponent, canActivate: [AuthGuard] },
 
   // Notation pages
-  { path: 'marks', title: 'Notation' + websiteName, component: NotationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
+  { path: 'marks', title: 'Notes' + websiteName, component: NotationComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
 
   // Teams pages
-  { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },
-  /* TODO */ { path: 'my-team', title: 'Teams' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
+  { path: 'teams', title: 'Equipes' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },
+  /* TODO */ { path: 'my-team', title: 'Mon équipe' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
   
   // Projects pages
-  /* TODO */ { path: 'dev-project', title: 'Projet de Développement' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
-  /* TODO */ { path: 'validation-project', title: 'Projet de Validation' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
+  /* TODO */ { path: 'dev-project', title: 'Projet Développement' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
+  /* TODO */ { path: 'validation-project', title: 'Projet Validation' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
 
   // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },
