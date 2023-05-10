@@ -32,7 +32,7 @@ const routes: Routes = [
   { path: 'consultings', title: 'Consultings' + websiteName, component: CalendarPageComponent, canActivate: [AuthGuard] },
 
   // Notation pages
-  { path: 'marks', title: 'Notation' + websiteName, component: NotationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
+  { path: 'marks', title: 'Notes' + websiteName, component: NotationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
 
   // Subject page
   { path: 'subjects',title: 'Sujets' + websiteName, component: ValidateSubjectPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
