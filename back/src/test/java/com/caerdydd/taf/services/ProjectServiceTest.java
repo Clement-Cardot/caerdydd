@@ -2,14 +2,20 @@ package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,15 +27,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import com.caerdydd.taf.models.dto.ProjectDTO;
+import com.caerdydd.taf.models.dto.TeamDTO;
+import com.caerdydd.taf.models.dto.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.ProjectEntity;
 import com.caerdydd.taf.models.entities.TeamEntity;
-import com.caerdydd.taf.models.entities.TeamMemberEntity;
-import com.caerdydd.taf.models.entities.UserEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.UserServiceRules;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectServiceTest {
@@ -49,6 +56,13 @@ class ProjectServiceTest {
 
     @Mock
     private SecurityConfig securityConfig;
+
+    @Mock
+    private UserServiceRules userServiceRules;
+
+    @Mock
+    private TeamMemberService teamMemberService;
+    
     
     @Test
     void testSaveProject_Nominal() {
@@ -154,132 +168,283 @@ class ProjectServiceTest {
     assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
 }
 
+
 @Test
-    public void testUpdateProjectDescription_Nominal() throws CustomRuntimeException {
-        Integer projectId = 1;
-        Integer currentUserId = 2;
+public void testUpdateProject_Nominal() throws CustomRuntimeException {
+    // Prepare data
+    Integer projectId = 1;
+    ProjectDTO projectDTO = new ProjectDTO();
+    projectDTO.setIdProject(projectId);
+    projectDTO.setName("Updated Project");
+    projectDTO.setDescription("Updated Description");
 
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setIdProject(projectId);
-        projectDTO.setName("Updated Project");
-        projectDTO.setDescription("Updated Description");
+    ProjectEntity existingProjectEntity = new ProjectEntity();
+    existingProjectEntity.setIdProject(projectId);
+    existingProjectEntity.setName("Project 1");
+    existingProjectEntity.setDescription("Description 1");
 
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setIdProject(projectId);
-        projectEntity.setName("Project 1");
-        projectEntity.setDescription("Description 1");
+    ProjectEntity updatedProjectEntity = new ProjectEntity();
+    updatedProjectEntity.setIdProject(projectId);
+    updatedProjectEntity.setName(projectDTO.getName());
+    updatedProjectEntity.setDescription(projectDTO.getDescription());
 
-        TeamEntity teamEntity = new TeamEntity();
-        teamEntity.setTeamMembers(new ArrayList<>());
-        
-        UserEntity currentUserEntity = new UserEntity();
-        currentUserEntity.setId(currentUserId);
-        
-        UserDTO currentUserDTO = new UserDTO();
-        currentUserDTO.setId(currentUserId);
-        
-        TeamMemberEntity teamMember = new TeamMemberEntity();
-        teamMember.setUser(currentUserEntity);
-        
-        teamEntity.getTeamMembers().add(teamMember);
+    // Configure Mocks behavior
+    when(projectRepository.findById(projectId)).thenReturn(Optional.of(existingProjectEntity));
+    when(projectRepository.save(any(ProjectEntity.class))).thenReturn(updatedProjectEntity);
 
-        when(projectRepository.findById(projectId)).thenReturn(Optional.of(projectEntity));
-        when(teamRepository.findByProjectDevId(projectId)).thenReturn(Optional.of(teamEntity));
-        when(securityConfig.getCurrentUser()).thenReturn(currentUserDTO);
-        when(projectRepository.save(projectEntity)).thenReturn(projectEntity);
-        when(modelMapper.map(projectEntity, ProjectDTO.class)).thenReturn(projectDTO);
+    // IMPORTANT: Mock the ModelMapper's map method for both uses in the updateProject() method
+    doReturn(updatedProjectEntity).when(modelMapper).map(any(ProjectDTO.class), eq(ProjectEntity.class));
+    doReturn(projectDTO).when(modelMapper).map(any(ProjectEntity.class), eq(ProjectDTO.class));
 
-        ProjectDTO actualProjectDTO = projectService.updateDescription(projectDTO);
+    // Call the method to test
+    ProjectDTO actualProjectDTO = projectService.updateProject(projectDTO);
 
-        verify(projectRepository, times(1)).findById(projectId);
-        verify(teamRepository, times(1)).findByProjectDevId(projectId);
-        verify(securityConfig, times(1)).getCurrentUser();
-        verify(projectRepository, times(1)).save(projectEntity);
-        verify(modelMapper, times(1)).map(projectEntity, ProjectDTO.class);
-        assertEquals(projectDTO, actualProjectDTO);
-    }
+    // Verify the results
+    verify(projectRepository, times(1)).findById(projectId);
+    verify(projectRepository, times(1)).save(any(ProjectEntity.class));
+    verify(modelMapper, times(1)).map(any(ProjectDTO.class), eq(ProjectEntity.class));
+    verify(modelMapper, times(1)).map(any(ProjectEntity.class), eq(ProjectDTO.class));
+    assertEquals(projectDTO, actualProjectDTO);
+}
 
-    @Test
-    public void testUpdateProjectDescription_ServiceError() {
-        Integer projectId = 1;
 
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setIdProject(projectId);
-        projectDTO.setName("Updated Project");
-        projectDTO.setDescription("Updated Description");
 
-        when(projectRepository.findById(projectId)).thenThrow(RuntimeException.class);
+@Test
+public void testUpdateProject_ProjectNotFound() {
+    // Prepare data
+    Integer projectId = 1;
+    ProjectDTO projectDTO = new ProjectDTO();
+    projectDTO.setIdProject(projectId);
 
-        assertThrows(CustomRuntimeException.class, () -> projectService.updateDescription(projectDTO));
-    }
+    // Configure Mocks behavior
+    when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
 
-    @Test
-    public void testUpdateProjectDescription_ProjectNotFound() {
-        Integer projectId = 1;
+    // Call the method to test and verify the exception
+    assertThrows(CustomRuntimeException.class, () -> projectService.updateProject(projectDTO));
+    verify(projectRepository, times(1)).findById(projectId);
+}
 
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setIdProject(projectId);
-        projectDTO.setName("Updated Project");
-        projectDTO.setDescription("Updated Description");
+@Test
+public void testUpdateProject_ServiceError() {
+    // Prepare data
+    Integer projectId = 1;
+    ProjectDTO projectDTO = new ProjectDTO();
+    projectDTO.setIdProject(projectId);
 
-        when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
+    ProjectEntity existingProjectEntity = new ProjectEntity();
+    existingProjectEntity.setIdProject(projectId);
 
-        assertThrows(CustomRuntimeException.class, () -> projectService.updateDescription(projectDTO));
-    }
+    // Configure Mocks behavior
+    when(projectRepository.findById(projectId)).thenReturn(Optional.of(existingProjectEntity));
+    when(projectRepository.save(any(ProjectEntity.class))).thenThrow(new RuntimeException("Service Error"));
 
-    @Test
-    public void testUpdateProjectDescription_TeamNotFound() {
-        Integer projectId = 1;
+    // Call the method to test and verify the exception
+    CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> projectService.updateProject(projectDTO));
+    verify(projectRepository, times(1)).findById(projectId);
+    assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
+}
 
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setIdProject(projectId);
-        projectDTO.setName("Updated Project");
-        projectDTO.setDescription("Updated Description");
+@Test
+public void testUpdateValidation_Nominal() throws CustomRuntimeException {
+    // Prepare data
+    Integer projectId = 1;
+    ProjectDTO projectDTO = new ProjectDTO();
+    projectDTO.setIdProject(projectId);
+    projectDTO.setName("Updated Project");
+    projectDTO.setDescription("Updated Description");
 
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setIdProject(projectId);
-        projectEntity.setName("Project 1");
-        projectEntity.setDescription("Description 1");
+    ProjectEntity existingProjectEntity = new ProjectEntity();
+    existingProjectEntity.setIdProject(projectId);
+    existingProjectEntity.setName("Project 1");
+    existingProjectEntity.setDescription("Description 1");
 
-        when(projectRepository.findById(projectId)).thenReturn(Optional.of(projectEntity));
-        when(teamRepository.findByProjectDevId(projectId)).thenReturn(Optional.empty());
+    ProjectEntity updatedProjectEntity = new ProjectEntity();
+    updatedProjectEntity.setIdProject(projectId);
+    updatedProjectEntity.setName(projectDTO.getName());
+    updatedProjectEntity.setDescription(projectDTO.getDescription());
 
-        assertThrows(CustomRuntimeException.class, () -> projectService.updateDescription(projectDTO));
-    }
+    // Configure Mocks behavior
+    doNothing().when(userServiceRules).checkCurrentUserRole("OPTION_LEADER_ROLE");
+    when(projectRepository.findById(projectId)).thenReturn(Optional.of(existingProjectEntity));
+    when(projectRepository.save(any(ProjectEntity.class))).thenReturn(updatedProjectEntity);
+    doReturn(updatedProjectEntity).when(modelMapper).map(any(ProjectDTO.class), eq(ProjectEntity.class));
+    doReturn(projectDTO).when(modelMapper).map(any(ProjectEntity.class), eq(ProjectDTO.class));
 
-    @Test
-    public void testUpdateProjectDescription_UserNotInAssociatedTeam() throws CustomRuntimeException {
-        Integer projectId = 1;
-        Integer currentUserId = 2;
+    // Call the method to test
+    ProjectDTO actualProjectDTO = projectService.updateValidation(projectDTO);
 
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setIdProject(projectId);
-        projectDTO.setName("Updated Project");
-        projectDTO.setDescription("Updated Description");
+    // Verify the results
+    verify(userServiceRules, times(1)).checkCurrentUserRole("OPTION_LEADER_ROLE");
+    verify(projectRepository, times(1)).findById(projectId);
+    verify(projectRepository, times(1)).save(any(ProjectEntity.class));
+    verify(modelMapper, times(1)).map(any(ProjectDTO.class), eq(ProjectEntity.class));
+    verify(modelMapper, times(1)).map(any(ProjectEntity.class), eq(ProjectDTO.class));
+    assertEquals(projectDTO, actualProjectDTO);
+}
 
-        ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setIdProject(projectId);
-        projectEntity.setName("Project 1");
-        projectEntity.setDescription("Description 1");
 
-        TeamEntity teamEntity = new TeamEntity();
-        teamEntity.setTeamMembers(new ArrayList<>());
+@Test
+public void testUpdateDescription_Nominal() throws CustomRuntimeException {
+    // Prepare data
+    Integer projectId = 1;
+    Integer teamId = 2;
+    ProjectDTO projectDTO = new ProjectDTO();
+    projectDTO.setIdProject(projectId);
+    projectDTO.setName("Updated Project");
+    projectDTO.setDescription("Updated Description");
+    TeamDTO teamDTO = new TeamDTO();
+    teamDTO.setIdTeam(teamId);
+    projectDTO.setTeamDev(teamDTO);
 
-        UserEntity currentUserEntity = new UserEntity();
-        currentUserEntity.setId(3);
+    UserDTO currentUser = new UserDTO();
+    currentUser.setId(3);
 
-        UserDTO currentUserDTO = new UserDTO();
-        currentUserDTO.setId(currentUserId);
+    TeamEntity teamEntity = new TeamEntity();
+    teamEntity.setIdTeam(teamId);
 
-        TeamMemberEntity teamMember = new TeamMemberEntity();
-        teamMember.setUser(currentUserEntity);
+    TeamMemberDTO teamMemberDTO = new TeamMemberDTO();
+    teamMemberDTO.setUser(currentUser);
+    teamMemberDTO.setTeam(teamDTO);
 
-        teamEntity.getTeamMembers().add(teamMember);
+    ProjectEntity existingProjectEntity = new ProjectEntity();
+    existingProjectEntity.setIdProject(projectId);
+    existingProjectEntity.setName("Project 1");
+    existingProjectEntity.setDescription("Description 1");
 
-        when(projectRepository.findById(projectId)).thenReturn(Optional.of(projectEntity));
-        when(teamRepository.findByProjectDevId(projectId)).thenReturn(Optional.of(teamEntity));
-        when(securityConfig.getCurrentUser()).thenReturn(currentUserDTO);
+    ProjectEntity updatedProjectEntity = new ProjectEntity();
+    updatedProjectEntity.setIdProject(projectId);
+    updatedProjectEntity.setName(projectDTO.getName());
+    updatedProjectEntity.setDescription(projectDTO.getDescription());
 
-        assertThrows(CustomRuntimeException.class, () -> projectService.updateDescription(projectDTO));
-    }
+    // Configure Mocks behavior
+    doNothing().when(userServiceRules).checkCurrentUserRole("TEAM_MEMBER_ROLE");
+    when(userServiceRules.getCurrentUser()).thenReturn(currentUser);
+    when(teamRepository.findById(teamId)).thenReturn(Optional.of(teamEntity));
+    when(teamMemberService.getTeamMemberById(currentUser.getId())).thenReturn(teamMemberDTO);
+    when(projectRepository.findById(projectId)).thenReturn(Optional.of(existingProjectEntity));
+    when(projectRepository.save(any(ProjectEntity.class))).thenReturn(updatedProjectEntity);
+    doReturn(updatedProjectEntity).when(modelMapper).map(any(ProjectDTO.class), eq(ProjectEntity.class));
+    doReturn(projectDTO).when(modelMapper).map(any(ProjectEntity.class), eq(ProjectDTO.class));
+
+    // Call the method to test
+    ProjectDTO actualProjectDTO = projectService.updateDescription(projectDTO);
+
+    // Verify the results
+    verify(userServiceRules, times(1)).checkCurrentUserRole("TEAM_MEMBER_ROLE");
+    verify(userServiceRules, times(1)).getCurrentUser();
+    verify(teamRepository, times(1)).findById(teamId);
+    verify(teamMemberService, times(1)).getTeamMemberById(currentUser.getId());
+    verify(projectRepository, times(1)).findById(projectId);
+    verify(projectRepository, times(1)).save(any(ProjectEntity.class));
+    assertEquals(projectDTO, actualProjectDTO);
+}
+
+
+@Test
+public void testUpdateDescription_TeamNotFound() throws CustomRuntimeException {
+// Prepare data
+Integer projectId = 1;
+Integer teamId = 2;
+ProjectDTO projectDTO = new ProjectDTO();
+projectDTO.setIdProject(projectId);
+projectDTO.setName("Updated Project");
+projectDTO.setDescription("Updated Description");
+TeamDTO teamDTO = new TeamDTO();
+teamDTO.setIdTeam(teamId);
+projectDTO.setTeamDev(teamDTO);
+UserDTO currentUser = new UserDTO();
+currentUser.setId(3);
+
+// Configure Mocks behavior
+doNothing().when(userServiceRules).checkCurrentUserRole("TEAM_MEMBER_ROLE");
+when(userServiceRules.getCurrentUser()).thenReturn(currentUser);
+when(teamRepository.findById(teamId)).thenReturn(Optional.empty());
+
+// Call the method to test and verify the exception is thrown
+assertThrows(CustomRuntimeException.class, () -> {
+    projectService.updateDescription(projectDTO);
+});
+
+// Verify the results
+verify(userServiceRules, times(1)).checkCurrentUserRole("TEAM_MEMBER_ROLE");
+verify(userServiceRules, times(1)).getCurrentUser();
+verify(teamRepository, times(1)).findById(teamId);
+}
+
+@Test
+public void testUpdateDescription_UserNotInTeam() throws CustomRuntimeException {
+// Prepare data
+Integer projectId = 1;
+Integer teamId = 2;
+ProjectDTO projectDTO = new ProjectDTO();
+projectDTO.setIdProject(projectId);
+projectDTO.setName("Updated Project");
+projectDTO.setDescription("Updated Description");
+TeamDTO teamDTO = new TeamDTO();
+teamDTO.setIdTeam(teamId);
+projectDTO.setTeamDev(teamDTO);
+UserDTO currentUser = new UserDTO();
+currentUser.setId(3);
+
+TeamEntity teamEntity = new TeamEntity();
+teamEntity.setIdTeam(teamId);
+
+TeamDTO anotherTeamDTO = new TeamDTO();
+anotherTeamDTO.setIdTeam(4);
+
+TeamMemberDTO teamMemberDTO = new TeamMemberDTO();
+teamMemberDTO.setUser(currentUser);
+teamMemberDTO.setTeam(anotherTeamDTO);
+
+// Configure Mocks behavior
+doNothing().when(userServiceRules).checkCurrentUserRole("TEAM_MEMBER_ROLE");
+when(userServiceRules.getCurrentUser()).thenReturn(currentUser);
+when(teamRepository.findById(teamId)).thenReturn(Optional.of(teamEntity));
+when(teamMemberService.getTeamMemberById(currentUser.getId())).thenReturn(teamMemberDTO);
+
+// Call the method to test and verify the exception is thrown
+assertThrows(CustomRuntimeException.class, () -> {
+    projectService.updateDescription(projectDTO);
+});
+
+// Verify the results
+verify(userServiceRules, times(1)).checkCurrentUserRole("TEAM_MEMBER_ROLE");
+verify(userServiceRules, times(1)).getCurrentUser();
+verify(teamRepository, times(1)).findById(teamId);
+verify(teamMemberService, times(1)).getTeamMemberById(currentUser.getId());
+}
+
+@Test
+public void testListAllProjects() throws CustomRuntimeException {
+    // Prepare data
+    List<ProjectEntity> projectEntities = new ArrayList<>();
+    projectEntities.add(new ProjectEntity(1, "Project 1", "Description 1", true));
+    projectEntities.add(new ProjectEntity(2, "Project 2", "Description 2", false));
+    projectEntities.add(new ProjectEntity(3, "Project 3", "Description 3", true));
+    List<ProjectDTO> expectedProjectDTOs = projectEntities.stream()
+        .map(project -> modelMapper.map(project, ProjectDTO.class))
+        .collect(Collectors.toList());
+
+    // Configure mocks behavior
+    when(projectRepository.findAll()).thenReturn(projectEntities);
+
+    // Call the method to test
+    List<ProjectDTO> actualProjectDTOs = projectService.listAllProjects();
+
+    // Verify the results
+    verify(projectRepository, times(1)).findAll();
+    assertEquals(expectedProjectDTOs.toString(), actualProjectDTOs.toString());
+}
+
+@Test
+public void testListAllProjects_ServiceError() {
+    // Configure Mocks behavior
+    when(projectRepository.findAll()).thenThrow(new RuntimeException("Service Error"));
+
+    // Call the method to test and verify the exception
+    CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> projectService.listAllProjects());
+    verify(projectRepository, times(1)).findAll();
+    assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
+}
+
 }
