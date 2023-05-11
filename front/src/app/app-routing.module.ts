@@ -11,7 +11,7 @@ import { RoleGuard } from './core/guards/role.guard';
 import { ConsultingCalendarComponent } from './consulting-page/consulting-calendar/consulting-calendar.component';
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
-import { TeamFileComponent } from './dev-project/component/team-file/team-file.component';
+import { TeamFileComponent } from './dev-project/component/team-file/project-file.component';
 
 const websiteName = " - Taf"
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FileInput } from 'ngx-material-file-input';
 import { Observable } from 'rxjs';
 import { FileInput } from 'ngx-material-file-input';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
@@ -11,11 +10,11 @@ import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.serv
 import { User } from 'src/app/core/data/models/user.model';
 
 @Component({
-  selector: 'app-team-file',
-  templateUrl: './team-file.component.html',
-  styleUrls: ['./team-file.component.scss']
+  selector: 'app-project-file',
+  templateUrl: './project-file.component.html',
+  styleUrls: ['./project-file.component.scss']
 })
-export class TeamFileComponent implements OnInit {
+export class ProjectFileComponent implements OnInit {
 
   user!: User | null;
 

@@ -1,4 +1,4 @@
-<app-team-file></app-team-file>
+<app-project-file></app-project-file>
 <button mat-raised-button color="primary" routerLink="/projectD">Modifier le projet de développement</button>
 <div *ngIf="isCurrentUserInTeam() && isProjectDev()">
   <form [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
