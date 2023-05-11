@@ -5,9 +5,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.models.dto.UserDTO;
@@ -23,11 +24,11 @@ public class AuthController {
   @Autowired
   AuthService authService;
 
-  @PostMapping("/login")
-  public ResponseEntity<UserDTO> login(@RequestBody UserDTO requestUser) {
-    logger.info("Process request : Login user : {} password : {}", requestUser.getLogin(), requestUser.getPassword());
+  @GetMapping("/login")
+  public ResponseEntity<UserDTO> login(@RequestParam String login, @RequestParam String password) {
+    logger.info("Process request : Login user : {} password : {}", login, password);
     try{
-      return authService.loginUser(requestUser.getLogin(), requestUser.getPassword());
+      return authService.loginUser(login, password);
     } catch (CustomRuntimeException e) {
       if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -38,7 +39,6 @@ public class AuthController {
 
       return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
-    
   }
 
   @PostMapping("/logout")
