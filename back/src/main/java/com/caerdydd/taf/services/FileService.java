@@ -1,5 +1,6 @@
 package com.caerdydd.taf.services;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,10 +39,12 @@ public class FileService {
             TeamDTO team = teamService.getTeamById(id);
             team.setFilePathScopeStatement(relativePath + id + "/" + type + fileExt);
             teamService.saveTeam(team);
+            logger.info("File saved at this location : " + (relativePath + id + "/" + type + fileExt));
         } catch (NullPointerException e) {
+            logger.warn("The team you are trying to add a file is not existing: {}", e.getMessage());
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } catch (IOException e) {
-            logger.info("Could not store the file. Error: " + e.getMessage());
+            logger.warn("Could not store the file. Error: " + e.getMessage());
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } 
     }

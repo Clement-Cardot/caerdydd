@@ -156,6 +156,8 @@ public class TeamController {
             switch (e.getMessage()) {
                 case CustomRuntimeException.SERVICE_ERROR:
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                case CustomRuntimeException.INCORRECT_FILE_FORMAT:
+                    return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
                 default:
                     logger.error("Unexpected Exception : {}", e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
