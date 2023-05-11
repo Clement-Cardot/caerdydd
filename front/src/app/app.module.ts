@@ -21,6 +21,8 @@ import { ConsultingPageModule } from './consulting-page/consulting-page.module';
 import { PlanificationPageModule } from './planification-page/planification-page.module';
 import { ApiProjectService } from './core/services/api-project.service';
 import { DevProjectModule } from './dev-project/dev-project.module';
+import { ErrorInterceptor } from './core/services/error.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { DevProjectModule } from './dev-project/dev-project.module';
     ApiTeamService,
     ApiUserService,
     ApiProjectService,
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide : LocationStrategy, useClass: HashLocationStrategy}
   ],
   imports: [

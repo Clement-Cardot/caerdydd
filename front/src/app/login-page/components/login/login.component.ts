@@ -49,7 +49,8 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.invalid){
       return;
     } else {
-      this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(userResponse => {
+      this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(
+          userResponse => {
             if(userResponse) {
                 this.userDataService.setCurrentUser(userResponse);
                 this.userDataService.getCurrentUser().subscribe((user: User | null) => {
@@ -58,14 +59,23 @@ export class LoginComponent implements OnInit {
 
                 console.log("Current User is : " + this.currentUser?.login);
                 this.router.navigateByUrl("dashboard");
-
-            } else {
-                this.router.navigateByUrl("/");
             }
+          }, 
+          error => {
+              // error est le code d'erreur HTTP
+              if (error === 401) {
+                  // Affiche un message si l'authentification a échoué
+                  this.usernameFormControl.setErrors({ 'incorrect': true });
+                  this.passwordFormControl.setErrors({ 'incorrect': true });
+              } else if (error === 404) {
+                  // Affiche un message si l'utilisateur n'est pas trouvé
+                  this.usernameFormControl.setErrors({ 'notFound': true });
+              }
           }
-        );
+      );
     }
-  }
+}
+
 
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
