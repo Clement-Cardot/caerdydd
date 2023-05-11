@@ -18,6 +18,8 @@ front/.angular
 ### Test API ###
 test-api/target/
 
+upload/
+
 
 # System files
 .DS_Store
