@@ -380,6 +380,7 @@ void testUpdateTeamMember_ServiceError() {
 
         assertEquals(mark, captor.getValue().getIndividualMark());
     }
+    
 
     @Test
     void testSetIndividualMarkByIdUserNotAuthorized() throws CustomRuntimeException {

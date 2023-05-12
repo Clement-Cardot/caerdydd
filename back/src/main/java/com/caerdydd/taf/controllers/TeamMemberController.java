@@ -83,7 +83,6 @@ public class TeamMemberController {
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
-
     @PostMapping("/individualMark")
     public ResponseEntity<TeamMemberDTO> setIndividualMarkById(@RequestParam("teamMemberId") Integer id, @RequestParam("mark") Integer individualMark) {
         logger.info("Process request : Set individualMark for team member by id : {}", id);
