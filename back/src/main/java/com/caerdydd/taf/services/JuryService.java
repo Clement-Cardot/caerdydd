@@ -58,15 +58,8 @@ public class JuryService {
     }
 
     public JuryEntity getJuryByIdTs1AdnIdTs2(Integer idTs1, Integer idTs2){
-        Optional<UserEntity> optTs1 = userRepository.findById(idTs1);
-        Optional<UserEntity> optTs2 = userRepository.findById(idTs2);
-        
-        UserEntity ts1 = optTs1.orElseThrow(() -> new IllegalArgumentException("UserEntity not found for idTs1: " + idTs1));
-        UserEntity ts2 = optTs2.orElseThrow(() -> new IllegalArgumentException("UserEntity not found for idTs2: " + idTs2));
-
-        Optional<JuryEntity> result = juryRepository.findByTs1AndTs2(ts1, ts2);
-
-        return result.get();
+        // TODO RETHINK THIS
+        return null;
     }
 
     public JuryDTO updateJury(JuryDTO juryDTO) throws CustomRuntimeException {
