@@ -9,9 +9,9 @@ import { RoleGuard } from './core/guards/role.guard';
 import { ConsultingCalendarComponent } from './consulting-page/consulting-calendar/consulting-calendar.component';
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
 import { ProjectFileComponent } from './dev-project/component/project-file/project-file.component';
+import { ProjectListComponent } from './page-validate-subject/components/projects-list/projects-list.component';
 import { DashboardComponent } from './dashboard/component/dashboard/dashboard.component';
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
-import { ProjectListComponent } from './page-validate-subject/components/projects-list/projects-list.component';
 
 const websiteName = " - Taf"
 
