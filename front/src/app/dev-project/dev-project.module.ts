@@ -5,7 +5,7 @@ import { DevProjectComponent } from './component/dev-project/dev-project.compone
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MaterialModule } from '../material.module';
-import { ProjectFileComponent } from './component/team-file/project-file.component';
+import { ProjectFileComponent } from './component/project-file/project-file.component';
 
 @NgModule({
   declarations: [

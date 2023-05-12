@@ -1,0 +1,43 @@
+<form id="teamScopeForm"  [formGroup]="importTSSform" (ngSubmit)="upload('teamScopeStatement')">
+  <label for="">Cahier des charges</label>
+  <mat-form-field class="inputForm" appearance="fill">
+    <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" [formControl]="fileFormControl" [accept]="'.pdf'">
+    </ngx-mat-file-input>
+    <mat-icon matSuffix>attachment</mat-icon>
+
+    <mat-error *ngIf="fileFormControl.hasError('required')">
+        Vous devez choisir un fichier
+    </mat-error>
+
+    <mat-error *ngIf="fileFormControl.hasError('apiError')">
+        {{errorMessage}}
+    </mat-error>
+
+  </mat-form-field>
+
+  <button mat-fab color="accent">
+    <mat-icon>upload</mat-icon>
+  </button>
+</form>
+
+<form id="analysisForm"  [formGroup]="importAnalysisform" (ngSubmit)="upload('analysis')">
+  <label for="">Analyse du cahier des charges</label>
+  <mat-form-field class="inputForm" appearance="fill">
+    <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" [formControl]="fileFormControl" [accept]="'.pdf'">
+    </ngx-mat-file-input>
+    <mat-icon matSuffix>attachment</mat-icon>
+
+    <mat-error *ngIf="fileFormControl.hasError('required')">
+        Vous devez choisir un fichier
+    </mat-error>
+
+    <mat-error *ngIf="fileFormControl.hasError('apiError')">
+        {{errorMessage}}
+    </mat-error>
+
+  </mat-form-field>
+
+  <button mat-fab color="accent">
+    <mat-icon>upload</mat-icon>
+  </button>
+</form>

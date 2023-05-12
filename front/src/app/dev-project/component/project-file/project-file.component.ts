@@ -19,7 +19,7 @@ export class ProjectFileComponent implements OnInit {
   user!: User | null;
 
   importTSSform: FormGroup;
-  fileSelected = false;
+  importAnalysisform: FormGroup;
 
   fileFormControl = new FormControl([Validators.required]);
 
@@ -27,6 +27,9 @@ export class ProjectFileComponent implements OnInit {
 
   constructor(private apiTeamMemberService: ApiTeamMemberService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService, private formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
     this.importTSSform = this.formBuilder.group({
+      file: this.fileFormControl
+    });
+    this.importAnalysisform = this.formBuilder.group({
       file: this.fileFormControl
     });
   }
