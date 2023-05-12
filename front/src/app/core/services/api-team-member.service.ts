@@ -51,6 +51,20 @@ export class ApiTeamMemberService {
         .pipe(
             catchError(this.handleError)
         );
+        
+    }
+    setIndividualMarkTeamMember(teamMemberId: number, mark: number): Observable<TeamMember> {
+        const url = `${this.baseUrl}/individualMark`;
+        const formData: FormData = new FormData();
+        formData.append('teamMemberId', teamMemberId.toString());
+        formData.append('mark', mark.toString());
+        return this.http.post(url, formData)
+        .pipe(
+            map((data: any) => this.teamMemberAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
     }
 
     private handleError(error: HttpErrorResponse) {
