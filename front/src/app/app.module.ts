@@ -20,7 +20,6 @@ import { ConsultingPageModule } from './consulting-page/consulting-page.module';
 import { PlanificationPageModule } from './planification-page/planification-page.module';
 import { ApiProjectService } from './core/services/api-project.service';
 import { DevProjectModule } from './dev-project/dev-project.module';
-import { JuryCreationModule } from './jury-creation/jury-creation.module';
 
 @NgModule({
   declarations: [
@@ -48,8 +47,7 @@ import { JuryCreationModule } from './jury-creation/jury-creation.module';
     NotationModule,
     ConsultingPageModule,
     PlanificationPageModule,
-    DevProjectModule,
-    JuryCreationModule
+    DevProjectModule
   ],
   bootstrap: [AppComponent],
 })
