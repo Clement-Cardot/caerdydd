@@ -489,4 +489,17 @@ public class TeamControllerTest {
         verify(teamService, times(1)).createTeams(anyInt());
         assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
     }
+
+    @Test
+    void testCreateTeams_Number_Teams_Invalid_Error() throws CustomRuntimeException {
+        // Mock teamService.createTeams(1) method
+        when(teamService.createTeams(-1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.NB_TEAMS_INVALID));
+
+        // Call the method to test
+        ResponseEntity<List<TeamDTO>> result = teamController.createTeams(-1);
+
+        // Verify the result
+        verify(teamService, times(1)).createTeams(anyInt());
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
 }

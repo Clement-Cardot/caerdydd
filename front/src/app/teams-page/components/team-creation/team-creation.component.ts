@@ -13,7 +13,7 @@ import { MyErrorStateMatcher } from 'src/app/login-page/components/login/login.c
 export class TeamCreationComponent implements OnInit {
   teamCreationForm!: FormGroup;
   matcher = new MyErrorStateMatcher();
-  nbTeamsFormControl = new FormControl('', Validators.required);
+  nbTeamsFormControl = new FormControl('', [Validators.required, Validators.min(1)]);
   teams!: Team[];
   @Output() componentDisplayed = new EventEmitter<boolean>();
 
