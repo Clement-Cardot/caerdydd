@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { Team } from 'src/app/core/data/models/team.model';
+import { User } from 'src/app/core/data/models/user.model';
 
 @Component({
   selector: 'app-all-teams-list',
@@ -14,12 +15,19 @@ export class AllTeamsListComponent{
 
   refresh: any;
 
+  openTeamsCreation: boolean = false;
+
+  currentUser!: User | null;
+
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {
   }
 
   ngOnInit(): void {
     this.getAllData();
     this.refresh = setInterval(() => { this.getAllData() },  5000 );
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+      this.currentUser = user;
+    });
   }
 
   ngOnDestroy(): void {
@@ -48,4 +56,24 @@ export class AllTeamsListComponent{
   update(idTeam: number){
     this.getTeamData(idTeam);
   }
+
+  generateTeams() {
+    this.openTeamsCreation = true;
+  }
+
+  closeTeamsCreation(componentDisplayed: boolean) {
+    this.openTeamsCreation = componentDisplayed;
+  }
+
+  isCurrentUserAnOptionLeader() {
+    if (this.currentUser == null) {
+      console.log("User is not connected");
+      return false;
+    }
+    if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")){
+      return true;
+    }
+    return false; 
+  }
+
 }

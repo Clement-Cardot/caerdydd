@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
-import { TeamsCreationPageModule } from './teams-creation-page/teams-creation-page.module';
 import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
 import { PageValidateSubjectModule } from './page-validate-subject/page-validate-subject.module';
 import { TeamsPageModule } from './teams-page/teams-page.module';
@@ -42,7 +41,6 @@ import { ValidationProjectModule } from './validation-project/validation-project
     HttpClientModule,
     BrowserAnimationsModule,
     LoginPageModule,
-    TeamsCreationPageModule,
     ProjectDescriptionPageModule,
     PageValidateSubjectModule,
     SidenavModule,
