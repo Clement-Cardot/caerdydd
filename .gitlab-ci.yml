@@ -7,6 +7,7 @@ stages:
   - sonar
   - deploy-angular
   - deploy-java
+  - selenium
 
 variables:
   MAVEN_OPTS: "-Dhttp.proxyHost=192.168.4.8 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=192.168.4.8 -Dhttps.proxyPort=3128 -Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
@@ -163,6 +164,23 @@ java-deploy-dev:
   only:
     - dev
     - gitlab-ci
+
+selenium-test:
+  stage: selenium
+  image: markhobson/maven-chrome
+  script:
+    - cd selenium
+    - mvn test -P dev
+  artifacts:
+    reports:
+      junit: selenium/target/surefire-reports/TEST*.xml
+  cache:
+    paths:
+      - $CI_PROJECT_DIR/.m2/repository
+  only:
+    - dev
+    - gitlab-ci
+    - Integrate-Create-Team-Component
 
 # Déploiement sur le serveur de prod
 angular-deploy-prod:

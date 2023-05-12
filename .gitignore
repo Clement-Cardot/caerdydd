@@ -17,7 +17,7 @@ front/.angular
 
 ### Test API ###
 test-api/target/
-
+selenium/target/
 upload/
 
 
