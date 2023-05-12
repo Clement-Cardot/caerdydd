@@ -3,20 +3,6 @@ CREATE DATABASE ProjetGL;
 
 USE ProjetGL;
 
-SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS teaching_staff;
-DROP TABLE IF EXISTS jury;
-DROP TABLE IF EXISTS project;
-DROP TABLE IF EXISTS presentation;
-DROP TABLE IF EXISTS team;
-DROP TABLE IF EXISTS consulting;
-DROP TABLE IF EXISTS team_member;
-DROP TABLE IF EXISTS notification;
-DROP TABLE IF EXISTS assigned_consulting;
-SET FOREIGN_KEY_CHECKS = 1;
-
 CREATE TABLE user (
     id INT NOT NULL AUTO_INCREMENT,
     firstname VARCHAR(20) NOT NULL,
@@ -150,7 +136,7 @@ CREATE TABLE planned_timing_availability (
     id_planned_timing_consulting INT NOT NULL AUTO_INCREMENT,
     id_ts INT NOT NULL,
     is_available BOOLEAN NOT NULL DEFAULT 1,
-    PRIMARY KEY(id_planned_timing_availability, id_ts),
+    PRIMARY KEY(id_planned_timing_consulting, id_ts),
     FOREIGN KEY (id_planned_timing_consulting) REFERENCES planned_timing_consulting (id_planned_timing_consulting),
     FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user)
 );
