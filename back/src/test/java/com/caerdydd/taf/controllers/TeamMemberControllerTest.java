@@ -226,4 +226,51 @@ public class TeamMemberControllerTest {
         assertEquals(expectedAnswer.toString(), result.toString());
         verify(teamMemberService, times(1)).setBonusPenaltyById(1, 2);
     }
+
+    @Test
+    public void setIndividualMarkById_success() throws CustomRuntimeException {
+        // Créer un objet TeamMemberDTO factice
+        UserDTO user = new UserDTO();
+        TeamMemberDTO teamMember = new TeamMemberDTO();
+        teamMember.setUser(user);
+        teamMember.setIndividualMark(80);
+
+        // Simuler l'appel du service et vérifier le résultat
+        when(teamMemberService.setIndividualMarkById(1, 90)).thenReturn(teamMember);
+        ResponseEntity<TeamMemberDTO> response = teamMemberController.setIndividualMarkById(1, 90);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(80, response.getBody().getIndividualMark()); // Vérifier que la note individuelle a été mise à jour
+    }
+
+    @Test
+    public void setIndividualMarkById_teamMemberNotFound() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où l'id de l'équipe n'existe pas
+        when(teamMemberService.setIndividualMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamMemberDTO> response = teamMemberController.setIndividualMarkById(1, 90);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void setIndividualMarkById_serviceError() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où une erreur de service se produit
+        when(teamMemberService.setIndividualMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamMemberDTO> response = teamMemberController.setIndividualMarkById(1, 90);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+    @Test
+    public void setIndividualMarkById_unexpectedException() throws CustomRuntimeException {
+        // Simuler une exception inattendue
+        when(teamMemberService.setIndividualMarkById(1, 90)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        ResponseEntity<TeamMemberDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamMemberDTO> response = teamMemberController.setIndividualMarkById(1, 90);
+        
+        assertEquals(expectedAnswer, response);
+    }
 }
