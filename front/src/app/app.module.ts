@@ -23,6 +23,7 @@ import { ApiProjectService } from './core/services/api-project.service';
 import { DevProjectModule } from './dev-project/dev-project.module';
 import { ErrorInterceptor } from './core/services/error.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ValidationProjectModule } from './validation-project/validation-project.module';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     PlanificationPageModule,
     DevProjectModule,
     ProjectsPageModule,
-    TeamsPageModule
+    TeamsPageModule,
+    ValidationProjectModule
   ],
   bootstrap: [AppComponent],
 })
