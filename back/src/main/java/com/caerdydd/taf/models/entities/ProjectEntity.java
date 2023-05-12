@@ -85,4 +85,9 @@ public class ProjectEntity implements Serializable {
             && this.teamDev.equals(teamEntity.getTeamDev())
             && this.teamValidation.equals(teamEntity.getTeamValidation());
     }
+
+    @Override
+    public int hashCode() {
+        return idProject.hashCode() + name.hashCode() + description.hashCode() + isValidated.hashCode() + idJury.hashCode() + teamDev.hashCode() + teamValidation.hashCode();
+    }
 }

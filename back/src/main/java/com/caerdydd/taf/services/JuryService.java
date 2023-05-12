@@ -1,11 +1,8 @@
 package com.caerdydd.taf.services;
 
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +11,6 @@ import com.caerdydd.taf.models.dto.JuryDTO;
 import com.caerdydd.taf.models.dto.RoleDTO;
 import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.models.entities.JuryEntity;
-import com.caerdydd.taf.models.entities.UserEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;

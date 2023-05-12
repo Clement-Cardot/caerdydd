@@ -18,7 +18,6 @@ import io.swagger.client.model.ProjectDTO;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 import java.util.logging.Logger;
