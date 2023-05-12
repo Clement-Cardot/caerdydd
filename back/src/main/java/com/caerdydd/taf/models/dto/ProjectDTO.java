@@ -23,6 +23,9 @@ public class ProjectDTO {
     @JsonBackReference(value="projectValidation")
     private TeamDTO teamValidation;
 
+    //@JsonBackReference
+    //private JuryDTO jury;
+
     public ProjectDTO() {
     }
 
@@ -34,7 +37,13 @@ public class ProjectDTO {
 
     @Override
     public String toString() {
-        return "ProjectDTO [idProject=" + idProject + ", name=" + name + ", description=" + description
-                + ", isValidated=" + isValidated + "]";
+        return "ProjectDTO [" +
+                "idProject=" + idProject +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", isValidated=" + isValidated +
+                ", idTeamDev=" + teamDev +
+                ", idTeamValidation=" + teamValidation +
+                ']';
     }
 }
