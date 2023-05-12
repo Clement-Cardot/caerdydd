@@ -8,8 +8,8 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.time.Duration;
+import java.util.Properties;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
