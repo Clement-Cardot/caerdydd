@@ -24,4 +24,10 @@ public class TeamMemberServiceRules {
             throw new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_INCORRECT_BONUS_PENALTY);
         }
     }
+
+    public void checkTeamMemberIndividualMark( int individualMark) throws CustomRuntimeException{
+        if (individualMark > 10 || individualMark < 0) {
+            throw new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_INCORRECT_INDIVIDUAL_MARK);
+        }
+    }
 }
