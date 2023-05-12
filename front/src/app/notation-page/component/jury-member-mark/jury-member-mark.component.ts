@@ -17,6 +17,7 @@ export class JuryMemberMarkComponent {
 		'individualMark',
 		'teamMark',
 		'validationMark',
+		'bonusMalus',
 		'FinalMark',
 	  ];
 	
