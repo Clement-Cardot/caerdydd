@@ -5,12 +5,13 @@ import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
 import { Project, ProjectAdapter } from "../data/models/project.model";
+import { environment } from "src/environments/environment";
 
 @Injectable({
     providedIn: "root"
 })
 export class ApiProjectService {
-    private baseUrl = "http://localhost:4200/api/projects";
+    private baseUrl = environment.apiURL + "/projects";
 
     constructor(
         private http: HttpClient, 
