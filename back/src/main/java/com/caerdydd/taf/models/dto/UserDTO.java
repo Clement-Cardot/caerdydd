@@ -34,10 +34,10 @@ public class UserDTO {
     @JsonManagedReference
     private List<RoleDTO> roles = new ArrayList<>();
 
-    @JsonBackReference(value="teachingStaff")
+    @JsonBackReference(value = "user")
     private TeachingStaffDTO teachingStaff;
 
-    @JsonBackReference(value="teamMember")
+    @JsonBackReference
     private TeamMemberDTO teamMember;
 
     public UserDTO() {

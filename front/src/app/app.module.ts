@@ -16,7 +16,7 @@ import { ApiTeamService } from './core/services/api-team.service';
 import { ApiUserService } from './core/services/api-user.service';
 import { SidenavModule } from './sidenav/sidenav.module';
 import { NotationModule } from './notation-page/notation.module';
-import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ConsultingPageModule } from './consulting-page/consulting-page.module';
 import { PlanificationPageModule } from './planification-page/planification-page.module';
 import { ApiProjectService } from './core/services/api-project.service';
@@ -25,9 +25,7 @@ import { ErrorInterceptor } from './core/services/error.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   providers: [
     UserDataService,
     ApiAuthService,
@@ -35,7 +33,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     ApiUserService,
     ApiProjectService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide : LocationStrategy, useClass: HashLocationStrategy}
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   imports: [
     CoreModule,
@@ -52,8 +50,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     PlanificationPageModule,
     DevProjectModule,
     ProjectsPageModule,
-    TeamsPageModule,
-    TeamsPageModule
   ],
   bootstrap: [AppComponent],
 })
