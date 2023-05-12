@@ -93,9 +93,8 @@ public class TeamMemberService {
         // Check if the current user is a jury member 
         userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
 
-        // Check if the value of the Individual Mark is correct.
+        // Check if the value of the bonus is correct.
         teamMemberServiceRules.checkTeamMemberIndividualMark(individualMark);
-
 
         TeamMemberDTO teamMember = getTeamMemberById(id);
 
