@@ -319,7 +319,7 @@ public void testUpdateDescription_Nominal() throws CustomRuntimeException {
     // Configure Mocks behavior
     doNothing().when(userServiceRules).checkCurrentUserRole("TEAM_MEMBER_ROLE");
     when(userServiceRules.getCurrentUser()).thenReturn(currentUser);
-    when(teamRepository.findById(teamId)).thenReturn(Optional.of(teamEntity));
+    when(teamRepository.findByProjectDevId(projectId)).thenReturn(Optional.of(teamEntity));
     when(teamMemberService.getTeamMemberById(currentUser.getId())).thenReturn(teamMemberDTO);
     when(projectRepository.findById(projectId)).thenReturn(Optional.of(existingProjectEntity));
     when(projectRepository.save(any(ProjectEntity.class))).thenReturn(updatedProjectEntity);
@@ -332,7 +332,7 @@ public void testUpdateDescription_Nominal() throws CustomRuntimeException {
     // Verify the results
     verify(userServiceRules, times(1)).checkCurrentUserRole("TEAM_MEMBER_ROLE");
     verify(userServiceRules, times(1)).getCurrentUser();
-    verify(teamRepository, times(1)).findById(teamId);
+    verify(teamRepository, times(1)).findByProjectDevId(projectId);
     verify(teamMemberService, times(1)).getTeamMemberById(currentUser.getId());
     verify(projectRepository, times(1)).findById(projectId);
     verify(projectRepository, times(1)).save(any(ProjectEntity.class));
@@ -358,7 +358,7 @@ currentUser.setId(3);
 // Configure Mocks behavior
 doNothing().when(userServiceRules).checkCurrentUserRole("TEAM_MEMBER_ROLE");
 when(userServiceRules.getCurrentUser()).thenReturn(currentUser);
-when(teamRepository.findById(teamId)).thenReturn(Optional.empty());
+when(teamRepository.findByProjectDevId(projectId)).thenReturn(Optional.empty());
 
 // Call the method to test and verify the exception is thrown
 assertThrows(CustomRuntimeException.class, () -> {
@@ -368,7 +368,7 @@ assertThrows(CustomRuntimeException.class, () -> {
 // Verify the results
 verify(userServiceRules, times(1)).checkCurrentUserRole("TEAM_MEMBER_ROLE");
 verify(userServiceRules, times(1)).getCurrentUser();
-verify(teamRepository, times(1)).findById(teamId);
+verify(teamRepository, times(1)).findByProjectDevId(projectId);
 }
 
 @Test
@@ -399,7 +399,7 @@ teamMemberDTO.setTeam(anotherTeamDTO);
 // Configure Mocks behavior
 doNothing().when(userServiceRules).checkCurrentUserRole("TEAM_MEMBER_ROLE");
 when(userServiceRules.getCurrentUser()).thenReturn(currentUser);
-when(teamRepository.findById(teamId)).thenReturn(Optional.of(teamEntity));
+when(teamRepository.findByProjectDevId(projectId)).thenReturn(Optional.of(teamEntity));
 when(teamMemberService.getTeamMemberById(currentUser.getId())).thenReturn(teamMemberDTO);
 
 // Call the method to test and verify the exception is thrown
@@ -410,7 +410,7 @@ assertThrows(CustomRuntimeException.class, () -> {
 // Verify the results
 verify(userServiceRules, times(1)).checkCurrentUserRole("TEAM_MEMBER_ROLE");
 verify(userServiceRules, times(1)).getCurrentUser();
-verify(teamRepository, times(1)).findById(teamId);
+verify(teamRepository, times(1)).findByProjectDevId(projectId);
 verify(teamMemberService, times(1)).getTeamMemberById(currentUser.getId());
 }
 

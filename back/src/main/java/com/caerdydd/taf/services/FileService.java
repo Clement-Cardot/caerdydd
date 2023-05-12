@@ -1,6 +1,5 @@
 package com.caerdydd.taf.services;
 
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,14 +9,10 @@ import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 @Service
