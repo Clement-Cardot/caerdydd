@@ -29,16 +29,18 @@ public class JuryServiceRules {
         Optional<UserEntity> optTs1 = userRepository.findById(idTs1);
         Optional<UserEntity> optTs2 = userRepository.findById(idTs2);
         
-        UserEntity ts1 = optTs1.orElseThrow(() -> new IllegalArgumentException("UserEntity not found for idTs1: " + idTs1));
-        UserEntity ts2 = optTs2.orElseThrow(() -> new IllegalArgumentException("UserEntity not found for idTs2: " + idTs2));
+        UserEntity ts1 = optTs1.orElseThrow(() -> new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
+        UserEntity ts2 = optTs2.orElseThrow(() -> new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
 
-        Optional<JuryEntity> optionalJury = Optional.empty();
+        Optional<JuryEntity> optionalJury1 = Optional.empty();
+        Optional<JuryEntity> optionalJury2 = Optional.empty();
         try {
-            optionalJury = juryRepository.findByTs1AndTs2(ts1, ts2);
+            optionalJury1 = juryRepository.findByTs1AndTs2(ts1, ts2);
+            optionalJury2 = juryRepository.findByTs1AndTs2(ts2, ts1);
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
-        if(optionalJury.isPresent()){
+        if(optionalJury1.isPresent() || optionalJury2.isPresent()){
             throw new CustomRuntimeException(CustomRuntimeException.JURY_ALREADY_EXISTS);
         }
     }

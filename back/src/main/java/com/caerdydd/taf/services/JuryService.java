@@ -57,11 +57,6 @@ public class JuryService {
         return updateJury(juryDTO);
     }
 
-    public JuryEntity getJuryByIdTs1AdnIdTs2(Integer idTs1, Integer idTs2){
-        // TODO RETHINK THIS
-        return null;
-    }
-
     public JuryDTO updateJury(JuryDTO juryDTO) throws CustomRuntimeException {
         JuryEntity juryEntity = modelMapper.map(juryDTO, JuryEntity.class);
         
