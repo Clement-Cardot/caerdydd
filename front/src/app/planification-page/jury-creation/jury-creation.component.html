@@ -1,0 +1,35 @@
+<mat-card>
+  <mat-card-header>
+      <mat-card-title> 
+          <h2>Importation des Consultings</h2> 
+      </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form>
+      <mat-form-field appearance="fill">
+        <mat-label>Spécialiste infrastructure</mat-label>
+        <mat-select [(ngModel)]="selectedOption1">
+          <ng-container *ngFor="let staff of teachingStaffs">
+            <mat-option *ngIf="staff.isInfrastructureSpecialist" [value]="staff.user.id">{{staff.user.firstname}} {{staff.user.lastname}}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Spécialiste developpement</mat-label>
+        <mat-select [(ngModel)]="selectedOption2">
+          <ng-container *ngFor="let staff of teachingStaffs">
+            <mat-option *ngIf="staff.isDevelopmentSpecialist" [value]="staff.user.id">{{staff.user.firstname}} {{staff.user.lastname}}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" id="submitButton" [disabled]="isSubmitable()" (click)="onSubmit()">Créer le jury</button>
+    </form>
+    <mat-error *ngIf="isSubmitable()">Vous devez selectionner deux spécialistes différents.</mat-error>
+
+    <mat-error *ngIf="errorMessage != ''">
+      {{errorMessage}}
+    </mat-error>
+    
+  </mat-card-content>
