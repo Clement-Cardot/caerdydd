@@ -1,13 +1,13 @@
 INSERT INTO user (firstname, lastname, login, password, email, speciality) VALUES
-('Sophie', 'Rousseau' , 'rousseauso', ' $2a$12$mWCdiM1cjZQdVBfNSlXPi.PaQDGPBdMv93xSTPHm5/9IdIXLgy3lK ', 'sophie.rousseau@eseo.fr', NULL),
-('Fabien', 'Chell', 'chellfa', ' $2a$12$wQlnPDk6Fl5ilIJqJAeDpunRwtuTUL2oncjvZ8m9IUNJbjYlkCRgG ', 'fabien.chell@eseo.fr', NULL),
-('Maissa', 'Abdallah', 'abdallahma', ' $2a$12$YQCz0lImJuMAtYe3U8U5xeryGId1W3YJBBZAJcAxlyh93D7oiPJpW ', 'maissa.abdallah@eseo.fr', NULL),
-('Olivier', 'Camp', 'campol', ' $2a$12$6VO2WseFEPiCwUmPBnLdQeF44W4YCJE5MtiLUxYr06qQerXOTvfmG ', 'olivier.camp@eseo.fr', NULL),
-('Mickael', 'Clavreul', 'clavreulmi', ' $2a$12$p/AXv4Ra0FZ9zWMRgeYuqOVMB5Ap8lMH1nInLJseWpvkEJRvfhkUa ', 'mickael.clavreul@eseo.fr', NULL),
-('Clive', 'Ferret-Canape', 'ferretcanapecl', ' $2a$12$1d/CyHg4AxyL8LxjkLvH7uSPLmbGWaulF1R.g/FkKRlUb2iNl1YKS ', 'clive.ferret-canape@eseo.fr', NULL),
-('Richard', 'Woodward', 'woodwardri', ' $2a$12$oydW.mXoyMMWJ.xCgd9yFeqnm9VQEc/bWAN/nH1sp4B1qHOUyUag2 ', 'richard.woodward@eseo.fr', NULL),
-('Jerome', 'Chavin', 'chavinje', ' $2a$12$6ZzqThU/qRiI3KoWUEZE0.G8I99OZ.B7CmKIbGKWueztbvKUqsxNq ', 'jerome.chavin@reseau.eseo.fr', NULL),
-('Francois', 'Jamet', 'jametfr', ' $2a$12$9TjB0bpVQkFBp2XcUU.9WudvOwrDUmPwLhvXuLtLOF.OwGPznSbk6 ', 'francois.jamet@reseau.eseo.fr', NULL);
+('Sophie', 'Rousseau' , 'rousseso', '$2a$12$t97oDbasmThFawvcaQkZduFrMmfEwZjB8QiWbEOJSwZoY/Hv/Xx7y', 'sophie.rousseau@eseo.fr', NULL),
+('Fabien', 'Chell', 'chellfa', '$2a$12$/j4lTg5nJ4PcJTOmgd5qSeYuiSyTPtAcEApMFk8q1TjKGRnK7cYtm', 'fabien.chell@eseo.fr', NULL),
+('Maissa', 'Abdallah', 'abdallma', '$2a$12$vGzIw1ycJIjk9AMwl20eo.WI7ugT3/unMoBttXwpec.g05P9NcD9C', 'maissa.abdallah@eseo.fr', NULL),
+('Olivier', 'Camp', 'campol', '$2a$12$4WdyrZysmPn2a9njpTVh.eNoth4ACC.LzH8CgkQSpAyW7SOTlUZ46', 'olivier.camp@eseo.fr', NULL),
+('Mickael', 'Clavreul', 'clavremi', '$2a$12$N7y2.IoA5BrvyYBdZCnhhecw3SUD8erxqdkYCFZQIlJygFXjBX8zW', 'mickael.clavreul@eseo.fr', NULL),
+('Clive', 'Ferret-Canape', 'ferretcl', '$2a$12$pnCUeNqsAGMbGRofcX7BVO6iXB7h4PvrEQbUjINRrCOcmnNBGMI6u', 'clive.ferret-canape@eseo.fr', NULL),
+('Richard', 'Woodward', 'woodwari', '$2a$12$X3GFVXF93Tw4PJMPzTn0WOu22WpJ.E1J8SFTXhNbgdh0airosZAkq', 'richard.woodward@eseo.fr', NULL),
+('Jerome', 'Chavin', 'chavinje', '$2a$12$.5zlxyqsJGSwNjXQ/QucR.niSv1ubQBLv5EaHyHjs9MjTAUMdiQum', 'jerome.chavin@reseau.eseo.fr', NULL),
+('Francois', 'Jamet', 'jametfr', '$2a$12$YmratvygaJgmnxxIg/gXQOay6tlEUZa1XqwUmJ2wu7GWrFBb.USma', 'francois.jamet@reseau.eseo.fr', NULL);
 
 INSERT INTO role (id_user, role) VALUES
 (1, 'TEACHING_STAFF_ROLE'),
