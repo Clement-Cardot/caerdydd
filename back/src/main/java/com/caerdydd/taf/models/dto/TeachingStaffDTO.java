@@ -3,6 +3,7 @@ package com.caerdydd.taf.models.dto;
 import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.entities.UserEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,8 @@ public class TeachingStaffDTO {
 
     private Integer idUser;
 
-    private UserEntity user;
+    @JsonManagedReference
+    private UserDTO user;
 
     private Boolean isInfrastructureSpecialist = false;
     private Boolean isDevelopmentSpecialist = false;
@@ -26,7 +28,7 @@ public class TeachingStaffDTO {
     public TeachingStaffDTO() {
     }
 
-    public TeachingStaffDTO(UserEntity user) {
+    public TeachingStaffDTO(UserDTO user) {
         this.idUser = user.getId();
         this.user = user;
     }
