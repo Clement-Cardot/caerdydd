@@ -4,7 +4,7 @@
     <p> {{team.name}} </p>
   </div>
   
-  <button *ngIf="isCurrentUserAStudent()" (click)="applyInTeam(team.idTeam)" mat-raised-button color="primary" id="buttonJoinTeam">Rejoindre l'équipe</button>
+  <button *ngIf="isCurrentUserAStudent()" (click)="applyInTeam(team.idTeam)" mat-raised-button color="primary" id="buttonJoinTeam{{team.idTeam}}">Rejoindre l'équipe</button>
 </div>
 <table mat-table [dataSource]="team.teamMembers" class="mat-elevation-z8">
 

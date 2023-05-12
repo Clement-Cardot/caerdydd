@@ -874,6 +874,14 @@ class TeamServiceTest {
     }
 
     @Test
+    void testCreateTeams_Number_Teams_Invalid() throws CustomRuntimeException {
+        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+            teamService.createTeams(0);
+        });
+        assertEquals(CustomRuntimeException.NB_TEAMS_INVALID, exception.getMessage());
+    }
+
+    @Test
     void testCreateTeams_ServiceError() throws CustomRuntimeException {
         // Mock securityConfig.getCurrentUser() method
         when(securityConfig.getCurrentUser()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
