@@ -49,7 +49,7 @@ export class JuryMemberMarkComponent {
 
 	saveMarks(): void{
 		this.team.teamMembers.forEach(teamMember => {
-			this.apiTeamMemberService.setBonusTeamMember(teamMember.user.id, teamMember.individualMark).subscribe((response) => {
+			this.apiTeamMemberService.setIndividualMarkTeamMember(teamMember.user.id, teamMember.individualMark).subscribe((response) => {
 				console.log(response);
 			  });
 			})
