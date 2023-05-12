@@ -106,8 +106,8 @@ public class TeamMemberController {
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
-    @PostMapping("/individualMark/{id}/{individualMark}")
-    public ResponseEntity<TeamMemberDTO> setIndividualMarkById(@PathVariable Integer id, @PathVariable Integer individualMark) {
+    @PostMapping("/individualMark")
+    public ResponseEntity<TeamMemberDTO> setIndividualMarkById(@RequestParam("teamMemberId") Integer id, @RequestParam("mark") Integer individualMark) {
         logger.info("Process request : Set individualMark for team member by id : {}", id);
         try {
             TeamMemberDTO teamMember = teamMemberService.setIndividualMarkById(id, individualMark);
@@ -119,6 +119,7 @@ public class TeamMemberController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            System.out.println(e);
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
