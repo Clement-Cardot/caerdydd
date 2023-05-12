@@ -89,8 +89,9 @@ public class TeamMemberService {
     }
 
     public TeamMemberDTO setIndividualMarkById(Integer id, Integer individualMark)throws CustomRuntimeException{
-          // Check if the current user is a jury member 
-          userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
+        
+        // Check if the current user is a jury member 
+        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
 
         // Check if the value of the bonus is correct.
         teamMemberServiceRules.checkTeamMemberIndividualMark(individualMark);
