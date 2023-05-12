@@ -1,5 +1,7 @@
 package com.caerdydd.taf.models.dto;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -23,6 +25,9 @@ public class ProjectDTO {
     @JsonBackReference(value="projectValidation")
     private TeamDTO teamValidation;
 
+    @JsonBackReference(value="project")
+    private List<PresentationDTO> presentations;
+
     //@JsonBackReference
     //private JuryDTO jury;
 
@@ -44,6 +49,7 @@ public class ProjectDTO {
                 ", isValidated=" + isValidated +
                 ", idTeamDev=" + teamDev +
                 ", idTeamValidation=" + teamValidation +
+                ", presentations=" + presentations +
                 ']';
     }
 }

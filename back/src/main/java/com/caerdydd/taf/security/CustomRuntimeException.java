@@ -12,6 +12,7 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_MEMBER_NOT_FOUND = "Team member not found";
     public static final String PROJECT_NOT_FOUND = "Can't found project";
     public static final String LINK_NOT_FOUND = "LINK_NOT_FOUND";
+    public static final String PRESENTATION_NOT_FOUND = "Presentation not found";
 
 
     // Already exist messages

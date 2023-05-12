@@ -1,7 +1,10 @@
 package com.caerdydd.taf.models.dto;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -20,6 +23,9 @@ public class JuryDTO {
     @JsonManagedReference(value="ts2")
     private UserDTO ts2;
 
+    @JsonBackReference(value="jury")
+    private List<PresentationDTO> presentations;
+
     public JuryDTO() {
     }
 
@@ -34,6 +40,7 @@ public class JuryDTO {
             " idJury='" + getIdJury() + "'" +
             ", ts1='" + getTs1() + "'" +
             ", ts2='" + getTs2() + "'" +
+            ", presentations='" + getPresentations() + "'" +
             "}";
     }
 

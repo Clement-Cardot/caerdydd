@@ -1,11 +1,14 @@
 package com.caerdydd.taf.models.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -34,6 +37,10 @@ public class ProjectEntity implements Serializable {
     @OneToOne(mappedBy = "projectValidation")
     private TeamEntity teamValidation;
 
+    @OneToMany
+    @JoinColumn(name = "id_project")
+    private List<PresentationEntity> presentations;
+
 //    @OneToOne
 //    @JoinColumn(name = "id_jury")
 //    private JuryEntity jury;
@@ -59,7 +66,7 @@ public class ProjectEntity implements Serializable {
     public String toString() {
         return "ProjectEntity [description=" + description + ", idProject=" + idProject + ", idJury=" + idJury
                 + ", isValidated=" + isValidated + ", name=" + name + ", teamDev=" + teamDev + ", teamValidation="
-                + teamValidation + "]";
+                + teamValidation + "presentation="+presentations+"]";
     }
 
     @Override

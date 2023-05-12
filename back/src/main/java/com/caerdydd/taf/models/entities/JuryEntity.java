@@ -1,10 +1,13 @@
 package com.caerdydd.taf.models.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -28,6 +31,10 @@ public class JuryEntity {
     @OneToOne
     @JoinColumn(name = "id_ts2")
     private UserEntity ts2;
+
+    @OneToMany
+    @JoinColumn(name = "id_jury")
+    private List<PresentationEntity> presentations;
 
 
     public JuryEntity() {
