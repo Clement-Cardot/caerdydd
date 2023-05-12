@@ -11,6 +11,7 @@ import { RoleGuard } from './core/guards/role.guard';
 import { ConsultingCalendarComponent } from './consulting-page/consulting-calendar/consulting-calendar.component';
 import { PlanificationPageComponent } from './planification-page/planification-page/planification-page.component' ;
 import { DevProjectComponent } from './dev-project/component/dev-project.component';
+import { ValidationProjectComponent } from './validation-project/component/validation-project/validation-project.component';
 
 const websiteName = " - Taf"
 
@@ -36,8 +37,8 @@ const routes: Routes = [
   /* TODO */ { path: 'my-team', title: 'Teams' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
   
   // Projects pages
-  /* TODO */ { path: 'dev-project', title: 'Projet de Développement' + websiteName, component: DevProjectComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
-  /* TODO */ { path: 'validation-project', title: 'Projet de Validation' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
+  { path: 'dev-project', title: 'Projet de Développement' + websiteName, component: DevProjectComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
+  { path: 'validation-project', title: 'Projet de Validation' + websiteName, component: ValidationProjectComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
 
   // Temporaire pour tester
   { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionComponent, canActivate: [AuthGuard] },

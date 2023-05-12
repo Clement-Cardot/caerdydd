@@ -21,6 +21,7 @@ import { ConsultingPageModule } from './consulting-page/consulting-page.module';
 import { PlanificationPageModule } from './planification-page/planification-page.module';
 import { ApiProjectService } from './core/services/api-project.service';
 import { DevProjectModule } from './dev-project/dev-project.module';
+import { ValidationProjectModule } from './validation-project/validation-project.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { DevProjectModule } from './dev-project/dev-project.module';
     NotationModule,
     ConsultingPageModule,
     PlanificationPageModule,
-    DevProjectModule
+    DevProjectModule,
+    ValidationProjectModule
   ],
   bootstrap: [AppComponent],
 })

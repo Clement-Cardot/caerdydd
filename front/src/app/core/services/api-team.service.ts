@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs/internal/Observable";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
-import { map } from "rxjs";
+import { map, switchMap } from "rxjs";
 import { Team, TeamAdapter } from "../data/models/team.model";
 import { User, UserAdapter } from "../data/models/user.model";
 import { environment } from "../../../environments/environment";
@@ -64,16 +64,21 @@ export class ApiTeamService {
         );
     }
 
-    addTestBookLink(teamId: number, testBookLink: string): Observable<Team> {
-        const url = `${this.baseUrl}/${teamId}/testBookLink`;
-        return this.http.put<any>(url, { testBookLink: testBookLink })
-          .pipe(
-            map((data: any) => this.teamAdapter.adapt(data))
+    addTestBookLink(teamId: number, link: string): Observable<Team> {
+      const url = `${this.baseUrl}/${teamId}/testBookLink`;
+      return this.http.put<Team>(url, { testBookLink: link }).pipe( 
+        switchMap(team => 
+          this.getTestBookLinkDev(teamId).pipe(
+            map(testBookLink => {
+              team.testBookLink = testBookLink;
+              return team;
+            })
           )
-          .pipe(
-            catchError(this.handleError)
-          );
-      }
+        ),
+        catchError(this.handleError)
+      );
+    }
+    
     
       getTestBookLinkDev(teamId: number): Observable<string> {
         const url = `${this.baseUrl}/${teamId}/testBookLinkDev`;
