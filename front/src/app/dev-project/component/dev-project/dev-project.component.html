@@ -14,6 +14,13 @@
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit" [disabled]="testBookLinkForm.invalid">Ajouter le lien TestBook</button>
   </form>
+
+  <mat-card *ngIf="testBookLink">
+    <mat-card-title>Lien vers le cahier de test</mat-card-title>
+    <mat-card-content>
+      <a mat-button color="primary" [href]="testBookLink" target="_blank">{{ testBookLink }}</a>
+    </mat-card-content>
+  </mat-card>
   
   </div>
 

@@ -26,6 +26,7 @@ export class DevProjectComponent implements OnInit {
   testBookLinkForm: FormGroup;
   currentUser!: User | null;
   currentTeam!: Team | null;
+  testBookLink!: string | null;
 
   constructor(
     private fb: FormBuilder,
@@ -65,11 +66,15 @@ export class DevProjectComponent implements OnInit {
         .addTestBookLink(this.currentTeam.idTeam, this.testBookLinkForm.value.testBookLink)
         .subscribe(team => {
           this.currentTeam = team;
+          this.testBookLink = team.testBookLink;
           console.log('Lien TestBook ajouté avec succès');
           this.openSnackBar();
         });
     }
   }
+  
+
+
 
   getTeamMember(userId: number) {
     this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
@@ -86,10 +91,23 @@ export class DevProjectComponent implements OnInit {
     this.apiTeamService.getTeam(teamId).subscribe(
       (team: Team) => {
         this.currentTeam = team;
+        this.getTestBookLink(team.idTeam);
       },
       (error) => {
         console.error("Error getting team:", error);
       }
     );
   }
+
+  getTestBookLink(teamId: number) {
+    this.apiTeamService.getTestBookLinkDev(teamId).subscribe(
+      (link: string) => {
+        this.testBookLink = link;
+      },
+      (error) => {
+        console.error("Error getting test book link:", error);
+      }
+    );
+  }
+
 }
