@@ -20,6 +20,7 @@ export class ProjectFileComponent implements OnInit {
 
   importTSSform: FormGroup;
   importAnalysisform: FormGroup;
+  importFTSSform: FormGroup;
 
   fileFormControl = new FormControl([Validators.required]);
 
@@ -30,6 +31,9 @@ export class ProjectFileComponent implements OnInit {
       file: this.fileFormControl
     });
     this.importAnalysisform = this.formBuilder.group({
+      file: this.fileFormControl
+    });
+    this.importFTSSform = this.formBuilder.group({
       file: this.fileFormControl
     });
   }

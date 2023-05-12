@@ -41,3 +41,25 @@
     <mat-icon>upload</mat-icon>
   </button>
 </form>
+
+<form id="finalteamScopeForm"  [formGroup]="importFTSSform" (ngSubmit)="upload('finalTeamScopeStatement')">
+  <label for="">Cahier des charges final</label>
+  <mat-form-field class="inputForm" appearance="fill">
+    <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" [formControl]="fileFormControl" [accept]="'.pdf'">
+    </ngx-mat-file-input>
+    <mat-icon matSuffix>attachment</mat-icon>
+
+    <mat-error *ngIf="fileFormControl.hasError('required')">
+        Vous devez choisir un fichier
+    </mat-error>
+
+    <mat-error *ngIf="fileFormControl.hasError('apiError')">
+        {{errorMessage}}
+    </mat-error>
+
+  </mat-form-field>
+
+  <button mat-fab color="accent">
+    <mat-icon>upload</mat-icon>
+  </button>
+</form>
