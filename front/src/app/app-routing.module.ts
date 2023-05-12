@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: '', title: 'Login' + websiteName, component: LoginComponent },
 
   // Main Page
-  { path: 'dashboard', title: 'Dashboard' + websiteName, component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', title: 'Tableau de bord' + websiteName, component: DashboardComponent, canActivate: [AuthGuard] },
 
   // Administration page
   /* TODO */ { path: 'administration', title: 'Administration' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},

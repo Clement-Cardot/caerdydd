@@ -12,7 +12,7 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
 export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 mobileQuery: MediaQueryList;
   pageName!: string;
-  
+
   fillerNav = Array.from({length: 5}, (_, i) => `Nav Item ${i + 1}`);
   navLink = new Array<string>;
 
@@ -21,9 +21,9 @@ mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
   constructor(
-        changeDetectorRef: ChangeDetectorRef, 
-        media: MediaMatcher, 
-        private router: Router, 
+        changeDetectorRef: ChangeDetectorRef,
+        media: MediaMatcher,
+        private router: Router,
         private userDataService: UserDataService
     ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -54,7 +54,7 @@ mobileQuery: MediaQueryList;
         this.router.navigateByUrl("/");
       }
       // Global
-      this.navLink.push("Dashboard");
+      this.navLink.push("Tableau de bord");
 
       // Option Leader
       if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
@@ -96,7 +96,7 @@ mobileQuery: MediaQueryList;
     console.log(pageName);
     this.pageName = pageName;
     switch (pageName) {
-      case "Dashboard":
+      case "Tableau de bord":
         this.router.navigateByUrl("/dashboard");
         break;
       case "Administration":
