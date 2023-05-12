@@ -106,4 +106,20 @@ public class TeamMemberController {
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
+    @PostMapping("/individualMark/{id}/{individualMark}")
+    public ResponseEntity<TeamMemberDTO> setIndividualMarkById(@PathVariable Integer id, @PathVariable Integer individualMark) {
+        logger.info("Process request : Set individualMark for team member by id : {}", id);
+        try {
+            TeamMemberDTO teamMember = teamMemberService.setIndividualMarkById(id, individualMark);
+            return new ResponseEntity<>(teamMember, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
 }
