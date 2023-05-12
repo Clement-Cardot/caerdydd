@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -344,4 +345,40 @@ public class TeamMemberServiceTest {
         });
         assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
     }
+    @Test
+    void testSetIndividualMarkByIdSuccess() throws CustomRuntimeException {
+        doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
+
+        TeamEntity team = new TeamEntity();
+        UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+
+        TeamMemberEntity teamMember = new TeamMemberEntity(user, team);
+
+        int mark = 2;
+        teamMember.setIndividualMark(mark);
+
+        ArgumentCaptor<TeamMemberEntity> captor = ArgumentCaptor.forClass(TeamMemberEntity.class);
+        when(teamMemberRepository.save(captor.capture())).thenReturn(teamMember);
+
+        Optional<TeamMemberEntity> mockedTeamMember = Optional.of(teamMember);
+        when(teamMemberRepository.findById(mockedTeamMember.get().getIdUser())).thenReturn(mockedTeamMember);
+        mockedTeamMember.get().setIndividualMark(0); // set bonus penalty to 0 initially
+
+        teamMemberService.setIndividualMarkById(mockedTeamMember.get().getIdUser(), mark);
+
+        assertEquals(mark, captor.getValue().getIndividualMark());
+    }
+
+    @Test
+    void testSetIndividualMarkByIdUserNotAuthorized() throws CustomRuntimeException {
+        // Mock des inputs
+        Integer id = 1;
+        Integer individualMark = 15;
+
+        // Appel de la méthode à tester et vérification de l'exception levée
+        assertThrows(CustomRuntimeException.class, () -> {
+            teamMemberService.setIndividualMarkById(id, individualMark);
+        });
+    }
+    
 }
