@@ -120,7 +120,7 @@ public class ProjectService {
         UserDTO currentUser = userServiceRules.getCurrentUser();
 
         // Verify he is a member of the team
-        Optional<TeamEntity> optionalTeam = teamRepository.findById(projectDTO.getTeamDev().getIdTeam());
+        Optional<TeamEntity> optionalTeam = teamRepository.findByProjectDevId(projectDTO.getIdProject());
         if (optionalTeam.isEmpty()) {
             throw new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND);
         }
