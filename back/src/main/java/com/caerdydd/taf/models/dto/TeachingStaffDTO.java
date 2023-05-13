@@ -14,7 +14,7 @@ public class TeachingStaffDTO {
 
     private Integer idUser;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "user")
     private UserDTO user;
 
     private Boolean isInfrastructureSpecialist = false;
