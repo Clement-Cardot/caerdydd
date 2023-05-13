@@ -170,7 +170,7 @@ selenium-test:
   image: markhobson/maven-chrome
   script:
     - cd selenium
-    - mvn test -P dev
+    - mvn $MAVEN_CLI_OPTS test -P dev
   artifacts:
     reports:
       junit: selenium/target/surefire-reports/TEST*.xml
