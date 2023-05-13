@@ -156,6 +156,7 @@ public class TeamController {
     
     @PutMapping("/{idTeam}/testBookLink")
     public ResponseEntity<TeamDTO> addTestBookLink(@PathVariable Integer idTeam,  @RequestBody Map<String, String> testBookLinkJson) {
+        logger.info("Process request : Add test book link in team: {} with link {}", idTeam, testBookLinkJson.get("testBookLink"));
         String testBookLink = testBookLinkJson.get("testBookLink");
         try {
             if (!isValidLink(testBookLink)) {
@@ -177,6 +178,7 @@ public class TeamController {
 
     @GetMapping("/{idTeam}/testBookLinkDev")
     public ResponseEntity<String> getTestBookLinkDev(@PathVariable Integer idTeam) {
+        logger.info("Process request : Get test book link dev of team: {}", idTeam);
         try {
             String testBookLinkDev = teamService.getTestBookLinkDev(idTeam);
             if (testBookLinkDev == null) {
@@ -197,6 +199,7 @@ public class TeamController {
 
     @GetMapping("/{idTeam}/testBookLinkValidation")
     public ResponseEntity<String> getTestBookLinkValidation(@PathVariable Integer idTeam) {
+        logger.info("Process request : Get test book link validation of team: {}", idTeam);
         try {
             String testBookLinkValidation = teamService.getTestBookLinkValidation(idTeam);
             if (testBookLinkValidation == null) {
@@ -217,6 +220,7 @@ public class TeamController {
 
     @PostMapping("/upload")
 	public ResponseEntity<HttpStatus> saveFile(@RequestParam("file") MultipartFile file, @RequestParam("teamId") int id, @RequestParam("fileType") String type) {
+        logger.info("Process request : Save file {} for team {} with type {}", file.getOriginalFilename(), id, type);
         try {
             fileService.saveFile(file, id, type);
 
@@ -228,7 +232,7 @@ public class TeamController {
                 case CustomRuntimeException.INCORRECT_FILE_FORMAT:
                     return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
                 default:
-                    logger.error("Unexpected Exception : {}", e.getMessage());
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
