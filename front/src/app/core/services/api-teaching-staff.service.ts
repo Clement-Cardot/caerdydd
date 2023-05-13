@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { map } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { HttpHeaders } from '@angular/common/http';
 import {
   TeachingStaff,
   TeachingStaffAdapter,
@@ -21,11 +22,8 @@ export class ApiTeachingStaffService {
     private teachingStaffAdapter: TeachingStaffAdapter
   ) {}
 
-  setSpeciality(
-    teachingStaff: TeachingStaff,
-    teachingStaffId: number
-  ): Observable<TeachingStaff> {
-    const url = `${this.baseUrl}/modify/${teachingStaffId}`;
+  setSpeciality(teachingStaff: TeachingStaff): Observable<TeachingStaff> {
+    const url = `${this.baseUrl}/modifySpeciality`;
     return this.http
       .post(url, teachingStaff)
       .pipe(map((data: any) => this.teachingStaffAdapter.adapt(data)))
@@ -33,9 +31,9 @@ export class ApiTeachingStaffService {
   }
 
   getTeachingStaff(teachingStaffId: number): Observable<TeachingStaff> {
-    const url = `${this.baseUrl}/modify/${teachingStaffId}`;
+    const url = `${this.baseUrl}/modifySpeciality`;
     return this.http
-      .get<any>(url)
+      .put(url, teachingStaffId)
       .pipe(map((data: any) => this.teachingStaffAdapter.adapt(data)))
       .pipe(catchError(this.handleError));
   }

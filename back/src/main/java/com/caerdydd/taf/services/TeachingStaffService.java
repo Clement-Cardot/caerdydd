@@ -16,6 +16,8 @@ import com.caerdydd.taf.models.dto.TeachingStaffDTO;
 import com.caerdydd.taf.models.entities.TeachingStaffEntity;
 import com.caerdydd.taf.repositories.TeachingStaffRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.services.rules.UserServiceRules;
+
 
 @Service
 @Transactional
@@ -30,6 +32,10 @@ public class TeachingStaffService {
 
   @Autowired
   private UserService userService;
+
+  @Autowired
+  UserServiceRules userServiceRules;
+
   
   public List<TeachingStaffDTO> listAllTeachingStaff() throws CustomRuntimeException {
       try {
@@ -76,6 +82,9 @@ public class TeachingStaffService {
   }
 
  public TeachingStaffDTO updateTeachingStaff(TeachingStaffDTO teachingStaff) throws CustomRuntimeException {
+    // Verify if the current user is a team member
+    userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+  
     TeachingStaffEntity teachingStaffEntity = modelMapper.map(teachingStaff, TeachingStaffEntity.class);
     
     Optional<TeachingStaffEntity> optionalTeachingStaff = teachingStaffRepository.findById(teachingStaffEntity.getUser().getId());

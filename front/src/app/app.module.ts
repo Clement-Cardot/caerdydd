@@ -23,6 +23,8 @@ import { ApiProjectService } from './core/services/api-project.service';
 import { DevProjectModule } from './dev-project/dev-project.module';
 import { ErrorInterceptor } from './core/services/error.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TeachingStaffPageModule } from './teaching-staff-page/teaching-staff-page.module';
+import { ApiTeachingStaffService } from './core/services/api-teaching-staff.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,6 +34,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     ApiTeamService,
     ApiUserService,
     ApiProjectService,
+    ApiTeachingStaffService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
@@ -50,6 +53,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     PlanificationPageModule,
     DevProjectModule,
     ProjectsPageModule,
+    TeachingStaffPageModule,
   ],
   bootstrap: [AppComponent],
 })

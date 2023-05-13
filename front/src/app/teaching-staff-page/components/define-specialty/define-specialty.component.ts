@@ -14,12 +14,12 @@ import { User } from 'src/app/core/data/models/user.model';
 export class DefineSpecialtyComponent implements OnInit {
   teachingStaff!: TeachingStaff;
   ngOptions: any[] = [];
+  currentUser!: User | null;
 
   constructor(
     private apiTeachingStaffService: ApiTeachingStaffService,
     public userDataService: UserDataService,
     public apiUserService: ApiUserService,
-    private route: ActivatedRoute
   ) {}
 
   public ngOnInit(): void {
@@ -27,13 +27,20 @@ export class DefineSpecialtyComponent implements OnInit {
     // ...
     // TODO : Récupèrer le TS correspondant à l'ID du currentUser
     // ...
-    this.apiTeachingStaffService
-      .getTeachingStaff(this.userDataService.getCurrentUser().id)
-      .subscribe((teachingStaff: TeachingStaff) => {
-        this.teachingStaff = teachingStaff;
-        this.initializeNgOptions();
-        console.log(this.teachingStaff);
-      });
+
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+      this.currentUser = user;
+    });
+    if (this.currentUser == null) {
+      console.log('User is not connected');
+    } else {
+      this.apiTeachingStaffService
+        .getTeachingStaff(this.currentUser.id)
+        .subscribe((teachingStaff: TeachingStaff) => {
+          this.teachingStaff = teachingStaff;
+          this.initializeNgOptions();
+        });
+    }
   }
 
   // Quand clic sur valider :
@@ -98,21 +105,7 @@ export class DefineSpecialtyComponent implements OnInit {
         }
       }
 
-      this.apiTeachingStaffService
-        .setSpeciality(
-          this.teachingStaff,
-          Number(this.route.snapshot.paramMap.get('id'))
-        )
-        .subscribe(
-          () => {
-            // Mise à jour effectuée avec succès
-            console.log('Speciality updated successfully.');
-          },
-          (error) => {
-            // Gestion des erreurs lors de la mise à jour
-            console.error('Failed to update speciality:', error);
-          }
-        );
+      this.apiTeachingStaffService.setSpeciality(this.teachingStaff);
     }
   }
 
@@ -147,14 +140,14 @@ export class DefineSpecialtyComponent implements OnInit {
   } */
 
   isCurrentUserATeachingStaff() {
-    let isTeachingStaff = false;
-    this.userDataService.getCurrentUser().roles.forEach((role) => {
-      if (role.role == 'TEACHING_STAFF_ROLE') {
-        console.log('User is Teaching Staff');
-        isTeachingStaff = true;
-      }
-    });
-    return isTeachingStaff;
+    if (this.currentUser == null) {
+      console.log('User is not connected');
+      return false;
+    }
+    if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
+      return true;
+    }
+    return false;
   }
 
   /*   public getSpecialities(): string[] {

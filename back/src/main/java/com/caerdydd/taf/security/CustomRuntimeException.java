@@ -12,12 +12,8 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_MEMBER_NOT_FOUND = "Team member not found";
     public static final String PROJECT_NOT_FOUND = "Can't found project";
     public static final String LINK_NOT_FOUND = "LINK_NOT_FOUND";
-    public static final String INCORRECT_INPUT_DATA_STRING = "Incorrect input data";
     public static final String TEACHINGSTAFF_NOT_FOUND = "Teaching Staff not found";
     public static final String TEACHINGSTAFF_ID_SHOULD_BE_NULL = "Teaching Staff id should be null";
-
-    
-
 
     // Already exist messages
     public static final String USER_ALREADY_EXISTS = "User already exist";

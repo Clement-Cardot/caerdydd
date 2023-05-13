@@ -13,6 +13,8 @@ import { ErrorComponent } from './error/component/error/error.component';
 import { ProjectFileComponent } from './dev-project/component/project-file/project-file.component';
 import { ProjectListComponent } from './page-validate-subject/components/projects-list/projects-list.component';
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
+import { AllTeachingStaffComponent } from './teaching-staff-page/components/all-teaching-staff/all-teaching-staff/all-teaching-staff.component';
+import { DefineSpecialtyComponent } from './teaching-staff-page/components/define-specialty/define-specialty.component';
 
 const websiteName = ' - Taf';
 const routes: Routes = [
@@ -114,6 +116,23 @@ const routes: Routes = [
   },
 
   { path: 'error', title: 'Erreur' + websiteName, component: ErrorComponent },
+
+  //TeachingStaff Pages
+  {
+    path: 'teachingStaff',
+    title: 'Corps Enseignant' + websiteName,
+    component: AllTeachingStaffComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['TEACHING_STAFF_ROLE'] },
+  },
+
+  {
+    path: 'teachingStaff/modifySpeciality',
+    title: 'Modifier Specialités' + websiteName,
+    component: DefineSpecialtyComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['TEACHING_STAFF_ROLE'] },
+  },
 ];
 
 @NgModule({

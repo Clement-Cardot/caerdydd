@@ -1,8 +1,6 @@
 package com.caerdydd.taf.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,12 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.caerdydd.taf.models.dto.TeachingStaffDTO;
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
-import com.caerdydd.taf.services.TeamMemberService;
 
 @ExtendWith(MockitoExtension.class)
 public class TeachingStaffControllerTest {
@@ -46,7 +40,7 @@ public class TeachingStaffControllerTest {
         ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
         
         // Call the method to test
-        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.list();
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
 
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());
@@ -63,7 +57,7 @@ public class TeachingStaffControllerTest {
         ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
         
         // Call the method to test
-        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.list();
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
 
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());
@@ -79,7 +73,7 @@ public class TeachingStaffControllerTest {
         ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         
         // Call the method to test
-        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.list();
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
 
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());
@@ -95,7 +89,7 @@ public class TeachingStaffControllerTest {
         ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         
         // Call the method to test
-        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.list();
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
 
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());

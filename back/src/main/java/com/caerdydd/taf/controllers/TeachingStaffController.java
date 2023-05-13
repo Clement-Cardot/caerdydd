@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,8 @@ import com.caerdydd.taf.services.TeachingStaffService;
 public class TeachingStaffController {
 
     private static final Logger logger = LogManager.getLogger(TeachingStaffController.class);
-    
+    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
+
     @Autowired
     private TeachingStaffService teachingStaffService;
 
@@ -33,10 +35,29 @@ public class TeachingStaffController {
             List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
             return new ResponseEntity<>(teachingStaffs, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            logger.error("Unexpected Exception : {}", e.getMessage());
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/modifySpeciality")
+    public ResponseEntity<TeachingStaffDTO> getTeachingStaffById(@RequestBody Integer teachingStaffId) {
+      logger.info("Process request : Get teachingStaff by id : {}", teachingStaffId);
+      try {
+            TeachingStaffDTO teachingStaff = teachingStaffService.getTeachingStaffById(teachingStaffId);
+            return new ResponseEntity<>(teachingStaff, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+          if (e.getMessage().equals(CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND)) {
+              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+          }
+          if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+              return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+          }
+          logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+          return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+      }
+    }
+
 
     @PostMapping("/modifySpeciality")
     public ResponseEntity<TeachingStaffDTO> submitSpeciality(@RequestBody TeachingStaffDTO teachingStaffDTO ) {
@@ -50,12 +71,11 @@ public class TeachingStaffController {
         switch (e.getMessage()) {
         case CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER:
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        case CustomRuntimeException.USER_NOT_FOUND:
+        case CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND:
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        default:
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        default: return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
-  }
-
+    }
 }
+
