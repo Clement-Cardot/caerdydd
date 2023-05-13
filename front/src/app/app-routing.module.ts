@@ -15,7 +15,6 @@ import { ProjectFileComponent } from './dev-project/component/project-file/proje
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
 import { ValidationProjectComponent } from './validation-project/component/validation-project/validation-project.component';
 
-
 const websiteName = " - Taf"
 
 const routes: Routes = [
