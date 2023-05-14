@@ -65,7 +65,7 @@ public class JuryService {
         if(optionalJury1.isPresent()){
             return modelMapper.map(optionalJury1.get(), JuryDTO.class);
         }
-        
+
         return modelMapper.map(optionalJury2.get(), JuryDTO.class);
     }
 
