@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import com.caerdydd.taf.models.dto.UserDTO;
 import com.caerdydd.taf.security.jwt.AuthEntryPointJwt;
@@ -59,7 +60,8 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthEntryPointJwt unauthorizedHandler, CustomUserDetailService userDetailsService) throws Exception {
         return http
-                .cors().and().csrf().disable()
+
+                .csrf().csrfTokenRepository(new CookieCsrfTokenRepository()).and()
 
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 

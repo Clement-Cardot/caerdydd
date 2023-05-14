@@ -37,11 +37,7 @@ public class AuthControllerTest {
         when(authService.loginUser(any(), any())).thenReturn(new ResponseEntity<UserDTO>(userDTO, headers, HttpStatus.OK));
         
         // Call login method
-        UserDTO userDTOInput = new UserDTO();
-        userDTOInput.setLogin("login");
-        userDTOInput.setPassword("password");
-
-        ResponseEntity<UserDTO> response = authController.login(userDTO);
+        ResponseEntity<UserDTO> response = authController.login("login", "password");
 
         // Check response
         assertNotNull(response);
@@ -57,7 +53,7 @@ public class AuthControllerTest {
         when(authService.loginUser(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
         
         // Call login method
-        ResponseEntity<UserDTO> response = authController.login(new UserDTO());
+        ResponseEntity<UserDTO> response = authController.login("login", "password");
 
         // Check response
         assertNotNull(response);
@@ -70,7 +66,7 @@ public class AuthControllerTest {
         when(authService.loginUser(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_PASSWORD_NOT_MATCH));
         
         // Call login method
-        ResponseEntity<UserDTO> response = authController.login(new UserDTO());
+        ResponseEntity<UserDTO> response = authController.login("login", "password");
 
         // Check response
         assertNotNull(response);
@@ -83,7 +79,7 @@ public class AuthControllerTest {
         when(authService.loginUser(any(), any())).thenThrow(new CustomRuntimeException("Unexpected error"));
         
         // Call login method
-        ResponseEntity<UserDTO> response = authController.login(new UserDTO());
+        ResponseEntity<UserDTO> response = authController.login("login", "password");
 
         // Check response
         assertNotNull(response);
