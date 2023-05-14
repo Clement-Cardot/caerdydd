@@ -3,14 +3,6 @@ package com.caerdydd.taf.services;
 import java.util.Optional;
 
 
-import java.util.Optional;
-
-import java.util.Optional;
-
-import java.util.Optional;
-
-import java.util.Optional;
-
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,7 +56,7 @@ public class JuryService {
     public JuryDTO addJury(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
         userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
 
-        // TODO verifier que un user est LD et l'autre CSS -> teachingStaffRules
+        // TODO CHECK SPECIALITY
 
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
         checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
