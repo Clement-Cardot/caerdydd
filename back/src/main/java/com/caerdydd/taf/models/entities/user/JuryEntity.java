@@ -1,5 +1,6 @@
 package com.caerdydd.taf.models.entities.user;
 
+import java.io.Serializable;
 import java.util.List;
 
 import java.io.Serializable;

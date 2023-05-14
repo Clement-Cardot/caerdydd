@@ -42,10 +42,10 @@ public class JuryService {
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
         juryServiceRules.checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
 
-        TeachingStaffDTO ts1 = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
-        TeachingStaffDTO ts2 = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
+        TeachingStaffDTO juryMemberDev = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
+        TeachingStaffDTO juryMemberArchi = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
 
-        JuryDTO juryDTO = new JuryDTO(ts1, ts2);
+        JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
         return updateJury(juryDTO);
     }
 

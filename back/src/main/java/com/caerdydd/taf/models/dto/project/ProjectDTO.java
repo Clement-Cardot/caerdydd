@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -29,8 +30,8 @@ public class ProjectDTO {
     @JsonManagedReference(value="project")
     private List<PresentationDTO> presentations;
 
-    //@JsonBackReference
-    //private JuryDTO jury;
+    @JsonBackReference
+    private JuryDTO jury;
 
     public ProjectDTO() {
     }
