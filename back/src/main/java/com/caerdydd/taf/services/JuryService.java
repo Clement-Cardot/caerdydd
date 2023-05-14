@@ -61,25 +61,9 @@ public class JuryService {
         if(optionalJury1.isPresent()){
             return modelMapper.map(optionalJury1.get(), JuryDTO.class);
         }
-        
+
         return modelMapper.map(optionalJury2.get(), JuryDTO.class);
-    }
-
-    public void checkJuryByTs(TeachingStaffDTO ts) throws CustomRuntimeException{
-        TeachingStaffEntity tsEntity = modelMapper.map(ts, TeachingStaffEntity.class);
-
-        Optional<JuryEntity> optionalJury1 = Optional.empty();
-        Optional<JuryEntity> optionalJury2 = Optional.empty();
-        try {
-            optionalJury1 = juryRepository.findByTs1(tsEntity);
-            optionalJury2 = juryRepository.findByTs2(tsEntity);
-        } catch (Exception e) {
-            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
-        }
-
-        if(!optionalJury1.isPresent() && !optionalJury2.isPresent()){
-            throw new CustomRuntimeException(CustomRuntimeException.JURY_NOT_FOUND);
-        }
+        
     }
 
     public void checkJuryExists(Integer idTs1, Integer idTs2) throws CustomRuntimeException {
@@ -101,7 +85,7 @@ public class JuryService {
     public JuryDTO addJury(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
         userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
 
-        // TODO CHECK SPECIALITY AND CHECK TEACHINGSTAFF NOT ALREADY IN A JURY
+        // TODO CHECK SPECIALITY
 
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
         checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
