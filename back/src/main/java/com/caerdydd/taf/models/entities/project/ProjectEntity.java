@@ -3,6 +3,7 @@ package com.caerdydd.taf.models.entities.project;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,8 +38,7 @@ public class ProjectEntity implements Serializable {
     @OneToOne(mappedBy = "projectValidation")
     private TeamEntity teamValidation;
 
-    @OneToMany
-    @JoinColumn(name = "id_project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<PresentationEntity> presentations;
 
 //    @OneToOne
