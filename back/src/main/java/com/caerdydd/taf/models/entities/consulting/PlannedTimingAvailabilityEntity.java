@@ -1,4 +1,4 @@
-package com.caerdydd.taf.models.entities;
+package com.caerdydd.taf.models.entities.consulting;
 
 import java.io.Serializable;
 
@@ -8,6 +8,8 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -3,7 +3,7 @@ package com.caerdydd.taf.services.rules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 import java.util.Objects;

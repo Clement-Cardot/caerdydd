@@ -1,4 +1,4 @@
-package com.caerdydd.taf.models.entities;
+package com.caerdydd.taf.models.entities.project;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.caerdydd.taf.models.entities.user.TeamMemberEntity;
 
 import lombok.Getter;
 import lombok.Setter;

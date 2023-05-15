@@ -17,7 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.TeamDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 

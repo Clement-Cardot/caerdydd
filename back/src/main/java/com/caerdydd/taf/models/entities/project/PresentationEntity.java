@@ -1,4 +1,4 @@
-package com.caerdydd.taf.models.entities;
+package com.caerdydd.taf.models.entities.project;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.caerdydd.taf.models.entities.user.JuryEntity;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.caerdydd.taf.models.dto;
+package com.caerdydd.taf.models.dto.user;
 
 import java.util.ArrayList;
 import java.util.List;

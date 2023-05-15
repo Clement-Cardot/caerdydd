@@ -12,8 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 

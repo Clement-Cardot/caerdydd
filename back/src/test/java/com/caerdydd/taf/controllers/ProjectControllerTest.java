@@ -1,5 +1,5 @@
 package com.caerdydd.taf.controllers;
-import com.caerdydd.taf.models.dto.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ProjectService;
 import org.junit.jupiter.api.Test;

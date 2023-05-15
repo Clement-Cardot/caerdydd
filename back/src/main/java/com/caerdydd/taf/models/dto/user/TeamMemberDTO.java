@@ -1,7 +1,8 @@
-package com.caerdydd.taf.models.dto;
+package com.caerdydd.taf.models.dto.user;
 
 import org.springframework.stereotype.Component;
 
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 

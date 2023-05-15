@@ -20,10 +20,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.RoleEntity;
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.user.RoleEntity;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.RoleRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 

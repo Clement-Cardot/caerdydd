@@ -15,8 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 

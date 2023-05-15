@@ -1,4 +1,4 @@
-package com.caerdydd.taf.models.entities;
+package com.caerdydd.taf.models.entities.user;
 
 import java.io.Serializable;
 
@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.caerdydd.taf.models.entities.project.TeamEntity;
 
 import lombok.Getter;
 import lombok.Setter;

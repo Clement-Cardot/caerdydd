@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.ConsultingDTO;
-import com.caerdydd.taf.models.entities.ConsultingEntity;
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
+import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
+import com.caerdydd.taf.repositories.PlannedTimingAvailabilityRepository;
+import com.caerdydd.taf.repositories.PlannedTimingConsultingRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.FileRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
@@ -29,6 +31,12 @@ public class ConsultingService {
 
     @Autowired
     private ConsultingRepository consultingRepository;
+
+    @Autowired
+    private PlannedTimingConsultingRepository plannedTimingConsultingRepository;
+
+    @Autowired
+    private PlannedTimingAvailabilityRepository plannedTimingAvailabilityRepository;
 
     @Autowired
     private ModelMapper modelMapper;

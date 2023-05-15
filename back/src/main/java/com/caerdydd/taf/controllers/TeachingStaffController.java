@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.caerdydd.taf.models.dto.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
 

@@ -11,7 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.repositories.TeachingStaffRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 

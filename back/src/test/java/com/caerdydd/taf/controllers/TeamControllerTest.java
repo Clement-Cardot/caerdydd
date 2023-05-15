@@ -19,10 +19,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.caerdydd.taf.models.dto.ProjectDTO;
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeamService;
 

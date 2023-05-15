@@ -17,7 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.repositories.RoleRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.jwt.JwtUtils;

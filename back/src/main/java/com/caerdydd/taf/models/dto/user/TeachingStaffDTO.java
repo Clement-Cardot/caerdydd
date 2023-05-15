@@ -1,4 +1,4 @@
-package com.caerdydd.taf.models.dto;
+package com.caerdydd.taf.models.dto.user;
 
 import org.springframework.stereotype.Component;
 

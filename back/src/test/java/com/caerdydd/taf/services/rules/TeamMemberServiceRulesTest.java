@@ -8,9 +8,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 @ExtendWith(MockitoExtension.class)

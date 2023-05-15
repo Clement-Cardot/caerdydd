@@ -19,8 +19,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import com.caerdydd.taf.models.dto.TeachingStaffDTO;
-import com.caerdydd.taf.models.entities.TeachingStaffEntity;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 import com.caerdydd.taf.repositories.TeachingStaffRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 

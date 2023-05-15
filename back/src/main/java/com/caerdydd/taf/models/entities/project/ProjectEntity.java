@@ -1,4 +1,4 @@
-package com.caerdydd.taf.models.entities;
+package com.caerdydd.taf.models.entities.project;
 
 import java.io.Serializable;
 import java.util.List;

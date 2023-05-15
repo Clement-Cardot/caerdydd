@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.caerdydd.taf.models.dto.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
 

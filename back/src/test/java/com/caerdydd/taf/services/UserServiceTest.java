@@ -24,8 +24,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 

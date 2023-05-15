@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.caerdydd.taf.models.entities.JuryEntity;
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.entities.user.JuryEntity;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;

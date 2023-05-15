@@ -1,9 +1,10 @@
-package com.caerdydd.taf.models.dto;
+package com.caerdydd.taf.models.dto.project;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;

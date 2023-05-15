@@ -7,10 +7,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.JuryDTO;
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.JuryEntity;
+import com.caerdydd.taf.models.dto.user.JuryDTO;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.user.JuryEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;

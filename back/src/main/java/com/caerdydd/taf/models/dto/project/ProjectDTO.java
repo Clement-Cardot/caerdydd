@@ -1,4 +1,4 @@
-package com.caerdydd.taf.models.dto;
+package com.caerdydd.taf.models.dto.project;
 
 import java.util.List;
 

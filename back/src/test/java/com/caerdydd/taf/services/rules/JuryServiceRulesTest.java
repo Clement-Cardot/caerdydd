@@ -12,8 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.caerdydd.taf.models.entities.JuryEntity;
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.entities.user.JuryEntity;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;

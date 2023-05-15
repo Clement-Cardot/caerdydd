@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.services.JuryService;
-import com.caerdydd.taf.models.dto.JuryDTO;
+import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 @RestController

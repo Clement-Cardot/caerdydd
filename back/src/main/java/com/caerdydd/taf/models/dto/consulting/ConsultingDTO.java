@@ -1,9 +1,10 @@
-package com.caerdydd.taf.models.dto;
+package com.caerdydd.taf.models.dto.consulting;
 
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
 

@@ -28,16 +28,15 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-
-import com.caerdydd.taf.models.dto.ProjectDTO;
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.ProjectEntity;
-import com.caerdydd.taf.models.entities.TeamEntity;
-import com.caerdydd.taf.models.entities.TeamMemberEntity;
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.project.ProjectEntity;
+import com.caerdydd.taf.models.entities.project.TeamEntity;
+import com.caerdydd.taf.models.entities.user.TeamMemberEntity;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.TeamMemberRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.TeamMemberServiceRules;
