@@ -27,7 +27,11 @@ public class FileService {
     public void saveFile(MultipartFile file, int id, String type) throws CustomRuntimeException {
         try {
             final String relativePath = "/upload/equipe";
-            String fileExt = "." + file.getOriginalFilename().split("\\.")[1];
+            String fileExt = "";
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename != null && originalFilename.contains(".")) {
+                fileExt = "." + originalFilename.split("\\.")[1];
+            }
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + relativePath + id));
             this.checkFileIsPDF(file);
             file.transferTo(new File(System.getProperty("user.dir") + relativePath + id + "/" + type + fileExt));

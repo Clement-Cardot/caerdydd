@@ -285,6 +285,7 @@ public class ApiClient {
                 return;
             }
         }
+        logger.warn("No HTTP basic authentication configured!");
         throw new RuntimeException("No HTTP basic authentication configured!");
     }
 
@@ -300,6 +301,7 @@ public class ApiClient {
                 return;
             }
         }
+        logger.warn("No HTTP basic authentication configured!");
         throw new RuntimeException("No HTTP basic authentication configured!");
     }
 
@@ -315,6 +317,7 @@ public class ApiClient {
                 return;
             }
         }
+        logger.warn("No API key authentication configured!");
         throw new RuntimeException("No API key authentication configured!");
     }
 
@@ -330,6 +333,7 @@ public class ApiClient {
                 return;
             }
         }
+        logger.warn("No API key authentication configured!");
         throw new RuntimeException("No API key authentication configured!");
     }
 
@@ -345,6 +349,7 @@ public class ApiClient {
                 return;
             }
         }
+        logger.warn("No OAuth2 authentication configured!");
         throw new RuntimeException("No OAuth2 authentication configured!");
     }
 

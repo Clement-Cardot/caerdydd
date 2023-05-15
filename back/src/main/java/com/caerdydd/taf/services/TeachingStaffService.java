@@ -32,6 +32,7 @@ public class TeachingStaffService {
             .map(teachingStaff -> modelMapper.map(teachingStaff, TeachingStaffDTO.class))
             .collect(Collectors.toList()) ;
         } catch (Exception e) {
+            logger.error("Error listing all teaching staff:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }

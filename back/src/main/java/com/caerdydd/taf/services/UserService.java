@@ -35,6 +35,7 @@ public class UserService {
                 .map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
         } catch (Exception e) {
+            logger.error("Error listing all users:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
@@ -44,9 +45,11 @@ public class UserService {
         try {
             optionalUser = userRepository.findById(id);
         } catch (Exception e) {
+            logger.error("Error getting user by id:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
         if (optionalUser.isEmpty()) {
+            logger.error("User not found");
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
         return modelMapper.map(optionalUser.get(), UserDTO.class);
@@ -57,9 +60,11 @@ public class UserService {
         try{
             optionalUser = userRepository.findByLogin(login);
         } catch (Exception e) {
+            logger.error("Error getting user by login:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
         if (optionalUser.isEmpty()) {
+            logger.error("User not found");
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
         return modelMapper.map(optionalUser.get(), UserDTO.class);
@@ -69,6 +74,7 @@ public class UserService {
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
         
         if (userEntity.getId() != null){
+            logger.error("User id should be null");
             throw new CustomRuntimeException(CustomRuntimeException.USER_ID_SHOULD_BE_NULL);
         }
 
@@ -76,6 +82,7 @@ public class UserService {
         try {
             response = userRepository.save(userEntity);
         } catch (Exception e) {
+            logger.error("Error saving user:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
 
@@ -87,6 +94,7 @@ public class UserService {
         
         Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
         if (optionalUser.isEmpty()){
+            logger.error("User not found");
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
 
@@ -94,6 +102,7 @@ public class UserService {
         try {
             response = userRepository.save(userEntity);
         } catch (Exception e) {
+            logger.error("Error updating user:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
 

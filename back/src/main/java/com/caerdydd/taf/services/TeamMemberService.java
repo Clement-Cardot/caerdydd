@@ -42,6 +42,7 @@ public class TeamMemberService {
             .map(user -> modelMapper.map(user, TeamMemberDTO.class))
             .collect(Collectors.toList()) ;
         } catch (Exception e) {
+            logger.error("Error listing all team members", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
@@ -51,10 +52,12 @@ public class TeamMemberService {
         try{
             optionalTeamMember = teamMemberRepository.findById(id);
         } catch (Exception e) {
+            logger.error("Error getting team member by id", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
 
         if (optionalTeamMember.isEmpty()) {
+            logger.error("Team member not found");
             throw new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND);
         }
         return  modelMapper.map(optionalTeamMember.get(), TeamMemberDTO.class);
@@ -90,6 +93,7 @@ public class TeamMemberService {
         
         Optional<TeamMemberEntity> optionalUser = teamMemberRepository.findById(teamMemberEntity.getIdUser());
         if (optionalUser.isEmpty()) {
+            logger.error("User not found");
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
 
@@ -97,6 +101,7 @@ public class TeamMemberService {
         try {
             response = teamMemberRepository.save(teamMemberEntity);
         } catch (Exception e) {
+            logger.error("Error updating team member", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
 
