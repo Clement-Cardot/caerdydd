@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.models.dto.TeamDTO;
@@ -130,6 +132,24 @@ public class TeamController {
             default:
                 return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
+        }
+    }
+
+    @PostMapping("/teamWorkMark")
+    public ResponseEntity<TeamDTO> setTeamWorkMark(@RequestParam("teamId") Integer id, @RequestParam("teamWorkMark") Integer teamWorkMark) {
+        logger.info("Process request : Set teamWorkMark for team by id : {}", id);
+        try {
+            TeamDTO team = teamService.setTeamWorkMarkById(id, teamWorkMark);
+            return new ResponseEntity<>(team, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            System.out.println(e);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 }

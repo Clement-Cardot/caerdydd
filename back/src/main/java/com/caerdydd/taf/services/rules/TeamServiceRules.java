@@ -30,4 +30,9 @@ public class TeamServiceRules {
                 throw new CustomRuntimeException(CustomRuntimeException.TEAM_ALREADY_HAS_4_LD);
         }
     }
+    public static void checkTeamWorkMark( int teamWorkMark) throws CustomRuntimeException{
+        if (teamWorkMark > 5  || teamWorkMark < 0) {
+            throw new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_INCORRECT_TEAM_MARK);
+        }
+    }
 }

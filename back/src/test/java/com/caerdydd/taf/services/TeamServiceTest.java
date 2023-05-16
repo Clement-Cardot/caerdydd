@@ -883,5 +883,5 @@ class TeamServiceTest {
         verify(securityConfig, times(1)).getCurrentUser();
         assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
     }
-
+    
 }
