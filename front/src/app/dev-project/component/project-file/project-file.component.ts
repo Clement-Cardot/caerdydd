@@ -18,6 +18,8 @@ export class ProjectFileComponent implements OnInit {
 
   user!: User | null;
 
+  isNotFinalScope!: boolean;
+
   importTSSform: FormGroup;
   importAnalysisform: FormGroup;
   importFTSSform: FormGroup;
@@ -26,7 +28,8 @@ export class ProjectFileComponent implements OnInit {
 
   errorMessage!: string;
 
-  constructor(private apiTeamMemberService: ApiTeamMemberService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService, private formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
+  constructor(private apiTeamMemberService: ApiTeamMemberService, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService, private formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
+    this.isNotFinalScope = true
     this.importTSSform = this.formBuilder.group({
       file: this.fileFormControl
     });
@@ -41,12 +44,12 @@ export class ProjectFileComponent implements OnInit {
   public ngOnInit():void {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.user = user;
-  });
+      this.isFinalStateScope();
+    });
   }
 
   upload(fileName: string) {
     if (this.user != null) {
-      this.apiTeamMemberService.getTeamMemberById(this.user.id);
       this.fileFormControl.setErrors({'apiError': null});
       this.fileFormControl.updateValueAndValidity();
       if(this.importTSSform.invalid){
@@ -54,13 +57,30 @@ export class ProjectFileComponent implements OnInit {
       } else {
         const file_form: FileInput = this.importTSSform.get('file')?.value;
         const file = file_form.files[0];
-        this.uploadFileService.upload(file, 1, fileName).subscribe(
-          data => {this.showSuccess()},
-          error => {this.showError(error)},
-        );
+        this.apiTeamMemberService.getTeamMemberById(this.user.id).subscribe(value => {
+          this.uploadFileService.upload(file, value.idTeam, fileName).subscribe(
+            data => {
+              this.showSuccess();
+              this.isNotFinalScope = false;
+            },
+            error => {this.showError(error)},
+          );
+        });
       }
     }
 
+  }
+
+  isFinalStateScope() {
+    if (this.user != null) {
+      this.apiTeamMemberService.getTeamMemberById(this.user.id).subscribe(value => {
+        this.apiTeamService.getTeam(value.idTeam).subscribe(value => {
+          if(value.filePathFinalScopeStatement != null) {
+            this.isNotFinalScope = false;
+          }
+        })
+      });
+    }
   }
 
   showSuccess() {

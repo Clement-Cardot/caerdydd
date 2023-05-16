@@ -19,7 +19,7 @@ front/.angular
 test-api/target/
 
 upload/
-
+back/upload/
 
 # System files
 .DS_Store
