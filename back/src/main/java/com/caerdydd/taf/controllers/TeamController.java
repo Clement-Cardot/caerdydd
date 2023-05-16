@@ -273,11 +273,9 @@ public class TeamController {
             return new ResponseEntity<>(team, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if(e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
-                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
-                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER)) {
