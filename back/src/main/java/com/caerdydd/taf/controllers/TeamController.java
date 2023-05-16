@@ -228,7 +228,7 @@ public class TeamController {
                 case CustomRuntimeException.INCORRECT_FILE_FORMAT:
                     return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
                 default:
-                    logger.error("Unexpected Exception : {}", e.getMessage());
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
