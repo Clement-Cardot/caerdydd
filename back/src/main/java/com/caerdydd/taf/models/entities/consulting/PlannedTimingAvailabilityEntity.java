@@ -2,9 +2,11 @@ package com.caerdydd.taf.models.entities.consulting;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,18 +19,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@IdClass(PlannedTimingAvailabilityEntityId.class)
 @Table(name = "planned_timing_availability")
 public class PlannedTimingAvailabilityEntity implements Serializable{
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "id_planned_timing_consulting")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idPlannedTimingAvailability;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_planned_timing_consulting", referencedColumnName = "idPlannedTimingConsulting", nullable = false)
     private PlannedTimingConsultingEntity plannedTimingConsulting;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "id_ts")
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_ts", referencedColumnName = "idUser", nullable = false)
     private TeachingStaffEntity teachingStaff;
 
     private Boolean isAvailable = true;
@@ -47,27 +50,4 @@ public class PlannedTimingAvailabilityEntity implements Serializable{
                 + teachingStaff + ", isAvailable=" + isAvailable + "]";
     }
     
-}
-
-class PlannedTimingAvailabilityEntityId implements Serializable{
-    PlannedTimingConsultingEntity plannedTimingConsulting;
-    TeachingStaffEntity teachingStaff;
-
-    @Override
-    public boolean equals(Object o){
-        if (o == null) {
-            return false;
-        }
-        if (o.getClass() != PlannedTimingAvailabilityEntityId.class) {
-            return false;
-        }
-        PlannedTimingAvailabilityEntityId plannedTimingAvailabilityEntityId = (PlannedTimingAvailabilityEntityId) o;
-        return this.teachingStaff.equals(plannedTimingAvailabilityEntityId.teachingStaff)
-            && this.plannedTimingConsulting.equals(plannedTimingAvailabilityEntityId.plannedTimingConsulting);
-    }
-
-    @Override
-    public int hashCode(){
-        return this.teachingStaff.hashCode() + this.plannedTimingConsulting.hashCode();
-    }
 }

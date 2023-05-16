@@ -15,7 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
+import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
+import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
+import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
+import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
 import com.caerdydd.taf.repositories.PlannedTimingAvailabilityRepository;
 import com.caerdydd.taf.repositories.PlannedTimingConsultingRepository;
@@ -39,6 +44,9 @@ public class ConsultingService {
     private PlannedTimingAvailabilityRepository plannedTimingAvailabilityRepository;
 
     @Autowired
+    private TeachingStaffService teachingStaffService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -47,25 +55,37 @@ public class ConsultingService {
     @Autowired
     private FileRules fileRules;
 
-    public List<ConsultingDTO> listAllConsultings() throws CustomRuntimeException {
+    // List all planned timing for consultings
+    public List<PlannedTimingConsultingDTO> listAllPlannedTimingConsultings() throws CustomRuntimeException {
         try {
-            return consultingRepository.findAll().stream()
-                        .map(consulting -> modelMapper.map(consulting, ConsultingDTO.class))
+            return plannedTimingConsultingRepository.findAll().stream()
+                        .map(plannedTimingConsultingEntity -> modelMapper.map(plannedTimingConsultingEntity, PlannedTimingConsultingDTO.class))
                         .collect(Collectors.toList()) ;
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
 
-    public ConsultingDTO saveConsulting(ConsultingDTO consulting) {
-        ConsultingEntity consultingEntity = modelMapper.map(consulting, ConsultingEntity.class);
+    // Save a planned Timing for consulting
+    public PlannedTimingConsultingDTO savePlannedTimingConsulting(PlannedTimingConsultingDTO consulting) {
+        PlannedTimingConsultingEntity plannedTimingConsultingEntity = modelMapper.map(consulting, PlannedTimingConsultingEntity.class);
 
-        ConsultingEntity response = consultingRepository.save(consultingEntity);
+        PlannedTimingConsultingEntity response = plannedTimingConsultingRepository.save(plannedTimingConsultingEntity);
 
-        return modelMapper.map(response, ConsultingDTO.class);
+        return modelMapper.map(response, PlannedTimingConsultingDTO.class);
     }
 
-    public List<ConsultingDTO> uploadConsultings(MultipartFile consultingFile) throws CustomRuntimeException, IOException {
+    // Save a planned Timing for consulting
+    public PlannedTimingAvailabilityDTO savePlannedTimingAvailability(PlannedTimingAvailabilityDTO consulting) {
+        PlannedTimingAvailabilityEntity plannedTimingConsultingEntity = modelMapper.map(consulting, PlannedTimingAvailabilityEntity.class);
+
+        PlannedTimingAvailabilityEntity response = plannedTimingAvailabilityRepository.save(plannedTimingConsultingEntity);
+
+        return modelMapper.map(response, PlannedTimingAvailabilityDTO.class);
+    }
+
+    // Upload a file with planned timings for consulting
+    public List<PlannedTimingConsultingDTO> uploadPlannedTimingConsultings(MultipartFile consultingFile) throws CustomRuntimeException, IOException {
 
         // Verify that user is a Planning assistant
         userServiceRules.checkCurrentUserRole("PLANNING_ROLE");
@@ -77,22 +97,29 @@ public class ConsultingService {
         fileRules.checkFileIsCSV(consultingFile);
             
         // Read file and save consultings
-        List<ConsultingDTO> consultingsFromFile = readCsvFile(consultingFile);
-        List<ConsultingDTO> consultingsSaved = new ArrayList<>();
+        List<PlannedTimingConsultingDTO> consultingsFromFile = readCsvFile(consultingFile);
 
-        for (ConsultingDTO consulting : consultingsFromFile) {
-            ConsultingDTO consultingSaved = saveConsulting(consulting);
-            consultingsSaved.add(consultingSaved);
+        List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
+
+        for (PlannedTimingConsultingDTO plannedTimingConsulting : consultingsFromFile) {
+            for (TeachingStaffDTO teachingStaffDTO : teachingStaffs) {
+                PlannedTimingAvailabilityDTO availabilityDTO = new PlannedTimingAvailabilityDTO();
+                availabilityDTO.setTeachingStaff(teachingStaffDTO);
+                availabilityDTO.setPlannedTimingConsulting(plannedTimingConsulting);
+                plannedTimingConsulting.getTeachingStaffAvailabilities().add(availabilityDTO);
+            }
+            savePlannedTimingConsulting(plannedTimingConsulting);
         }
 
-        return consultingsSaved;
+        return listAllPlannedTimingConsultings();
     }
 
-    List<ConsultingDTO> readCsvFile(MultipartFile file) throws CustomRuntimeException, IOException {
+    // Read a .csv file with planned timings for consulting
+    List<PlannedTimingConsultingDTO> readCsvFile(MultipartFile file) throws CustomRuntimeException, IOException {
         Reader reader = Reader.nullReader();
         try {
             reader = new InputStreamReader(file.getInputStream());
-            List<ConsultingDTO> consultings = new CsvToBeanBuilder<ConsultingDTO>(reader).withType(ConsultingDTO.class).build().parse();
+            List<PlannedTimingConsultingDTO> consultings = new CsvToBeanBuilder<PlannedTimingConsultingDTO>(reader).withType(PlannedTimingConsultingDTO.class).build().parse();
             reader.close();
             return consultings;
         } catch (IllegalStateException | IOException e) {

@@ -38,7 +38,7 @@ public class ConsultingEntity {
 
         @ManyToOne
         @JoinColumn(name = "id_ts")
-        private TeachingStaffEntity ts;
+        private TeachingStaffEntity teachingStaff;
 
         public ConsultingEntity(){
         }
