@@ -3,8 +3,8 @@ package com.caerdydd.taf.services;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,11 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
-import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
@@ -64,6 +62,23 @@ public class ConsultingService {
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
+    }
+
+    // Get a planned timing availability by id
+    public PlannedTimingAvailabilityDTO getPlannedTimingAvailabilityById(Integer id) throws CustomRuntimeException {
+        Optional<PlannedTimingAvailabilityEntity> optionalAvailability;
+        try {
+            optionalAvailability = plannedTimingAvailabilityRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    
+        if (optionalAvailability.isEmpty()) {
+            throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND);
+        }
+    
+        PlannedTimingAvailabilityEntity availabilityEntity = optionalAvailability.get();
+        return modelMapper.map(availabilityEntity, PlannedTimingAvailabilityDTO.class);
     }
 
     // Save a planned Timing for consulting
@@ -132,6 +147,26 @@ public class ConsultingService {
             throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
         } 
         
+    }
+
+    // Update a planned timing availability
+    public PlannedTimingAvailabilityDTO updatePlannedTimingAvailability(PlannedTimingAvailabilityDTO plannedTimingAvailabilityDTO) throws CustomRuntimeException {
+
+        // Check if planned timing availability exists
+        PlannedTimingAvailabilityDTO plannedTimingAvailability = getPlannedTimingAvailabilityById(plannedTimingAvailabilityDTO.getIdPlannedTimingAvailability());
+
+        // Verify that user is a Teaching staff
+        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // TODO check if user is the owner of the availability
+
+        // TODO check if planned timing is not in the past
+
+        // TODO check if planned timing is not already taken
+
+        // Update entity
+        plannedTimingAvailability.setIsAvailable(plannedTimingAvailabilityDTO.getIsAvailable());
+        return savePlannedTimingAvailability(plannedTimingAvailability);
     }
         
 }
