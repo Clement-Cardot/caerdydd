@@ -47,7 +47,7 @@ public class TeachingStaffController {
         }
     }
 
-    @GetMapping("/{teachingStaffId}")
+    @GetMapping("/modifySpeciality/{teachingStaffId}")
     public ResponseEntity<TeachingStaffDTO> getTeachingStaffById(@PathVariable Integer teachingStaffId) {
       logger.info("Process request : Get teachingStaff by id : {}", teachingStaffId);
       try {

@@ -97,7 +97,14 @@ export class DefineSpecialtyComponent implements OnInit {
         ', ' +
         this.teachingStaff.isModelingSpecialist
     );
-    this.apiTeachingStaffService.setSpeciality(this.teachingStaff);
+    this.apiTeachingStaffService.setSpeciality(this.teachingStaff).subscribe(
+      (response) => {
+        console.log('Response from server: ', response);
+      },
+      (error) => {
+        console.error('Error:', error);
+      }
+    );
   }
 
   isCurrentUserATeachingStaff() {

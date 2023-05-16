@@ -24,13 +24,13 @@ export class ApiTeachingStaffService {
   setSpeciality(teachingStaff: TeachingStaff): Observable<TeachingStaff> {
     const url = `${this.baseUrl}/modifySpeciality`;
     return this.http
-      .post(url, teachingStaff)
+      .post<any>(url, teachingStaff)
       .pipe(map((data: any) => this.teachingStaffAdapter.adapt(data)))
       .pipe(catchError(this.handleError));
   }
 
   getTeachingStaff(teachingStaffId: number): Observable<TeachingStaff> {
-    const url = `${this.baseUrl}/${teachingStaffId}`;
+    const url = `${this.baseUrl}/modifySpeciality/${teachingStaffId}`;
     return this.http
       .get(url)
       .pipe(map((data: any) => this.teachingStaffAdapter.adapt(data)))
