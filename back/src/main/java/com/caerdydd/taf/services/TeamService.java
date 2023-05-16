@@ -198,34 +198,6 @@ public class TeamService {
         TeamDTO pairedTeam = getTeamById(team.getProjectValidation().getIdProject());
         return pairedTeam.getTestBookLink();
     }
-    
-    public TeamDTO setTeamWorkMarkById(Integer id, Integer teamWorkMark)throws CustomRuntimeException{
-        // Check if the current user is a jury member 
-        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
-
-      // Check if the value of the bonus is correct.
-      TeamServiceRules.checkTeamWorkMark(teamWorkMark);
-
-
-      TeamDTO team = getTeamById(id);
-
-      team.setTeamWorkMark(teamWorkMark);
-      return saveTeam(team);
-  }
-
-
-    public TeamDTO setTeamValidationMarkById(Integer id, Integer teamValidationMark)throws CustomRuntimeException{
-        // Check if the current user is a jury member 
-        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
-
-    // Check if the value of the bonus is correct.
-    TeamServiceRules.checkTeamValidationMark(teamValidationMark);
-
-    TeamDTO team = getTeamById(id);
-
-    team.setTeamValidationMark(teamValidationMark);
-    return saveTeam(team);
-    }
 
 }
 
