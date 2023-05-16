@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.user.JuryDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
@@ -36,10 +37,9 @@ public class PresentationDTO {
     private String jury1Notes;
     private String jury2Notes;
 
-    @JsonManagedReference(value="jury")
     private JuryDTO jury;
 
-    @JsonManagedReference(value="project")
+    @JsonBackReference(value="project")
     private ProjectDTO project;
 
     public PresentationDTO() {

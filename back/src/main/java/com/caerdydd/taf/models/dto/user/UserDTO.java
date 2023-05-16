@@ -31,14 +31,14 @@ public class UserDTO {
     @CsvBindByPosition(position = 4, required = true)
     private String speciality;
     
-    @JsonManagedReference
+    @JsonManagedReference(value = "roles")
     private List<RoleDTO> roles = new ArrayList<>();
 
-    @JsonBackReference
+    @JsonBackReference(value = "teamMember")
     private TeamMemberDTO teamMember;
     
-    // @JsonBackReference
-    // private TeachingStaffDTO teachingStaff;
+    @JsonBackReference(value = "teachingStaff")
+    private TeachingStaffDTO teachingStaff;
 
     public UserDTO() {
     }

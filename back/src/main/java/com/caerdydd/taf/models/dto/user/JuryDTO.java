@@ -1,12 +1,6 @@
 package com.caerdydd.taf.models.dto.user;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
-
-import com.caerdydd.taf.models.dto.project.PresentationDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,19 +12,15 @@ import lombok.Setter;
 public class JuryDTO {
     private Integer idJury;
 
-    @JsonManagedReference(value="ts1")
-    private UserDTO ts1;
+    private TeachingStaffDTO ts1;
     
-    @JsonManagedReference(value="ts2")
-    private UserDTO ts2;
+    private TeachingStaffDTO ts2;
 
-    @JsonBackReference(value="jury")
-    private List<PresentationDTO> presentations;
 
     public JuryDTO() {
     }
 
-    public JuryDTO(UserDTO ts1, UserDTO ts2) {
+    public JuryDTO(TeachingStaffDTO ts1, TeachingStaffDTO ts2) {
         this.ts1 = ts1;
         this.ts2 = ts2;
     }
@@ -41,7 +31,6 @@ public class JuryDTO {
             " idJury='" + getIdJury() + "'" +
             ", ts1='" + getTs1() + "'" +
             ", ts2='" + getTs2() + "'" +
-            ", presentations='" + getPresentations() + "'" +
             "}";
     }
 

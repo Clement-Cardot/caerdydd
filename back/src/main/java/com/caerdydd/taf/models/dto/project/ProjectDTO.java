@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +26,7 @@ public class ProjectDTO {
     @JsonBackReference(value="projectValidation")
     private TeamDTO teamValidation;
 
-    @JsonBackReference(value="project")
+    @JsonManagedReference(value="project")
     private List<PresentationDTO> presentations;
 
     //@JsonBackReference

@@ -22,7 +22,7 @@ public class RoleDTO {
     private Integer idRole;
     private String role;
 
-    @JsonBackReference
+    @JsonBackReference(value = "roles")
     private UserDTO user;
 
     public RoleDTO() {
