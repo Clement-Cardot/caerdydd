@@ -31,9 +31,6 @@ public class TeachingStaffService {
   private ModelMapper modelMapper;
 
   @Autowired
-  private UserService userService;
-
-  @Autowired
   UserServiceRules userServiceRules;
 
   
@@ -63,20 +60,11 @@ public class TeachingStaffService {
      );
   }
 
-  public TeachingStaffDTO saveTeachingStaff(TeachingStaffDTO teachingStaff) throws CustomRuntimeException {
+  public TeachingStaffDTO saveTeachingStaff(TeachingStaffDTO teachingStaff) {    
     TeachingStaffEntity teachingStaffEntity = modelMapper.map(
       teachingStaff, TeachingStaffEntity.class);
 
-    if(teachingStaffEntity.getUser().getId() != null){
-      throw new CustomRuntimeException(CustomRuntimeException.TEACHINGSTAFF_ID_SHOULD_BE_NULL);
-    }
-
-    TeachingStaffEntity response = null;
-    try{
-        response = teachingStaffRepository.save(teachingStaffEntity);
-    } catch(Exception e) {
-        throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
-    }
+      TeachingStaffEntity response = teachingStaffRepository.save(teachingStaffEntity);
 
     return modelMapper.map(response, TeachingStaffDTO.class);
   }

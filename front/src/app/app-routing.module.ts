@@ -119,7 +119,7 @@ const routes: Routes = [
 
   //TeachingStaff Pages
   {
-    path: 'teachingStaff',
+    path: 'teachingStaffSpe',
     title: 'Corps Enseignant' + websiteName,
     component: AllTeachingStaffComponent,
     canActivate: [AuthGuard, RoleGuard],
@@ -127,7 +127,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'teachingStaff/modifySpeciality',
+    path: 'teachingStaffSpe/modifySpeciality',
     title: 'Modifier Specialités' + websiteName,
     component: DefineSpecialtyComponent,
     canActivate: [AuthGuard, RoleGuard],

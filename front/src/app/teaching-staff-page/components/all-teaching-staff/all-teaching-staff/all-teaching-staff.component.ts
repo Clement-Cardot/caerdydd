@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { TeachingStaff } from 'src/app/core/data/models/teaching-staff.model';
 import { User } from 'src/app/core/data/models/user.model';
 import { ApiTeachingStaffService } from 'src/app/core/services/api-teaching-staff.service';
-import { ApiUserService } from 'src/app/core/services/api-user.service';
-import { Router } from '@angular/router';
+import { UserDataService } from 'src/app/core/services/user-data.service';
 
 @Component({
   selector: 'app-all-teaching-staff',
@@ -12,24 +11,34 @@ import { Router } from '@angular/router';
 })
 export class AllTeachingStaffComponent {
   teachingStaffs!: TeachingStaff[];
+  currentUser!: User | null;
 
   constructor(
     private apiTeachingStaffService: ApiTeachingStaffService,
-    private router: Router
+    public userDataService: UserDataService
   ) {}
 
   ngOnInit(): void {
-    this.teachingStaffs = this.getAllTS();
+    this.getAllTS();
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+      this.currentUser = user;
+    });
   }
 
-  public getAllTS(): TeachingStaff[] {
+  public getAllTS() {
     this.apiTeachingStaffService.getAllTeachingStaff().subscribe((data) => {
       this.teachingStaffs = data;
     });
-    return this.teachingStaffs;
   }
 
-  public toDefineSpeciality(): void {
-    this.router.navigateByUrl('/defineSpeciality');
+  isCurrentUserATeachingStaff() {
+    if (this.currentUser == null) {
+      console.log('User is not connected');
+      return false;
+    }
+    if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
+      return true;
+    }
+    return false;
   }
 }

@@ -1,8 +1,24 @@
 <div>
   <mat-list role="list" *ngFor="let teachingStaff of teachingStaffs">
-    <mat-list-item>{{ teachingStaff.user.firstname }}</mat-list-item>
+    <mat-list-item
+      >{{ teachingStaff.user.firstname }} {{ teachingStaff.user.lastname }} :
+    </mat-list-item>
+    <mat-list-item *ngIf="teachingStaff.isInfrastructureSpecialist"
+      >Spécialiste Infrastructure
+    </mat-list-item>
+    <mat-list-item *ngIf="teachingStaff.isDevelopmentSpecialist"
+      >Spécialiste Développement
+    </mat-list-item>
+    <mat-list-item *ngIf="teachingStaff.isModelingSpecialist"
+      >Spécialiste Modélisation</mat-list-item
+    >
+    <mat-divider></mat-divider>
   </mat-list>
-  <button mat-raised-button routerLink="/teachingStaff/modifySpeciality">
+  <button
+    *ngIf="isCurrentUserATeachingStaff()"
+    mat-raised-button
+    routerLink="/teachingStaffSpe/modifySpeciality"
+  >
     Définir mes spécialités
   </button>
 </div>

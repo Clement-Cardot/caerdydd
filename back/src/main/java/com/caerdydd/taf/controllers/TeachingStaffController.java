@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
 
 @RestController
-@RequestMapping("/api/teaching_staff")
+@RequestMapping("/api/teachingStaffSpe")
 public class TeachingStaffController {
 
     private static final Logger logger = LogManager.getLogger(TeachingStaffController.class);
@@ -35,13 +36,19 @@ public class TeachingStaffController {
             List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
             return new ResponseEntity<>(teachingStaffs, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.ALL_TEACHINGSTAFF_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
-    @PutMapping("/modifySpeciality")
-    public ResponseEntity<TeachingStaffDTO> getTeachingStaffById(@RequestBody Integer teachingStaffId) {
+    @GetMapping("/{teachingStaffId}")
+    public ResponseEntity<TeachingStaffDTO> getTeachingStaffById(@PathVariable Integer teachingStaffId) {
       logger.info("Process request : Get teachingStaff by id : {}", teachingStaffId);
       try {
             TeachingStaffDTO teachingStaff = teachingStaffService.getTeachingStaffById(teachingStaffId);
