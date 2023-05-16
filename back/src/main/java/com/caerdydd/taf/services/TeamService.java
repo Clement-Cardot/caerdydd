@@ -198,6 +198,23 @@ public class TeamService {
         TeamDTO pairedTeam = getTeamById(team.getProjectValidation().getIdProject());
         return pairedTeam.getTestBookLink();
     }
+    
+    public TeamDTO setTeamWorkMarkById(Integer id, Integer teamWorkMark)throws CustomRuntimeException{
+        // Check if the current user is a jury member 
+        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
+
+      // Check if the value of the bonus is correct.
+      TeamServiceRules.checkTeamWorkMark(teamWorkMark);
+
+
+      TeamDTO team = getTeamById(id);
+
+      // TODO faire une rules pour vérifier que la note total est < 20
+      //teamMemberServiceRules.checkTeamMemberMarkAfterBonus(teamMember, individualMark);
+
+      team.setTeamWorkMark(teamWorkMark);
+      return saveTeam(team);
+  }
 
 
     public TeamDTO setTeamValidationMarkById(Integer id, Integer teamValidationMark)throws CustomRuntimeException{
