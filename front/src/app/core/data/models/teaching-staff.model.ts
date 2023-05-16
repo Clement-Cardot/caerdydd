@@ -4,6 +4,7 @@ import { Adapter } from "../adapter";
 
 export class TeachingStaff{
     constructor(
+        public idUser: number,
         public user: User,
         public isInfrastructureSpecialist: boolean,
         public isDevelopmentSpecialist: boolean,
@@ -22,6 +23,7 @@ export class TeachingStaffAdapter implements Adapter<TeachingStaff>{
 
     adapt(item: any): TeachingStaff {
         return new TeachingStaff(
+            item.idUser,
             this.userAdapter.adapt(item.user),
             item.isInfrastructureSpecialist,
             item.isDevelopmentSpecialist,
