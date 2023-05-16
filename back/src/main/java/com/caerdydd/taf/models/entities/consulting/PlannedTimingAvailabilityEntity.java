@@ -26,7 +26,7 @@ public class PlannedTimingAvailabilityEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPlannedTimingAvailability;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_planned_timing_consulting", referencedColumnName = "idPlannedTimingConsulting", nullable = false)
     private PlannedTimingConsultingEntity plannedTimingConsulting;
 

@@ -47,7 +47,6 @@ import java.text.DateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,8 +56,6 @@ import io.swagger.client.auth.ApiKeyAuth;
 import io.swagger.client.auth.OAuth;
 
 public class ApiClient {
-
-    static final Logger logger = Logger.getLogger(ApiClient.class.getName());
 
     private String basePath = "http://localhost:8080";
     private boolean debugging = false;
@@ -285,7 +282,6 @@ public class ApiClient {
                 return;
             }
         }
-        logger.warn("No HTTP basic authentication configured!");
         throw new RuntimeException("No HTTP basic authentication configured!");
     }
 
@@ -301,7 +297,6 @@ public class ApiClient {
                 return;
             }
         }
-        logger.warn("No HTTP basic authentication configured!");
         throw new RuntimeException("No HTTP basic authentication configured!");
     }
 
@@ -317,7 +312,6 @@ public class ApiClient {
                 return;
             }
         }
-        logger.warn("No API key authentication configured!");
         throw new RuntimeException("No API key authentication configured!");
     }
 
@@ -333,7 +327,6 @@ public class ApiClient {
                 return;
             }
         }
-        logger.warn("No API key authentication configured!");
         throw new RuntimeException("No API key authentication configured!");
     }
 
@@ -349,7 +342,6 @@ public class ApiClient {
                 return;
             }
         }
-        logger.warn("No OAuth2 authentication configured!");
         throw new RuntimeException("No OAuth2 authentication configured!");
     }
 

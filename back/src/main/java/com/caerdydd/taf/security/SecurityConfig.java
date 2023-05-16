@@ -68,7 +68,7 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthEntryPointJwt unauthorizedHandler, CustomUserDetailService userDetailsService) throws Exception {
         return http
-
+                //.cors().and().csrf().disable()
                 .csrf().csrfTokenRepository(csrfTokenRepository()).and()
 
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
