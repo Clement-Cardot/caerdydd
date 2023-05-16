@@ -5,6 +5,8 @@ import { CalendarDateFormatter, CalendarModule, CalendarNativeDateFormatter, Dat
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from 'moment';
 import { MaterialModule } from '../material.module';
+import { ClickedEventDialogComponent } from './clicked-event-dialog/clicked-event-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 export function momentAdapterFactory() {
   return adapterFactory(moment);
@@ -12,11 +14,13 @@ export function momentAdapterFactory() {
 
 @NgModule({
   declarations: [
-    ConsultingCalendarComponent
+    ConsultingCalendarComponent,
+    ClickedEventDialogComponent
   ],
   imports: [
     CommonModule,
     MaterialModule,
+    FormsModule,
     CalendarModule.
     forRoot({ 
         provide: DateAdapter, useFactory: momentAdapterFactory

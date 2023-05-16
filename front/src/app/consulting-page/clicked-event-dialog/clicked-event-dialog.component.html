@@ -1,0 +1,38 @@
+<div [ngSwitch]="userRole">
+
+    <!-- Team Member View -->
+    <div *ngSwitchCase="'TEAM_MEMBER_ROLE'">
+        <h1>{{data.event.title}}</h1>
+        <p>{{data.event.start | date:'short'}} - {{data.event.end | date:'shortTime'}}</p>
+        <p> Professeurs disponibles : </p>
+        <div *ngFor="let availability of data.event.availabilities">
+            <p *ngIf="availability.isAvailable"> {{availability.teachingStaff.user.firstname}} {{availability.teachingStaff.user.lastname}}</p>
+        </div> 
+    </div>
+
+    <!-- Teaching Staff View -->
+    <div *ngSwitchCase="'TEACHING_STAFF_ROLE'">
+        <h1>{{data.event.title}}</h1>
+        <p>{{data.event.start | date:'short'}} - {{data.event.end | date:'shortTime'}}</p>
+
+        <form id="consultingAvailabilityForm" (ngSubmit)="submit()">
+            <label id="availability">Votre disponibilité sur cette session :</label>
+            <mat-radio-group 
+                aria-labelledby="availability" 
+                [(ngModel)]="myAvailability.isAvailable"
+                [ngModelOptions]="{standalone: true}">
+                <mat-radio-button [value]="true">Disponible</mat-radio-button>
+                <mat-radio-button [value]="false">Indisponible</mat-radio-button>
+            </mat-radio-group>
+
+            <button mat-raised-button>Valider</button>
+        </form>
+    </div>
+
+    <!-- Planning View -->
+    <div *ngSwitchCase="'PLANNING_ROLE'">
+
+    </div>
+</div>
+
+

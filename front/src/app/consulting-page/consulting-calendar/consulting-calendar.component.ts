@@ -1,7 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { CalendarEvent } from 'angular-calendar';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
+import { ClickedEventDialogComponent } from '../clicked-event-dialog/clicked-event-dialog.component';
+import { PlannedTimingConsulting } from 'src/app/core/data/models/planned-timing-consulting.model';
 
+class ClickEvent {
+  event!: CalendarEvent;
+  sourceEvent!: MouseEvent | KeyboardEvent;
+}
 @Component({
   selector: 'app-consulting-calendar',
   templateUrl: './consulting-calendar.component.html',
@@ -9,16 +16,15 @@ import { ApiConsultingService } from 'src/app/core/services/api-consulting.servi
 })
 export class ConsultingCalendarComponent implements OnInit, OnDestroy {
   viewDate: Date = new Date();
-  events: CalendarEvent[] = [];
-
+  events: PlannedTimingConsulting[] = [];
   refresh: any;
   
 
-  constructor(private apiConsultingService: ApiConsultingService) { }
+  constructor(private apiConsultingService: ApiConsultingService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.updateConsultings();
-    this.refresh = setInterval(() => { this.updateConsultings() },  5000 );
+    this.loadConsultings();
+    this.refresh = setInterval(() => { this.loadConsultings() },  5000 );
   }
 
   ngOnDestroy() {
@@ -27,11 +33,15 @@ export class ConsultingCalendarComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateConsultings() {
+  loadConsultings() {
     this.apiConsultingService.getAllConsultings().subscribe(data => {
       console.log(data);
       this.events = data;
     });
+  }
+
+  clickOnEvent(clickEvent : ClickEvent) {
+    this.dialog.open(ClickedEventDialogComponent, { data: { event: clickEvent.event }});
   }
 
 }
