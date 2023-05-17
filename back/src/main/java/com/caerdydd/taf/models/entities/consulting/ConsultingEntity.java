@@ -35,9 +35,9 @@ public class ConsultingEntity implements Serializable {
         @JoinColumn(name = "id_planned_timing_availability")
         private PlannedTimingAvailabilityEntity plannedTimingAvailability;
 
-        @ManyToOne
-        @JoinColumn(name = "id_planned_timing_consulting")
-        private PlannedTimingConsultingEntity plannedTimingConsulting;
+        @OneToOne
+        @JoinColumn(name = "id_planned_timing_availability")
+        private PlannedTimingAvailabilityEntity plannedTimingAvailability;
 
         @ManyToOne
         @JoinColumn(name = "id_team")
