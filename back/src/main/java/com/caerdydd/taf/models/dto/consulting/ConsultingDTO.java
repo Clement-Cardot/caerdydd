@@ -2,6 +2,7 @@ package com.caerdydd.taf.models.dto.consulting;
 
 import org.springframework.stereotype.Component;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +18,11 @@ public class ConsultingDTO {
     private Boolean isValidated = false;
     private Boolean isReserved = false;
 
-    private PlannedTimingAvailabilityDTO plannedTimingAvailability;
+    private PlannedTimingConsultingDTO plannedTimingConsulting;
 
     private TeamDTO team;
+    
+    private TeachingStaffDTO teachingStaff;
 
     public ConsultingDTO() {
     }
