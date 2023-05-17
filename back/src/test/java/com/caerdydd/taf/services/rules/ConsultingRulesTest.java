@@ -124,9 +124,7 @@ public class ConsultingRulesTest {
     @Test
     void testCheckPlannedTimingIsNotAlreadyTaken_True() {
         // Prepare Input
-        ConsultingDTO consultingDTO = new ConsultingDTO();
         PlannedTimingAvailabilityDTO plannedTimingAvailabilityDTO = new PlannedTimingAvailabilityDTO();
-        plannedTimingAvailabilityDTO.setConsulting(consultingDTO);
 
         // Call method to test
         try {
@@ -139,7 +137,9 @@ public class ConsultingRulesTest {
     @Test
     void testCheckPlannedTimingIsNotAlreadyTaken_False() {
         // Prepare Input
+        ConsultingDTO consultingDTO = new ConsultingDTO();
         PlannedTimingAvailabilityDTO plannedTimingAvailabilityDTO = new PlannedTimingAvailabilityDTO();
+        plannedTimingAvailabilityDTO.setConsulting(consultingDTO);
 
         // Call method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {

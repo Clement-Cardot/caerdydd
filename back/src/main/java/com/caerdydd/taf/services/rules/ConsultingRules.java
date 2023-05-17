@@ -23,7 +23,7 @@ public class ConsultingRules {
     }
 
     public void checkPlannedTimingIsNotAlreadyTaken(PlannedTimingAvailabilityDTO plannedTimingAvailability) throws CustomRuntimeException{
-        if (plannedTimingAvailability.getConsulting() == null){
+        if (plannedTimingAvailability.getConsulting() != null){
             throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN);
         }
     }

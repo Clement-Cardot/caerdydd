@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;

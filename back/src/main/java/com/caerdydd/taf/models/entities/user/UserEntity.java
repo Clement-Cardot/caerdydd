@@ -39,9 +39,9 @@ public class UserEntity implements Serializable {
     @PrimaryKeyJoinColumn
     private TeamMemberEntity teamMember;
 
-    // @OneToOne(mappedBy = "user")
-    // @PrimaryKeyJoinColumn
-    // private TeachingStaffEntity teachingStaff;
+    @OneToOne(mappedBy = "user")
+    @PrimaryKeyJoinColumn
+    private TeachingStaffEntity teachingStaff;
 
     // @OneToMany(mappedBy = "user")
     // private List<NotificationEntity> notifications;
