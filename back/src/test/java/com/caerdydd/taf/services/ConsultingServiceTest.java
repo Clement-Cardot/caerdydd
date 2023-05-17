@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -138,6 +139,9 @@ public class ConsultingServiceTest {
     // UploadConsultings
     @Test
     public void testuploadConsulting_Nominal() throws CustomRuntimeException, IOException {
+
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
         // Mock userServiceRules.checkCurrentUserRole()
         doNothing().when(userServiceRules).checkCurrentUserRole(any(String.class));
 

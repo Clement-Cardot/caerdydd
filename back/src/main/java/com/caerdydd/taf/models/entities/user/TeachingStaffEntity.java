@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -34,7 +35,7 @@ public class TeachingStaffEntity implements Serializable{
     private Boolean isOptionLeader = false;
     private Boolean isSubjectValidator = false;
 
-    @OneToMany(mappedBy = "teachingStaff")
+    @OneToMany(mappedBy = "teachingStaff", fetch = FetchType.LAZY)
     private List<PlannedTimingAvailabilityEntity> availabilities;
 
     public TeachingStaffEntity() {

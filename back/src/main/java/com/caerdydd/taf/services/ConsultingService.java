@@ -123,11 +123,12 @@ public class ConsultingService {
         List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
 
         for (PlannedTimingConsultingDTO plannedTimingConsulting : plannedTimingConsultingsFromFile) {
+            plannedTimingConsulting.setTeachingStaffAvailabilities(new ArrayList<>());
             for (TeachingStaffDTO teachingStaffDTO : teachingStaffs) {
                 PlannedTimingAvailabilityDTO availabilityDTO = new PlannedTimingAvailabilityDTO();
                 availabilityDTO.setTeachingStaff(teachingStaffDTO);
                 availabilityDTO.setPlannedTimingConsulting(plannedTimingConsulting);
-                availabilityDTO.setPlannedTimingConsulting(plannedTimingConsulting);
+                plannedTimingConsulting.getTeachingStaffAvailabilities().add(availabilityDTO);
             }
             plannedTimingConsultingsToSave.add(plannedTimingConsulting);
         }
