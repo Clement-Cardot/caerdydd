@@ -8,6 +8,7 @@ public class CustomRuntimeException extends Exception{
     
     // Not found messages
     public static final String USER_NOT_FOUND = "User not found";
+    public static final String TEACHING_STAFF_NOT_FOUND = "Teaching staff not found";
     public static final String TEAM_NOT_FOUND = "Team not found";
     public static final String TEAM_MEMBER_NOT_FOUND = "Team member not found";
     public static final String PROJECT_NOT_FOUND = "Can't found project";
