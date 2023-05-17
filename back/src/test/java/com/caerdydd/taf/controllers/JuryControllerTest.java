@@ -24,7 +24,7 @@ public class JuryControllerTest {
     private JuryService juryService;
 
     @Test
-    public void testCreateJury_nominal() throws CustomRuntimeException {
+    void testCreateJury_nominal() throws CustomRuntimeException {
         // Given
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
@@ -40,7 +40,7 @@ public class JuryControllerTest {
     }
 
     @Test
-    public void createJury_userNotPlanningAssistant_returnNotFound() throws CustomRuntimeException {
+    void createJury_userNotPlanningAssistant_returnNotFound() throws CustomRuntimeException {
         // Arrange
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
@@ -54,7 +54,7 @@ public class JuryControllerTest {
     }
 
     @Test
-    public void createJury_serviceError_returnInternalServerError() throws CustomRuntimeException {
+    void createJury_serviceError_returnInternalServerError() throws CustomRuntimeException {
         // Arrange
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
@@ -68,7 +68,7 @@ public class JuryControllerTest {
     }
 
     @Test
-    public void testCreateJury_UnexpectedError() throws CustomRuntimeException{
+    void testCreateJury_UnexpectedError() throws CustomRuntimeException{
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
         when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException("Unexpected exception"));

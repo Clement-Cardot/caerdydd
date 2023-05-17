@@ -31,14 +31,14 @@ public class JuryServiceRulesTest {
     JuryRepository juryRepositoryMock;
 
     @Test
-    public void checkDifferentTeachingStaff_DifferentTeachingStaff(){
+    void checkDifferentTeachingStaff_DifferentTeachingStaff(){
         Integer teachingStaffId = 1;
         Integer otherTeachingStaffId = 2;
         assertDoesNotThrow(() -> juryServiceRules.checkDifferentTeachingStaff(teachingStaffId, otherTeachingStaffId));
     }
 
     @Test
-    public void checkDifferentTeachingStaff_SameTeachingStaff(){
+    void checkDifferentTeachingStaff_SameTeachingStaff(){
         Integer teachingStaffId = 1;
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
             juryServiceRules.checkDifferentTeachingStaff(teachingStaffId, teachingStaffId);
@@ -49,7 +49,7 @@ public class JuryServiceRulesTest {
     }
 
     @Test
-    public void testCheckJuryExists_JuryDoNotExist(){
+    void testCheckJuryExists_JuryDoNotExist(){
         Integer idTs1 = 1;
         Integer idTs2 = 2;
         UserEntity ts1 = new UserEntity();
@@ -65,7 +65,7 @@ public class JuryServiceRulesTest {
     }
 
     @Test
-    public void testCheckJuryExists_JuryAlreadyExists() throws CustomRuntimeException {
+    void testCheckJuryExists_JuryAlreadyExists() throws CustomRuntimeException {
         // mock de userRepository
         UserEntity ts1 = new UserEntity();
         ts1.setId(1);

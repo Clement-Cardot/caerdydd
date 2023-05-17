@@ -20,7 +20,7 @@ public class FileRulesTest {
     private FileRules fileRules;
 
     @Test
-    public void checkFileIsNotEmpty_FileIsEmpty() {
+    void checkFileIsNotEmpty_FileIsEmpty() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", new byte[0]);
 
@@ -34,7 +34,7 @@ public class FileRulesTest {
     }
 
     @Test
-    public void checkFileIsNotEmpty_FileIsNotEmpty() {
+    void checkFileIsNotEmpty_FileIsNotEmpty() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.txt", "text/plain", "some xml".getBytes());
 
@@ -47,7 +47,7 @@ public class FileRulesTest {
     }
 
     @Test
-    public void checkFileIsCSV_FileIsCSV() {
+    void checkFileIsCSV_FileIsCSV() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.csv", "text/plain", "some xml".getBytes());
 
@@ -60,7 +60,7 @@ public class FileRulesTest {
     }
 
     @Test
-    public void checkFileIsCSV_FileIsNotCSV() {
+    void checkFileIsCSV_FileIsNotCSV() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.txt", "text/plain", "some xml".getBytes());
 

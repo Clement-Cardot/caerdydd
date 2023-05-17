@@ -1,5 +1,7 @@
 package com.caerdydd.taf.models.entities.consulting;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +20,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "consulting")
-public class ConsultingEntity {
+public class ConsultingEntity implements Serializable {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)

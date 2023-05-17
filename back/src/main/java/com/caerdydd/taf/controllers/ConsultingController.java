@@ -70,8 +70,23 @@ public class ConsultingController {
             PlannedTimingAvailabilityDTO savedPlannedTimingAvailabilityDTO = consultingService.updatePlannedTimingAvailability(plannedTimingAvailabilityDTO);
             return new ResponseEntity<>(savedPlannedTimingAvailabilityDTO, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            switch (e.getMessage()) {
+                case CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND:
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY:
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST:
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN:
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
         }
     }
     

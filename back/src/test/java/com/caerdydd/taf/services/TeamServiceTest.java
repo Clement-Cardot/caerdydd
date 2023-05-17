@@ -221,7 +221,7 @@ class TeamServiceTest {
 
     // Test saveTeam() method
     @Test
-    public void saveTeamTest_Nominal(){
+    void saveTeamTest_Nominal(){
         // Mock teamRepository.save() method
         TeamEntity mockedAnswer = new TeamEntity(
                                             1, 
@@ -249,7 +249,7 @@ class TeamServiceTest {
 
     // Test applyInATeam() method
     @Test
-    public void applyInATeamTest_Nominal() throws CustomRuntimeException {
+    void applyInATeamTest_Nominal() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -323,7 +323,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_UserNotFound() throws CustomRuntimeException {
+    void applyInATeamTest_UserNotFound() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         when(userService.getUserById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));        
 
@@ -348,7 +348,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_TeamNotFound() throws CustomRuntimeException {
+    void applyInATeamTest_TeamNotFound() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -392,7 +392,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_UserIsNotAStudent() throws CustomRuntimeException {
+    void applyInATeamTest_UserIsNotAStudent() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -446,7 +446,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
+    void applyInATeamTest_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -503,7 +503,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_TeamIsFull() throws CustomRuntimeException {
+    void applyInATeamTest_TeamIsFull() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -563,7 +563,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_TeamHasAlready2CSS() throws CustomRuntimeException {
+    void applyInATeamTest_TeamHasAlready2CSS() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -626,7 +626,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_TeamHasAlready4LD() throws CustomRuntimeException {
+    void applyInATeamTest_TeamHasAlready4LD() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);

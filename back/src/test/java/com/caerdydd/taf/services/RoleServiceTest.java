@@ -40,7 +40,7 @@ public class RoleServiceTest {
     private ModelMapper modelMapper;
 
     @Test
-    public void testListAllRoles_Nominal(){
+    void testListAllRoles_Nominal(){
         // Mock teamRepository.findAll() method
         List<RoleEntity> mockedAnswer = new ArrayList<RoleEntity>();
         mockedAnswer.add(new RoleEntity(1, "STUDENT_ROLE", new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD")));
@@ -67,7 +67,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void testListAllRoles_Empty(){
+    void testListAllRoles_Empty(){
         // Mock teamRepository.findAll() method
         List<RoleEntity> mockedAnswer = new ArrayList<RoleEntity>();
         when(roleRepository.findAll()).thenReturn(mockedAnswer);
@@ -90,7 +90,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void testListAllRoles_ServiceError(){
+    void testListAllRoles_ServiceError(){
         // Mock teamRepository.findAll() method
         when(roleRepository.findAll()).thenThrow(new NoSuchElementException());
 
@@ -105,7 +105,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void testSaveRole_Nominal(){
+    void testSaveRole_Nominal(){
         // Mock teamRepository.save() method
         RoleEntity mockedAnswer = new RoleEntity(1, "STUDENT_ROLE", new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD"));
         when(roleRepository.save(any(RoleEntity.class))).thenReturn(mockedAnswer);

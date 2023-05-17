@@ -37,7 +37,7 @@ public class TeachingStaffServiceTest {
     private ModelMapper modelMapper;
 
     @Test
-    public void testListAllTeachingStaff_Nominal() {
+    void testListAllTeachingStaff_Nominal() {
         // Mock teamMemberRepository.findAll() method
         List<TeachingStaffEntity> mockedAnswer = new ArrayList<TeachingStaffEntity>();
 
@@ -63,7 +63,7 @@ public class TeachingStaffServiceTest {
     }
 
     @Test
-    public void testListAllTeachingStaff_Empty() {
+    void testListAllTeachingStaff_Empty() {
           // Mock teamMemberRepository.findAll() method
           List<TeachingStaffEntity> mockedAnswer = new ArrayList<TeachingStaffEntity>();
           when(teachingStaffRepository.findAll()).thenReturn(mockedAnswer);
@@ -86,7 +86,7 @@ public class TeachingStaffServiceTest {
     }
 
     @Test
-    public void testListAllTeachingStaff_ServiceError() {
+    void testListAllTeachingStaff_ServiceError() {
           // Mock teamMemberRepository.findAll() method
           when(teachingStaffRepository.findAll()).thenThrow(new NoSuchElementException());
   
