@@ -1,7 +1,6 @@
 package com.caerdydd.taf.models.dto.consulting;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -29,9 +28,14 @@ public class PlannedTimingConsultingDTO {
     private LocalDateTime  datetimeEnd;
 
     @JsonManagedReference(value = "teachingStaffAvailabilities")
-    private List<PlannedTimingAvailabilityDTO> teachingStaffAvailabilities = new ArrayList<>();
+    private List<PlannedTimingAvailabilityDTO> teachingStaffAvailabilities;
 
     public PlannedTimingConsultingDTO() {
+    }
+
+    public PlannedTimingConsultingDTO(LocalDateTime datetimeBegin, LocalDateTime datetimeEnd) {
+        this.datetimeBegin = datetimeBegin;
+        this.datetimeEnd = datetimeEnd;
     }
 
     @Override

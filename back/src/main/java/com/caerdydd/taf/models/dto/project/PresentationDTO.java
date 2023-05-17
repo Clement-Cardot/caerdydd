@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
 

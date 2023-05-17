@@ -20,6 +20,10 @@ public class JuryDTO {
     public JuryDTO() {
     }
 
+    public JuryDTO(Integer idJury) {
+        this.idJury = idJury;
+    }
+
     public JuryDTO(TeachingStaffDTO ts1, TeachingStaffDTO ts2) {
         this.ts1 = ts1;
         this.ts2 = ts2;

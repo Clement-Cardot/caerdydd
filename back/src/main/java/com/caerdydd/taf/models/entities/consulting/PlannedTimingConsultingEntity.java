@@ -2,7 +2,6 @@ package com.caerdydd.taf.models.entities.consulting;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -29,7 +28,7 @@ public class PlannedTimingConsultingEntity implements Serializable {
     private LocalDateTime datetimeEnd;
 
     @OneToMany(mappedBy = "plannedTimingConsulting", cascade = CascadeType.ALL)
-    private List<PlannedTimingAvailabilityEntity> teachingStaffAvailabilities = new ArrayList<>();
+    private List<PlannedTimingAvailabilityEntity> teachingStaffAvailabilities;
 
     public PlannedTimingConsultingEntity() {
     }

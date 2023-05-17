@@ -39,7 +39,7 @@ class PresentationServiceTest {
     private PresentationRepository presentationRepository;
 
     @Test
-    void testListAllPresentations_Nominal() {
+    void testListAllPresentations_Nominal() throws CustomRuntimeException {
         //Mock presentationRepository.findAll() method
         List<PresentationEntity> mockedAnswer = new ArrayList<PresentationEntity>();
         mockedAnswer.add(new PresentationEntity(1));
@@ -53,11 +53,8 @@ class PresentationServiceTest {
 
         //Call the method to test
         List<PresentationDTO> result = new ArrayList<PresentationDTO>();
-        try {
-            result = presentationService.listAllPresentations();
-        } catch (CustomRuntimeException e) {
-            fail();
-        }
+
+        result = presentationService.listAllPresentations();
 
         // Verify the result
         verify(presentationRepository, times(1)).findAll();
@@ -66,7 +63,7 @@ class PresentationServiceTest {
     }
 
     @Test
-    void testListAllPresentations_Empty() {
+    void testListAllPresentations_Empty() throws CustomRuntimeException {
         // Mock presentationRepository.findAll() method
         List<PresentationEntity> mockedAnswer = new ArrayList<PresentationEntity>();
         when(presentationRepository.findAll()).thenReturn(mockedAnswer);
@@ -76,11 +73,8 @@ class PresentationServiceTest {
 
         // Call the method to test
         List<PresentationDTO> result = new ArrayList<PresentationDTO>();
-        try {
-            result = presentationService.listAllPresentations();
-        } catch (CustomRuntimeException e) {
-            fail();
-        }
+
+        result = presentationService.listAllPresentations();
 
         // Verify the result
         verify(presentationRepository, times(1)).findAll();

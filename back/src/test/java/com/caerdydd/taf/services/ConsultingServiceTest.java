@@ -22,9 +22,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
-import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
-import com.caerdydd.taf.repositories.ConsultingRepository;
+import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
+import com.caerdydd.taf.repositories.PlannedTimingConsultingRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.FileRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
@@ -40,10 +42,13 @@ public class ConsultingServiceTest {
     private ModelMapper modelMapper;
 
     @Mock
-    private ConsultingRepository consultingRepository;
+    private PlannedTimingConsultingRepository plannedTimingConsultingRepository;
 
     @Mock
     private UserServiceRules userServiceRules;
+
+    @Mock
+    private TeachingStaffService teachingStaffService;
 
     @Mock 
     private FileRules fileRules;
@@ -52,25 +57,25 @@ public class ConsultingServiceTest {
     @Test
     public void testListAllConsultings_Nominal() throws CustomRuntimeException {
         // Mock consultingRepository.findAll()
-        List<ConsultingEntity> mockedConsultings = List.of(
-            new ConsultingEntity(
+        List<PlannedTimingConsultingEntity> mockedConsultings = List.of(
+            new PlannedTimingConsultingEntity(
                 LocalDateTime.of(2023, 1, 1, 10, 0, 0),
                 LocalDateTime.of(2023, 1, 1, 10, 30, 0)),
-            new ConsultingEntity(
+            new PlannedTimingConsultingEntity(
                 LocalDateTime.of(2023, 1, 1, 11, 0, 0),
                 LocalDateTime.of(2023, 1, 1, 11, 30, 0))
         );
-        when(consultingRepository.findAll()).thenReturn(mockedConsultings);
+        when(plannedTimingConsultingRepository.findAll()).thenReturn(mockedConsultings);
 
         // Call method to test
-        List<ConsultingDTO> consultings = consultingService.listAllConsultings();
+        List<PlannedTimingConsultingDTO> consultings = consultingService.listAllPlannedTimingConsultings();
 
         // Expected Answer
-        List<ConsultingDTO> expectedConsultings = List.of(
-            new ConsultingDTO(
+        List<PlannedTimingConsultingDTO> expectedConsultings = List.of(
+            new PlannedTimingConsultingDTO(
                 LocalDateTime.of(2023, 1, 1, 10, 0, 0),
                 LocalDateTime.of(2023, 1, 1, 10, 30, 0)),
-            new ConsultingDTO(
+            new PlannedTimingConsultingDTO(
                 LocalDateTime.of(2023, 1, 1, 11, 0, 0),
                 LocalDateTime.of(2023, 1, 1, 11, 30, 0))
         );
@@ -84,11 +89,11 @@ public class ConsultingServiceTest {
     @Test
     public void testListAllConsultings_EmptyList() throws CustomRuntimeException {
         // Mock consultingRepository.findAll()
-        List<ConsultingEntity> mockedConsultings = new ArrayList<>();
-        when(consultingRepository.findAll()).thenReturn(mockedConsultings);
+        List<PlannedTimingConsultingEntity> mockedConsultings = new ArrayList<>();
+        when(plannedTimingConsultingRepository.findAll()).thenReturn(mockedConsultings);
 
         // Call method to test
-        List<ConsultingDTO> consultings = consultingService.listAllConsultings();
+        List<PlannedTimingConsultingDTO> consultings = consultingService.listAllPlannedTimingConsultings();
 
         // Assertions
         assertEquals(mockedConsultings.size(), consultings.size());
@@ -97,11 +102,11 @@ public class ConsultingServiceTest {
     @Test
     public void testListAllConsultings_ServiceError() {
         // Mock consultingRepository.findAll()
-        when(consultingRepository.findAll()).thenThrow(new NullPointerException());
+        when(plannedTimingConsultingRepository.findAll()).thenThrow(new NullPointerException());
 
         // Call method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            consultingService.listAllConsultings();
+            consultingService.listAllPlannedTimingConsultings();
         });
         
         // Assertions
@@ -112,21 +117,22 @@ public class ConsultingServiceTest {
     @Test
     public void testSaveConsulting_Nominal() {
         // mock consultingRepository.save()
-        ConsultingEntity mockedConsulting = new ConsultingEntity(
+        PlannedTimingConsultingEntity mockedConsulting = new PlannedTimingConsultingEntity(
             LocalDateTime.of(2023, 1, 1, 10, 0, 0), 
             LocalDateTime.of(2023, 1, 1, 10, 30, 0)
         );
-        when(consultingRepository.save(any(ConsultingEntity.class))).thenReturn(mockedConsulting);
+        when(plannedTimingConsultingRepository.saveAll(any())).thenReturn(List.of(mockedConsulting));
 
         // Call method to test
-        ConsultingDTO input = new ConsultingDTO(
+        PlannedTimingConsultingDTO input = new PlannedTimingConsultingDTO(
             LocalDateTime.of(2023, 1, 1, 10, 0, 0), 
             LocalDateTime.of(2023, 1, 1, 10, 30, 0)
         );
-        ConsultingDTO response = consultingService.saveConsulting(input);
+        List<PlannedTimingConsultingDTO> response = consultingService.savePlannedTimingConsultings(List.of(input));
 
         // Assertions
-        assertEquals(input.toString(), response.toString());
+        assertEquals(1, response.size());
+        assertEquals(input.toString(), response.get(0).toString());
     }
 
     // UploadConsultings
@@ -141,21 +147,28 @@ public class ConsultingServiceTest {
         // Mock fileRules.checkFileIsCSV()
         doNothing().when(fileRules).checkFileIsCSV(any(MultipartFile.class));
 
+        // Mock teachingStaffService.listAllTeachingStaff()
+        List<TeachingStaffDTO> mockedTeachingStaffs = List.of(
+            new TeachingStaffDTO(new UserDTO(1, "prenom1", "nom1", "login1", "password1", "email1", null)),
+            new TeachingStaffDTO(new UserDTO(2, "prenom2", "nom2", "login2", "password2", "email2", null))
+        );
+        when(teachingStaffService.listAllTeachingStaff()).thenReturn(mockedTeachingStaffs);
+
         // Mock consultingRepository.save()
-        when(consultingRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+        when(plannedTimingConsultingRepository.saveAll(any())).thenAnswer(i -> i.getArguments()[0]);
 
         // Mock file
         MultipartFile mockedFile = new MockMultipartFile("file", "testcsv", "text/csv", "20230421T080000,20230421T082000\n20230421T090000,20230421T092000".getBytes());
 
         // Call method to test
-        List<ConsultingDTO> response = consultingService.uploadConsultings(mockedFile);
+        List<PlannedTimingConsultingDTO> response = consultingService.uploadPlannedTimingConsultings(mockedFile);
 
         // Expected Answer
-        List<ConsultingDTO> expectedAnswer = List.of(
-            new ConsultingDTO(
+        List<PlannedTimingConsultingDTO> expectedAnswer = List.of(
+            new PlannedTimingConsultingDTO(
             LocalDateTime.of(2023, 4, 21, 8, 0, 0),
             LocalDateTime.of(2023, 4, 21, 8, 20, 0)
-            ), new ConsultingDTO(
+            ), new PlannedTimingConsultingDTO(
             LocalDateTime.of(2023, 4, 21, 9, 0, 0),
             LocalDateTime.of(2023, 4, 21, 9, 20, 0)
         ));
@@ -175,7 +188,7 @@ public class ConsultingServiceTest {
 
         // Call method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            consultingService.uploadConsultings(mockedFile);
+            consultingService.uploadPlannedTimingConsultings(mockedFile);
         });
 
         // Assertions
@@ -195,7 +208,7 @@ public class ConsultingServiceTest {
 
         // Call method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            consultingService.uploadConsultings(mockedFile);
+            consultingService.uploadPlannedTimingConsultings(mockedFile);
         });
 
         // Assertions
@@ -218,7 +231,7 @@ public class ConsultingServiceTest {
 
         // Call method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            consultingService.uploadConsultings(mockedFile);
+            consultingService.uploadPlannedTimingConsultings(mockedFile);
         });
 
         // Assertions
@@ -241,7 +254,7 @@ public class ConsultingServiceTest {
 
         // Call method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            consultingService.uploadConsultings(mockedFile);
+            consultingService.uploadPlannedTimingConsultings(mockedFile);
         });
 
         // Assertions
@@ -255,13 +268,13 @@ public class ConsultingServiceTest {
         MultipartFile mockedFile = new MockMultipartFile("file", "testcsv", "text/csv", "20230421T080000,20230421T082000".getBytes());
 
         // Expected Answer
-        List<ConsultingDTO> expecedAnswer = List.of(new ConsultingDTO(
+        List<PlannedTimingConsultingDTO> expecedAnswer = List.of(new PlannedTimingConsultingDTO(
             LocalDateTime.of(2023, 4, 21, 8, 0, 0),
             LocalDateTime.of(2023, 4, 21, 8, 20, 0))
         );
 
         // Call the method to test
-        List<ConsultingDTO> response = consultingService.readCsvFile(mockedFile);
+        List<PlannedTimingConsultingDTO> response = consultingService.readCsvFile(mockedFile);
 
         // Assertions
         assertEquals(expecedAnswer.size(), response.size());
@@ -274,10 +287,10 @@ public class ConsultingServiceTest {
         MultipartFile mockedFile = new MockMultipartFile("file", "testcsv", "text/csv", "".getBytes());
 
         // Expected Answer
-        List<ConsultingDTO> expecedAnswer = new ArrayList<>();
+        List<PlannedTimingConsultingDTO> expecedAnswer = new ArrayList<>();
 
         // Call the method to test
-        List<ConsultingDTO> response = consultingService.readCsvFile(mockedFile);
+        List<PlannedTimingConsultingDTO> response = consultingService.readCsvFile(mockedFile);
 
         // Assertions
         assertEquals(expecedAnswer.size(), response.size());

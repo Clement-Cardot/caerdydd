@@ -39,8 +39,8 @@ public class JuryServiceTest {
 
     @Test
     public void testUpdateTeamMember_Nominal() {
-        JuryDTO input = new JuryDTO();
-        JuryEntity juryEntity = new JuryEntity();
+        JuryDTO input = new JuryDTO(1);
+        JuryEntity juryEntity = new JuryEntity(1);
 
         when(juryRepository.save(any(JuryEntity.class))).thenReturn(juryEntity);
 

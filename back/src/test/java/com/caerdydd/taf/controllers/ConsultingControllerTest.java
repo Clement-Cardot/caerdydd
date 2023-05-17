@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
+import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ConsultingService;
 
@@ -34,18 +34,18 @@ public class ConsultingControllerTest {
     @Test
     public void testGetAllConsultings_Nominal() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
-        List<ConsultingDTO> mockedConsultings = List.of(
-            new ConsultingDTO(
+        List<PlannedTimingConsultingDTO> mockedConsultings = List.of(
+            new PlannedTimingConsultingDTO(
                 LocalDateTime.of(2023, 1, 1, 10, 0, 0),
                 LocalDateTime.of(2023, 1, 1, 10, 30, 0)),
-            new ConsultingDTO(
+            new PlannedTimingConsultingDTO(
                 LocalDateTime.of(2023, 1, 1, 11, 0, 0),
                 LocalDateTime.of(2023, 1, 1, 11, 30, 0))
         );
-        when(consultingService.listAllConsultings()).thenReturn(mockedConsultings);
+        when(consultingService.listAllPlannedTimingConsultings()).thenReturn(mockedConsultings);
 
         // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
+        ResponseEntity<List<PlannedTimingConsultingDTO>> response = consultingController.getAllPlannedTimingConsultings();
 
         // Assertions
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -55,11 +55,11 @@ public class ConsultingControllerTest {
     @Test
     public void testGetAllConsultings_Empty() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
-        List<ConsultingDTO> mockedConsultings = new ArrayList<>();
-        when(consultingService.listAllConsultings()).thenReturn(mockedConsultings);
+        List<PlannedTimingConsultingDTO> mockedConsultings = new ArrayList<>();
+        when(consultingService.listAllPlannedTimingConsultings()).thenReturn(mockedConsultings);
 
         // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
+        ResponseEntity<List<PlannedTimingConsultingDTO>> response = consultingController.getAllPlannedTimingConsultings();
 
         // Assertions
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -69,10 +69,10 @@ public class ConsultingControllerTest {
     @Test
     public void testGetAllConsultings_UnexpectedError() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
-        when(consultingService.listAllConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+        when(consultingService.listAllPlannedTimingConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
         // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
+        ResponseEntity<List<PlannedTimingConsultingDTO>> response = consultingController.getAllPlannedTimingConsultings();
 
         // Assertions
         assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
@@ -84,18 +84,18 @@ public class ConsultingControllerTest {
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/csv", "mock".getBytes());
 
         // Mock consultingService.uploadConsulting()
-        List<ConsultingDTO> mockedConsultings = List.of(
-            new ConsultingDTO(
+        List<PlannedTimingConsultingDTO> mockedConsultings = List.of(
+            new PlannedTimingConsultingDTO(
                 LocalDateTime.of(2023, 1, 1, 10, 0, 0),
                 LocalDateTime.of(2023, 1, 1, 10, 30, 0)),
-            new ConsultingDTO(
+            new PlannedTimingConsultingDTO(
                 LocalDateTime.of(2023, 1, 1, 11, 0, 0),
                 LocalDateTime.of(2023, 1, 1, 11, 30, 0))
         );
-        when(consultingService.uploadConsultings(file)).thenReturn(mockedConsultings);
+        when(consultingService.uploadPlannedTimingConsultings(file)).thenReturn(mockedConsultings);
 
         // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.uploadConsulting(file);
+        ResponseEntity<List<PlannedTimingConsultingDTO>> response = consultingController.uploadPlannedTimingConsultings(file);
 
         // Assertions
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -108,10 +108,10 @@ public class ConsultingControllerTest {
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "".getBytes());
 
         // Mock consultingService.uploadConsulting()
-        when(consultingService.uploadConsultings(file)).thenThrow(new CustomRuntimeException(CustomRuntimeException.FILE_IS_EMPTY));
+        when(consultingService.uploadPlannedTimingConsultings(file)).thenThrow(new CustomRuntimeException(CustomRuntimeException.FILE_IS_EMPTY));
 
         // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.uploadConsulting(file);
+        ResponseEntity<List<PlannedTimingConsultingDTO>> response = consultingController.uploadPlannedTimingConsultings(file);
 
         // Assertions
         assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.getStatusCode());
@@ -123,10 +123,10 @@ public class ConsultingControllerTest {
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
 
         // Mock consultingService.uploadConsulting()
-        when(consultingService.uploadConsultings(file)).thenThrow(new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT));
+        when(consultingService.uploadPlannedTimingConsultings(file)).thenThrow(new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT));
 
         // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.uploadConsulting(file);
+        ResponseEntity<List<PlannedTimingConsultingDTO>> response = consultingController.uploadPlannedTimingConsultings(file);
 
         // Assertions
         assertEquals(HttpStatus.UNSUPPORTED_MEDIA_TYPE, response.getStatusCode());
@@ -138,10 +138,10 @@ public class ConsultingControllerTest {
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "mock".getBytes());
 
         // Mock consultingService.uploadConsulting()
-        when(consultingService.uploadConsultings(file)).thenThrow(new CustomRuntimeException("Unexpected exception"));
+        when(consultingService.uploadPlannedTimingConsultings(file)).thenThrow(new CustomRuntimeException("Unexpected exception"));
 
         // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.uploadConsulting(file);
+        ResponseEntity<List<PlannedTimingConsultingDTO>> response = consultingController.uploadPlannedTimingConsultings(file);
 
         // Assertions
         assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
