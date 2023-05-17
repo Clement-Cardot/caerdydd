@@ -69,7 +69,9 @@ export class ConsultingCalendarComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterConsultingsTeamMember() {}
+  filterConsultingsTeamMember() {
+    // TODO
+  }
 
   filterConsultingsTeachingStaff() {
     this.events.forEach(event => {
@@ -83,7 +85,9 @@ export class ConsultingCalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterConsultingsPlanning() {}
+  filterConsultingsPlanning() {
+    // TODO
+  }
 
   clickOnEvent(clickEvent : ClickEvent) {
     this.dialog.open(ClickedEventDialogComponent, { data: { event: clickEvent.event }});
