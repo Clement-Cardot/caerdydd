@@ -1,0 +1,28 @@
+.consultingDialogTeachingStaff {
+    margin: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#consultingAvailabilityForm {
+    display: flex;
+    flex-direction: column;
+}
+
+mat-radio-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}

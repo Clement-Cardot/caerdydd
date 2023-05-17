@@ -11,9 +11,9 @@
     </div>
 
     <!-- Teaching Staff View -->
-    <div *ngSwitchCase="'TEACHING_STAFF_ROLE'">
-        <h1>{{data.event.title}}</h1>
-        <p>{{data.event.start | date:'short'}} - {{data.event.end | date:'shortTime'}}</p>
+    <div class="consultingDialogTeachingStaff" *ngSwitchCase="'TEACHING_STAFF_ROLE'">
+        <h1 class="title">{{data.event.title}}</h1>
+        <p class="subtitle">{{data.event.start | date:'short'}} - {{data.event.end | date:'shortTime'}}</p>
 
         <form id="consultingAvailabilityForm" (ngSubmit)="submit()">
             <label id="availability">Votre disponibilité sur cette session :</label>
@@ -25,7 +25,7 @@
                 <mat-radio-button [value]="false">Indisponible</mat-radio-button>
             </mat-radio-group>
 
-            <button mat-raised-button>Valider</button>
+            <button mat-raised-button color="accent">Valider</button>
         </form>
     </div>
 
