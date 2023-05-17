@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { FileInput } from 'ngx-material-file-input';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
@@ -8,6 +8,15 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
 import { User } from 'src/app/core/data/models/user.model';
+import { Team } from 'src/app/core/data/models/team.model';
+
+
+function linkValidator(control: AbstractControl): { [key: string]: any } | null {
+  const value = control.value;
+  const isValidUrl = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?/.test(value);
+
+  return isValidUrl ? null : { invalidLink: true };
+}
 
 @Component({
   selector: 'app-project-file',
@@ -17,6 +26,8 @@ import { User } from 'src/app/core/data/models/user.model';
 export class ProjectFileComponent implements OnInit {
 
   user!: User | null;
+  testBookLinkForm: FormGroup;
+  currentTeam!: Team | null;
 
   isNotFinalScope!: boolean;
 
@@ -39,11 +50,17 @@ export class ProjectFileComponent implements OnInit {
     this.importFTSSform = this.formBuilder.group({
       file: this.fileFormControl
     });
+    this.testBookLinkForm = this.formBuilder.group({
+      testBookLink: ['', [Validators.required, linkValidator]]
+    });
   }
 
   public ngOnInit():void {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.user = user;
+      if (user?.teamId) {
+        this.getTeam(user.teamId);
+      }
       this.isFinalStateScope();
     });
   }
@@ -81,6 +98,42 @@ export class ProjectFileComponent implements OnInit {
         })
       });
     }
+  }
+
+  isCurrentUserInTeam(): boolean {
+    console.log(this.currentTeam);
+    return !!(this.user && this.currentTeam);
+  }
+
+  isProjectDev(): boolean {
+    return !!(this.currentTeam && this.currentTeam.idProjectDev !== null);
+  }
+
+  onSubmit(): void {
+    if (this.testBookLinkForm.valid && this.user && this.currentTeam) {
+      this.apiTeamService
+        .addTestBookLink(this.currentTeam.idTeam, this.testBookLinkForm.value.testBookLink)
+        .subscribe(team => {
+          this.currentTeam = team;
+          console.log('Lien TestBook ajouté avec succès');
+          this.openSnackBar();
+        });
+    }
+  }
+
+  getTeam(teamId: number) {
+    this.apiTeamService.getTeam(teamId).subscribe(
+      (team: Team) => {
+        this.currentTeam = team;
+      },
+      (error) => {
+        console.error("Error getting team:", error);
+      }
+    );
+  }
+
+  openSnackBar() {
+    this._snackBar.open("Lien TestBook ajouté avec succès", "Fermer", { duration: 5000 });
   }
 
   showSuccess() {

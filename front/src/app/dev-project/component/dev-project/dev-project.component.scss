@@ -1,0 +1,15 @@
+#dev-projectComponent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 90%;
+  width: 90%;
+  padding: 5% 5%;
+}
+
+app-project-file {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
