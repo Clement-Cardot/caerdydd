@@ -22,7 +22,6 @@ import com.caerdydd.taf.security.CustomRuntimeException;
 public class UserService {
 
     private static final Logger logger = LogManager.getLogger(UserService.class);
-    private static final String USER_NOT_FOUND = "User not found";
 
     @Autowired
     private UserRepository userRepository;
@@ -46,11 +45,10 @@ public class UserService {
         try {
             optionalUser = userRepository.findById(id);
         } catch (Exception e) {
-            logger.error("Error getting user by id:", e);
+            logger.error("Error findById", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
         if (optionalUser.isEmpty()) {
-            logger.error(USER_NOT_FOUND);
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
         return modelMapper.map(optionalUser.get(), UserDTO.class);
@@ -61,11 +59,10 @@ public class UserService {
         try{
             optionalUser = userRepository.findByLogin(login);
         } catch (Exception e) {
-            logger.error("Error getting user by login:", e);
+            logger.error("Error findByLogin", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
         if (optionalUser.isEmpty()) {
-            logger.error(USER_NOT_FOUND);
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
         return modelMapper.map(optionalUser.get(), UserDTO.class);
@@ -95,7 +92,6 @@ public class UserService {
         
         Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
         if (optionalUser.isEmpty()){
-            logger.error(USER_NOT_FOUND);
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
 
