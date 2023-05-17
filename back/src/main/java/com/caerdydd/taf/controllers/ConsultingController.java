@@ -32,8 +32,8 @@ public class ConsultingController {
     @Autowired
     private ConsultingService consultingService;
 
-    @GetMapping("")
-    public ResponseEntity<List<PlannedTimingConsultingDTO>> getAllConsultings() {
+    @GetMapping("/plannedTiming")
+    public ResponseEntity<List<PlannedTimingConsultingDTO>> getAllPlannedTimingConsultings() {
         logger.info("Process request : Get all consultings");
         try {
             List<PlannedTimingConsultingDTO> plannedTimingConsultingDTOs = consultingService.listAllPlannedTimingConsultings();
@@ -44,8 +44,8 @@ public class ConsultingController {
         }
     }
 
-    @PutMapping("")
-    public ResponseEntity<List<PlannedTimingConsultingDTO>> uploadConsulting(@RequestParam("file") MultipartFile file) {
+    @PutMapping("/plannedTiming")
+    public ResponseEntity<List<PlannedTimingConsultingDTO>> uploadPlannedTimingConsultings(@RequestParam("file") MultipartFile file) {
         logger.info("Process request : Upload consulting");
         try {
             List<PlannedTimingConsultingDTO> savedplannedTimingConsultingDTOs = consultingService.uploadPlannedTimingConsultings(file);

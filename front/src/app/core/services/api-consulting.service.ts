@@ -22,7 +22,7 @@ export class ApiConsultingService {
     }
 
     getAllConsultings(): Observable<PlannedTimingConsulting[]> {
-        const url = this.baseUrl;
+        const url = `${this.baseUrl}/plannedTiming`;
         return this.http.get<any>(url)
         .pipe(
             map((data: any[]) => data.map((item) => this.plannedTimingConsultingAdapter.adapt(item)))
@@ -36,7 +36,7 @@ export class ApiConsultingService {
         const formData: FormData = new FormData();
         formData.append('file', file);
 
-        const url = this.baseUrl;
+        const url = `${this.baseUrl}/plannedTiming`;
         return this.http.put<any>(url, formData)
         .pipe(
             map((data: any[]) => data.map((item) => this.plannedTimingConsultingAdapter.adapt(item)))
