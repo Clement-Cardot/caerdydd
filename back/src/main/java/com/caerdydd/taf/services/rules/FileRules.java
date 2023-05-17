@@ -15,8 +15,10 @@ public class FileRules {
     }
 
     public void checkFileIsCSV(MultipartFile file) throws CustomRuntimeException {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         try {
-            if (!file.getOriginalFilename().endsWith(".csv")){
+            if (!fileName.endsWith(".csv")){
                 throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
             }
         } catch (NullPointerException e) {

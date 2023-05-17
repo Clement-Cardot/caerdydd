@@ -49,8 +49,10 @@ public class FileService {
     }
 
     public void checkFileIsPDF(MultipartFile file) throws CustomRuntimeException {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         try {
-            if (!file.getOriginalFilename().endsWith(".pdf")){
+            if (!fileName.endsWith(".pdf")){
                 throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
             }
         } catch (NullPointerException e) {

@@ -1,5 +1,6 @@
 package com.caerdydd.taf.models.entities.project;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "presentation")
-public class PresentationEntity {
+public class PresentationEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
