@@ -24,6 +24,7 @@ import com.caerdydd.taf.repositories.ConsultingRepository;
 import com.caerdydd.taf.repositories.PlannedTimingAvailabilityRepository;
 import com.caerdydd.taf.repositories.PlannedTimingConsultingRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.services.rules.ConsultingRules;
 import com.caerdydd.taf.services.rules.FileRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -53,6 +54,9 @@ public class ConsultingService {
 
     @Autowired
     private FileRules fileRules;
+
+    @Autowired
+    private ConsultingRules consultingRules;
 
     // List all planned timing for consultings
     public List<PlannedTimingConsultingDTO> listAllPlannedTimingConsultings() throws CustomRuntimeException {
@@ -165,11 +169,14 @@ public class ConsultingService {
         // Verify that user is a Teaching staff
         userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
 
-        // TODO check if user is the owner of the availability
+        // check if user is the owner of the availability
+        consultingRules.checkUserIsOwnerOfAvailability(userServiceRules.getCurrentUser().getTeachingStaff(), plannedTimingAvailability);
 
-        // TODO check if planned timing is not in the past
+        // check if planned timing is not in the past
+        consultingRules.checkPlannedTimingIsNotInPast(plannedTimingAvailability);
 
-        // TODO check if planned timing is not already taken
+        // check if planned timing is not already taken
+        consultingRules.checkPlannedTimingIsNotAlreadyTaken(plannedTimingAvailability);
 
         // Update entity
         plannedTimingAvailability.setIsAvailable(plannedTimingAvailabilityDTO.getIsAvailable());

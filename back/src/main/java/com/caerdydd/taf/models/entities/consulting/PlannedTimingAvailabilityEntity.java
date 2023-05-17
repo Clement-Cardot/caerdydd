@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
@@ -33,6 +34,9 @@ public class PlannedTimingAvailabilityEntity implements Serializable{
     @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_ts", referencedColumnName = "idUser", nullable = false)
     private TeachingStaffEntity teachingStaff;
+
+    // @OneToOne(mappedBy = "plannedTimingAvailability")
+    // private ConsultingEntity consulting;
 
     private Boolean isAvailable = true;
 

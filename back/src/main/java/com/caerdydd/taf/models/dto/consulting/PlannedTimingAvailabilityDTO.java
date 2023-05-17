@@ -20,6 +20,8 @@ public class PlannedTimingAvailabilityDTO {
 
     private TeachingStaffDTO teachingStaff;
 
+    private ConsultingDTO consulting;
+
     private Boolean isAvailable = true;
 
     public PlannedTimingAvailabilityDTO() {
