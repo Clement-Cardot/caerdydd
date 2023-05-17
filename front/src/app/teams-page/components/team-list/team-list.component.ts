@@ -14,9 +14,13 @@ export class TeamListComponent implements OnInit {
   @Input() team!: Team;
   @Output() applyEvent = new EventEmitter<number>();
 
-  displayedColumns: string[] = ['id', 'name', 'surname', 'speciality'];
+  displayedColumns: string[] = ['name', 'surname', 'speciality'];
 
   currentUser!: User | null;
+
+  panelOpenState = false;
+
+  testBookLink!: string | null;
 
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {  }
   
@@ -51,7 +55,29 @@ export class TeamListComponent implements OnInit {
     return false; 
   }
 
+  isCurrentUserATeachingStaff() {
+    if (this.currentUser == null) {
+      console.log("User is not connected");
+      return false;
+    }
+    if (this.currentUser.getRoles().includes("TEACHING_STAFF_ROLE")){
+      return true;
+    }
+    return false; 
+  }
+
   update(){
     this.applyEvent.emit(this.team.idTeam);
+  }
+
+  getTestBookLink(teamId: number) {
+    this.apiTeamService.getTestBookLinkDev(teamId).subscribe(
+      (link: string) => {
+        this.testBookLink = link;
+      },
+      (error) => {
+        console.error("Error getting test book link:", error);
+      }
+    );
   }
 }

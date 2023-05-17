@@ -59,7 +59,7 @@ mobileQuery: MediaQueryList;
       // Option Leader
       if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
         this.navLink.push("Administration");
-        this.navLink.push("Equipes");
+        //this.navLink.push("Equipes");
         this.navLink.push("Notes");
         this.navLink.push("Sujets");
       }

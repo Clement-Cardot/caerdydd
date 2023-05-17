@@ -6,16 +6,20 @@ import { TeamCreationComponent } from './components/team-creation/team-creation.
 import {MaterialModule} from '../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { TeamInfoComponent } from './components/team-info/team-info.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
   declarations: [
     TeamListComponent,
     AllTeamsListComponent,
-    TeamCreationComponent
+    TeamCreationComponent,
+    TeamInfoComponent
   ],
   imports: [
     CommonModule,
+    RouterModule,
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
