@@ -26,7 +26,6 @@ public class PlannedTimingConsultingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPlannedTimingConsulting;
-
     private LocalDateTime datetimeBegin;
     private LocalDateTime datetimeEnd;
 

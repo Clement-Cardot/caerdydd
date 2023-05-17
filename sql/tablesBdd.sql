@@ -92,16 +92,6 @@ CREATE TABLE planned_timing_consulting (
     PRIMARY KEY(id_planned_timing_consulting)
 );
 
-CREATE TABLE planned_timing_availability (
-    id_planned_timing_availability INT NOT NULL AUTO_INCREMENT,
-    id_planned_timing_consulting INT NOT NULL,
-    id_ts INT NOT NULL,
-    is_available BOOLEAN NOT NULL DEFAULT 1,
-    PRIMARY KEY(id_planned_timing_availability),
-    FOREIGN KEY (id_planned_timing_consulting) REFERENCES planned_timing_consulting (id_planned_timing_consulting),
-    FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user)
-);
-
 CREATE TABLE consulting (
     id_consulting INT NOT NULL AUTO_INCREMENT,
     speciality ENUM('Infrastructure', 'Développement', 'Modélisation'),

@@ -37,7 +37,7 @@ public class ConsultingController {
 
     @GetMapping("/plannedTiming")
     public ResponseEntity<List<PlannedTimingConsultingDTO>> getAllPlannedTimingConsultings() {
-        logger.info("Process request : Get all planned timing consultings");
+        logger.info("Process request : Get all consultings");
         try {
             List<PlannedTimingConsultingDTO> plannedTimingConsultingDTOs = consultingService.listAllPlannedTimingConsultings();
             return new ResponseEntity<>(plannedTimingConsultingDTOs, HttpStatus.OK);
@@ -94,7 +94,7 @@ public class ConsultingController {
 
     @PutMapping("/plannedTiming")
     public ResponseEntity<List<PlannedTimingConsultingDTO>> uploadPlannedTimingConsultings(@RequestParam("file") MultipartFile file) {
-        logger.info("Process request : Upload planned timing consultings");
+        logger.info("Process request : Upload consulting");
         try {
             List<PlannedTimingConsultingDTO> savedplannedTimingConsultingDTOs = consultingService.uploadPlannedTimingConsultings(file);
             return new ResponseEntity<>(savedplannedTimingConsultingDTOs, HttpStatus.OK);
