@@ -3,6 +3,7 @@ package com.caerdydd.taf.services;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
@@ -82,12 +84,16 @@ public class ConsultingService {
     }
 
     // Save a planned Timing for consulting
-    public PlannedTimingConsultingDTO savePlannedTimingConsulting(PlannedTimingConsultingDTO consulting) {
-        PlannedTimingConsultingEntity plannedTimingConsultingEntity = modelMapper.map(consulting, PlannedTimingConsultingEntity.class);
+    public List<PlannedTimingConsultingDTO> savePlannedTimingConsultings(List<PlannedTimingConsultingDTO> plannedTimingConsultings) {
+        List<PlannedTimingConsultingEntity> plannedTimingConsultingEntities = plannedTimingConsultings.stream()
+            .map(plannedTimingConsulting -> modelMapper.map(plannedTimingConsulting, PlannedTimingConsultingEntity.class))
+            .collect(Collectors.toList());
 
-        PlannedTimingConsultingEntity response = plannedTimingConsultingRepository.save(plannedTimingConsultingEntity);
+        List<PlannedTimingConsultingEntity> response = plannedTimingConsultingRepository.saveAll(plannedTimingConsultingEntities);
 
-        return modelMapper.map(response, PlannedTimingConsultingDTO.class);
+        return response.stream()
+            .map(responseElement -> modelMapper.map(responseElement, PlannedTimingConsultingDTO.class))
+            .collect(Collectors.toList());
     }
 
     // Save a planned Timing for consulting
@@ -112,21 +118,21 @@ public class ConsultingService {
         fileRules.checkFileIsCSV(consultingFile);
             
         // Read file and save consultings
-        List<PlannedTimingConsultingDTO> consultingsFromFile = readCsvFile(consultingFile);
+        List<PlannedTimingConsultingDTO> plannedTimingConsultingsFromFile = readCsvFile(consultingFile);
+        List<PlannedTimingConsultingDTO> plannedTimingConsultingsToSave = new ArrayList<>();
 
         List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
 
-        for (PlannedTimingConsultingDTO plannedTimingConsulting : consultingsFromFile) {
+        for (PlannedTimingConsultingDTO plannedTimingConsulting : plannedTimingConsultingsFromFile) {
             for (TeachingStaffDTO teachingStaffDTO : teachingStaffs) {
                 PlannedTimingAvailabilityDTO availabilityDTO = new PlannedTimingAvailabilityDTO();
                 availabilityDTO.setTeachingStaff(teachingStaffDTO);
                 availabilityDTO.setPlannedTimingConsulting(plannedTimingConsulting);
                 plannedTimingConsulting.getTeachingStaffAvailabilities().add(availabilityDTO);
             }
-            savePlannedTimingConsulting(plannedTimingConsulting);
+            plannedTimingConsultingsToSave.add(plannedTimingConsulting);
         }
-
-        return listAllPlannedTimingConsultings();
+        return savePlannedTimingConsultings(plannedTimingConsultingsToSave);
     }
 
     // Read a .csv file with planned timings for consulting
