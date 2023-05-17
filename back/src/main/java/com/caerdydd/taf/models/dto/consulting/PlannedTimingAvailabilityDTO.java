@@ -26,5 +26,16 @@ public class PlannedTimingAvailabilityDTO {
 
     public PlannedTimingAvailabilityDTO() {
     }
+
+    public PlannedTimingAvailabilityDTO(PlannedTimingConsultingDTO plannedTimingConsulting, TeachingStaffDTO teachingStaff) {
+        this.plannedTimingConsulting = plannedTimingConsulting;
+        this.teachingStaff = teachingStaff;
+    }
+
+    @Override
+    public String toString() {
+        return "PlannedTimingAvailabilityDTO [plannedTimingConsulting=" + plannedTimingConsulting + ", teachingStaff="
+                + teachingStaff + ", isAvailable=" + isAvailable + "]";
+    }
     
 }
