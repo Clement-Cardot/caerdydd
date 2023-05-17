@@ -1,5 +1,7 @@
 package com.caerdydd.taf.models.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +17,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "jury")
-public class JuryEntity {
+public class JuryEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

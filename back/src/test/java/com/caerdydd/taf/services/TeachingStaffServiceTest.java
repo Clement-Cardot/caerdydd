@@ -138,7 +138,7 @@ public class TeachingStaffServiceTest {
     @Test
     void testGetTeachingStaffById_ServiceError() {
         // Mock teachingStaffRepository.findById() method
-        when(teachingStaffRepository.findById(1)).thenThrow(new Exception());
+        when(teachingStaffRepository.findById(1)).thenThrow(new NoSuchElementException());
 
         // Call the method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {

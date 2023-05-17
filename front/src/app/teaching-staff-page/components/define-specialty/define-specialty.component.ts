@@ -4,6 +4,7 @@ import { ApiTeachingStaffService } from 'src/app/core/services/api-teaching-staf
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiUserService } from 'src/app/core/services/api-user.service';
 import { User } from 'src/app/core/data/models/user.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-define-specialty',
@@ -18,7 +19,8 @@ export class DefineSpecialtyComponent implements OnInit {
   constructor(
     private apiTeachingStaffService: ApiTeachingStaffService,
     public userDataService: UserDataService,
-    public apiUserService: ApiUserService
+    public apiUserService: ApiUserService,
+    private _snackBar: MatSnackBar
   ) {}
 
   public ngOnInit(): void {
@@ -55,6 +57,12 @@ export class DefineSpecialtyComponent implements OnInit {
         checked: this.teachingStaff.isModelingSpecialist,
       },
     ];
+  }
+
+  openSnackBar() {
+    this._snackBar.open('Spécialités modifiées', 'Fermer', {
+      duration: 5000,
+    });
   }
 
   public modifySpeciality2() {
@@ -105,6 +113,7 @@ export class DefineSpecialtyComponent implements OnInit {
         console.error('Error:', error);
       }
     );
+    this.openSnackBar();
   }
 
   isCurrentUserATeachingStaff() {

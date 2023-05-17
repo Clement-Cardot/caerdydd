@@ -240,19 +240,20 @@ public class TeachingStaffControllerTest {
     @Test
     void testSubmitSpeciality_Nominal() throws CustomRuntimeException {
         // Mock teachingStaffService.updateTeachingStaff() method
-        TeachingStaffDTO mockedAnswer = new TeachingStaffDTO();
-        when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenReturn(mockedAnswer);
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
 
-        // Create a sample TeachingStaffDTO object for the request body
-        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO();
-        // Set the necessary properties of the requestTeachingStaffDTO object
+        TeachingStaffDTO mockedAnswer = new TeachingStaffDTO(user1);
+        when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenReturn(mockedAnswer);
+        
+        // Define the expected answer
+        ResponseEntity<TeachingStaffDTO> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
 
         // Call the method to test
-        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.submitSpeciality(requestTeachingStaffDTO);
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.submitSpeciality(mockedAnswer);
 
         // Verify the result
         verify(teachingStaffService, times(1)).updateTeachingStaff(any(TeachingStaffDTO.class));
-        assertEquals(mockedAnswer.toString(), result.getBody().toString());
+        assertEquals(expectedAnswer.toString(), result.toString());
     }
 
     @Test
@@ -261,7 +262,9 @@ public class TeachingStaffControllerTest {
         when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER));
 
         // Create a sample TeachingStaffDTO object for the request body
-        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO();
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+
+        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO(user1);
         // Set the necessary properties of the requestTeachingStaffDTO object
 
         // Call the method to test
@@ -278,7 +281,9 @@ public class TeachingStaffControllerTest {
         when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND));
 
         // Create a sample TeachingStaffDTO object for the request body
-        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO();
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+
+        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO(user1);
         // Set the necessary properties of the requestTeachingStaffDTO object
 
         // Call the method to test
@@ -295,7 +300,9 @@ public class TeachingStaffControllerTest {
         when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
 
         // Create a sample TeachingStaffDTO object for the request body
-        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO();
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+
+        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO(user1);
         // Set the necessary properties of the requestTeachingStaffDTO object
 
         // Define the expected answer

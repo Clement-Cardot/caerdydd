@@ -1,20 +1,32 @@
 <app-project-file></app-project-file>
-<button mat-raised-button color="primary" routerLink="/projectD">Modifier le projet de développement</button>
+<button mat-raised-button color="primary" routerLink="/projectD">
+  Modifier le projet de développement
+</button>
 <div *ngIf="isCurrentUserInTeam() && isProjectDev()">
   <form [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="fill">
       <mat-label>Lien TestBook</mat-label>
-      <input matInput formControlName="testBookLink" required>
-      <mat-error *ngIf="testBookLinkForm.controls['testBookLink'].hasError('required')">
+      <input matInput formControlName="testBookLink" required />
+      <mat-error
+        *ngIf="testBookLinkForm.controls['testBookLink'].hasError('required')"
+      >
         Le lien TestBook est obligatoire.
       </mat-error>
-      <mat-error *ngIf="testBookLinkForm.controls['testBookLink'].hasError('invalidLink')">
+      <mat-error
+        *ngIf="
+          testBookLinkForm.controls['testBookLink'].hasError('invalidLink')
+        "
+      >
         Le lien TestBook doit être une URL valide.
       </mat-error>
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="testBookLinkForm.invalid">Ajouter le lien TestBook</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="testBookLinkForm.invalid"
+    >
+      Ajouter le lien TestBook
+    </button>
   </form>
-  
-  </div>
-
-  
+</div>
