@@ -14,6 +14,7 @@ import { ProjectListComponent } from './page-validate-subject/components/project
 import { ProjectFileComponent } from './dev-project/component/project-file/project-file.component';
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
 import { ValidationProjectComponent } from './validation-project/component/validation-project/validation-project.component';
+import { TeamInfoComponent } from './teams-page/components/team-info/team-info.component';
 
 const websiteName = " - Taf"
 
@@ -40,6 +41,7 @@ const routes: Routes = [
   { path: 'teams', title: 'Teams' + websiteName, component: AllTeamsListComponent, canActivate: [AuthGuard] },
   /* TODO */ { path: 'my-team', title: 'Teams' + websiteName, component: DashboardComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
   { path: 'file', title: 'Teams' + websiteName, component: ProjectFileComponent, canActivate: [AuthGuard] },
+  { path: 'teams/:id', title: 'Teams Info' + websiteName, component: TeamInfoComponent, canActivate: [AuthGuard]},
 
   // Projects pages
   { path: 'dev-project', title: 'Projet de Développement' + websiteName, component: DevProjectComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
