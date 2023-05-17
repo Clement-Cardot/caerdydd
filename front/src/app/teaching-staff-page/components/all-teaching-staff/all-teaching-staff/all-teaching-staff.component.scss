@@ -1,0 +1,26 @@
+button {
+  background-color: #b0324f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #8c1c2f;
+  }
+}
+
+.speciality {
+  text-indent: 30px;
+}
+
+.divButton {
+  margin: 10px;
+}
+
+.name {
+  font-weight: bold;
+}
