@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.jwt.AuthEntryPointJwt;
 import com.caerdydd.taf.security.jwt.AuthTokenFilter;
 import com.caerdydd.taf.services.UserService;
@@ -68,8 +68,8 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthEntryPointJwt unauthorizedHandler, CustomUserDetailService userDetailsService) throws Exception {
         return http
-
-                .csrf().csrfTokenRepository(csrfTokenRepository()).and()
+                .cors().and().csrf().disable()
+                //.csrf().csrfTokenRepository(csrfTokenRepository()).and()
 
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 

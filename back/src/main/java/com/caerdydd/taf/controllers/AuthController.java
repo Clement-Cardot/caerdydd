@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.AuthService;
 
@@ -20,6 +20,7 @@ import com.caerdydd.taf.services.AuthService;
 public class AuthController {
 
   private static final Logger logger = LogManager.getLogger(AuthController.class);
+  private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
 
   @Autowired
   AuthService authService;
@@ -31,12 +32,15 @@ public class AuthController {
       return authService.loginUser(login, password);
     } catch (CustomRuntimeException e) {
       if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
+        logger.warn(e.getMessage());
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       }
       if (e.getMessage().equals(CustomRuntimeException.USER_PASSWORD_NOT_MATCH)) {
+        logger.warn(e.getMessage());
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
       }
 
+      logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
       return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
   }
@@ -47,6 +51,7 @@ public class AuthController {
     try{
       return authService.logoutUser();
     } catch (Exception e) {
+      logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
       return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
     }
   }

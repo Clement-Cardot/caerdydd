@@ -8,12 +8,14 @@ public class CustomRuntimeException extends Exception{
     
     // Not found messages
     public static final String USER_NOT_FOUND = "User not found";
+    public static final String TEACHING_STAFF_NOT_FOUND = "Teaching staff not found";
     public static final String TEAM_NOT_FOUND = "Team not found";
     public static final String TEAM_MEMBER_NOT_FOUND = "Team member not found";
     public static final String PROJECT_NOT_FOUND = "Can't found project";
     public static final String LINK_NOT_FOUND = "LINK_NOT_FOUND";
     public static final String PRESENTATION_NOT_FOUND = "Presentation not found";
-
+    public static final String PLANNED_TIMING_CONSULTING_NOT_FOUND = "Planned timing consulting not found";
+    public static final String PLANNED_TIMING_AVAILABILITY_NOT_FOUND = "Planned timing availability not found";
 
     // Already exist messages
     public static final String USER_ALREADY_EXISTS = "User already exist";
@@ -38,6 +40,9 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_ID_SHOULD_BE_NULL = "User id should be null";
     public static final String USER_NOT_IN_ASSOCIATED_TEAM = "User is not associated in a team";
     public static final String USER_NOT_IN_A_TEAM = "User is not in a team";
+    public static final String USER_IS_NOT_OWNER_OF_AVAILABILITY = "User is not owner of availability";
+    public static final String PLANNED_TIMING_IS_IN_PAST = "Planned timing is in past";
+    public static final String PLANNED_TIMING_IS_ALREADY_TAKEN = "Planned timing is already taken";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";

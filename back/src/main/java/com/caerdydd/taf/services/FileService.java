@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.TeamDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 @Service
@@ -49,8 +49,10 @@ public class FileService {
     }
 
     public void checkFileIsPDF(MultipartFile file) throws CustomRuntimeException {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         try {
-            if (!file.getOriginalFilename().endsWith(".pdf")){
+            if (!fileName.endsWith(".pdf")){
                 throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
             }
         } catch (NullPointerException e) {

@@ -20,10 +20,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.RoleEntity;
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.user.RoleEntity;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.RoleRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
@@ -40,7 +40,7 @@ public class RoleServiceTest {
     private ModelMapper modelMapper;
 
     @Test
-    public void testListAllRoles_Nominal(){
+    void testListAllRoles_Nominal(){
         // Mock teamRepository.findAll() method
         List<RoleEntity> mockedAnswer = new ArrayList<RoleEntity>();
         mockedAnswer.add(new RoleEntity(1, "STUDENT_ROLE", new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD")));
@@ -67,7 +67,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void testListAllRoles_Empty(){
+    void testListAllRoles_Empty(){
         // Mock teamRepository.findAll() method
         List<RoleEntity> mockedAnswer = new ArrayList<RoleEntity>();
         when(roleRepository.findAll()).thenReturn(mockedAnswer);
@@ -90,7 +90,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void testListAllRoles_ServiceError(){
+    void testListAllRoles_ServiceError(){
         // Mock teamRepository.findAll() method
         when(roleRepository.findAll()).thenThrow(new NoSuchElementException());
 
@@ -105,7 +105,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    public void testSaveRole_Nominal(){
+    void testSaveRole_Nominal(){
         // Mock teamRepository.save() method
         RoleEntity mockedAnswer = new RoleEntity(1, "STUDENT_ROLE", new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD"));
         when(roleRepository.save(any(RoleEntity.class))).thenReturn(mockedAnswer);

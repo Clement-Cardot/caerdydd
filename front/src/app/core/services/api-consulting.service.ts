@@ -5,7 +5,8 @@ import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
 import { environment } from "../../../environments/environment";
-import { Consulting, ConsultingAdapter } from "../data/models/consulting.model";
+import { PlannedTimingConsultingAdapter, PlannedTimingConsulting } from "../data/models/planned-timing-consulting.model";
+import { PlannedTimingAvailability, PlannedTimingAvailabilityAdapter } from "../data/models/planned-timing-availability.model";
 
 @Injectable({
     providedIn: "root"
@@ -15,29 +16,41 @@ export class ApiConsultingService {
 
     constructor(
         private http: HttpClient, 
-        private consultingAdapter: ConsultingAdapter
+        private plannedTimingConsultingAdapter: PlannedTimingConsultingAdapter,
+        private plannedTimingAvailabilityAdapter: PlannedTimingAvailabilityAdapter
         ) {
     }
 
-    getAllConsultings(): Observable<Consulting[]> {
-        const url = this.baseUrl;
+    getAllConsultings(): Observable<PlannedTimingConsulting[]> {
+        const url = `${this.baseUrl}/plannedTiming`;
         return this.http.get<any>(url)
         .pipe(
-            map((data: any[]) => data.map((item) => this.consultingAdapter.adapt(item)))
+            map((data: any[]) => data.map((item) => this.plannedTimingConsultingAdapter.adapt(item)))
         )
         .pipe(
             catchError(this.handleError)
         );
     }
     
-    upload(file: File): Observable<Consulting[]> {
+    upload(file: File): Observable<PlannedTimingConsulting[]> {
         const formData: FormData = new FormData();
         formData.append('file', file);
 
-        const url = `${this.baseUrl}/upload`;
-        return this.http.post<any>(url, formData)
+        const url = `${this.baseUrl}/plannedTiming`;
+        return this.http.put<any>(url, formData)
         .pipe(
-            map((data: any[]) => data.map((item) => this.consultingAdapter.adapt(item)))
+            map((data: any[]) => data.map((item) => this.plannedTimingConsultingAdapter.adapt(item)))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    updateAvailability(consulting: PlannedTimingAvailability): Observable<PlannedTimingAvailability> {
+        const url = `${this.baseUrl}/availability`;
+        return this.http.post<PlannedTimingAvailability>(url, consulting)
+        .pipe(
+            map((data: any) => this.plannedTimingAvailabilityAdapter.adapt(data))
         )
         .pipe(
             catchError(this.handleError)

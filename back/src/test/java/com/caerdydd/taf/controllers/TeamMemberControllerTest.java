@@ -17,9 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeamMemberService;
 
@@ -32,7 +32,7 @@ public class TeamMemberControllerTest {
     private TeamMemberService teamMemberService;
 
     @Test
-    public void testList_Nominal() throws CustomRuntimeException{
+    void testList_Nominal() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         List<TeamMemberDTO> mockedAnswer = new ArrayList<TeamMemberDTO>();
 
@@ -58,7 +58,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testList_Empty() throws CustomRuntimeException{
+    void testList_Empty() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         List<TeamMemberDTO> mockedAnswer = new ArrayList<TeamMemberDTO>();
         when(teamMemberService.listAllTeamMembers()).thenReturn(mockedAnswer);
@@ -75,7 +75,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testList_ServiceError() throws CustomRuntimeException{
+    void testList_ServiceError() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         when(teamMemberService.listAllTeamMembers()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
@@ -91,7 +91,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testList_UnexpectedError() throws CustomRuntimeException{
+    void testList_UnexpectedError() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         when(teamMemberService.listAllTeamMembers()).thenThrow(new CustomRuntimeException("Unexpected error"));
 
@@ -107,7 +107,7 @@ public class TeamMemberControllerTest {
     }
     
     @Test
-    public void testGet_Nominal() throws CustomRuntimeException{
+    void testGet_Nominal() throws CustomRuntimeException{
         // Mock userService.getUserById() method
         UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
         TeamDTO team1 = new TeamDTO();
@@ -127,7 +127,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testGet_UserNotFound() throws CustomRuntimeException{
+    void testGet_UserNotFound() throws CustomRuntimeException{
         // Mock userService.getUserById() method
         when(teamMemberService.getTeamMemberById(anyInt())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
 
@@ -143,7 +143,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testGet_ServiceError() throws CustomRuntimeException{
+    void testGet_ServiceError() throws CustomRuntimeException{
         // Mock userService.getUserById() method
         when(teamMemberService.getTeamMemberById(anyInt())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
@@ -159,7 +159,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testGet_UnexpectedError() throws CustomRuntimeException{
+    void testGet_UnexpectedError() throws CustomRuntimeException{
         // Mock userService.getUserById() method
         when(teamMemberService.getTeamMemberById(anyInt())).thenThrow(new CustomRuntimeException("Unexpected error"));
 
@@ -175,7 +175,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testSetBonus_Nominal() throws CustomRuntimeException{
+    void testSetBonus_Nominal() throws CustomRuntimeException{
         // Mock userService.getUserById() method
         UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
         TeamDTO team1 = new TeamDTO();
@@ -195,7 +195,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testSetBonus_ServiceError() throws CustomRuntimeException{
+    void testSetBonus_ServiceError() throws CustomRuntimeException{
         // Mock userService.getUserById() method
         when(teamMemberService.setBonusPenaltyById(1, 2)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
@@ -211,7 +211,7 @@ public class TeamMemberControllerTest {
     }
 
     @Test
-    public void testSetBonus_UnexpectedError() throws CustomRuntimeException{
+    void testSetBonus_UnexpectedError() throws CustomRuntimeException{
         // Mock userService.getUserById() method
         when(teamMemberService.setBonusPenaltyById(1, 2)).thenThrow(new CustomRuntimeException("Unexpected error"));
 

@@ -17,7 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.TeamDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 
@@ -34,7 +34,7 @@ public class FileServiceTest {
     private ModelMapper modelMapper;
 
     @Test
-    public void testSaveFile() throws IOException, CustomRuntimeException {
+    void testSaveFile() throws IOException, CustomRuntimeException {
         TeamDTO mockedAnswer = new TeamDTO(1, null, null, null);
         when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
         // Create a empty file
@@ -48,7 +48,7 @@ public class FileServiceTest {
     }
 
     @Test
-    public void checkFileIsPDF_FileIsPDF() {
+    void checkFileIsPDF_FileIsPDF() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.pdf", "text/plain", "some test".getBytes());
 
@@ -61,7 +61,7 @@ public class FileServiceTest {
     }
 
     @Test
-    public void checkFileIsPDF_FileIsNotPDF() {
+    void checkFileIsPDF_FileIsNotPDF() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.txt", "text/plain", "some xml".getBytes());
 

@@ -19,8 +19,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import com.caerdydd.taf.models.dto.TeachingStaffDTO;
-import com.caerdydd.taf.models.entities.TeachingStaffEntity;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 import com.caerdydd.taf.repositories.TeachingStaffRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
@@ -37,7 +37,7 @@ public class TeachingStaffServiceTest {
     private ModelMapper modelMapper;
 
     @Test
-    public void testListAllTeachingStaff_Nominal() {
+    void testListAllTeachingStaff_Nominal() {
         // Mock teamMemberRepository.findAll() method
         List<TeachingStaffEntity> mockedAnswer = new ArrayList<TeachingStaffEntity>();
 
@@ -63,7 +63,7 @@ public class TeachingStaffServiceTest {
     }
 
     @Test
-    public void testListAllTeachingStaff_Empty() {
+    void testListAllTeachingStaff_Empty() {
           // Mock teamMemberRepository.findAll() method
           List<TeachingStaffEntity> mockedAnswer = new ArrayList<TeachingStaffEntity>();
           when(teachingStaffRepository.findAll()).thenReturn(mockedAnswer);
@@ -86,7 +86,7 @@ public class TeachingStaffServiceTest {
     }
 
     @Test
-    public void testListAllTeachingStaff_ServiceError() {
+    void testListAllTeachingStaff_ServiceError() {
           // Mock teamMemberRepository.findAll() method
           when(teachingStaffRepository.findAll()).thenThrow(new NoSuchElementException());
   

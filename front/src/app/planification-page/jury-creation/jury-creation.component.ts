@@ -59,12 +59,10 @@ export class JuryCreationComponent {
     this._snackBar.open("Le jury, constitué de " + data.ts1.lastname + " et " + data.ts2.lastname + ", a bien été créé.", "Fermer", {
       duration: 5000,
     });
-    this.errorMessage = "";
   }
 
-  showError(errorCode: number) {
-    console.log(errorCode);
-    switch (errorCode) {
+  showError(error: { status: number; }) {
+    switch (error.status) {
       case 418:
         this.errorMessage = "Le jury existe déjà";
         break;

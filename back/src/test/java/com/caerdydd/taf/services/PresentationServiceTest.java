@@ -1,7 +1,6 @@
 package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -21,8 +20,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import com.caerdydd.taf.models.dto.PresentationDTO;
-import com.caerdydd.taf.models.entities.PresentationEntity;
+import com.caerdydd.taf.models.dto.project.PresentationDTO;
+import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.repositories.PresentationRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
@@ -39,7 +38,7 @@ class PresentationServiceTest {
     private PresentationRepository presentationRepository;
 
     @Test
-    void testListAllPresentations_Nominal() {
+    void testListAllPresentations_Nominal() throws CustomRuntimeException {
         //Mock presentationRepository.findAll() method
         List<PresentationEntity> mockedAnswer = new ArrayList<PresentationEntity>();
         mockedAnswer.add(new PresentationEntity(1));
@@ -53,11 +52,8 @@ class PresentationServiceTest {
 
         //Call the method to test
         List<PresentationDTO> result = new ArrayList<PresentationDTO>();
-        try {
-            result = presentationService.listAllPresentations();
-        } catch (CustomRuntimeException e) {
-            fail();
-        }
+
+        result = presentationService.listAllPresentations();
 
         // Verify the result
         verify(presentationRepository, times(1)).findAll();
@@ -66,7 +62,7 @@ class PresentationServiceTest {
     }
 
     @Test
-    void testListAllPresentations_Empty() {
+    void testListAllPresentations_Empty() throws CustomRuntimeException {
         // Mock presentationRepository.findAll() method
         List<PresentationEntity> mockedAnswer = new ArrayList<PresentationEntity>();
         when(presentationRepository.findAll()).thenReturn(mockedAnswer);
@@ -76,11 +72,8 @@ class PresentationServiceTest {
 
         // Call the method to test
         List<PresentationDTO> result = new ArrayList<PresentationDTO>();
-        try {
-            result = presentationService.listAllPresentations();
-        } catch (CustomRuntimeException e) {
-            fail();
-        }
+
+        result = presentationService.listAllPresentations();
 
         // Verify the result
         verify(presentationRepository, times(1)).findAll();
@@ -119,7 +112,7 @@ class PresentationServiceTest {
     }
 
     @Test
-    public void testGetPresentationById_Nominal() throws CustomRuntimeException {
+    void testGetPresentationById_Nominal() throws CustomRuntimeException {
         // Mock presentationRepository.findById() method
         Optional<PresentationEntity> mockedAnswer = Optional.of(new PresentationEntity(1));
         when(presentationRepository.findById(any(Integer.class))).thenReturn(mockedAnswer);
@@ -136,7 +129,7 @@ class PresentationServiceTest {
     }
 
     @Test
-    public void testGetPresentationById_PresentationNotFound() {
+    void testGetPresentationById_PresentationNotFound() {
         // Mock presentationRepository.findById() method
         Optional<PresentationEntity> mockedAnswer = Optional.empty();
         when(presentationRepository.findById(any(Integer.class))).thenReturn(mockedAnswer);

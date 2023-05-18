@@ -7,13 +7,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.JuryDTO;
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.JuryEntity;
+import com.caerdydd.taf.models.dto.user.JuryDTO;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.entities.user.JuryEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
-import com.caerdydd.taf.security.SecurityConfig;
 import com.caerdydd.taf.services.rules.JuryServiceRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 
@@ -23,9 +22,6 @@ public class JuryService {
     @Autowired
     private JuryRepository juryRepository;
 
-    @Autowired 
-    private UserService userService;
-
     @Autowired
     private JuryServiceRules juryServiceRules;
 
@@ -33,10 +29,10 @@ public class JuryService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private UserServiceRules userServiceRules;
+    private TeachingStaffService teachingStaffService;
 
     @Autowired
-    SecurityConfig securityConfig;
+    UserServiceRules userServiceRules;
     
     public JuryDTO addJuryMembers(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
         userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
@@ -46,10 +42,10 @@ public class JuryService {
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
         juryServiceRules.checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
 
-        UserDTO juryMemberDev = userService.getUserById(idJuryMemberDev);
-        UserDTO juryMemberArchi = userService.getUserById(idJuryMemberArchi);
+        TeachingStaffDTO ts1 = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
+        TeachingStaffDTO ts2 = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
 
-        JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
+        JuryDTO juryDTO = new JuryDTO(ts1, ts2);
         return updateJury(juryDTO);
     }
 

@@ -1,6 +1,6 @@
 package com.caerdydd.taf.controllers;
 
-import com.caerdydd.taf.models.dto.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ProjectService;
 
@@ -35,6 +35,7 @@ public class ProjectController {
             return new ResponseEntity<>(updatedProject, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -49,6 +50,7 @@ public class ProjectController {
             return new ResponseEntity<>(updatedProject, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -63,9 +65,11 @@ public class ProjectController {
             return new ResponseEntity<>(project, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.PROJECT_NOT_FOUND)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -81,6 +85,7 @@ public class ProjectController {
             return new ResponseEntity<>(projects, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());

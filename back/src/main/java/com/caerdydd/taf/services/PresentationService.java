@@ -10,8 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.PresentationDTO;
-import com.caerdydd.taf.models.entities.PresentationEntity;
+import com.caerdydd.taf.models.dto.project.PresentationDTO;
+import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.repositories.PresentationRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
