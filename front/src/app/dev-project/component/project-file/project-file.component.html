@@ -1,5 +1,5 @@
 <div id="projectFileComponent">
-  <form class="inputFileForm" id="teamScopeForm"  [formGroup]="importTSSform" (ngSubmit)="upload('teamScopeStatement')" *ngIf="this.isNotFinalScope">
+  <form class="inputFileForm" id="teamScopeForm"  [formGroup]="importTSSform" (ngSubmit)="upload('teamScopeStatement')" *ngIf="!isFinalStateScope()">
     <label for="">Cahier des charges :</label>
     <div class="sameRow">
       <mat-form-field class="inputForm" appearance="fill">
@@ -78,10 +78,10 @@
       </button>
     </form>
 
-    <mat-card *ngIf="testBookLink">
+    <mat-card *ngIf="currentTeam?.testBookLink">
       <mat-card-title>Lien vers le cahier de test</mat-card-title>
       <mat-card-content>
-        <a mat-button color="primary" [href]="testBookLink" target="_blank">{{ testBookLink }}</a>
+        <a mat-button color="primary" [href]="currentTeam?.testBookLink" target="_blank">{{ currentTeam?.testBookLink }}</a>
       </mat-card-content>
     </mat-card>
 

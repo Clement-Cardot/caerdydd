@@ -29,9 +29,6 @@ export class ProjectFileComponent implements OnInit {
   testBookLinkForm: FormGroup;
   currentUser!: User | null;
   currentTeam!: Team | null;
-  testBookLink!: string | null;
-
-  isNotFinalScope!: boolean;
 
   importTSSform: FormGroup;
   importAnalysisform: FormGroup;
@@ -42,7 +39,6 @@ export class ProjectFileComponent implements OnInit {
   errorMessage!: string;
 
   constructor(private apiTeamMemberService: ApiTeamMemberService, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService, private formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
-    this.isNotFinalScope = true
     this.importTSSform = this.formBuilder.group({
       file: this.fileFormControl
     });
@@ -60,12 +56,13 @@ export class ProjectFileComponent implements OnInit {
   public ngOnInit():void {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.currentUser = user;
-        this.getTeamMember();
+      this.getTeamMember();
     });
   }
 
   upload(fileName: string) {
-    if (this.currentUser != null) {
+    if (this.currentUser != null && this.currentTeam != null) {
+      let id = this.currentTeam.idTeam;
       this.fileFormControl.setErrors({'apiError': null});
       this.fileFormControl.updateValueAndValidity();
       if(this.importTSSform.invalid){
@@ -73,30 +70,20 @@ export class ProjectFileComponent implements OnInit {
       } else {
         const file_form: FileInput = this.importTSSform.get('file')?.value;
         const file = file_form.files[0];
-        this.apiTeamMemberService.getTeamMemberById(this.currentUser.id).subscribe(value => {
-          this.uploadFileService.upload(file, value.idTeam, fileName).subscribe(
-            data => {
-              this.showSuccess();
-              this.isNotFinalScope = false;
-            },
-            error => {this.showError(error)},
-          );
-        });
+        this.uploadFileService.upload(file, id, fileName).subscribe(
+          data => {
+            this.getTeam(id);
+            this.showSuccess();
+          },
+          error => {this.showError(error)},
+        );
       }
     }
 
   }
 
   isFinalStateScope() {
-    if (this.currentUser != null) {
-      this.apiTeamMemberService.getTeamMemberById(this.currentUser.id).subscribe(value => {
-        this.apiTeamService.getTeam(value.idTeam).subscribe(value => {
-          if(value.filePathFinalScopeStatement != null) {
-            this.isNotFinalScope = false;
-          }
-        })
-      });
-    }
+    return (this.currentTeam?.filePathFinalScopeStatement != null);
   }
 
   isCurrentUserInTeam(): boolean {
@@ -113,7 +100,6 @@ export class ProjectFileComponent implements OnInit {
       this.apiTeamService.addTestBookLink(this.currentTeam)
         .subscribe(team => {
           this.currentTeam = team;
-          this.testBookLink = team.testBookLink;
           console.log('Lien TestBook ajouté avec succès');
           this.openSnackBar();
         });
@@ -133,21 +119,9 @@ export class ProjectFileComponent implements OnInit {
     this.apiTeamService.getTeam(teamId).subscribe(
       (team: Team) => {
         this.currentTeam = team;
-        this.getTestBookLink(team.idTeam);
       },
       (error) => {
         console.error("Error getting team:", error);
-      }
-    );
-  }
-
-  getTestBookLink(teamId: number) {
-    this.apiTeamService.getTestBookLinkDev(teamId).subscribe(
-      (link: string) => {
-        this.testBookLink = link;
-      },
-      (error) => {
-        console.error("Error getting test book link:", error);
       }
     );
   }
