@@ -51,7 +51,7 @@ public class TeachingStaffController {
             TeachingStaffDTO teachingStaff = teachingStaffService.getTeachingStaffById(teachingStaffId);
             return new ResponseEntity<>(teachingStaff, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-          if (e.getMessage().equals(CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND)) {
+          if (e.getMessage().equals(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND)) {
               return new ResponseEntity<>(HttpStatus.NOT_FOUND);
           }
           if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
@@ -75,7 +75,7 @@ public class TeachingStaffController {
         switch (e.getMessage()) {
         case CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER:
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        case CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND:
+        case CustomRuntimeException.TEACHING_STAFF_NOT_FOUND:
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         default: return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }

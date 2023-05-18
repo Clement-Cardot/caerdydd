@@ -192,7 +192,7 @@ public class TeachingStaffControllerTest {
     @Test
     void testGetTeachingStaffById_TeachingStaffNotFound() throws CustomRuntimeException {
         // Mock teachingStaffService.getTeachingStaffById() method
-        when(teachingStaffService.getTeachingStaffById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND));
+        when(teachingStaffService.getTeachingStaffById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
 
         // Define the expected response
         ResponseEntity<TeachingStaffDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -278,7 +278,7 @@ public class TeachingStaffControllerTest {
     @Test
     void testSubmitSpeciality_TeachingStaffNotFound() throws CustomRuntimeException {
         // Mock teachingStaffService.updateTeachingStaff() method
-        when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND));
+        when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
 
         // Create a sample TeachingStaffDTO object for the request body
         UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");

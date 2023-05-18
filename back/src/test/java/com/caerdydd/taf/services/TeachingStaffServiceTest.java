@@ -163,7 +163,7 @@ public class TeachingStaffServiceTest {
 
         // Verify the result
         verify(teachingStaffRepository, times(1)).findById(1);
-        assertEquals(CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND, exception.getMessage());
+        assertEquals(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND, exception.getMessage());
     }
 
     @Test

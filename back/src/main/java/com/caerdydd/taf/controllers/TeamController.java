@@ -1,11 +1,6 @@
 package com.caerdydd.taf.controllers;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
@@ -150,26 +143,12 @@ public class TeamController {
             }
         }
     }
-
-    private boolean isValidLink(String link) {
-        try {
-            new URL(link).toURI();
-            return true;
-        } catch (MalformedURLException | URISyntaxException e) {
-            return false;
-        }
-    }
     
-    @PutMapping("/{idTeam}/testBookLink")
-    public ResponseEntity<TeamDTO> addTestBookLink(@PathVariable Integer idTeam,  @RequestBody Map<String, String> testBookLinkJson) {
-        logger.info("Process request : Add test book link in team: {} with link {}", idTeam, testBookLinkJson.get("testBookLink"));
-        String testBookLink = testBookLinkJson.get("testBookLink");
+    @PutMapping("/testBookLink")
+    public ResponseEntity<TeamDTO> addTestBookLink(@RequestBody TeamDTO team) {
+        logger.info("Process request : Add test book link in team: {} with link {}", team.getIdTeam(), team.getTestBookLink());
         try {
-            // TODO Move this logic verification to the service method
-            if (!isValidLink(testBookLink)) {
-                throw new CustomRuntimeException(CustomRuntimeException.INVALID_LINK);
-            }
-            TeamDTO updatedTeam = teamService.addTestBookLink(idTeam, testBookLink);
+            TeamDTO updatedTeam = teamService.addTestBookLink(team);
             return new ResponseEntity<>(updatedTeam, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
