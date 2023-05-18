@@ -19,10 +19,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.caerdydd.taf.models.dto.ProjectDTO;
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeamService;
 
@@ -36,7 +36,7 @@ public class TeamControllerTest {
     private TeamService teamService;
 
     @Test
-    public void testGetAllTeams_Nominal() throws CustomRuntimeException {
+    void testGetAllTeams_Nominal() throws CustomRuntimeException {
         // Mock teamService.listAllTeams() method
         List<TeamDTO> mockedAnswer = new ArrayList<>();
         mockedAnswer.add(new TeamDTO(
@@ -65,7 +65,7 @@ public class TeamControllerTest {
     }
 
     @Test
-    public void testGetAllTeams_Empty() throws CustomRuntimeException {
+    void testGetAllTeams_Empty() throws CustomRuntimeException {
         // Mock teamService.listAllTeams() method
         List<TeamDTO> mockedAnswer = new ArrayList<>();
         when(teamService.listAllTeams()).thenReturn(mockedAnswer);
@@ -82,7 +82,7 @@ public class TeamControllerTest {
     }
 
     @Test
-    public void testGetAllTeams_ServiceError() throws CustomRuntimeException {
+    void testGetAllTeams_ServiceError() throws CustomRuntimeException {
         // Mock teamService.listAllTeams() method
         when(teamService.listAllTeams()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
@@ -98,7 +98,7 @@ public class TeamControllerTest {
     }
 
     @Test
-    public void testGetAllTeams_UnexpectedError() throws CustomRuntimeException {
+    void testGetAllTeams_UnexpectedError() throws CustomRuntimeException {
         // Mock teamService.listAllTeams() method
         when(teamService.listAllTeams()).thenThrow(new CustomRuntimeException("Unexpected error"));
 

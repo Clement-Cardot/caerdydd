@@ -38,7 +38,7 @@ export class TeamAdapter implements Adapter<Team> {
                     teamMemberList.push(this.teamMemberAdapter.adapt(teamMember));
                 });
             }
-            let response = new Team(
+            return new Team(
                 item.idTeam,
                 item.name,
                 item.teamWorkMark,
@@ -54,7 +54,5 @@ export class TeamAdapter implements Adapter<Team> {
                 this.projectAdapter.adapt(item.projectDev),
                 this.projectAdapter.adapt(item.projectValidation)
             );
-            console.log(response);
-            return response;
         }
     }

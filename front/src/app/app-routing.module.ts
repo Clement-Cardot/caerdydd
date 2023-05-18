@@ -15,8 +15,11 @@ import { ProjectListComponent } from './page-validate-subject/components/project
 import { DevProjectComponent } from './dev-project/component/dev-project/dev-project.component';
 import { AllTeachingStaffComponent } from './teaching-staff-page/components/all-teaching-staff/all-teaching-staff/all-teaching-staff.component';
 import { DefineSpecialtyComponent } from './teaching-staff-page/components/define-specialty/define-specialty.component';
+import { ValidationProjectComponent } from './validation-project/component/validation-project/validation-project.component';
+import { TeamInfoComponent } from './teams-page/components/team-info/team-info.component';
 
-const websiteName = ' - Taf';
+const websiteName = " - Taf"
+
 const routes: Routes = [
   { path: '', title: 'Login' + websiteName, component: LoginComponent },
 

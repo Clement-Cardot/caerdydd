@@ -1,13 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
 import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
-
 import { ProjectsPageModule } from './page-validate-subject/page-validate-subject.module';
 import { TeamsPageModule } from './teams-page/teams-page.module';
 import { UserDataService } from './core/services/user-data.service';
@@ -22,9 +21,9 @@ import { PlanificationPageModule } from './planification-page/planification-page
 import { ApiProjectService } from './core/services/api-project.service';
 import { DevProjectModule } from './dev-project/dev-project.module';
 import { ErrorInterceptor } from './core/services/error.interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TeachingStaffPageModule } from './teaching-staff-page/teaching-staff-page.module';
 import { ApiTeachingStaffService } from './core/services/api-teaching-staff.service';
+import { ValidationProjectModule } from './validation-project/validation-project.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -43,6 +42,7 @@ import { ApiTeachingStaffService } from './core/services/api-teaching-staff.serv
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN'}),
     BrowserAnimationsModule,
     LoginPageModule,
     ProjectDescriptionPageModule,
@@ -54,6 +54,8 @@ import { ApiTeachingStaffService } from './core/services/api-teaching-staff.serv
     DevProjectModule,
     ProjectsPageModule,
     TeachingStaffPageModule,
+    TeamsPageModule,
+    ValidationProjectModule
   ],
   bootstrap: [AppComponent],
 })

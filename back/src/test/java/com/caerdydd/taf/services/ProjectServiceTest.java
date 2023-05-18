@@ -2,7 +2,6 @@ package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -12,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,12 +24,12 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import com.caerdydd.taf.models.dto.ProjectDTO;
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.ProjectEntity;
-import com.caerdydd.taf.models.entities.TeamEntity;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.project.ProjectEntity;
+import com.caerdydd.taf.models.entities.project.TeamEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -112,7 +110,7 @@ class ProjectServiceTest {
 
 
     @Test
-    public void testGetProjectById_Nominal() throws CustomRuntimeException {
+    void testGetProjectById_Nominal() throws CustomRuntimeException {
         // Préparer les données d'entrée
         Integer projectId = 1;
 
@@ -142,7 +140,7 @@ class ProjectServiceTest {
     }
 
     @Test
-    public void testGetProjectById_ProjectNotFound() {
+    void testGetProjectById_ProjectNotFound() {
         // Préparer les données d'entrée
         Integer projectId = 1;
 
@@ -155,7 +153,7 @@ class ProjectServiceTest {
     }
 
     @Test
-    public void testGetProjectById_ServiceError() {
+    void testGetProjectById_ServiceError() {
     // Préparer les données d'entrée
     Integer projectId = 1;
 
@@ -170,7 +168,7 @@ class ProjectServiceTest {
 
 
 @Test
-public void testUpdateProject_Nominal() throws CustomRuntimeException {
+void testUpdateProject_Nominal() throws CustomRuntimeException {
     // Prepare data
     Integer projectId = 1;
     ProjectDTO projectDTO = new ProjectDTO();
@@ -210,7 +208,7 @@ public void testUpdateProject_Nominal() throws CustomRuntimeException {
 
 
 @Test
-public void testUpdateProject_ProjectNotFound() {
+void testUpdateProject_ProjectNotFound() {
     // Prepare data
     Integer projectId = 1;
     ProjectDTO projectDTO = new ProjectDTO();
@@ -225,7 +223,7 @@ public void testUpdateProject_ProjectNotFound() {
 }
 
 @Test
-public void testUpdateProject_ServiceError() {
+void testUpdateProject_ServiceError() {
     // Prepare data
     Integer projectId = 1;
     ProjectDTO projectDTO = new ProjectDTO();
@@ -245,7 +243,7 @@ public void testUpdateProject_ServiceError() {
 }
 
 @Test
-public void testUpdateValidation_Nominal() throws CustomRuntimeException {
+void testUpdateValidation_Nominal() throws CustomRuntimeException {
     // Prepare data
     Integer projectId = 1;
     ProjectDTO projectDTO = new ProjectDTO();
@@ -284,7 +282,7 @@ public void testUpdateValidation_Nominal() throws CustomRuntimeException {
 
 
 @Test
-public void testUpdateDescription_Nominal() throws CustomRuntimeException {
+void testUpdateDescription_Nominal() throws CustomRuntimeException {
     // Prepare data
     Integer projectId = 1;
     Integer teamId = 2;
@@ -341,7 +339,7 @@ public void testUpdateDescription_Nominal() throws CustomRuntimeException {
 
 
 @Test
-public void testUpdateDescription_TeamNotFound() throws CustomRuntimeException {
+void testUpdateDescription_TeamNotFound() throws CustomRuntimeException {
 // Prepare data
 Integer projectId = 1;
 Integer teamId = 2;
@@ -372,7 +370,7 @@ verify(teamRepository, times(1)).findByProjectDevId(projectId);
 }
 
 @Test
-public void testUpdateDescription_UserNotInTeam() throws CustomRuntimeException {
+void testUpdateDescription_UserNotInTeam() throws CustomRuntimeException {
 // Prepare data
 Integer projectId = 1;
 Integer teamId = 2;
@@ -415,7 +413,7 @@ verify(teamMemberService, times(1)).getTeamMemberById(currentUser.getId());
 }
 
 @Test
-public void testListAllProjects() throws CustomRuntimeException {
+void testListAllProjects() throws CustomRuntimeException {
     // Prepare data
     List<ProjectEntity> projectEntities = new ArrayList<>();
     projectEntities.add(new ProjectEntity(1, "Project 1", "Description 1", true));
@@ -437,7 +435,7 @@ public void testListAllProjects() throws CustomRuntimeException {
 }
 
 @Test
-public void testListAllProjects_ServiceError() {
+void testListAllProjects_ServiceError() {
     // Configure Mocks behavior
     when(projectRepository.findAll()).thenThrow(new RuntimeException("Service Error"));
 

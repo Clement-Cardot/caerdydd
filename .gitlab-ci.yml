@@ -24,10 +24,6 @@ angular-build:
     - npm install --legacy-peer-deps
     - npm install -g @angular/cli
     - ng build
-  artifacts:
-    paths:
-      - front/dist
-    expire_in: 1 day
   cache:
     paths:
       - front/node_modules
@@ -43,7 +39,6 @@ java-build:
     name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
     paths:
       - $CI_PROJECT_DIR/mvn.log
-      - back/target/taf.war
     expire_in: 1 day
     when: always
   cache:
@@ -62,7 +57,6 @@ junit-test:
     reports:
       junit: back/target/surefire-reports/TEST*.xml
     paths:
-      - back/target/site/jacoco
       - $CI_PROJECT_DIR/mvn.log
     expire_in: 1 day
     when: always

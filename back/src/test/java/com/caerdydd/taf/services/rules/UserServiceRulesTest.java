@@ -15,8 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 
@@ -31,7 +31,7 @@ public class UserServiceRulesTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"STUDENT_ROLE", "TEACHING_STAFF_ROLE", "OPTION_LEADER_ROLE", "TEAM_MEMBER_ROLE", "PLANNING_ROLE"})
-    public void checkUserRoleTest_UserHasRole(String role) {
+    void checkUserRoleTest_UserHasRole(String role) {
         // Create User
         UserDTO user = new UserDTO();
         user.setRoles(new ArrayList<>());
@@ -49,7 +49,7 @@ public class UserServiceRulesTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"STUDENT_ROLE", "TEACHING_STAFF_ROLE", "OPTION_LEADER_ROLE", "TEAM_MEMBER_ROLE", "PLANNING_ROLE"})
-    public void checkUserRoleTest_UserHasNotRole(String role) {
+    void checkUserRoleTest_UserHasNotRole(String role) {
         // Create User
         UserDTO user = new UserDTO();
         user.setRoles(new ArrayList<>());
@@ -85,7 +85,7 @@ public class UserServiceRulesTest {
     }
 
     @Test
-    public void checkUserRoleTest_UnexpectedRole() {
+    void checkUserRoleTest_UnexpectedRole() {
         // Create User
         UserDTO user = new UserDTO();
         user.setRoles(new ArrayList<>());
@@ -102,7 +102,7 @@ public class UserServiceRulesTest {
     }
     
     @Test
-    public void checkCurrentUser_UserIsNotCurrentUser() throws CustomRuntimeException {
+    void checkCurrentUser_UserIsNotCurrentUser() throws CustomRuntimeException {
         // Create Users
         UserDTO user1 = new UserDTO();
         user1.setId(1);
@@ -123,7 +123,7 @@ public class UserServiceRulesTest {
     }
 
     @Test
-    public void checkCurrentUser_UserIsCurrentUser() throws CustomRuntimeException {
+    void checkCurrentUser_UserIsCurrentUser() throws CustomRuntimeException {
         // Create Users
         UserDTO user1 = new UserDTO();
         user1.setId(1);

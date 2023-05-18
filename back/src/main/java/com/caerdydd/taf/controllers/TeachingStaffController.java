@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.caerdydd.taf.models.dto.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
 
@@ -24,7 +24,7 @@ public class TeachingStaffController {
 
     private static final Logger logger = LogManager.getLogger(TeachingStaffController.class);
     private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
-
+    
     @Autowired
     private TeachingStaffService teachingStaffService;
 
@@ -35,10 +35,8 @@ public class TeachingStaffController {
             List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
             return new ResponseEntity<>(teachingStaffs, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            if (e.getMessage().equals(CustomRuntimeException.ALL_TEACHINGSTAFF_NOT_FOUND)) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+            if(e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());

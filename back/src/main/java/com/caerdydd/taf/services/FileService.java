@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.TeamDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 @Service
@@ -27,7 +27,11 @@ public class FileService {
     public void saveFile(MultipartFile file, int id, String type) throws CustomRuntimeException {
         try {
             final String relativePath = "/upload/equipe";
-            String fileExt = "." + file.getOriginalFilename().split("\\.")[1];
+            String fileExt = "";
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename != null && originalFilename.contains(".")) {
+                fileExt = "." + originalFilename.split("\\.")[1];
+            }
             Files.createDirectories(Paths.get(System.getProperty("user.dir") + relativePath + id));
             this.checkFileIsPDF(file);
             file.transferTo(new File(System.getProperty("user.dir") + relativePath + id + "/" + type + fileExt));
@@ -45,8 +49,10 @@ public class FileService {
     }
 
     public void checkFileIsPDF(MultipartFile file) throws CustomRuntimeException {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         try {
-            if (!file.getOriginalFilename().endsWith(".pdf")){
+            if (!fileName.endsWith(".pdf")){
                 throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
             }
         } catch (NullPointerException e) {

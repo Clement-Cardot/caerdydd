@@ -12,8 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.TeachingStaffDTO;
-import com.caerdydd.taf.models.entities.TeachingStaffEntity;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 import com.caerdydd.taf.repositories.TeachingStaffRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.UserServiceRules;
@@ -32,7 +32,6 @@ public class TeachingStaffService {
 
   @Autowired
   UserServiceRules userServiceRules;
-
   
   public List<TeachingStaffDTO> listAllTeachingStaff() throws CustomRuntimeException {
       try {
@@ -40,25 +39,24 @@ public class TeachingStaffService {
           .map(teachingStaff -> modelMapper.map(teachingStaff, TeachingStaffDTO.class))
           .collect(Collectors.toList()) ;
       } catch (Exception e) {
+          logger.error("Error listing all teaching staff:", e);
           throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
       }
   }
 
-  public TeachingStaffDTO getTeachingStaffById(Integer idUser) throws CustomRuntimeException  {
-    Optional<TeachingStaffEntity> optionalTeachingStaff;
-    try {
-      optionalTeachingStaff = teachingStaffRepository.findById(idUser);
-    } catch(Exception e) {
-      throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
-    }
-    if(optionalTeachingStaff.isEmpty()){
-      throw new CustomRuntimeException(CustomRuntimeException.TEACHINGSTAFF_NOT_FOUND);
-    }
-    return modelMapper.map(
-      optionalTeachingStaff.get(),
-     TeachingStaffDTO.class
-     );
-  }
+  public TeachingStaffDTO getTeachingStaffById(Integer id) throws CustomRuntimeException {
+      Optional<TeachingStaffEntity> optionalTeachingStaff;
+      try {
+          optionalTeachingStaff = teachingStaffRepository.findById(id);
+      } catch (Exception e) {
+          throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+      }
+      
+      if (optionalTeachingStaff.isEmpty()) {
+          throw new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND);
+      }
+      return modelMapper.map(optionalTeachingStaff.get(), TeachingStaffDTO.class);
+  } 
 
   public TeachingStaffDTO saveTeachingStaff(TeachingStaffDTO teachingStaff) {    
     TeachingStaffEntity teachingStaffEntity = modelMapper.map(
@@ -69,7 +67,7 @@ public class TeachingStaffService {
     return modelMapper.map(response, TeachingStaffDTO.class);
   }
 
- public TeachingStaffDTO updateTeachingStaff(TeachingStaffDTO teachingStaff) throws CustomRuntimeException {
+  public TeachingStaffDTO updateTeachingStaff(TeachingStaffDTO teachingStaff) throws CustomRuntimeException {
     // Verify if the current user is a team member
     userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
   
@@ -89,4 +87,5 @@ public class TeachingStaffService {
 
     return modelMapper.map(response, TeachingStaffDTO.class);
   }
+    
 }

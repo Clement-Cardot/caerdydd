@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileInput } from 'ngx-material-file-input';
-import { Consulting } from 'src/app/core/data/models/consulting.model';
+import { PlannedTimingConsulting } from 'src/app/core/data/models/planned-timing-consulting.model';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
 
 @Component({
@@ -45,7 +45,7 @@ export class ConsultingImportComponent {
     }
   }
 
-  showSuccess(data : Consulting[]) {
+  showSuccess(data : PlannedTimingConsulting[]) {
     let nbConsulting = data.length;
     this._snackBar.open(nbConsulting + " sessions de consulting ont bien été importés", "Fermer", {
       duration: 5000,

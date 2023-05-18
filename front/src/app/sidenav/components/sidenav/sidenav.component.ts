@@ -63,11 +63,10 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       this.navLink.push('Tableau de bord');
 
       // Option Leader
-      if (this.currentUser.getRoles().includes('OPTION_LEADER_ROLE')) {
-        this.navLink.push('Administration');
-        this.navLink.push('Equipes');
-        this.navLink.push('Notes');
-        this.navLink.push('Sujets');
+      if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
+        this.navLink.push("Administration");
+        this.navLink.push("Notes");
+        this.navLink.push("Sujets");
       }
 
       // Planning

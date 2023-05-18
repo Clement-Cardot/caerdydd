@@ -18,8 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.caerdydd.taf.models.dto.TeachingStaffDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
 
@@ -32,7 +32,7 @@ public class TeachingStaffControllerTest {
     private TeachingStaffService teachingStaffService;
 
     @Test
-    public void testList_Nominal() throws CustomRuntimeException{
+    void testList_Nominal() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         List<TeachingStaffDTO> mockedAnswer = new ArrayList<TeachingStaffDTO>();
 
@@ -51,7 +51,7 @@ public class TeachingStaffControllerTest {
     }
 
     @Test
-    public void testList_Empty() throws CustomRuntimeException{
+    void testList_Empty() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         List<TeachingStaffDTO> mockedAnswer = new ArrayList<TeachingStaffDTO>();
         when(teachingStaffService.listAllTeachingStaff()).thenReturn(mockedAnswer);
@@ -68,7 +68,7 @@ public class TeachingStaffControllerTest {
     }
 
     @Test
-    public void testList_ServiceError() throws CustomRuntimeException{
+    void testList_ServiceError() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         when(teachingStaffService.listAllTeachingStaff()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
@@ -84,7 +84,7 @@ public class TeachingStaffControllerTest {
     }
 
     @Test
-    public void testList_UnexpectedError() throws CustomRuntimeException{
+    void testList_UnexpectedError() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         when(teachingStaffService.listAllTeachingStaff()).thenThrow(new CustomRuntimeException("Unexpected error"));
 
