@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
-import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
@@ -137,8 +136,7 @@ public class ConsultingService {
             }
             plannedTimingConsultingsToSave.add(plannedTimingConsulting);
         }
-        List<PlannedTimingConsultingDTO> plannedTimingConsultings = savePlannedTimingConsultings(plannedTimingConsultingsToSave);
-        return plannedTimingConsultings;
+        return savePlannedTimingConsultings(plannedTimingConsultingsToSave);
     }
 
     // Read a .csv file with planned timings for consulting

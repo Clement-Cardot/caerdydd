@@ -889,51 +889,52 @@ class TeamServiceTest {
     }
 
     @Test
-void testAddTestBookLink() {
-    // Mock teamRepository.findById() method
-    TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
-    Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
-    when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+    void testAddTestBookLink() {
+        // Mock teamRepository.findById() method
+        TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
+        Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
+        when(teamRepository.findById(1)).thenReturn(mockedAnswer);
 
-    // Mock teamRepository.save() method
-    when(teamRepository.save(any(TeamEntity.class))).then(AdditionalAnswers.returnsFirstArg());
+        // Mock teamRepository.save() method
+        when(teamRepository.save(any(TeamEntity.class))).thenAnswer(i -> i.getArguments()[0]);
 
-    // Call the method to test
-    TeamDTO result = new TeamDTO();
-    try {
-        result = teamService.addTestBookLink(1, "https://testbook.com/testlink");
-    } catch (CustomRuntimeException e) {
-        fail();
+        // Prepare input
+        TeamDTO input = new TeamDTO();
+        input.setIdTeam(1);
+        input.setTestBookLink("https://testbook.com/testlink");
+
+        // Call the method to test
+        TeamDTO result = new TeamDTO();
+        try {
+            result = teamService.addTestBookLink(input);
+        } catch (CustomRuntimeException e) {
+            fail();
+        }
+
+        // Verify the result
+        verify(teamRepository, times(1)).findById(1);
+        verify(teamRepository, times(1)).save(any(TeamEntity.class));
+        assertEquals("https://testbook.com/testlink", result.getTestBookLink());
     }
 
-    // Verify the result
-    verify(teamRepository, times(1)).findById(1);
-    verify(teamRepository, times(1)).save(any(TeamEntity.class));
-    assertEquals("https://testbook.com/testlink", result.getTestBookLink());
-}
+    @Test
+    void testGetTestBookLinkDev() {
+        // Mock teamRepository.findById() method
+        TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
+        teamEntity.setTestBookLink("https://testbook.com/testlink");
+        Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
+        when(teamRepository.findById(1)).thenReturn(mockedAnswer);
 
-@Test
-void testGetTestBookLinkDev() {
-    // Mock teamRepository.findById() method
-    TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
-    teamEntity.setTestBookLink("https://testbook.com/testlink");
-    Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
-    when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+        // Call the method to test
+        String result = "";
+        try {
+            result = teamService.getTestBookLinkDev(1);
+        } catch (CustomRuntimeException e) {
+            fail();
+        }
 
-    // Call the method to test
-    String result = "";
-    try {
-        result = teamService.getTestBookLinkDev(1);
-    } catch (CustomRuntimeException e) {
-        fail();
+        // Verify the result
+        verify(teamRepository, times(1)).findById(1);
+        assertEquals("https://testbook.com/testlink", result);
     }
-
-    // Verify the result
-    verify(teamRepository, times(1)).findById(1);
-    assertEquals("https://testbook.com/testlink", result);
-}
- 
-
-
-
 }

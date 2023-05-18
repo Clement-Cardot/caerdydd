@@ -160,7 +160,7 @@ public class TeamController {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 default:
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
     }
@@ -181,7 +181,7 @@ public class TeamController {
                 case CustomRuntimeException.LINK_NOT_FOUND:
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
     }
@@ -202,7 +202,7 @@ public class TeamController {
                 case CustomRuntimeException.LINK_NOT_FOUND:
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
     }
