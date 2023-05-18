@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarEvent } from 'angular-calendar';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
@@ -16,7 +16,7 @@ class ClickEvent {
   templateUrl: './consulting-calendar.component.html',
   styleUrls: ['./consulting-calendar.component.scss']
 })
-export class ConsultingCalendarComponent implements OnInit, OnDestroy {
+export class ConsultingCalendarComponent implements OnInit {
   
   currentUser: User | null = null;
   
@@ -30,15 +30,16 @@ export class ConsultingCalendarComponent implements OnInit, OnDestroy {
     public dialog: MatDialog
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.currentUser = user;
       this.loadConsultings();
-      this.refresh = setInterval(() => { this.loadConsultings() },  5000 );
     });
+    this.refresh = setInterval(() => { this.loadConsultings() },  5000 );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
+    console.log("destroy");
     if (this.refresh) {
       clearInterval(this.refresh);
     }
@@ -46,7 +47,6 @@ export class ConsultingCalendarComponent implements OnInit, OnDestroy {
 
   loadConsultings() {
     this.apiConsultingService.getAllConsultings().subscribe(data => {
-      //console.log(data);
       this.events = data;
       this.filterConsultingsByRole();
     });
