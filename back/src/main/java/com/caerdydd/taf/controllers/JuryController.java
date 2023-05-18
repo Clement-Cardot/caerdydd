@@ -28,7 +28,7 @@ public class JuryController {
     public ResponseEntity<JuryDTO> createJury(@PathVariable Integer juryLD, @PathVariable Integer juryCSS) {
         logger.info("Process request : Put jury");
         try {
-            JuryDTO jury = juryService.addJuryMembers(juryLD, juryCSS);
+            JuryDTO jury = juryService.addJury(juryLD, juryCSS);
             return new ResponseEntity<>(jury, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch(e.getMessage()){
