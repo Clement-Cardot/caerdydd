@@ -105,7 +105,6 @@ public class JuryServiceTest {
 
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
         when(juryRepository.save(any(JuryEntity.class))).thenReturn(juryEntity);
-
         when(teachingStaffService.getTeachingStaffById(1)).thenReturn(devMember);
         when(teachingStaffService.getTeachingStaffById(2)).thenReturn(archiMember);
 
