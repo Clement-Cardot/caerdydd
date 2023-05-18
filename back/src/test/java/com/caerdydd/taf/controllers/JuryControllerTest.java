@@ -44,7 +44,7 @@ public class JuryControllerTest {
         // Arrange
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT));
+        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
 
         // Act
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);

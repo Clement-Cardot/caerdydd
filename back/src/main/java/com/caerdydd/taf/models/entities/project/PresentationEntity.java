@@ -3,6 +3,7 @@ package com.caerdydd.taf.models.entities.project;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,10 +27,14 @@ public class PresentationEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPresentation;
     private String type;
-    private LocalDateTime dateTimeBegin;
-    private LocalDateTime dateTimeEnd;
+    private LocalDateTime datetimeBegin;
+    private LocalDateTime datetimeEnd;
     private String room;
+
+    @Column(name = "jury1_notes")
     private String jury1Notes;
+
+    @Column(name = "jury2_notes")
     private String jury2Notes;
 
     @ManyToOne
@@ -50,7 +55,7 @@ public class PresentationEntity implements Serializable {
     @Override
     public String toString() {
         return "PresentationEntity [idPresentation=" + idPresentation + ", type=" + type + ", dateTimeBegin="
-                + dateTimeBegin + ", dateTimeEnd=" + dateTimeEnd + ", room=" + room + ", jury1Notes=" + jury1Notes
+                + datetimeBegin + ", dateTimeEnd=" + datetimeEnd + ", room=" + room + ", jury1Notes=" + jury1Notes
                 + ", jury2Notes=" + jury2Notes + ", jury=" + jury + ", project=" + project + "]";
     }
     
