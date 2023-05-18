@@ -199,6 +199,20 @@ public class TeamService {
         return pairedTeam.getTestBookLink();
     }
 
+
+    public TeamDTO setTeamValidationMarkById(Integer id, Integer teamValidationMark)throws CustomRuntimeException{
+        // Check if the current user is a jury member 
+        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
+
+    // Check if the value of the bonus is correct.
+    TeamServiceRules.checkTeamValidationMark(teamValidationMark);
+
+    TeamDTO team = getTeamById(id);
+
+    team.setTeamValidationMark(teamValidationMark);
+    return saveTeam(team);
+    }
+
 }
 
 
