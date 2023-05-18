@@ -45,10 +45,10 @@ public class JuryService {
     @Autowired
     SecurityConfig securityConfig;
 
-    public JuryDTO findJuryByTs1AndTs2(TeachingStaffDTO ts1DTO, TeachingStaffDTO ts2DTO) throws CustomRuntimeException {
+    public JuryDTO findJuryByTs1AndTs2(TeachingStaffDTO ts12, TeachingStaffDTO ts22) throws CustomRuntimeException {
 
-        TeachingStaffEntity ts1 = modelMapper.map(ts1DTO, TeachingStaffEntity.class);
-        TeachingStaffEntity ts2 = modelMapper.map(ts2DTO, TeachingStaffEntity.class);
+        TeachingStaffEntity ts1 = modelMapper.map(ts12, TeachingStaffEntity.class);
+        TeachingStaffEntity ts2 = modelMapper.map(ts22, TeachingStaffEntity.class);
 
         Optional<JuryEntity> optionalJury1 = Optional.empty();
         Optional<JuryEntity> optionalJury2 = Optional.empty();
