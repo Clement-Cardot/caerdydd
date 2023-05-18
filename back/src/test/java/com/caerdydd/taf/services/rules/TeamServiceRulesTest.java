@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 
@@ -30,7 +30,7 @@ public class TeamServiceRulesTest {
     SecurityConfig securityConfig;
 
     @Test
-    public void checkTeamIsFull_TeamIsFull() {
+    void checkTeamIsFull_TeamIsFull() {
         // Create a full team
         TeamDTO team = new TeamDTO();
         team.setTeamMembers(new ArrayList<>());
@@ -51,7 +51,7 @@ public class TeamServiceRulesTest {
     }
 
     @Test
-    public void checkTeamIsFull_TeamIsEmpty() {
+    void checkTeamIsFull_TeamIsEmpty() {
         // Create aa empty team
         TeamDTO team = new TeamDTO();
         team.setTeamMembers(new ArrayList<>());
@@ -68,7 +68,7 @@ public class TeamServiceRulesTest {
     
     @ParameterizedTest
     @ValueSource(strings = {"CSS", "LD"})
-    public void checkSpecialityRatio_TeamMaxSpe(String speciality) throws CustomRuntimeException {
+    void checkSpecialityRatio_TeamMaxSpe(String speciality) throws CustomRuntimeException {
         // Mock securityConfig.getCurrentUser()
         UserDTO mockedUser = new UserDTO();
         mockedUser.setSpeciality(speciality);
@@ -101,7 +101,7 @@ public class TeamServiceRulesTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"CSS", "LD"})
-    public void checkSpecialityRatio_TeamMaxSpe_ButUserIsOtherSpe(String speciality) throws CustomRuntimeException {
+    void checkSpecialityRatio_TeamMaxSpe_ButUserIsOtherSpe(String speciality) throws CustomRuntimeException {
         // Mock securityConfig.getCurrentUser()
         UserDTO mockedUser = new UserDTO();
         mockedUser.setSpeciality((speciality.equals("CSS")) ? "LD" : "CSS");
@@ -132,7 +132,7 @@ public class TeamServiceRulesTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"CSS", "LD"})
-    public void checkSpecialityRatio_TeamisEmpty(String speciality) throws CustomRuntimeException {
+    void checkSpecialityRatio_TeamisEmpty(String speciality) throws CustomRuntimeException {
         // Create an empty team
         TeamDTO team = new TeamDTO();
         team.setTeamMembers(new ArrayList<>());
@@ -149,7 +149,7 @@ public class TeamServiceRulesTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"CSS", "LD"})
-    public void checkSpecialityRatio_TeamHasSlot(String speciality) throws CustomRuntimeException {
+    void checkSpecialityRatio_TeamHasSlot(String speciality) throws CustomRuntimeException {
         // Create a team
         TeamDTO team = new TeamDTO();
         team.setTeamMembers(new ArrayList<>());

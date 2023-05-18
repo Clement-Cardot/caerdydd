@@ -2,7 +2,7 @@ package com.caerdydd.taf.services.rules;
 
 import org.springframework.stereotype.Component;
 
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 @Component

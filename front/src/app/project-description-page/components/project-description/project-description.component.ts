@@ -74,7 +74,7 @@ export class ProjectDescriptionComponent implements OnInit {
       this.project.description =this.projectForm.get("description")!.value;
 
       this.apiProjectService
-        .updateProject(this.project)
+        .updateProjectDescription(this.project)
         .subscribe(
           (response) => {
             console.log(response);

@@ -26,9 +26,10 @@ function linkValidator(control: AbstractControl): { [key: string]: any } | null 
 })
 export class ProjectFileComponent implements OnInit {
 
-  user!: User | null;
   testBookLinkForm: FormGroup;
+  currentUser!: User | null;
   currentTeam!: Team | null;
+  testBookLink!: string | null;
 
   isNotFinalScope!: boolean;
 
@@ -58,17 +59,13 @@ export class ProjectFileComponent implements OnInit {
 
   public ngOnInit():void {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
-      this.user = user;
-      console.log(this.user);
-      if (user) {
-        this.getTeamMember(user.id);
-      }
-      this.isFinalStateScope();
+      this.currentUser = user;
+        this.getTeamMember();
     });
   }
 
   upload(fileName: string) {
-    if (this.user != null) {
+    if (this.currentUser != null) {
       this.fileFormControl.setErrors({'apiError': null});
       this.fileFormControl.updateValueAndValidity();
       if(this.importTSSform.invalid){
@@ -76,7 +73,7 @@ export class ProjectFileComponent implements OnInit {
       } else {
         const file_form: FileInput = this.importTSSform.get('file')?.value;
         const file = file_form.files[0];
-        this.apiTeamMemberService.getTeamMemberById(this.user.id).subscribe(value => {
+        this.apiTeamMemberService.getTeamMemberById(this.currentUser.id).subscribe(value => {
           this.uploadFileService.upload(file, value.idTeam, fileName).subscribe(
             data => {
               this.showSuccess();
@@ -91,8 +88,8 @@ export class ProjectFileComponent implements OnInit {
   }
 
   isFinalStateScope() {
-    if (this.user != null) {
-      this.apiTeamMemberService.getTeamMemberById(this.user.id).subscribe(value => {
+    if (this.currentUser != null) {
+      this.apiTeamMemberService.getTeamMemberById(this.currentUser.id).subscribe(value => {
         this.apiTeamService.getTeam(value.idTeam).subscribe(value => {
           if(value.filePathFinalScopeStatement != null) {
             this.isNotFinalScope = false;
@@ -103,8 +100,7 @@ export class ProjectFileComponent implements OnInit {
   }
 
   isCurrentUserInTeam(): boolean {
-    console.log(this.currentTeam);
-    return !!(this.user && this.currentTeam);
+    return !!(this.currentUser && this.currentTeam);
   }
 
   isProjectDev(): boolean {
@@ -112,38 +108,49 @@ export class ProjectFileComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.user && this.currentTeam) {
-      this.apiTeamService
-        .addTestBookLink(this.currentTeam.idTeam, this.testBookLinkForm.value.testBookLink)
+    if (this.testBookLinkForm.valid && this.currentUser && this.currentTeam) {
+      this.currentTeam.testBookLink = this.testBookLinkForm.value.testBookLink;
+      this.apiTeamService.addTestBookLink(this.currentTeam)
         .subscribe(team => {
           this.currentTeam = team;
+          this.testBookLink = team.testBookLink;
           console.log('Lien TestBook ajouté avec succès');
           this.openSnackBar();
         });
     }
   }
 
-  getTeamMember(userId: number) {
-      this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
-        (teamMember: TeamMember) => {
-          this.getTeam(teamMember.idTeam);
-        },
-        (error) => {
-          console.error("Error getting team member:", error);
-        }
-      );
-    }
+  getTeamMember() {
+    let id = this.currentUser?.id;
+    if (id == null || id == undefined) return;
+    this.apiTeamMemberService.getTeamMemberById(id).subscribe(
+      (teamMember: TeamMember) => { this.getTeam(teamMember.idTeam)},
+      (error) => { console.error("Error getting team member:", error)}
+    );
+  }
   
-    getTeam(teamId: number) {
-      this.apiTeamService.getTeam(teamId).subscribe(
-        (team: Team) => {
-          this.currentTeam = team;
-        },
-        (error) => {
-          console.error("Error getting team:", error);
-        }
-      );
-    }
+  getTeam(teamId: number) {
+    this.apiTeamService.getTeam(teamId).subscribe(
+      (team: Team) => {
+        this.currentTeam = team;
+        this.getTestBookLink(team.idTeam);
+      },
+      (error) => {
+        console.error("Error getting team:", error);
+      }
+    );
+  }
+
+  getTestBookLink(teamId: number) {
+    this.apiTeamService.getTestBookLinkDev(teamId).subscribe(
+      (link: string) => {
+        this.testBookLink = link;
+      },
+      (error) => {
+        console.error("Error getting test book link:", error);
+      }
+    );
+  }
 
   openSnackBar() {
     this._snackBar.open("Lien TestBook ajouté avec succès", "Fermer", { duration: 5000 });

@@ -5,6 +5,7 @@
 ### API ###
 back/target/
 back/src/main/resources/static/
+back/upload/
 **.war
 
 ### front ###
@@ -15,11 +16,10 @@ front/bazel-out
 front/node_modules
 front/.angular
 
-### Test API ###
-test-api/target/
-
+### OTHER ###
 upload/
-back/upload/
+gitStats/*.csv
+
 
 # System files
 .DS_Store

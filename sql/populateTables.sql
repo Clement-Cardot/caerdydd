@@ -1,39 +1,36 @@
 INSERT INTO user (firstname, lastname, login, password, email, speciality) VALUES
-('Jean', 'Dupont', 'jdupont', '$2a$12$beDKCRFS7AkSAzqfuVAgjemzWSbtYRMmGmg6lMmSqymZet9egfL7q', 'jean.dupont@reseau.eseo.fr', 'LD'),
-('Pierre', 'Durand', 'pdurand', '$2a$12$zeVlwY3Eo6mBVM3INdB4GeXWrk8PpG4/gLs3W7.C9ZLmaLVFx9SOC', 'pierre.durand@reseau.eseo.fr', 'CSS'),
-('Paul', 'Martin', 'pmartin', '$2a$12$lHpX7qcs5rf4wH4CejKBKu5j3FXqPwhyHl4Iki4vd3eSYEOfC7rbm', 'paul.martin@reseau.eseo.fr', 'LD'),
-('Jacques', 'Petit', 'jpetit', '$2a$12$L4RDLQG0fV7qnp99BBtW/eq1BoI8bVkwe5LchAuPmM76GWDuroDbi', 'jacques.petit@reseau.eseo.fr', 'LD'),
-('Sophie', 'Rousseau' , 'srousseau', '$2a$12$fA/Ihe/902MPfd8MZYoqEOXpk7GEw/oI9Gw8msi01OnM0BeCHeiDO', 'sophie.rousseau@eseo.fr', NULL),
-('Fabien', 'Chell', 'fchell', '$2a$12$SAU1bTDSVlfa5zfGwF7Ac.Ha98rqyZ3agWSb4qUh0WVMK0J2/Yfoi', 'fabien.chell@eseo.fr', NULL);
+('Sophie', 'Rousseau' , 'rousseso', '$2a$12$t97oDbasmThFawvcaQkZduFrMmfEwZjB8QiWbEOJSwZoY/Hv/Xx7y', 'sophie.rousseau@eseo.fr', NULL),
+('Fabien', 'Chhel', 'chhelfa', '$2a$12$RvdQtUaAefpCHgqBYeyb1uYuBOuJu4XM73ftSihwpssrxsA.jV0bu', 'fabien.chhel@eseo.fr', NULL),
+('Maissa', 'Abdallah', 'abdallma', '$2a$12$vGzIw1ycJIjk9AMwl20eo.WI7ugT3/unMoBttXwpec.g05P9NcD9C', 'maissa.abdallah@eseo.fr', NULL),
+('Olivier', 'Camp', 'campol', '$2a$12$4WdyrZysmPn2a9njpTVh.eNoth4ACC.LzH8CgkQSpAyW7SOTlUZ46', 'olivier.camp@eseo.fr', NULL),
+('Mickael', 'Clavreul', 'clavremi', '$2a$12$N7y2.IoA5BrvyYBdZCnhhecw3SUD8erxqdkYCFZQIlJygFXjBX8zW', 'mickael.clavreul@eseo.fr', NULL),
+('Clive', 'Ferret-Canape', 'ferretcl', '$2a$12$pnCUeNqsAGMbGRofcX7BVO6iXB7h4PvrEQbUjINRrCOcmnNBGMI6u', 'clive.ferret-canape@eseo.fr', NULL),
+('Richard', 'Woodward', 'woodwari', '$2a$12$X3GFVXF93Tw4PJMPzTn0WOu22WpJ.E1J8SFTXhNbgdh0airosZAkq', 'richard.woodward@eseo.fr', NULL),
+('Jerome', 'Chavin', 'chavinje', '$2a$12$.5zlxyqsJGSwNjXQ/QucR.niSv1ubQBLv5EaHyHjs9MjTAUMdiQum', 'jerome.chavin@reseau.eseo.fr', NULL),
+('Francois', 'Jamet', 'jametfr', '$2a$12$YmratvygaJgmnxxIg/gXQOay6tlEUZa1XqwUmJ2wu7GWrFBb.USma', 'francois.jamet@reseau.eseo.fr', NULL),
+('Alexandra', 'Bouvier', 'bouvieal', '$2a$12$G7pnCaJ7xxim5Vw3N/bbEOMJqvjgxyuKx1g1N0nS47cYXRgCM1j4a', 'alexandra.bouvier@reseau.eseo.fr', NULL);
 
 INSERT INTO role (id_user, role) VALUES
-(1, 'STUDENT_ROLE'),
-(2, 'STUDENT_ROLE'),
-(3, 'STUDENT_ROLE'),
-(4, 'STUDENT_ROLE'),
-(5, 'OPTION_LEADER_ROLE'),
-(6, 'TEACHING_STAFF_ROLE');
+(1, 'TEACHING_STAFF_ROLE'),
+(2, 'TEACHING_STAFF_ROLE'),
+(3, 'TEACHING_STAFF_ROLE'),
+(4, 'TEACHING_STAFF_ROLE'),
+(5, 'TEACHING_STAFF_ROLE'),
+(6, 'TEACHING_STAFF_ROLE'),
+(7, 'TEACHING_STAFF_ROLE'),
+(8, 'TEACHING_STAFF_ROLE'),
+(9, 'TEACHING_STAFF_ROLE'),
+(1, 'OPTION_LEADER_ROLE'),
+(8, 'OPTION_LEADER_ROLE'),
+(10, 'PLANNING_ROLE');
 
 INSERT INTO teaching_staff (id_user, is_infrastructure_specialist, is_development_specialist, is_modeling_specialist, is_option_leader, is_subject_validator) VALUES
-(5, 0, 1, 0, 0, 1),
-(6, 0, 0, 1, 1, 1);
-
-INSERT INTO project (name, description, is_validated) VALUES
-('Projet 1', 'Description du projet', 0),
-('Projet 2', 'Description du projet', 0),
-('Projet 3', 'Description du projet', 0),
-('Projet 4', 'Description du projet', 0),
-('Projet 5', 'Description du projet', 0),
-('Projet 6', 'Description du projet', 0),
-('Projet 7', 'Description du projet', 0),
-('Projet 8', 'Description du projet', 0);
-
-INSERT INTO team (name, id_project_dev, id_project_validation) VALUES
-('Equipe 1', 1, 2),
-('Equipe 2', 2, 1),
-('Equipe 3', 3, 4),
-('Equipe 4', 4, 3),
-('Equipe 5', 5, 6),
-('Equipe 6', 6, 5),
-('Equipe 7', 7, 8),
-('Equipe 8', 8, 7);
+(1, 0, 1, 1, 1, 1),
+(2, 0, 1, 1, 0, 0),
+(3, 0, 1, 1, 0, 0),
+(4, 0, 1, 1, 0, 0),
+(5, 0, 1, 1, 0, 0),
+(6, 0, 1, 1, 0, 0),
+(7, 0, 1, 1, 0, 0),
+(8, 1, 0, 0, 1, 1),
+(9, 1, 0, 0, 0, 0);

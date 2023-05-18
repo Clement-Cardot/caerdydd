@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.caerdydd.taf.models.dto.TeamDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 @Service
@@ -39,19 +39,21 @@ public class FileService {
                 team.setFilePathFinalScopeStatement(relativePath + id + "/" + type + ".pdf");
             }
             teamService.saveTeam(team);
-            logger.info("File saved at this location : " + (relativePath + id + "/" + type + ".pdf"));
+            logger.info("File saved at this location : {}", (relativePath + id + "/" + type + ".pdf"));
         } catch (NullPointerException e) {
             logger.warn("The team you are trying to add a file is not existing: {}", e.getMessage());
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } catch (IOException e) {
-            logger.warn("Could not store the file. Error: " + e.getMessage());
+            logger.warn("Could not store the file. Error: {}", e.getMessage());
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } 
     }
 
     public void checkFileIsPDF(MultipartFile file) throws CustomRuntimeException {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         try {
-            if (!file.getOriginalFilename().endsWith(".pdf")){
+            if (!fileName.endsWith(".pdf")){
                 throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
             }
         } catch (NullPointerException e) {

@@ -1,8 +1,11 @@
 package com.caerdydd.taf.controllers;
 
-import com.caerdydd.taf.models.dto.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ProjectService;
+
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +28,29 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @PutMapping("")
-    public ResponseEntity<ProjectDTO> updateProject(@RequestBody ProjectDTO projectDTO) {
+    @PutMapping("/description")
+    public ResponseEntity<ProjectDTO> updateDescription(@RequestBody ProjectDTO projectDTO) {
         try {
-            ProjectDTO updatedProject = projectService.updateProject(projectDTO);
+            ProjectDTO updatedProject = projectService.updateDescription(projectDTO);
             return new ResponseEntity<>(updatedProject, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @PutMapping("/validation")
+    public ResponseEntity<ProjectDTO> updateValidation(@RequestBody ProjectDTO projectDTO) {
+        try {
+            ProjectDTO updatedProject = projectService.updateValidation(projectDTO);
+            return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -46,9 +65,27 @@ public class ProjectController {
             return new ResponseEntity<>(project, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.PROJECT_NOT_FOUND)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
+        logger.info("Process request : Get all projects");
+        try {
+            List<ProjectDTO> projects = projectService.listAllProjects();
+            return new ResponseEntity<>(projects, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());

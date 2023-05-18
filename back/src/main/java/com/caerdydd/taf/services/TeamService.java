@@ -12,12 +12,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.ProjectDTO;
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.TeamEntity;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.project.TeamEntity;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
@@ -169,12 +169,22 @@ public class TeamService {
     }
 
 
-    public TeamDTO addTestBookLink(Integer idTeam, String testBookLink) throws CustomRuntimeException {
-        TeamDTO teamDTO = getTeamById(idTeam);
-        TeamEntity teamEntity = modelMapper.map(teamDTO, TeamEntity.class); // Convertissez TeamDTO en TeamEntity
-        teamEntity.setTestBookLink(testBookLink);
-        teamRepository.save(teamEntity); // Enregistrez l'entité TeamEntity
-        return modelMapper.map(teamEntity, TeamDTO.class); // Convertissez l'entité TeamEntity mise à jour en TeamDTO et retournez-la
+    public TeamDTO addTestBookLink(TeamDTO team) throws CustomRuntimeException {
+
+        // Check if the Team exists
+        TeamDTO teamDTO = getTeamById(team.getIdTeam());
+
+        // Check if the user is a team member
+        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+
+        // Check if the user is a member of the team
+        teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
+
+        // Check if Link is valid
+        teamServiceRules.isValidLink(team.getTestBookLink());
+        
+        teamDTO.setTestBookLink(team.getTestBookLink());
+        return saveTeam(teamDTO);
     }
     
 

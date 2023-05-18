@@ -19,14 +19,14 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import com.caerdydd.taf.models.dto.ProjectDTO;
-import com.caerdydd.taf.models.dto.RoleDTO;
-import com.caerdydd.taf.models.dto.TeamDTO;
-import com.caerdydd.taf.models.dto.TeamMemberDTO;
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.ProjectEntity;
-import com.caerdydd.taf.models.entities.TeamEntity;
-import com.caerdydd.taf.models.entities.TeamMemberEntity;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.project.ProjectEntity;
+import com.caerdydd.taf.models.entities.project.TeamEntity;
+import com.caerdydd.taf.models.entities.user.TeamMemberEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -221,7 +221,7 @@ class TeamServiceTest {
 
     // Test saveTeam() method
     @Test
-    public void saveTeamTest_Nominal(){
+    void saveTeamTest_Nominal(){
         // Mock teamRepository.save() method
         TeamEntity mockedAnswer = new TeamEntity(
                                             1, 
@@ -249,7 +249,7 @@ class TeamServiceTest {
 
     // Test applyInATeam() method
     @Test
-    public void applyInATeamTest_Nominal() throws CustomRuntimeException {
+    void applyInATeamTest_Nominal() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -323,7 +323,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_UserNotFound() throws CustomRuntimeException {
+    void applyInATeamTest_UserNotFound() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         when(userService.getUserById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));        
 
@@ -348,7 +348,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_TeamNotFound() throws CustomRuntimeException {
+    void applyInATeamTest_TeamNotFound() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -392,7 +392,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_UserIsNotAStudent() throws CustomRuntimeException {
+    void applyInATeamTest_UserIsNotAStudent() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -446,7 +446,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
+    void applyInATeamTest_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -503,7 +503,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_TeamIsFull() throws CustomRuntimeException {
+    void applyInATeamTest_TeamIsFull() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -563,7 +563,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_TeamHasAlready2CSS() throws CustomRuntimeException {
+    void applyInATeamTest_TeamHasAlready2CSS() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -626,7 +626,7 @@ class TeamServiceTest {
     }
 
     @Test
-    public void applyInATeamTest_TeamHasAlready4LD() throws CustomRuntimeException {
+    void applyInATeamTest_TeamHasAlready4LD() throws CustomRuntimeException {
         // Mock userService.getUserById() method
         UserDTO mockedUser = new UserDTO();
         mockedUser.setId(1);
@@ -889,51 +889,52 @@ class TeamServiceTest {
     }
 
     @Test
-void testAddTestBookLink() {
-    // Mock teamRepository.findById() method
-    TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
-    Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
-    when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+    void testAddTestBookLink() {
+        // Mock teamRepository.findById() method
+        TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
+        Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
+        when(teamRepository.findById(1)).thenReturn(mockedAnswer);
 
-    // Mock teamRepository.save() method
-    when(teamRepository.save(any(TeamEntity.class))).then(AdditionalAnswers.returnsFirstArg());
+        // Mock teamRepository.save() method
+        when(teamRepository.save(any(TeamEntity.class))).thenAnswer(i -> i.getArguments()[0]);
 
-    // Call the method to test
-    TeamDTO result = new TeamDTO();
-    try {
-        result = teamService.addTestBookLink(1, "https://testbook.com/testlink");
-    } catch (CustomRuntimeException e) {
-        fail();
+        // Prepare input
+        TeamDTO input = new TeamDTO();
+        input.setIdTeam(1);
+        input.setTestBookLink("https://testbook.com/testlink");
+
+        // Call the method to test
+        TeamDTO result = new TeamDTO();
+        try {
+            result = teamService.addTestBookLink(input);
+        } catch (CustomRuntimeException e) {
+            fail();
+        }
+
+        // Verify the result
+        verify(teamRepository, times(1)).findById(1);
+        verify(teamRepository, times(1)).save(any(TeamEntity.class));
+        assertEquals("https://testbook.com/testlink", result.getTestBookLink());
     }
 
-    // Verify the result
-    verify(teamRepository, times(1)).findById(1);
-    verify(teamRepository, times(1)).save(any(TeamEntity.class));
-    assertEquals("https://testbook.com/testlink", result.getTestBookLink());
-}
+    @Test
+    void testGetTestBookLinkDev() {
+        // Mock teamRepository.findById() method
+        TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
+        teamEntity.setTestBookLink("https://testbook.com/testlink");
+        Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
+        when(teamRepository.findById(1)).thenReturn(mockedAnswer);
 
-@Test
-void testGetTestBookLinkDev() {
-    // Mock teamRepository.findById() method
-    TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
-    teamEntity.setTestBookLink("https://testbook.com/testlink");
-    Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
-    when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+        // Call the method to test
+        String result = "";
+        try {
+            result = teamService.getTestBookLinkDev(1);
+        } catch (CustomRuntimeException e) {
+            fail();
+        }
 
-    // Call the method to test
-    String result = "";
-    try {
-        result = teamService.getTestBookLinkDev(1);
-    } catch (CustomRuntimeException e) {
-        fail();
+        // Verify the result
+        verify(teamRepository, times(1)).findById(1);
+        assertEquals("https://testbook.com/testlink", result);
     }
-
-    // Verify the result
-    verify(teamRepository, times(1)).findById(1);
-    assertEquals("https://testbook.com/testlink", result);
-}
- 
-
-
-
 }

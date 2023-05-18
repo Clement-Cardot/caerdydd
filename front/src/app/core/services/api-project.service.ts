@@ -5,12 +5,13 @@ import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
 import { Project, ProjectAdapter } from "../data/models/project.model";
+import { environment } from "src/environments/environment";
 
 @Injectable({
     providedIn: "root"
 })
 export class ApiProjectService {
-    private baseUrl = "http://localhost:4200/api/projects";
+    private baseUrl = environment.apiURL + "/projects";
 
     constructor(
         private http: HttpClient, 
@@ -29,11 +30,32 @@ export class ApiProjectService {
         );
     }
     
-    updateProject(project: Project): Observable<Project> {
-        const url = `${this.baseUrl}`;
+    updateProjectDescription(project: Project): Observable<Project> {
+        const url = `${this.baseUrl}/description`;
         return this.http.put<any>(url, project)
         .pipe(
             map((data: any) => this.projectAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    updateProjectValidation(project: Project): Observable<Project> {
+        const url = `${this.baseUrl}/validation`;
+        return this.http.put<any>(url, project)
+        .pipe(
+            map((data: any) => this.projectAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    getAllSubjects(): Observable<Project[]> {
+        return this.http.get<any[]>(this.baseUrl)
+        .pipe(
+            map((data: any[]) => data.map((item) => this.projectAdapter.adapt(item)))
         )
         .pipe(
             catchError(this.handleError)

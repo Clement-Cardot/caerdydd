@@ -7,6 +7,7 @@ export class Project {
         public name: string,
         public description: string,
         public isValidated: boolean,
+        public teamName?: string,
     ) {}
 }
 

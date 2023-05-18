@@ -12,8 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.caerdydd.taf.models.dto.UserDTO;
-import com.caerdydd.taf.models.entities.UserEntity;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
@@ -35,6 +35,7 @@ public class UserService {
                 .map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
         } catch (Exception e) {
+            logger.error("Error listing all users:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
@@ -44,6 +45,7 @@ public class UserService {
         try {
             optionalUser = userRepository.findById(id);
         } catch (Exception e) {
+            logger.error("Error findById", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
         if (optionalUser.isEmpty()) {
@@ -57,6 +59,7 @@ public class UserService {
         try{
             optionalUser = userRepository.findByLogin(login);
         } catch (Exception e) {
+            logger.error("Error findByLogin", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
         if (optionalUser.isEmpty()) {
@@ -69,6 +72,7 @@ public class UserService {
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
         
         if (userEntity.getId() != null){
+            logger.error("User id should be null");
             throw new CustomRuntimeException(CustomRuntimeException.USER_ID_SHOULD_BE_NULL);
         }
 
@@ -76,6 +80,7 @@ public class UserService {
         try {
             response = userRepository.save(userEntity);
         } catch (Exception e) {
+            logger.error("Error saving user:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
 
@@ -94,6 +99,7 @@ public class UserService {
         try {
             response = userRepository.save(userEntity);
         } catch (Exception e) {
+            logger.error("Error updating user:", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
 

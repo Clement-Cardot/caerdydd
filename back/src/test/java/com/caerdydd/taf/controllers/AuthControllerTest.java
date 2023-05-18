@@ -14,7 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.caerdydd.taf.models.dto.UserDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.AuthService;
 
@@ -29,7 +29,7 @@ public class AuthControllerTest {
 
 
     @Test
-    public void testLoginUser_Nominal() throws CustomRuntimeException{
+    void testLoginUser_Nominal() throws CustomRuntimeException{
         // Mock authService.loginUser()
         UserDTO userDTO = new UserDTO("firstname", "lastname", "login", "password", "email", "LD");
         HttpHeaders headers = new HttpHeaders();
@@ -37,11 +37,7 @@ public class AuthControllerTest {
         when(authService.loginUser(any(), any())).thenReturn(new ResponseEntity<UserDTO>(userDTO, headers, HttpStatus.OK));
         
         // Call login method
-        UserDTO userDTOInput = new UserDTO();
-        userDTOInput.setLogin("login");
-        userDTOInput.setPassword("password");
-
-        ResponseEntity<UserDTO> response = authController.login(userDTO);
+        ResponseEntity<UserDTO> response = authController.login("login", "password");
 
         // Check response
         assertNotNull(response);
@@ -52,12 +48,12 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void testLoginUser_UserNotFound() throws CustomRuntimeException{
+    void testLoginUser_UserNotFound() throws CustomRuntimeException{
         // Mock authService.loginUser()
         when(authService.loginUser(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND));
         
         // Call login method
-        ResponseEntity<UserDTO> response = authController.login(new UserDTO());
+        ResponseEntity<UserDTO> response = authController.login("login", "password");
 
         // Check response
         assertNotNull(response);
@@ -65,12 +61,12 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void testLoginUser_UserPasswordNotMatch() throws CustomRuntimeException{
+    void testLoginUser_UserPasswordNotMatch() throws CustomRuntimeException{
         // Mock authService.loginUser()
         when(authService.loginUser(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_PASSWORD_NOT_MATCH));
         
         // Call login method
-        ResponseEntity<UserDTO> response = authController.login(new UserDTO());
+        ResponseEntity<UserDTO> response = authController.login("login", "password");
 
         // Check response
         assertNotNull(response);
@@ -78,12 +74,12 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void testLoginUser_UnexpectedError() throws CustomRuntimeException{
+    void testLoginUser_UnexpectedError() throws CustomRuntimeException{
         // Mock authService.loginUser()
         when(authService.loginUser(any(), any())).thenThrow(new CustomRuntimeException("Unexpected error"));
         
         // Call login method
-        ResponseEntity<UserDTO> response = authController.login(new UserDTO());
+        ResponseEntity<UserDTO> response = authController.login("login", "password");
 
         // Check response
         assertNotNull(response);
@@ -91,7 +87,7 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void testLogoutUser_Nominal() {
+    void testLogoutUser_Nominal() {
         // Mock authService.logout()
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE,  "JSESSIONID=Expired");

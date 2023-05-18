@@ -1,22 +1,24 @@
 package com.caerdydd.taf.services;
 
-import com.caerdydd.taf.models.dto.ProjectDTO;
-import com.caerdydd.taf.models.entities.ProjectEntity;
-import com.caerdydd.taf.models.entities.TeamEntity;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.models.entities.project.ProjectEntity;
+import com.caerdydd.taf.models.entities.project.TeamEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.services.rules.UserServiceRules;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.caerdydd.taf.security.SecurityConfig;
 
 @Service
 @Transactional
@@ -32,11 +34,23 @@ public class ProjectService {
     private TeamRepository teamRepository;
 
     @Autowired
-    SecurityConfig securityConfig;
+    private TeamMemberService teamMemberService;
+
+    @Autowired
+    UserServiceRules userServiceRules;
 
 
-    public ProjectDTO updateProject(ProjectDTO projectDTO) throws CustomRuntimeException {
-        Integer projectId = projectDTO.getIdProject();
+    public List<ProjectDTO> listAllProjects() throws CustomRuntimeException {
+        try {
+            return projectRepository.findAll().stream()
+                    .map(project -> modelMapper.map(project, ProjectDTO.class))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
+
+    public ProjectDTO getProjectById(Integer projectId) throws CustomRuntimeException {
         Optional<ProjectEntity> optionalProject;
         try {
             optionalProject = projectRepository.findById(projectId);
@@ -49,31 +63,7 @@ public class ProjectService {
         }
     
         ProjectEntity projectEntity = optionalProject.get();
-    
-        // Get the team associated with the project
-        Optional<TeamEntity> optionalTeam = teamRepository.findByProjectDevId(projectId);
-
-        if (optionalTeam.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND);
-        }
-
-        TeamEntity teamEntity = optionalTeam.get();
-    
-        // Verify if the current user is a member of the associated team with the project
-        Integer currentUserId = securityConfig.getCurrentUser().getId();
-        boolean isUserInAssociatedTeam = teamEntity.getTeamMembers().stream()
-                .anyMatch(teamMember -> teamMember.getUser().getId().equals(currentUserId));
-    
-        if (!isUserInAssociatedTeam) {
-            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM);
-        }
-    
-        projectEntity.setName(projectDTO.getName());
-        projectEntity.setDescription(projectDTO.getDescription());
-    
-        ProjectEntity updatedProjectEntity = projectRepository.save(projectEntity);
-    
-        return modelMapper.map(updatedProjectEntity, ProjectDTO.class);
+        return modelMapper.map(projectEntity, ProjectDTO.class);
     }
 
     public ProjectDTO saveProject(ProjectDTO project) {
@@ -96,21 +86,52 @@ public class ProjectService {
         }
         return projects;
     }
-    public ProjectDTO getProjectById(Integer projectId) throws CustomRuntimeException {
-        Optional<ProjectEntity> optionalProject;
+
+    public ProjectDTO updateProject(ProjectDTO projectDTO) throws CustomRuntimeException {
+        ProjectEntity projectEntity = modelMapper.map(projectDTO, ProjectEntity.class);
+        
+        Optional<ProjectEntity> optionalUser = projectRepository.findById(projectEntity.getIdProject());
+        if (optionalUser.isEmpty()){
+            throw new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND);
+        }
+
+        ProjectEntity response = null;
         try {
-            optionalProject = projectRepository.findById(projectId);
+            response = projectRepository.save(projectEntity);
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
-    
-        if (optionalProject.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND);
-        }
-    
-        ProjectEntity projectEntity = optionalProject.get();
-        return modelMapper.map(projectEntity, ProjectDTO.class);
+
+        return modelMapper.map(response, ProjectDTO.class);
     }
     
-    
+    public ProjectDTO updateValidation(ProjectDTO projectDTO) throws CustomRuntimeException {
+        // Verify if the current user is an option leader
+        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
+
+        return this.updateProject(projectDTO);
+    }
+
+    public ProjectDTO updateDescription(ProjectDTO projectDTO) throws CustomRuntimeException {
+        // Verify if the current user is a team member
+        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+
+        // Get current user
+        UserDTO currentUser = userServiceRules.getCurrentUser();
+
+        // Verify he is a member of the team
+        Optional<TeamEntity> optionalTeam = teamRepository.findByProjectDevId(projectDTO.getIdProject());
+        if (optionalTeam.isEmpty()) {
+            throw new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND);
+        }
+        TeamEntity team = optionalTeam.get();
+
+        TeamMemberDTO teamMember = teamMemberService.getTeamMemberById(currentUser.getId());
+
+        if (!teamMember.getTeam().getIdTeam().equals(team.getIdTeam())) {
+            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_IN_A_TEAM);
+        }
+
+        return this.updateProject(projectDTO);
+    }
 }

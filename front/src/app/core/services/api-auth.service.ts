@@ -17,8 +17,8 @@ export class ApiAuthService {
     }
 
     tryToLogIn(login: string, password: string): Observable<User> {
-        const url = `${this.baseUrl}/login`;
-        return this.http.post(url, { login, password })
+        const url = `${this.baseUrl}/login?login=${login}&password=${password}`;	
+        return this.http.get(url)
         .pipe(
             map((data: any) => this.adapter.adapt(data))
         )
@@ -46,6 +46,6 @@ export class ApiAuthService {
               `Backend returned code ${error.status}, body was: `, error.error);
           }
           // Return an observable with a user-facing error message.
-          return throwError(() => new Error('Something bad happened; please try again later.'));
+          return throwError(() => error.status);
         }
 }
