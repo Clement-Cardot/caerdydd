@@ -891,8 +891,6 @@ class TeamServiceTest {
 
         TeamEntity team = new TeamEntity();
 
-        TeamEntity team = new TeamEntity(id, team);
-
         int mark = 2;
         team.setTeamWorkMark(mark);
 
@@ -926,8 +924,6 @@ class TeamServiceTest {
 
         TeamEntity team = new TeamEntity();
 
-        TeamEntity team = new TeamEntity(user, team);
-
         int mark = 2;
         team.setTeamValidationMark(mark);
 
@@ -935,10 +931,10 @@ class TeamServiceTest {
         when(teamRepository.save(captor.capture())).thenReturn(team);
 
         Optional<TeamEntity> mockedTeam = Optional.of(team);
-        when(teamRepository.findById(mockedTeam.get().getIdUser())).thenReturn(mockedTeam);
-        mockedTeam.get().setValidationMark(0); // set bonus penalty to 0 initially
+        when(teamRepository.findById(mockedTeam.get().getIdTeam())).thenReturn(mockedTeam);
+        mockedTeam.get().setTeamValidationMark(0); // set bonus penalty to 0 initially
 
-        teamService.setTeamValidationMarkById(mockedTeam.get().getIdUser(), mark);
+        teamService.setTeamValidationMarkById(mockedTeam.get().getIdTeam(), mark);
 
         assertEquals(mark, captor.getValue().getTeamValidationMark());
     }
