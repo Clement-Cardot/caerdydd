@@ -945,7 +945,6 @@ class TeamServiceTest {
 
         TeamEntity team = new TeamEntity();
 
-
         int mark = 2;
         team.setTeamWorkMark(mark);
 
