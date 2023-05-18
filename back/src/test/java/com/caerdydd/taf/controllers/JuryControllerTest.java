@@ -29,7 +29,7 @@ public class JuryControllerTest {
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
         JuryDTO juryDTO = new JuryDTO();
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenReturn(juryDTO);
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenReturn(juryDTO);
 
         // When
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
@@ -44,7 +44,7 @@ public class JuryControllerTest {
         // Arrange
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT));
 
         // Act
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
@@ -58,7 +58,7 @@ public class JuryControllerTest {
         // Arrange
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
         // Act
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
@@ -71,7 +71,7 @@ public class JuryControllerTest {
     void testCreateJury_UnexpectedError() throws CustomRuntimeException{
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException("Unexpected exception"));
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException("Unexpected exception"));
         
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
 
