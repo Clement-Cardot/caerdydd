@@ -19,6 +19,7 @@ import com.caerdydd.taf.security.CustomRuntimeException;
 public class JuryController {
 
     private static final Logger logger = LogManager.getLogger(JuryController.class);
+    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
 
     @Autowired
     private JuryService juryService;
@@ -30,13 +31,26 @@ public class JuryController {
             JuryDTO jury = juryService.addJuryMembers(juryLD, juryCSS);
             return new ResponseEntity<>(jury, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT)) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            switch(e.getMessage()){
+                case CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.TEACHING_STAFF_ARE_THE_SAME:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                case CustomRuntimeException.TEACHING_STAFF_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.JURY_ALREADY_EXISTS:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
-            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 }
