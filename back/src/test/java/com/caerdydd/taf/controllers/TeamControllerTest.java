@@ -509,7 +509,7 @@ void testAddTestBookLink_Nominal() throws CustomRuntimeException {
 
     // Verify the result
     verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
-    assertEquals(expectedAnswer.toString(), result.toString());
+    assertEquals(expectedAnswer, result);
 }
 
 @Test
@@ -637,14 +637,14 @@ void testGetTestBookLinkDev_UnexpectedError() throws CustomRuntimeException {
     when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
 
     // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
 
     // Call the method to test
     ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
 
     // Verify the result
     verify(teamService, times(1)).getTestBookLinkDev(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
+    assertEquals(expectedAnswer, result);
 }
 
 @Test
@@ -702,7 +702,7 @@ void testGetTestBookLinkValidation_UnexpectedError() throws CustomRuntimeExcepti
     when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
 
     // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
 
     // Call the method to test
     ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);

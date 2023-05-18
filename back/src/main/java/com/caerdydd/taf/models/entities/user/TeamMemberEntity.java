@@ -46,6 +46,7 @@ public class TeamMemberEntity implements Serializable {
         this.user = user;
         this.team = team;
         this.idUser = user.getId();
+        this.idTeam = team.getIdTeam();
     }
 
     @Override
