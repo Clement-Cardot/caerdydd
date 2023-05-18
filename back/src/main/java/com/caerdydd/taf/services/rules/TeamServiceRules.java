@@ -35,4 +35,10 @@ public class TeamServiceRules {
             throw new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_INCORRECT_TEAM_MARK);
         }
     }
+
+    public static void checkTeamValidationMark( int teamValidationMark) throws CustomRuntimeException{
+        if (teamValidationMark > 5  || teamValidationMark < 0) {
+            throw new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_INCORRECT_TEAM_MARK);
+        }
+    }
 }

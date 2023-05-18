@@ -489,4 +489,68 @@ public class TeamControllerTest {
         verify(teamService, times(1)).createTeams(anyInt());
         assertEquals(HttpStatus.I_AM_A_TEAPOT, result.getStatusCode());
     }
+    @Test
+    public void setTeamWorkMarkById_teamNotFound() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où l'id de l'équipe n'existe pas
+        when(teamService.setTeamWorkMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamWorkMark(1, 90);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void setTeamWorkMarkById_serviceError() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où une erreur de service se produit
+        when(teamService.setTeamWorkMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamWorkMark(1, 90);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    public void setTeamWorkMarkById_unexpectedException() throws CustomRuntimeException {
+        // Simuler une exception inattendue
+        when(teamService.setTeamWorkMarkById(1, 90)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamWorkMark(1, 90);
+        
+        assertEquals(expectedAnswer, response);
+    }
+    @Test
+    public void setTeamValidationMarkById_teamNotFound() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où l'id de l'équipe n'existe pas
+        when(teamService.setTeamValidationMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamValidationMark(1, 90);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void setTeamValidationMarkById_serviceError() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où une erreur de service se produit
+        when(teamService.setTeamValidationMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamValidationMark(1, 90);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    public void setTeamValidationMarkById_unexpectedException() throws CustomRuntimeException {
+        // Simuler une exception inattendue
+        when(teamService.setTeamValidationMarkById(1, 90)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamValidationMark(1, 90);
+        
+        assertEquals(expectedAnswer, response);
+    }
 }

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.AdditionalAnswers;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -883,5 +884,77 @@ class TeamServiceTest {
         verify(securityConfig, times(1)).getCurrentUser();
         assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
     }
+
+    @Test
+    void testSetTeamWorkMarkByIdSuccess() throws CustomRuntimeException {
+        doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
+
+        TeamEntity team = new TeamEntity();
+
+        TeamEntity team = new TeamEntity(id, team);
+
+        int mark = 2;
+        team.setTeamWorkMark(mark);
+
+        ArgumentCaptor<TeamEntity> captor = ArgumentCaptor.forClass(TeamEntity.class);
+        when(teamRepository.save(captor.capture())).thenReturn(team);
+
+        Optional<TeamEntity> mockedTeam = Optional.of(team);
+        when(teamRepository.findById(mockedTeam.get().getIdTeam())).thenReturn(mockedTeam);
+        mockedTeam.get().setTeamWorkMark(0); // set bonus penalty to 0 initially
+
+        teamService.setTeamWorkMarkById(mockedTeam.get().getIdTeam(), mark);
+
+        assertEquals(mark, captor.getValue().getTeamWorkMark());
+    }
+
+    @Test
+    void testSetteamWorkMarkByIdUserNotAuthorized() throws CustomRuntimeException {
+        // Mock des inputs
+        Integer id = 1;
+        Integer teamWorkMark = 15;
+
+        // Appel de la méthode à tester et vérification de l'exception levée
+        assertThrows(CustomRuntimeException.class, () -> {
+            teamService.setTeamWorkMarkById(id, teamWorkMark);
+        });
+    }
+
+    @Test
+    void testSetTeamValidationMarkByIdSuccess() throws CustomRuntimeException {
+        doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
+
+        TeamEntity team = new TeamEntity();
+
+        TeamEntity team = new TeamEntity(user, team);
+
+        int mark = 2;
+        team.setTeamValidationMark(mark);
+
+        ArgumentCaptor<TeamEntity> captor = ArgumentCaptor.forClass(TeamEntity.class);
+        when(teamRepository.save(captor.capture())).thenReturn(team);
+
+        Optional<TeamEntity> mockedTeam = Optional.of(team);
+        when(teamRepository.findById(mockedTeam.get().getIdUser())).thenReturn(mockedTeam);
+        mockedTeam.get().setValidationMark(0); // set bonus penalty to 0 initially
+
+        teamService.setTeamValidationMarkById(mockedTeam.get().getIdUser(), mark);
+
+        assertEquals(mark, captor.getValue().getTeamValidationMark());
+    }
+
+    @Test
+    void testSetteamValidationMarkByIdUserNotAuthorized() throws CustomRuntimeException {
+        // Mock des inputs
+        Integer id = 1;
+        Integer teamValidationMark = 15;
+
+        // Appel de la méthode à tester et vérification de l'exception levée
+        assertThrows(CustomRuntimeException.class, () -> {
+            teamService.setTeamValidationMarkById(id, teamValidationMark);
+        });
+    }
+    
     
 }
+
