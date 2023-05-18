@@ -52,16 +52,23 @@ export class JuryMemberMarkComponent {
 	async saveMarks(): Promise<void> {
 		try {
 		  for (const teamMember of this.team.teamMembers) {
-			await this.apiTeamMemberService.setIndividualMarkTeamMember(teamMember.user.id, teamMember.individualMark).toPromise();
-			console.log("Individual mark saved for user:", teamMember.user.id);
-		  }
-	  
+			if(teamMember.individualMark != null) {
+				await this.apiTeamMemberService.setIndividualMarkTeamMember(teamMember.user.id, teamMember.individualMark).toPromise();
+				console.log("Individual mark saved for user:", teamMember.user.id);
+			}
+		} 
+			if(this.team.teamWorkMark != null) 
+			{
 		  await this.apiTeamService.setTeamWorkMarkTeam(this.team.idTeam, this.team.teamWorkMark).toPromise();
 		  console.log("Team work mark saved!");
-	  
+			}
+
+			if(this.team.teamValidationMark != null)
+			{
 		  await this.apiTeamService.setTeamValidationMarkTeam(this.team.idTeam, this.team.teamValidationMark).toPromise();
 		  console.log("Validation mark saved!");
-	  
+			}
+
 		  console.log("Marks saved!");
 		} catch (error) {
 		  console.error("Error while saving marks:", error);
