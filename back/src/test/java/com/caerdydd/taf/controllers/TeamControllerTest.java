@@ -492,260 +492,320 @@ public class TeamControllerTest {
     }
 
     @Test
-void testAddTestBookLink_Nominal() throws CustomRuntimeException {
-    // Mock teamService.addTestBookLink() method
-    when(teamService.addTestBookLink(any(TeamDTO.class))).thenAnswer(i -> i.getArguments()[0]);
+    void testAddTestBookLink_Nominal() throws CustomRuntimeException {
+        // Mock teamService.addTestBookLink() method
+        when(teamService.addTestBookLink(any(TeamDTO.class))).thenAnswer(i -> i.getArguments()[0]);
 
-    // Prepare request body
-    TeamDTO input = new TeamDTO();
-    input.setIdTeam(1);
-    input.setTestBookLink("https://www.google.com");
+        // Prepare request body
+        TeamDTO input = new TeamDTO();
+        input.setIdTeam(1);
+        input.setTestBookLink("https://www.google.com");
 
-    // Define the expected response
-    ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(input, HttpStatus.OK);
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(input, HttpStatus.OK);
 
-    // Call the method to test
-    ResponseEntity<TeamDTO> result = teamController.addTestBookLink(input);
+        // Call the method to test
+        ResponseEntity<TeamDTO> result = teamController.addTestBookLink(input);
 
-    // Verify the result
-    verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
-    assertEquals(expectedAnswer, result);
-}
+        // Verify the result
+        verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
+        assertEquals(expectedAnswer, result);
+    }
 
-@Test
-void testAddTestBookLink_TeamNotFound() throws CustomRuntimeException {
-    // Mock teamService.addTestBookLink() method
-    when(teamService.addTestBookLink(any(TeamDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+    @Test
+    void testAddTestBookLink_TeamNotFound() throws CustomRuntimeException {
+        // Mock teamService.addTestBookLink() method
+        when(teamService.addTestBookLink(any(TeamDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
 
-    // Prepare request body
-    TeamDTO input = new TeamDTO();
-    input.setIdTeam(1);
-    input.setTestBookLink("https://www.google.com");
+        // Prepare request body
+        TeamDTO input = new TeamDTO();
+        input.setIdTeam(1);
+        input.setTestBookLink("https://www.google.com");
 
-    // Define the expected response
-    ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-    // Call the method to test
-    ResponseEntity<TeamDTO> result = teamController.addTestBookLink(input);
+        // Call the method to test
+        ResponseEntity<TeamDTO> result = teamController.addTestBookLink(input);
 
-    // Verify the result
-    verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
+        // Verify the result
+        verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
 
-@Test
-void testAddTestBookLink_InvalidLink() throws CustomRuntimeException{
-    // Mock teamService.addTestBookLink() method
-    when(teamService.addTestBookLink(any(TeamDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.INVALID_LINK));
+    @Test
+    void testAddTestBookLink_InvalidLink() throws CustomRuntimeException{
+        // Mock teamService.addTestBookLink() method
+        when(teamService.addTestBookLink(any(TeamDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.INVALID_LINK));
 
-    // Prepare request body
-    TeamDTO input = new TeamDTO();
-    input.setIdTeam(1);
-    input.setTestBookLink("https://www.google.com");
+        // Prepare request body
+        TeamDTO input = new TeamDTO();
+        input.setIdTeam(1);
+        input.setTestBookLink("https://www.google.com");
 
-    // Define the expected response
-    ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-    // Call the method to test
-    ResponseEntity<TeamDTO> result = teamController.addTestBookLink(input);
+        // Call the method to test
+        ResponseEntity<TeamDTO> result = teamController.addTestBookLink(input);
 
-    // Verify the result
-    verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
+        // Verify the result
+        verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
 
 
 
-@Test
-void testAddTestBookLink_UnexpectedError() throws CustomRuntimeException {
-    // Mock teamService.addTestBookLink() method
-    when(teamService.addTestBookLink(any(TeamDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
+    @Test
+    void testAddTestBookLink_UnexpectedError() throws CustomRuntimeException {
+        // Mock teamService.addTestBookLink() method
+        when(teamService.addTestBookLink(any(TeamDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
 
-    // Prepare request body
-    TeamDTO input = new TeamDTO();
-    input.setIdTeam(1);
-    input.setTestBookLink("https://www.google.com");
+        // Prepare request body
+        TeamDTO input = new TeamDTO();
+        input.setIdTeam(1);
+        input.setTestBookLink("https://www.google.com");
 
-    // Define the expected response
-    ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        // Define the expected response
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
 
-    // Call the method to test
-    ResponseEntity<TeamDTO> result = teamController.addTestBookLink(input);
+        // Call the method to test
+        ResponseEntity<TeamDTO> result = teamController.addTestBookLink(input);
 
-    // Verify the result
-    verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
+        // Verify the result
+        verify(teamService, times(1)).addTestBookLink(any(TeamDTO.class));
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
 
 
 
 
 
 
-@Test
-void testGetTestBookLinkDev_Nominal() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkDev() method
-    String mockedTestBookLinkDev = "https://example.com/testbooklinkdev";
-    when(teamService.getTestBookLinkDev(1)).thenReturn(mockedTestBookLinkDev);
+    @Test
+    void testGetTestBookLinkDev_Nominal() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkDev() method
+        String mockedTestBookLinkDev = "https://example.com/testbooklinkdev";
+        when(teamService.getTestBookLinkDev(1)).thenReturn(mockedTestBookLinkDev);
 
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(mockedTestBookLinkDev, HttpStatus.OK);
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(mockedTestBookLinkDev, HttpStatus.OK);
 
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkDev(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-@Test
-void testGetTestBookLinkDev_TeamNotFound() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkDev() method
-    when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkDev(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-@Test
-void testGetTestBookLinkDev_LinkNotFound() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkDev() method
-    when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND));
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkDev(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-@Test
-void testGetTestBookLinkDev_UnexpectedError() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkDev() method
-    when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkDev(anyInt());
-    assertEquals(expectedAnswer, result);
-}
-
-@Test
-void testGetTestBookLinkValidation_Nominal() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkValidation() method
-    String mockedTestBookLinkValidation = "https://example.com/testbooklinkvalidation";
-    when(teamService.getTestBookLinkValidation(1)).thenReturn(mockedTestBookLinkValidation);
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(mockedTestBookLinkValidation, HttpStatus.OK);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-@Test
-void testGetTestBookLinkValidation_TeamNotFound() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkValidation() method
-    when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-@Test
-void testGetTestBookLinkValidation_LinkNotFound() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkValidation() method
-    when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND));
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-@Test
-void testGetTestBookLinkValidation_UnexpectedError() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkValidation() method
-    when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-@Test
-void testGetTestBookLinkDev_LinkNotFound2() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkDev() method
-    when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND));
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkDev(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-@Test
-void testGetTestBookLinkValidation_LinkNotFound2() throws CustomRuntimeException {
-    // Mock teamService.getTestBookLinkValidation() method
-    when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND));
-
-    // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-    // Call the method to test
-    ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
-
-    // Verify the result
-    verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
-    assertEquals(expectedAnswer.toString(), result.toString());
-}
-
-
-
-
-
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkDev(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTestBookLinkDev_TeamNotFound() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkDev() method
+        when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkDev(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTestBookLinkDev_LinkNotFound() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkDev() method
+        when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND));
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkDev(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTestBookLinkDev_UnexpectedError() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkDev() method
+        when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkDev(anyInt());
+        assertEquals(expectedAnswer, result);
+    }
+
+    @Test
+    void testGetTestBookLinkValidation_Nominal() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkValidation() method
+        String mockedTestBookLinkValidation = "https://example.com/testbooklinkvalidation";
+        when(teamService.getTestBookLinkValidation(1)).thenReturn(mockedTestBookLinkValidation);
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(mockedTestBookLinkValidation, HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTestBookLinkValidation_TeamNotFound() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkValidation() method
+        when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTestBookLinkValidation_LinkNotFound() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkValidation() method
+        when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND));
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTestBookLinkValidation_UnexpectedError() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkValidation() method
+        when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTestBookLinkDev_LinkNotFound2() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkDev() method
+        when(teamService.getTestBookLinkDev(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND));
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkDev(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkDev(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTestBookLinkValidation_LinkNotFound2() throws CustomRuntimeException {
+        // Mock teamService.getTestBookLinkValidation() method
+        when(teamService.getTestBookLinkValidation(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND));
+
+        // Define the expected response
+        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<String> result = teamController.getTestBookLinkValidation(1);
+
+        // Verify the result
+        verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    public void setTeamWorkMarkById_teamNotFound() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où l'id de l'équipe n'existe pas
+        when(teamService.setTeamWorkMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamWorkMark(1, 90);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void setTeamWorkMarkById_serviceError() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où une erreur de service se produit
+        when(teamService.setTeamWorkMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamWorkMark(1, 90);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    public void setTeamWorkMarkById_unexpectedException() throws CustomRuntimeException {
+        // Simuler une exception inattendue
+        when(teamService.setTeamWorkMarkById(1, 90)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamWorkMark(1, 90);
+        
+        assertEquals(expectedAnswer, response);
+    }
+    @Test
+    public void setTeamValidationMarkById_teamNotFound() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où l'id de l'équipe n'existe pas
+        when(teamService.setTeamValidationMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamValidationMark(1, 90);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void setTeamValidationMarkById_serviceError() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où une erreur de service se produit
+        when(teamService.setTeamValidationMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamValidationMark(1, 90);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    public void setTeamValidationMarkById_unexpectedException() throws CustomRuntimeException {
+        // Simuler une exception inattendue
+        when(teamService.setTeamValidationMarkById(1, 90)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        ResponseEntity<TeamDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamDTO> response = teamController.setTeamValidationMark(1, 90);
+        
+        assertEquals(expectedAnswer, response);
+    }
 }
