@@ -46,10 +46,10 @@ export class DevProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentUser = this.userDataService.getCurrentUser().value;
-    if (this.currentUser) {
-      this.getTeamMember(this.currentUser.id);
-    }
+    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+      this.currentUser = user;
+      this.getTeamMember();
+    });
   }
 
   isCurrentUserInTeam(): boolean {
@@ -62,8 +62,9 @@ export class DevProjectComponent implements OnInit {
 
   onSubmit(): void {
     if (this.testBookLinkForm.valid && this.currentUser && this.currentTeam) {
+      this.currentTeam.testBookLink = this.testBookLinkForm.value.testBookLink;
       this.apiTeamService
-        .addTestBookLink(this.currentTeam.idTeam, this.testBookLinkForm.value.testBookLink)
+        .addTestBookLink(this.currentTeam)
         .subscribe(team => {
           this.currentTeam = team;
           this.testBookLink = team.testBookLink;
@@ -76,14 +77,12 @@ export class DevProjectComponent implements OnInit {
 
 
 
-  getTeamMember(userId: number) {
-    this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
-      (teamMember: TeamMember) => {
-        this.getTeam(teamMember.idTeam);
-      },
-      (error) => {
-        console.error("Error getting team member:", error);
-      }
+  getTeamMember() {
+    let id = this.currentUser?.id;
+    if (id == null || id == undefined) return;
+    this.apiTeamMemberService.getTeamMemberById(id).subscribe(
+      (teamMember: TeamMember) => { this.getTeam(teamMember.idTeam)},
+      (error) => { console.error("Error getting team member:", error)}
     );
   }
 

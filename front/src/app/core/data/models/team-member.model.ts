@@ -6,7 +6,6 @@ export class TeamMember{
     constructor(
         public user: User,
         public idTeam: number,
-        public idUser: number,
         public individualMark: number,
         public bonusPenalty: number
     ) {}
@@ -23,7 +22,6 @@ export class TeamMemberAdapter implements Adapter<TeamMember>{
         return new TeamMember(
             this.userAdapter.adapt(item.user),
             item.idTeam,
-            item.idUser,
             item.individualMark,
             item.bonusPenalty
         );

@@ -15,12 +15,12 @@ import lombok.Setter;
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeamMemberDTO {
 
-    @JsonManagedReference(value = "teamMember")
-    private UserDTO user;
-
     private Integer idTeam;
     private Integer individualMark;
     private Integer bonusPenalty;
+
+    @JsonManagedReference(value = "teamMember")
+    private UserDTO user;
     
     @JsonBackReference(value = "team")
     private TeamDTO team;
