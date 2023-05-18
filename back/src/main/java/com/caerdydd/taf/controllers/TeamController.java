@@ -1,5 +1,6 @@
 package com.caerdydd.taf.controllers;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -9,6 +10,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -247,4 +249,25 @@ public class TeamController {
             }
         }
     }
+
+    @GetMapping("/download")
+    public ResponseEntity<HttpStatus> retrieveFile(@RequestParam String filePath) throws MalformedURLException {
+        logger.info("Process request : Download file with path {}", filePath);
+        try {
+            Resource downloadedFile = fileService.retrieveFile(filePath);
+
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.SERVICE_ERROR:
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                
+                // case CustomRuntimeException.INCORRECT_FILE_FORMAT:
+                //     return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }   
 }
