@@ -77,31 +77,47 @@ export class ApiTeamService {
         );
     }
 
-    setTeamValidationMarkTeam(teamId: number, teamValidationMark: number): Observable<Team> {
-        const url = `${this.baseUrl}/teamValidationMark`;
-        const formData: FormData = new FormData();
-        formData.append('teamId', teamId.toString());
-        formData.append('teamValidationMark', teamValidationMark.toString());
-        return this.http.post(url, formData)
-        .pipe(
-            map((data: any) => this.teamAdapter.adapt(data))
-        )
-        .pipe(
-            catchError(this.handleError)
-        );
-    }
+  setTeamValidationMarkTeam(teamId: number, teamValidationMark: number): Observable<Team> {
+      const url = `${this.baseUrl}/teamValidationMark`;
+      const formData: FormData = new FormData();
+      formData.append('teamId', teamId.toString());
+      formData.append('teamValidationMark', teamValidationMark.toString());
+      return this.http.post(url, formData)
+      .pipe(
+          map((data: any) => this.teamAdapter.adapt(data))
+      )
+      .pipe(
+          catchError(this.handleError)
+      );
+  }
 
-    private handleError(error: HttpErrorResponse) {
-        if (error.status === 0) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.error('An error occurred:', error.error);
-          } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong.
-            console.error(
-              `Backend returned code ${error.status}, body was: `, error.error);
-          }
-          // Return an observable with a user-facing error message.
-          return throwError(() => new Error('Something bad happened; please try again later.'));
-        }
+  getTestBookLinkDev(teamId: number): Observable<string> {
+    const url = `${this.baseUrl}/${teamId}/testBookLinkDev`;
+    return this.http.get(url, { responseType: 'text' })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getTestBookLinkValidation(teamId: number): Observable<string> {
+    const url = `${this.baseUrl}/${teamId}/testBookLinkValidation`;
+    return this.http.get(url, { responseType: 'text' })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+        // A client-side or network error occurred. Handle it accordingly.
+        console.error('An error occurred:', error.error);
+      } else {
+        // The backend returned an unsuccessful response code.
+        // The response body may contain clues as to what went wrong.
+        console.error(
+          `Backend returned code ${error.status}, body was: `, error.error);
+      }
+    // Return an observable with a user-facing error message.
+    return throwError(() => new Error('Something bad happened; please try again later.'));
+  }
 }
