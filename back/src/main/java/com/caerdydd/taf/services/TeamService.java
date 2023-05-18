@@ -134,13 +134,6 @@ public class TeamService {
 
         // check if the speciality ratio is respected (2CSS/4LD)
         teamServiceRules.checkSpecialityRatio(team);
-        
-        // Check if the user is already in a team
-        if (userService.getUserById(idUser).getTeamMember() != null) {
-            Integer idTeamAlreadyIn = userService.getUserById(idUser).getTeamMember().getTeam().getIdTeam();
-            logger.warn("ILLEGAL API USE : Current user : {} tried to apply in team {} but is already in team {}", idUser, idTeam, idTeamAlreadyIn);
-            throw new CustomRuntimeException("User is already in a team");
-        }
 
         // If everythings OK : create the user role "team_member" and create a new team member entity
         logger.info("Create role of User {} : team_member", idUser);
