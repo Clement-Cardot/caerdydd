@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
 import { User } from 'src/app/core/data/models/user.model';
 import { Team } from 'src/app/core/data/models/team.model';
+import { TeamMember } from 'src/app/core/data/models/team-member.model';
 
 
 function linkValidator(control: AbstractControl): { [key: string]: any } | null {
@@ -58,8 +59,9 @@ export class ProjectFileComponent implements OnInit {
   public ngOnInit():void {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.user = user;
-      if (user?.teamId) {
-        this.getTeam(user.teamId);
+      console.log(this.user);
+      if (user) {
+        this.getTeamMember(user.id);
       }
       this.isFinalStateScope();
     });
@@ -110,7 +112,7 @@ export class ProjectFileComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.testBookLinkForm.valid && this.user && this.currentTeam) {
+    if (this.user && this.currentTeam) {
       this.apiTeamService
         .addTestBookLink(this.currentTeam.idTeam, this.testBookLinkForm.value.testBookLink)
         .subscribe(team => {
@@ -121,16 +123,27 @@ export class ProjectFileComponent implements OnInit {
     }
   }
 
-  getTeam(teamId: number) {
-    this.apiTeamService.getTeam(teamId).subscribe(
-      (team: Team) => {
-        this.currentTeam = team;
-      },
-      (error) => {
-        console.error("Error getting team:", error);
-      }
-    );
-  }
+  getTeamMember(userId: number) {
+      this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
+        (teamMember: TeamMember) => {
+          this.getTeam(teamMember.idTeam);
+        },
+        (error) => {
+          console.error("Error getting team member:", error);
+        }
+      );
+    }
+  
+    getTeam(teamId: number) {
+      this.apiTeamService.getTeam(teamId).subscribe(
+        (team: Team) => {
+          this.currentTeam = team;
+        },
+        (error) => {
+          console.error("Error getting team:", error);
+        }
+      );
+    }
 
   openSnackBar() {
     this._snackBar.open("Lien TestBook ajouté avec succès", "Fermer", { duration: 5000 });

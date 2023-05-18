@@ -39,57 +39,7 @@ export class DevProjectComponent implements OnInit {
     });
   }
 
-  
-  openSnackBar() {
-    this._snackBar.open("Lien TestBook ajouté avec succès", "Fermer", { duration: 5000 });
-  }
-
   ngOnInit(): void {
     this.currentUser = this.userDataService.getCurrentUser().value;
-    if (this.currentUser) {
-      this.getTeamMember(this.currentUser.id);
-    }
-  }
-
-  isCurrentUserInTeam(): boolean {
-    return !!(this.currentUser && this.currentTeam);
-  }
-
-  isProjectDev(): boolean {
-    return !!(this.currentTeam && this.currentTeam.idProjectDev !== null);
-  }
-
-  onSubmit(): void {
-    if (this.testBookLinkForm.valid && this.currentUser && this.currentTeam) {
-      this.apiTeamService
-        .addTestBookLink(this.currentTeam.idTeam, this.testBookLinkForm.value.testBookLink)
-        .subscribe(team => {
-          this.currentTeam = team;
-          console.log('Lien TestBook ajouté avec succès');
-          this.openSnackBar();
-        });
-    }
-  }
-
-  getTeamMember(userId: number) {
-    this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
-      (teamMember: TeamMember) => {
-        this.getTeam(teamMember.idTeam);
-      },
-      (error) => {
-        console.error("Error getting team member:", error);
-      }
-    );
-  }
-
-  getTeam(teamId: number) {
-    this.apiTeamService.getTeam(teamId).subscribe(
-      (team: Team) => {
-        this.currentTeam = team;
-      },
-      (error) => {
-        console.error("Error getting team:", error);
-      }
-    );
   }
 }

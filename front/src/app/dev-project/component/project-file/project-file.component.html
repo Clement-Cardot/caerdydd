@@ -64,12 +64,14 @@
       <mat-form-field  class="inputForm" appearance="fill">
         <mat-label>Lien TestBook</mat-label>
         <input matInput formControlName="testBookLink" required>
+        <mat-icon matSuffix>link</mat-icon>
         <mat-error *ngIf="testBookLinkForm.controls['testBookLink'].hasError('required')">
           Le lien TestBook est obligatoire.
         </mat-error>
         <mat-error *ngIf="testBookLinkForm.controls['testBookLink'].hasError('invalidLink')">
           Le lien TestBook doit être une URL valide.
         </mat-error>
+          
       </mat-form-field>
       <button mat-fab color="accent" type="submit" [disabled]="testBookLinkForm.invalid">
         <mat-icon>upload</mat-icon>
