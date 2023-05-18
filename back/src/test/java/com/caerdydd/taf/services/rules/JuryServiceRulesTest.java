@@ -49,4 +49,5 @@ public class JuryServiceRulesTest {
         // Verify the result
         assertEquals(CustomRuntimeException.TEACHING_STAFF_ARE_THE_SAME, exception.getMessage());
     }
+
 }
