@@ -27,6 +27,8 @@ export class JuryMemberMarkComponent {
 
 	individualMarkMax = 10; 
 	individualMarkMin = 0;
+	teamMarkMax = 5;
+	teamMarkMin = 0; 
 
 	constructor(private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService) {
 	}
@@ -47,12 +49,22 @@ export class JuryMemberMarkComponent {
 		return false;
 	}
 
-	saveMarks(): void{
-		this.team.teamMembers.forEach(teamMember => {
-			this.apiTeamMemberService.setIndividualMarkTeamMember(teamMember.user.id, teamMember.individualMark).subscribe((response) => {
-				console.log(response);
-			  });
-			})
-		console.log("individualMark");
-	}
+	async saveMarks(): Promise<void> {
+		try {
+		  for (const teamMember of this.team.teamMembers) {
+			await this.apiTeamMemberService.setIndividualMarkTeamMember(teamMember.user.id, teamMember.individualMark).toPromise();
+			console.log("Individual mark saved for user:", teamMember.user.id);
+		  }
+	  
+		  await this.apiTeamService.setTeamWorkMarkTeam(this.team.idTeam, this.team.teamWorkMark).toPromise();
+		  console.log("Team work mark saved!");
+	  
+		  await this.apiTeamService.setTeamValidationMarkTeam(this.team.idTeam, this.team.teamValidationMark).toPromise();
+		  console.log("Validation mark saved!");
+	  
+		  console.log("Marks saved!");
+		} catch (error) {
+		  console.error("Error while saving marks:", error);
+		}
+	  }
 }
