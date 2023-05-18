@@ -121,19 +121,19 @@ export class ApiTeamService {
     );
   }
 
-  setTeamValidationMarkTeam(teamId: number, teamValidationMark: number): Observable<Team> {
-      const url = `${this.baseUrl}/teamValidationMark`;
-      const formData: FormData = new FormData();
-      formData.append('teamId', teamId.toString());
-      formData.append('teamValidationMark', teamValidationMark.toString());
-      return this.http.post(url, formData)
-      .pipe(
-          map((data: any) => this.teamAdapter.adapt(data))
-      )
-      .pipe(
-          catchError(this.handleError)
-      );
-  }
+    setTeamValidationMarkTeam(teamId: number, teamValidationMark: number): Observable<Team> {
+        const url = `${this.baseUrl}/teamValidationMark`;
+        const formData: FormData = new FormData();
+        formData.append('teamId', teamId.toString());
+        formData.append('teamValidationMark', teamValidationMark.toString());
+        return this.http.post(url, formData)
+        .pipe(
+            map((data: any) => this.teamAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
