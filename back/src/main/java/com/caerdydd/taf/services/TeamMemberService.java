@@ -92,7 +92,7 @@ public class TeamMemberService {
           // Check if the current user is a jury member 
           userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
 
-        // Check if the value of the bonus is correct.
+        // Check if the value of the Individual Mark is correct.
         teamMemberServiceRules.checkTeamMemberIndividualMark(individualMark);
 
 
