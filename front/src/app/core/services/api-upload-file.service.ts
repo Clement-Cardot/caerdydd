@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
-import { Team } from '../data/models/team.model';
+import { catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
