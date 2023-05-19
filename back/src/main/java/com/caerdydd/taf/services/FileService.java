@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -28,29 +29,36 @@ public class FileService {
     @Autowired
     private Environment env;
 
-    public void saveFile(MultipartFile file, int id, String type) throws CustomRuntimeException {
+    public void saveFile(MultipartFile multipartFile, int id, String type) throws CustomRuntimeException {
         try {
-            final String absolutPath = env.getProperty("file.upload-dir") + "/equipe/";
-            Files.createDirectories(Paths.get(absolutPath + id));
-            this.checkFileIsPDF(file);
+            this.checkFileIsPDF(multipartFile);
+            
+            String path = env.getProperty("file.upload-dir") + MessageFormat.format("/equipe{}/", id);
             String fileName = type + ".pdf";
-            String filePath = absolutPath + id;
-            file.transferTo(new File(filePath, fileName));
+
+            Files.createDirectories(Paths.get(path));
+            multipartFile.transferTo(new File(path, fileName));
+
             TeamDTO team = teamService.getTeamById(id);
+
             if (type.equals("teamScopeStatement")) {
-                team.setFilePathScopeStatement(absolutPath + id + "/" + type + ".pdf");
+                team.setFilePathScopeStatement(path + "/" + fileName);
             } else if (type.equals("analysis")) {
-                team.setFilePathScopeStatementAnalysis(absolutPath + id + "/" + type + ".pdf");
+                team.setFilePathScopeStatementAnalysis(path + "/" + fileName);
             } else if (type.equals("finalTeamScopeStatement")) {
-                team.setFilePathFinalScopeStatement(absolutPath + id + "/" + type + ".pdf");
+                team.setFilePathFinalScopeStatement(path + "/" + fileName);
             }
+
             teamService.saveTeam(team);
-            logger.info("File saved at this location : {} {}", filePath, fileName);
+            logger.info("File saved at this location : {} {}", path, fileName);
+
         } catch (NullPointerException e) {
-            logger.warn("The team you are trying to add a file is not existing: {}", e.getMessage());
-            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+            logger.error("The team you are trying to add a file is not existing: {}", e.getMessage());
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR); // TODO change for a NOT FOUND Message Exception
         } catch (IOException e) {
-            logger.warn("Could not store the file. Error: {}", e.getMessage());
+
+            logger.error("Could not store the file. Error: {}", e.getMessage());
+            logger.error(e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } 
     }
