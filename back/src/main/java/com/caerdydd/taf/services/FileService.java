@@ -1,9 +1,8 @@
 package com.caerdydd.taf.services;
 
-import java.io.ByteArrayOutputStream;
+
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,9 +54,11 @@ public class FileService {
     }
 
     public Resource retrieveFile(String filePath) throws CustomRuntimeException, MalformedURLException {
-            Path file = Paths.get(filePath);
+            Path file = Paths.get("/upload/equipe2/").resolve("teamScopeStatement.pdf");
             Resource resource = new UrlResource(file.toUri());
-
+            logger.warn(resource);
+            logger.warn(resource.exists());
+            logger.warn(resource.isReadable());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {

@@ -251,7 +251,7 @@ public class TeamController {
     }
 
     @GetMapping("/download")
-    public ResponseEntity<HttpStatus> retrieveFile(@RequestParam String filePath) throws MalformedURLException {
+    public ResponseEntity<HttpStatus> retrieveFile(@RequestParam("filepath") String filePath) throws MalformedURLException {
         logger.info("Process request : Download file with path {}", filePath);
         try {
             Resource downloadedFile = fileService.retrieveFile(filePath);

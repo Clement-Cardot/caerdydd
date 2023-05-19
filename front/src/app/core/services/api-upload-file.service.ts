@@ -1,7 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
-import { Team } from '../data/models/team.model';
+import { catchError, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -20,21 +19,10 @@ export class ApiUploadFileService {
     formData.append('teamId', team.toString());
     formData.append('fileType', fileType);
 
-    // const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
-    //   reportProgress: true,
-    //   responseType: 'json'
-    // });
-
     return this._http.post(`${this.baseUrl}/upload`, formData )
         .pipe(
             catchError(this.handleError)
         );
-
-    // return this._http.request(req);
-  }
-
-  getFiles(): Observable<any> {
-    return this._http.get(`${this.baseUrl}/files`);
   }
 
   private handleError(error: HttpErrorResponse) {
