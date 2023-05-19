@@ -39,6 +39,8 @@ java-build:
     name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
     paths:
       - $CI_PROJECT_DIR/mvn.log
+      # TEMP
+      # - back/target/taf.war
     expire_in: 1 day
     when: always
   cache:
@@ -57,6 +59,8 @@ junit-test:
     reports:
       junit: back/target/surefire-reports/TEST*.xml
     paths:
+      # TEMP
+      # - back/target/site/jacoco
       - $CI_PROJECT_DIR/mvn.log
     expire_in: 1 day
     when: always
@@ -74,6 +78,10 @@ quality-dev:
   image: maven:3.8.1-jdk-11
   script:
     - cd back
+    # TEMP
+    - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
+    - mvn --log-file $CI_PROJECT_DIR/mvn.log $MAVEN_CLI_OPTS compile test
+    # TEMP
     - cp ./target/site/jacoco/jacoco.xml ./jacoco.xml
     - mvn --log-file $CI_PROJECT_DIR/mvn_clean_install.log $MAVEN_CLI_OPTS clean install -DskipTests=true
     - mvn --log-file $CI_PROJECT_DIR/mvn_dependency_check.log $MAVEN_CLI_OPTS dependency-check:check
@@ -97,6 +105,10 @@ quality-prod:
   image: maven:3.8.1-jdk-11
   script:
     - cd back
+    # TEMP
+    - curl https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.7.9/spring-boot-starter-parent-2.7.9.pom
+    - mvn --log-file $CI_PROJECT_DIR/mvn.log $MAVEN_CLI_OPTS compile test
+    # TEMP
     - cp ./target/site/jacoco/jacoco.xml ./jacoco.xml
     - mvn --log-file $CI_PROJECT_DIR/mvn_clean_install.log $MAVEN_CLI_OPTS clean install -DskipTests=true
     - mvn --log-file $CI_PROJECT_DIR/mvn_dependency_check.log $MAVEN_CLI_OPTS dependency-check:check
