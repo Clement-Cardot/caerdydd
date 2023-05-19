@@ -2,7 +2,8 @@
 # name of the targetted branch of the MR : CI_MERGE_REQUEST_TARGET_BRANCH_NAME
 
 stages:
-  - build&test
+  - build
+  - test
   - sonar
   - deploy-angular
   - deploy-java
@@ -16,7 +17,7 @@ before_script:
   - export http_proxy=http://192.168.4.8:3128/
 
 angular-build:
-  stage: build&test
+  stage: build
   image: node:16.19.1-alpine3.17
   script:
     - cd front
@@ -27,8 +28,8 @@ angular-build:
     paths:
       - front/node_modules
 
-java-build&test1 :
-  stage: build&test
+java-build:
+  stage: build
   image: maven:3.8.1-jdk-11
   script:
     - cd back
@@ -46,8 +47,8 @@ java-build&test1 :
     paths:
       - $CI_PROJECT_DIR/.m2/repository
 
-java-build&test2:
-  stage: build&test
+junit-test:
+  stage: test
   image: maven:3.8.1-jdk-11
   script:
     - cd back
