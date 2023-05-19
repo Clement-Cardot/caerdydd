@@ -13,10 +13,6 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_MEMBER_NOT_FOUND = "Team member not found";
     public static final String PROJECT_NOT_FOUND = "Can't found project";
     public static final String LINK_NOT_FOUND = "LINK_NOT_FOUND";
-    // TO REMOVE
-    // public static final String ALL_TEACHINGSTAFF_NOT_FOUND = "All Teaching Staff not found";
-    // public static final String TEACHINGSTAFF_NOT_FOUND = "Teaching Staff not found";
-    // public static final String TEACHINGSTAFF_ID_SHOULD_BE_NULL = "Teaching Staff id should be null";
     public static final String PRESENTATION_NOT_FOUND = "Presentation not found";
     public static final String PLANNED_TIMING_CONSULTING_NOT_FOUND = "Planned timing consulting not found";
     public static final String PLANNED_TIMING_AVAILABILITY_NOT_FOUND = "Planned timing availability not found";

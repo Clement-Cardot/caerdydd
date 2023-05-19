@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,22 +25,27 @@ public class FileService {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private Environment env;
+
     public void saveFile(MultipartFile file, int id, String type) throws CustomRuntimeException {
         try {
-            final String relativePath = "/upload/equipe";
-            Files.createDirectories(Paths.get(System.getProperty("user.dir") + relativePath + id));
+            final String absolutPath = env.getProperty("file.upload-dir") + "/equipe/";
+            Files.createDirectories(Paths.get(absolutPath + id));
             this.checkFileIsPDF(file);
-            file.transferTo(new File(System.getProperty("user.dir") + relativePath + id + "/" + type + ".pdf"));
+            String fileName = type + ".pdf";
+            String filePath = absolutPath + id;
+            file.transferTo(new File(filePath, fileName));
             TeamDTO team = teamService.getTeamById(id);
             if (type.equals("teamScopeStatement")) {
-                team.setFilePathScopeStatement(relativePath + id + "/" + type + ".pdf");
+                team.setFilePathScopeStatement(absolutPath + id + "/" + type + ".pdf");
             } else if (type.equals("analysis")) {
-                team.setFilePathScopeStatementAnalysis(relativePath + id + "/" + type + ".pdf");
+                team.setFilePathScopeStatementAnalysis(absolutPath + id + "/" + type + ".pdf");
             } else if (type.equals("finalTeamScopeStatement")) {
-                team.setFilePathFinalScopeStatement(relativePath + id + "/" + type + ".pdf");
+                team.setFilePathFinalScopeStatement(absolutPath + id + "/" + type + ".pdf");
             }
             teamService.saveTeam(team);
-            logger.info("File saved at this location : {}", (relativePath + id + "/" + type + ".pdf"));
+            logger.info("File saved at this location : {} {}", filePath, fileName);
         } catch (NullPointerException e) {
             logger.warn("The team you are trying to add a file is not existing: {}", e.getMessage());
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
