@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.MessageFormat;
 
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +32,7 @@ public class FileService {
         try {
             this.checkFileIsPDF(multipartFile);
             
-            String path = env.getProperty("file.upload-dir") + MessageFormat.format("/equipe{}/", id);
+            String path = env.getProperty("file.upload-dir") + String.format("/equipe%d/", id);
             String fileName = type + ".pdf";
 
             Files.createDirectories(Paths.get(path));
