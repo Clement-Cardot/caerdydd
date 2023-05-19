@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+
 import { FileInput } from 'ngx-material-file-input';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.service';
@@ -34,7 +34,7 @@ export class ProjectFileComponent implements OnInit {
   importAnalysisform: FormGroup;
   importFTSSform: FormGroup;
 
-  fileFormControl = new FormControl([Validators.required]);
+  fileFormControl = new FormControl(['', Validators.required]);
 
   errorMessage!: string;
 
