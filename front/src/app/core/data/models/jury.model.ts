@@ -1,12 +1,13 @@
 import { User, UserAdapter } from "./user.model";
 import { Injectable } from "@angular/core";
 import { Adapter } from "../adapter";
+import { TeachingStaff, TeachingStaffAdapter } from "./teaching-staff.model";
 
 export class Jury{
     constructor(
         public idJury: number,
-        public ts1: User,
-        public ts2: User
+        public ts1: TeachingStaff,
+        public ts2: TeachingStaff
     ) {}
 }
 
@@ -15,13 +16,13 @@ export class Jury{
 })
 export class JuryAdapter implements Adapter<Jury>{
 
-    constructor(private userAdapter: UserAdapter) { }
+    constructor(private teachingStaffAdapter: TeachingStaffAdapter) { }
 
     adapt(item: any): Jury {
         return new Jury(
             item.idJury,
-            this.userAdapter.adapt(item.ts1),
-            this.userAdapter.adapt(item.ts2)
+            this.teachingStaffAdapter.adapt(item.ts1),
+            this.teachingStaffAdapter.adapt(item.ts2)
         );
     }
 }
