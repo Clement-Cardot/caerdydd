@@ -56,7 +56,7 @@ export class JuryCreationComponent {
   }
 
   showSuccess(data : Jury) {
-    this._snackBar.open("Le jury, constitué de " + data.ts1.lastname + " et " + data.ts2.lastname + ", a bien été créé.", "Fermer", {
+    this._snackBar.open("Le jury, constitué de " + data.ts1.user.lastname + " et " + data.ts2.user.lastname + ", a bien été créé.", "Fermer", {
       duration: 5000,
     });
   }
