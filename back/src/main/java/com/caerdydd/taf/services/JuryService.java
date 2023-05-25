@@ -26,6 +26,12 @@ public class JuryService {
     @Autowired
     private JuryRepository juryRepository;
 
+    @Autowired 
+    private TeachingStaffService teachingStaffService;
+
+    @Autowired 
+    private RoleService roleService;
+
     @Autowired
     private JuryServiceRules juryServiceRules;
 
@@ -34,9 +40,6 @@ public class JuryService {
 
     @Autowired
     private ModelMapper modelMapper;
-
-    @Autowired
-    private TeachingStaffService teachingStaffService;
 
     @Autowired
     SecurityConfig securityConfig;
@@ -108,6 +111,9 @@ public class JuryService {
 
         TeachingStaffDTO juryMemberDev = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
         TeachingStaffDTO juryMemberArchi = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
+
+        roleService.assignRoleToUser(idJuryMemberDev, "JURY_MEMBER_ROLE");
+        roleService.assignRoleToUser(idJuryMemberArchi, "JURY_MEMBER_ROLE");
 
         JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
         return updateJury(juryDTO);
