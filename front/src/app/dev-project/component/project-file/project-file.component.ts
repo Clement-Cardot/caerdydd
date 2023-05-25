@@ -82,7 +82,15 @@ export class ProjectFileComponent implements OnInit {
 
   }
 
-  isFinalStateScope() {
+  isThereStateScope() {
+    return (this.currentTeam?.filePathScopeStatement != null);
+  }
+
+  isThereAnalysis() {
+    return (this.currentTeam?.filePathScopeStatementAnalysis != null);
+  }
+
+  isThereFinalStateScope() {
     return (this.currentTeam?.filePathFinalScopeStatement != null);
   }
 
@@ -126,15 +134,19 @@ export class ProjectFileComponent implements OnInit {
     );
   }
 
-  getFile(teamId: number, file: string) {
-    this.uploadFileService.download(teamId, file).subscribe(response=>
+  getFile(file: string) {
+    if (this.currentTeam) {
+      this.uploadFileService.download(this.currentTeam?.idTeam, file).subscribe(response=>
       {
-        let fileName = response.headers.get('content-disposition').split(';')[1].split('=')[1];
+        let fileName = response.headers.get('content-disposition').split(';')[2].split('=')[1];
+        fileName = fileName.slice(1, fileName.length - 1);
         let blob : Blob = response.body as Blob;
         let a = document.createElement('a');
         a.download = fileName;
         a.href = window.URL.createObjectURL(blob);
-      })
+        a.click();
+      });
+    }
   }
 
   openSnackBar() {
