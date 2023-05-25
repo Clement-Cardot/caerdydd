@@ -93,6 +93,9 @@ public class JuryService {
         TeachingStaffDTO juryMemberDev = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
         TeachingStaffDTO juryMemberArchi = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
 
+        roleService.assignRoleToUser(idJuryMemberDev, "JURY_MEMBER_ROLE");
+        roleService.assignRoleToUser(idJuryMemberArchi, "JURY_MEMBER_ROLE");
+
         JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
         return updateJury(juryDTO);
     }
