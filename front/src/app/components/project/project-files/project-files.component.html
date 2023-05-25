@@ -1,5 +1,5 @@
 <div id="projectFileComponent">
-  <form class="inputFileForm" id="teamScopeForm"  [formGroup]="importTSSform" (ngSubmit)="upload('teamScopeStatement')" *ngIf="!isFinalStateScope()">
+  <form class="inputFileForm" id="teamScopeForm"  [formGroup]="importTSSform" (ngSubmit)="upload('teamScopeStatement')" *ngIf="!isThereFinalStateScope()">
     <label for="">Cahier des charges :</label>
     <div class="sameRow">
       <mat-form-field class="inputForm" appearance="fill">
@@ -43,7 +43,7 @@
     <label for="">Cahier des charges final :</label>
     <div class="sameRow">
       <mat-form-field class="inputForm" appearance="fill">
-        <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" [formControl]="fileFormControl" [accept]="'.pdf'">
+        <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" formControlName="file" [accept]="'.pdf'">
         </ngx-mat-file-input>
         <mat-icon matSuffix>attachment</mat-icon>
         <mat-error *ngIf="fileFormControl.hasError('required')">
@@ -58,6 +58,8 @@
       </button>
     </div>
   </form>
+
+  <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFinalStateScope()">Télécharger le document</button>
 
     <form [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
       <mat-form-field  class="inputForm" appearance="fill">
@@ -77,7 +79,7 @@
       </button>
     </form>
 
-    <button (click)="getFile(1,'analysis')">Download File</button>
+
 
   <div id="testbookForm">
 
