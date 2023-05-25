@@ -1,5 +1,6 @@
 package com.caerdydd.taf.models.entities.user;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "jury")
-public class JuryEntity {
+public class JuryEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +35,7 @@ public class JuryEntity {
     @JoinColumn(name = "id_ts2")
     private TeachingStaffEntity ts2;
 
-    @OneToMany
-    @JoinColumn(name = "id_jury")
+    @OneToMany(mappedBy = "jury")
     private List<PresentationEntity> presentations;
 
 

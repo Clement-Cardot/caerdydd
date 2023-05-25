@@ -14,6 +14,8 @@ import com.caerdydd.taf.models.dto.project.PresentationDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.repositories.PresentationRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.services.rules.PresentationServiceRule;
+import com.caerdydd.taf.services.rules.UserServiceRules;
 
 @Service
 @Transactional
@@ -24,6 +26,13 @@ public class PresentationService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PresentationServiceRule presentationServiceRule;
+
+
+    @Autowired
+    private UserServiceRules userServiceRules;
 
     public List<PresentationDTO> listAllPresentations() throws CustomRuntimeException {
         try {
@@ -53,5 +62,27 @@ public class PresentationService {
         PresentationEntity response = presentationRepository.save(presentationEntity);
         return modelMapper.map(response, PresentationDTO.class);
     }
+
+
+    public PresentationDTO createPresentation(PresentationDTO presentation) throws CustomRuntimeException {
+        
+        //Check existing jury and project 
+        presentationServiceRule.checkJuryExists(presentation.getJury().getIdJury());
+        presentationServiceRule.checkProjectExists(presentation.getProject().getIdProject());
+
+        // Verify that user is a Planning assistant
+        userServiceRules.checkCurrentUserRole("PLANNING_ROLE");
+
+        // Check Presentation timeframe
+        presentationServiceRule.checkPresentationTimeframe(presentation.getDatetimeBegin(), presentation.getDatetimeEnd());
+
+        // Check  Teaching Staff availability
+        presentationServiceRule.checkTeachingStaffAvailability(presentation.getJury().getIdJury(), presentation.getDatetimeBegin(), presentation.getDatetimeEnd());
+    
+        // Save Presentation (Convert the saved PresentationEntity back to PresentationDTO)
+        return savePresentation(presentation);
+    }
+
+    
     
 }

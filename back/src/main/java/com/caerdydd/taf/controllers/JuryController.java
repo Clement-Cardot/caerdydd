@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,4 +40,18 @@ public class JuryController {
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
+    
+    @GetMapping("/{idJury}")
+public ResponseEntity<JuryDTO> getJury(@PathVariable Integer idJury) {
+    try {
+        JuryDTO jury = juryService.getJury(idJury);
+        return new ResponseEntity<>(jury, HttpStatus.OK);
+    } catch (CustomRuntimeException e) {
+        if (e.getMessage().equals(CustomRuntimeException.JURY_NOT_FOUND)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 }

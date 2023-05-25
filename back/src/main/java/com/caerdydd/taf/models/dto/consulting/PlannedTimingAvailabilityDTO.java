@@ -20,9 +20,22 @@ public class PlannedTimingAvailabilityDTO {
 
     private TeachingStaffDTO teachingStaff;
 
+    private ConsultingDTO consulting;
+
     private Boolean isAvailable = true;
 
     public PlannedTimingAvailabilityDTO() {
+    }
+
+    public PlannedTimingAvailabilityDTO(PlannedTimingConsultingDTO plannedTimingConsulting, TeachingStaffDTO teachingStaff) {
+        this.plannedTimingConsulting = plannedTimingConsulting;
+        this.teachingStaff = teachingStaff;
+    }
+
+    @Override
+    public String toString() {
+        return "PlannedTimingAvailabilityDTO [plannedTimingConsulting=" + plannedTimingConsulting + ", teachingStaff="
+                + teachingStaff + ", isAvailable=" + isAvailable + "]";
     }
     
 }

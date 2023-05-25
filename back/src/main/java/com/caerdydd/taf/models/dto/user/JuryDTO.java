@@ -16,7 +16,6 @@ public class JuryDTO {
     
     private TeachingStaffDTO ts2;
 
-
     public JuryDTO() {
     }
 

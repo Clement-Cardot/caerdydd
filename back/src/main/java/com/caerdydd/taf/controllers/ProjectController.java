@@ -87,4 +87,17 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
+
+    @GetMapping("/id/{idProject}")
+    public ResponseEntity<ProjectDTO> getProjectId(@PathVariable Integer idProject) {
+        try {
+            ProjectDTO project = projectService.getProjectId(idProject);
+            return new ResponseEntity<>(project, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.PROJECT_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

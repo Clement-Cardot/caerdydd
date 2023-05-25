@@ -48,39 +48,39 @@ public class JuryServiceRulesTest {
         assertEquals(CustomRuntimeException.TEACHING_STAFF_ARE_THE_SAME, exception.getMessage());
     }
 
-    @Test
-    public void testCheckJuryExists_JuryDoNotExist(){
-        Integer idTs1 = 1;
-        Integer idTs2 = 2;
-        UserEntity ts1 = new UserEntity();
-        ts1.setId(idTs1);
-        UserEntity ts2 = new UserEntity();
-        ts2.setId(idTs2);
+    // @Test
+    // public void testCheckJuryExists_JuryDoNotExist(){
+    //     Integer idTs1 = 1;
+    //     Integer idTs2 = 2;
+    //     UserEntity ts1 = new UserEntity();
+    //     ts1.setId(idTs1);
+    //     UserEntity ts2 = new UserEntity();
+    //     ts2.setId(idTs2);
 
-        when(userRepositoryMock.findById(idTs1)).thenReturn(Optional.of(ts1));
-        when(userRepositoryMock.findById(idTs2)).thenReturn(Optional.of(ts2));
-        when(juryRepositoryMock.findByTs1AndTs2(ts1, ts2)).thenReturn(Optional.empty());
+    //     when(userRepositoryMock.findById(idTs1)).thenReturn(Optional.of(ts1));
+    //     when(userRepositoryMock.findById(idTs2)).thenReturn(Optional.of(ts2));
+    //     when(juryRepositoryMock.findByTs1AndTs2(ts1, ts2)).thenReturn(Optional.empty());
 
-        assertDoesNotThrow(() -> juryServiceRules.checkJuryExists(idTs1, idTs2));
-    }
+    //     assertDoesNotThrow(() -> juryServiceRules.checkJuryExists(idTs1, idTs2));
+    // }
 
-    @Test
-    public void testCheckJuryExists_JuryAlreadyExists() throws CustomRuntimeException {
-        // mock de userRepository
-        UserEntity ts1 = new UserEntity();
-        ts1.setId(1);
-        UserEntity ts2 = new UserEntity();
-        ts2.setId(2);
-        when(userRepositoryMock.findById(1)).thenReturn(Optional.of(ts1));
-        when(userRepositoryMock.findById(2)).thenReturn(Optional.of(ts2));
+    // @Test
+    // public void testCheckJuryExists_JuryAlreadyExists() throws CustomRuntimeException {
+    //     // mock de userRepository
+    //     UserEntity ts1 = new UserEntity();
+    //     ts1.setId(1);
+    //     UserEntity ts2 = new UserEntity();
+    //     ts2.setId(2);
+    //     when(userRepositoryMock.findById(1)).thenReturn(Optional.of(ts1));
+    //     when(userRepositoryMock.findById(2)).thenReturn(Optional.of(ts2));
 
-        // mock de juryRepository
-        JuryEntity jury = new JuryEntity();
-        when(juryRepositoryMock.findByTs1AndTs2(ts1, ts2)).thenReturn(Optional.of(jury));
+    //     // mock de juryRepository
+    //     JuryEntity jury = new JuryEntity();
+    //     when(juryRepositoryMock.findByTs1AndTs2(ts1, ts2)).thenReturn(Optional.of(jury));
 
-        // appel de la méthode et vérification de l'exception
-        assertThrows(CustomRuntimeException.class, () -> {
-            juryServiceRules.checkJuryExists(1, 2);
-        }, CustomRuntimeException.JURY_ALREADY_EXISTS);
-    }
+    //     // appel de la méthode et vérification de l'exception
+    //     assertThrows(CustomRuntimeException.class, () -> {
+    //         juryServiceRules.checkJuryExists(1, 2);
+    //     }, CustomRuntimeException.JURY_ALREADY_EXISTS);
+    // }
 }

@@ -5,9 +5,11 @@ import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.project.TeamEntity;
+import com.caerdydd.taf.repositories.PresentationRepository;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
+import com.caerdydd.taf.services.rules.PresentationServiceRule;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 
 import java.util.List;
@@ -38,6 +40,17 @@ public class ProjectService {
 
     @Autowired
     UserServiceRules userServiceRules;
+
+    @Autowired
+    JuryService juryService;
+
+    @Autowired
+    PresentationServiceRule presentationServiceRule;
+
+    @Autowired
+    PresentationRepository presentationRepository;
+
+
 
 
     public List<ProjectDTO> listAllProjects() throws CustomRuntimeException {
@@ -134,4 +147,15 @@ public class ProjectService {
 
         return this.updateProject(projectDTO);
     }
+
+    public ProjectDTO getProjectId(Integer idProject) throws CustomRuntimeException {
+        Optional<ProjectEntity> optionalProject = projectRepository.findById(idProject);
+        if (!optionalProject.isPresent()) {
+            throw new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND);
+        }
+        return modelMapper.map(optionalProject.get(), ProjectDTO.class);
+    }
+
+    
+    
 }
