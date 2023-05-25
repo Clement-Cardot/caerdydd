@@ -40,6 +40,9 @@ public class JuryServiceTest {
     TeachingStaffService teachingStaffService;
 
     @Mock
+    RoleService roleService;
+
+    @Mock
     JuryServiceRules juryServiceRules;
 
     @Mock
@@ -94,15 +97,19 @@ public class JuryServiceTest {
         user1.setId(1);
         UserEntity user2 = new UserEntity();
         user2.setId(2);
+        
         TeachingStaffEntity ts1 = new TeachingStaffEntity(user1);
         TeachingStaffEntity ts2 = new TeachingStaffEntity(user2);
         JuryEntity juryEntity = new JuryEntity(ts1, ts2);
 
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
         when(juryRepository.save(any(JuryEntity.class))).thenReturn(juryEntity);
-        
+
         when(teachingStaffService.getTeachingStaffById(1)).thenReturn(devMember);
         when(teachingStaffService.getTeachingStaffById(2)).thenReturn(archiMember);
+
+        when(roleService.assignRoleToUser(1, "JURY_MEMBER_ROLE")).thenReturn(new RoleDTO());
+        when(roleService.assignRoleToUser(2, "JURY_MEMBER_ROLE")).thenReturn(new RoleDTO());
 
         // Call the method to be tested
         JuryDTO result = juryService.addJury(1, 2);
@@ -117,6 +124,4 @@ public class JuryServiceTest {
         assertEquals(devMember.getIdUser(), result.getTs1().getIdUser());
         assertEquals(archiMember.getIdUser(), result.getTs2().getIdUser());
     }
-
-    
 }
