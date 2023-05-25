@@ -23,8 +23,6 @@ public class ConsultingDTO {
     private PlannedTimingConsultingDTO plannedTimingConsulting;
 
     private TeamDTO team;
-    
-    private TeachingStaffDTO teachingStaff;
 
     public ConsultingDTO() {
     }

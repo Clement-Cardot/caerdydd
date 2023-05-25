@@ -56,8 +56,8 @@ CREATE TABLE project (
 CREATE TABLE presentation (
     id_presentation INT NOT NULL AUTO_INCREMENT, 
     type ENUM('intermediate', 'final'),
-    datetime_begin DATE NOT NULL,
-    datetime_end DATE NOT NULL,
+    datetime_begin DATETIME NOT NULL,
+    datetime_end DATETIME NOT NULL,
     room VARCHAR(20) NOT NULL,
     jury1_notes VARCHAR(250),
     jury2_notes VARCHAR(250),

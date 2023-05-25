@@ -74,5 +74,19 @@ public ResponseEntity<TeachingStaffDTO> addJuryMemberRole(@RequestBody TeachingS
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    
+    @GetMapping("/{idJury}")
+public ResponseEntity<JuryDTO> getJury(@PathVariable Integer idJury) {
+    try {
+        JuryDTO jury = juryService.getJury(idJury);
+        return new ResponseEntity<>(jury, HttpStatus.OK);
+    } catch (CustomRuntimeException e) {
+        if (e.getMessage().equals(CustomRuntimeException.JURY_NOT_FOUND)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 }
 }

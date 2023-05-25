@@ -37,8 +37,7 @@ public class JuryEntity implements Serializable {
     @JoinColumn(name = "id_ts2")
     private TeachingStaffEntity ts2;
 
-    @OneToMany
-    @JoinColumn(name = "id_jury")
+    @OneToMany(mappedBy = "jury")
     private List<PresentationEntity> presentations;
 
 
