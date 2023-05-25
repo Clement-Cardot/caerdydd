@@ -1,9 +1,13 @@
 package com.caerdydd.taf.controllers;
 
+import java.io.IOException;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -224,6 +228,32 @@ public class TeamController {
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
+        }
+    }
+
+    @GetMapping("/download/{teamId}/{fileType}")
+    public ResponseEntity<InputStreamResource> viewFile(@PathVariable("teamId") int id, @PathVariable("fileType") String type) {
+        try {
+            Resource file = fileService.loadFileAsResource(id, type);
+            InputStreamResource resource = new InputStreamResource(file.getInputStream());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDispositionFormData("attachment", "Equipe-" + id + "_" + type + ".pdf");
+
+            return new ResponseEntity<>(resource, headers, HttpStatus.ACCEPTED);
+        } catch (CustomRuntimeException e) { 
+            switch (e.getMessage()) {
+                case CustomRuntimeException.SERVICE_ERROR:
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                case CustomRuntimeException.FILE_NOT_FOUND:
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        } catch (IOException e) {
+            logger.warn("Could not retrieve the file. Error: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

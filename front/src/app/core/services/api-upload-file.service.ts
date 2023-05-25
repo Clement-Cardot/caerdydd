@@ -13,28 +13,22 @@ export class ApiUploadFileService {
 
   constructor(private _http: HttpClient) { }
 
-  public upload(file: File, team: number, fileType: string) {
+  public upload(file: File, idTeam: number, fileType: string) {
     const formData: FormData = new FormData();
 
     formData.append('file', file);
-    formData.append('teamId', team.toString());
+    formData.append('teamId', idTeam.toString());
     formData.append('fileType', fileType);
-
-    // const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
-    //   reportProgress: true,
-    //   responseType: 'json'
-    // });
 
     return this._http.post(`${this.baseUrl}/upload`, formData )
         .pipe(
             catchError(this.handleError)
         );
-
-    // return this._http.request(req);
   }
 
-  getFiles(): Observable<any> {
-    return this._http.get(`${this.baseUrl}/files`);
+  download(idTeam: number, fileType: string): Observable<any> {
+    return this._http.get(`${this.baseUrl}/download/${idTeam}/${fileType}`,
+      {observe: 'response', responseType: 'blob'});
   }
 
   private handleError(error: HttpErrorResponse) {
