@@ -2,7 +2,9 @@ package com.caerdydd.taf.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javax.transaction.Transactional;
@@ -10,6 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,6 +64,22 @@ public class FileService {
             logger.error(e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } 
+    }
+
+    public Resource loadFileAsResource(int idTeam, String type) throws CustomRuntimeException {
+        try {
+            Path filePath = Paths.get(System.getProperty("user.dir") + "/upload/equipe" + idTeam + "/" + type + ".pdf").toAbsolutePath().normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) {
+                return resource;
+            } else {
+                logger.warn("File not found for path {}", filePath);
+                throw new CustomRuntimeException(CustomRuntimeException.FILE_NOT_FOUND);
+            }
+        } catch (MalformedURLException ex) {
+            logger.warn("File not found {}, {}", type, ex);
+            throw new CustomRuntimeException(CustomRuntimeException.FILE_NOT_FOUND);
+        }
     }
 
     public void checkFileIsPDF(MultipartFile file) throws CustomRuntimeException {

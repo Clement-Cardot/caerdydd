@@ -70,15 +70,17 @@
         <mat-error *ngIf="testBookLinkForm.controls['testBookLink'].hasError('invalidLink')">
           Le lien TestBook doit être une URL valide.
         </mat-error>
-          
+
       </mat-form-field>
       <button mat-fab color="accent" type="submit" [disabled]="testBookLinkForm.invalid">
         <mat-icon>upload</mat-icon>
       </button>
     </form>
 
+    <button (click)="getFile(1,'analysis')">Download File</button>
+
   <div id="testbookForm">
-    
+
 
     <mat-card *ngIf="currentTeam?.testBookLink">
       <mat-card-title>Lien vers le cahier de test</mat-card-title>

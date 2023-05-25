@@ -114,7 +114,7 @@ export class ProjectFilesComponent implements OnInit {
       (error) => { console.error("Error getting team member:", error)}
     );
   }
-  
+
   getTeam(teamId: number) {
     this.apiTeamService.getTeam(teamId).subscribe(
       (team: Team) => {
@@ -124,6 +124,17 @@ export class ProjectFilesComponent implements OnInit {
         console.error("Error getting team:", error);
       }
     );
+  }
+
+  getFile(teamId: number, file: string) {
+    this.uploadFileService.download(teamId, file).subscribe(response=>
+      {
+        let fileName = response.headers.get('content-disposition').split(';')[1].split('=')[1];
+        let blob : Blob = response.body as Blob;
+        let a = document.createElement('a');
+        a.download = fileName;
+        a.href = window.URL.createObjectURL(blob);
+      })
   }
 
   openSnackBar() {

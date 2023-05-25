@@ -48,6 +48,7 @@ public class CustomRuntimeException extends Exception{
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
     public static final String FILE_EXCEPTION = "File exception";
     public static final String FILE_IS_EMPTY = "File is empty";
+    public static final String FILE_NOT_FOUND = "File not found";
     
     // Invalid messages
     public static final String INVALID_LINK = "The provided text is not a valid link";
