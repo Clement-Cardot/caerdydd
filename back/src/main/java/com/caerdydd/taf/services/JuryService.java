@@ -92,16 +92,18 @@ public class JuryService {
     public JuryDTO addJury(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
         userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
 
-        // TODO CHECK SPECIALITY AND CHECK TEACHINGSTAFF NOT ALREADY IN A JURY
-
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
-        checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
 
         TeachingStaffDTO juryMemberDev = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
         TeachingStaffDTO juryMemberArchi = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
 
-        roleService.assignRoleToUser(idJuryMemberDev, "JURY_MEMBER_ROLE");
-        roleService.assignRoleToUser(idJuryMemberArchi, "JURY_MEMBER_ROLE");
+        String juryMemberRoleName = "JURY_MEMBER_ROLE";
+
+        userServiceRules.checkUserNotThisRole(juryMemberDev.getUser(), juryMemberRoleName);
+        userServiceRules.checkUserNotThisRole(juryMemberArchi.getUser(), juryMemberRoleName);
+
+        roleService.assignRoleToUser(idJuryMemberDev, juryMemberRoleName);
+        roleService.assignRoleToUser(idJuryMemberArchi, juryMemberRoleName);
 
         JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
         return updateJury(juryDTO);
