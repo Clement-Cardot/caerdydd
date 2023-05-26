@@ -2,7 +2,9 @@
   <mat-toolbar color="primary" class="example-toolbar">
     <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
     <h1 class="example-app-name">TAF</h1>
-    <h1 class="page-name">{{pageName}}</h1>
+    <div id="title">
+      <h1 class="page-name">{{pageName}}</h1>
+    </div>
   </mat-toolbar>
 
   <mat-sidenav-container [style.marginTop.px]="mobileQuery.matches ? 56 : 0" id="sidenav">

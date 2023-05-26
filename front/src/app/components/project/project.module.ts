@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MaterialModule } from "src/app/material.module";
-import { ProjectValidationComponent } from "./project-validation/project-validation.component";
+import { SubjectValidationComponent } from "./subject-validation/subject-validation.component";
 import { MarksComponent } from "./marks/marks.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TeamCreationComponent } from "./team-creation/team-creation.component";
@@ -10,11 +10,13 @@ import { TeamListComponent } from "./team-list/team-list.component";
 import { StudentImportComponent } from "./student-import/student-import.component";
 import { RouterModule } from "@angular/router";
 import { MaterialFileInputModule } from "ngx-material-file-input";
+import { ProjectFileComponent } from "./project-files/project-files.component";
 
 @NgModule({
     declarations: [
-      ProjectValidationComponent,
+      SubjectValidationComponent,
       MarksComponent,
+      ProjectFileComponent,
       StudentImportComponent,
       TeamCreationComponent,
       TeamInfoComponent,
@@ -29,8 +31,9 @@ import { MaterialFileInputModule } from "ngx-material-file-input";
       MaterialFileInputModule,
     ],
     exports: [
-      ProjectValidationComponent,
+      SubjectValidationComponent,
       MarksComponent,
+      ProjectFileComponent,
       StudentImportComponent,
       TeamCreationComponent,
       TeamInfoComponent,

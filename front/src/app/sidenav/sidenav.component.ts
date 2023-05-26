@@ -82,7 +82,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       // Teaching Staff
       if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
         this.navLink.push('Equipes');
-        this.navLink.push('Spécialités');
+        this.navLink.push('Corps Enseignant');
       }
 
       // Team Member
@@ -124,8 +124,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       case 'Equipes':
         this.router.navigateByUrl('/teams');
         break;
-      case 'Spécialités':
-        this.router.navigateByUrl('/teachingStaffSpe');
+      case 'Corps Enseignant':
+        this.router.navigateByUrl('/teachingStaff');
         break;
       case 'Mon équipe':
         this.router.navigateByUrl('/my-team');

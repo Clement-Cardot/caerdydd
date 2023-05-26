@@ -1,14 +1,4 @@
-<div class="divButton">
-  <button
-    *ngIf="isCurrentUserATeachingStaff()"
-    mat-raised-button
-    routerLink="/teachingStaffSpe/modifySpeciality"
-    color="primary"
-    id="buttonAllTS"
-  >
-    Définir mes spécialités
-  </button>
-</div>
+<app-define-specialty></app-define-specialty>
 <div class="listTS">
   <mat-list role="list" *ngFor="let teachingStaff of teachingStaffs">
     <mat-divider></mat-divider>
