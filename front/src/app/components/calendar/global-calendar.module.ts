@@ -6,6 +6,7 @@ import { CalendarComponent } from "./calendar/calendar.component";
 import { CalendarDateFormatter, CalendarModule, CalendarNativeDateFormatter, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/moment';
 import * as moment from "moment";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 export function momentAdapterFactory() {
     return adapterFactory(moment);
@@ -19,6 +20,8 @@ export function momentAdapterFactory() {
     imports: [
       CommonModule,
       MaterialModule,
+      FormsModule,
+      ReactiveFormsModule,
       CalendarModule.forRoot({ 
             provide: DateAdapter, useFactory: momentAdapterFactory
         })

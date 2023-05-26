@@ -5,13 +5,13 @@ import { Team } from 'src/app/core/data/models/team.model';
 import { User } from 'src/app/core/data/models/user.model';
 
 @Component({
-  selector: 'app-all-teams-list',
+  selector: 'app-teams-page',
   templateUrl: './teams-page.component.html',
   styleUrls: ['./teams-page.component.scss']
 })
 
 export class TeamsPageComponent implements OnInit {
-  teams!: Team[];
+  teams: Team[] = [];
 
   refresh: any;
 

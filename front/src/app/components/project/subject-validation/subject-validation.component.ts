@@ -4,11 +4,11 @@ import { ApiProjectService } from '../../../core/services/api-project.service';
 
 
 @Component({
-  selector: 'project-validation',
-  templateUrl: './project-validation.component.html',
-  styleUrls: ['./project-validation.component.scss']
+  selector: 'subject-validation',
+  templateUrl: './subject-validation.component.html',
+  styleUrls: ['./subject-validation.component.scss']
 })
-export class ProjectValidationComponent {
+export class SubjectValidationComponent {
   @Input() project!: Project;
   constructor(private projectService: ApiProjectService) { }
 

@@ -1,4 +1,4 @@
-<div id="generateTeams" *ngIf="teams.length > 0 && isCurrentUserAnOptionLeader()">
+<div id="generateTeams" *ngIf="teams.length > 0 && isCurrentUserAnOptionLeader() && openTeamsCreation == false">
     <button mat-raised-button id="generateTeamsButton" color="primary" (click)="generateTeams()">Créer des équipes</button>
 </div>
 <div *ngIf="isCurrentUserAnOptionLeader() && (teams.length == 0 || openTeamsCreation == true)">

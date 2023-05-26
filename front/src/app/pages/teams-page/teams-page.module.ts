@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { TeamsPageComponent } from './teams-page.component';
-import { TeamModule } from 'src/app/components/teams/team.module';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from 'src/app/material.module';
+import { TeamModule } from 'src/app/components/project/project.module';
 
 
 @NgModule({
@@ -8,6 +10,8 @@ import { TeamModule } from 'src/app/components/teams/team.module';
     TeamsPageComponent,
   ],
   imports: [
+    CommonModule,
+    MaterialModule,
     TeamModule
   ]
 })

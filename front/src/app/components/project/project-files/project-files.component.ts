@@ -21,8 +21,8 @@ function linkValidator(control: AbstractControl): { [key: string]: any } | null 
 
 @Component({
   selector: 'app-project-file',
-  templateUrl: './project-file.component.html',
-  styleUrls: ['./project-file.component.scss']
+  templateUrl: './project-files.component.html',
+  styleUrls: ['./project-files.component.scss']
 })
 export class ProjectFileComponent implements OnInit {
 
