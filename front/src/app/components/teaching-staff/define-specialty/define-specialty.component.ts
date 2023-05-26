@@ -5,7 +5,6 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiUserService } from 'src/app/core/services/api-user.service';
 import { User } from 'src/app/core/data/models/user.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-define-specialty',
@@ -21,8 +20,7 @@ export class DefineSpecialtyComponent implements OnInit {
     private apiTeachingStaffService: ApiTeachingStaffService,
     public userDataService: UserDataService,
     public apiUserService: ApiUserService,
-    private _snackBar: MatSnackBar,
-    private location: Location
+    private _snackBar: MatSnackBar
   ) {}
 
   public ngOnInit(): void {
@@ -67,7 +65,7 @@ export class DefineSpecialtyComponent implements OnInit {
     });
   }
 
-  public modifySpeciality2() {
+  public modifySpeciality() {
     for (const opt of this.ngOptions) {
       if (opt.value === 'Infrastructure') {
         this.teachingStaff.isInfrastructureSpecialist = opt.checked;
@@ -88,7 +86,6 @@ export class DefineSpecialtyComponent implements OnInit {
       }
     );
     this.openSnackBar();
-    this.location.back();
   }
 
   isCurrentUserATeachingStaff() {
