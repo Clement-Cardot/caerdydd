@@ -24,7 +24,7 @@ function linkValidator(control: AbstractControl): { [key: string]: any } | null 
   templateUrl: './project-files.component.html',
   styleUrls: ['./project-files.component.scss']
 })
-export class ProjectFileComponent implements OnInit {
+export class ProjectFilesComponent implements OnInit {
 
   testBookLinkForm: FormGroup;
   currentUser!: User | null;
