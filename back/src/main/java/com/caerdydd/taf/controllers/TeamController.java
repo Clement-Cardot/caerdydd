@@ -222,6 +222,8 @@ public class TeamController {
             switch (e.getMessage()) {
                 case CustomRuntimeException.SERVICE_ERROR:
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                case CustomRuntimeException.TEAM_NOT_FOUND:
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.INCORRECT_FILE_FORMAT:
                     return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
                 default:
