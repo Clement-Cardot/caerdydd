@@ -98,9 +98,6 @@ public class TeamMemberService {
 
         TeamMemberDTO teamMember = getTeamMemberById(id);
 
-        // TODO faire une rules pour vérifier que la note total est < 20
-        //teamMemberServiceRules.checkTeamMemberMarkAfterBonus(teamMember, individualMark);
-
         teamMember.setIndividualMark(individualMark);
         return updateTeamMember(teamMember);
     }
