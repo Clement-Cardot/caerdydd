@@ -50,7 +50,7 @@ public class JuryControllerTest {
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
 
         // Assert
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
 
     @Test
