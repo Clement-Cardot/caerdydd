@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.caerdydd.taf.models.entities.user.JuryEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -41,9 +42,9 @@ public class ProjectEntity implements Serializable {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<PresentationEntity> presentations;
 
-//    @OneToOne
-//    @JoinColumn(name = "id_jury")
-//    private JuryEntity jury;
+    @OneToOne
+    @JoinColumn(name = "id_jury")
+    private JuryEntity jury;
 
 
     public ProjectEntity() {

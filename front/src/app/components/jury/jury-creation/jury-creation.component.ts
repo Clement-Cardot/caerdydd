@@ -61,9 +61,9 @@ export class JuryCreationComponent {
     });
   }
 
-  showError(error: { status: number; }) {
-    switch (error.status) {
-      case 418:
+  showError(errorCode : number) {
+    switch (errorCode) {
+      case 409:
         this.errorMessage = "Le jury existe déjà";
         break;
       case 500:
