@@ -32,14 +32,6 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_IS_NOT_AUTHORIZED = "Requested user is not authorized";
     public static final String USER_IS_NOT_A_JURY_MEMBER = "Requested user is not a jury member";
 
-    // user already has this role messages
-    public static final String USER_IS_A_STUDENT = "Requested user is a student";
-    public static final String USER_IS_A_TEACHING_STAFF = "Requested user is a teaching staff";
-    public static final String USER_IS_AN_OPTION_LEADER = "Requested user is a option leader";
-    public static final String USER_IS_A_TEAM_MEMBER = "Requested user is a team member";
-    public static final String USER_IS_A_PLANNING_ASSISTANT = "Requested user is a planning assistant";
-    public static final String USER_IS_A_JURY_MEMBER = "Requested user is a jury member";
-
     // Règles métiers messages <- A traduire en anglais ^^
     public static final String NB_TEAMS_SHOULD_BE_EVEN = "The number of teams should be even";
     public static final String TEAM_IS_FULL = "The team is full";

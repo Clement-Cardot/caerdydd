@@ -56,17 +56,10 @@ public class JuryService {
         // TODO verifier que un user est LD et l'autre CSS -> teachingStaffRules
 
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
+        checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
 
         TeachingStaffDTO juryMemberDev = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
         TeachingStaffDTO juryMemberArchi = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
-
-        String juryMemberRoleName = "JURY_MEMBER_ROLE";
-
-        userServiceRules.checkUserNotThisRole(juryMemberDev.getUser(), juryMemberRoleName);
-        userServiceRules.checkUserNotThisRole(juryMemberArchi.getUser(), juryMemberRoleName);
-
-        roleService.assignRoleToUser(idJuryMemberDev, juryMemberRoleName);
-        roleService.assignRoleToUser(idJuryMemberArchi, juryMemberRoleName);
 
         JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
         return updateJury(juryDTO);
