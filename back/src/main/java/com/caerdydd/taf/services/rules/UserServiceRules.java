@@ -27,6 +27,8 @@ public class UserServiceRules {
                     throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEAM_MEMBER);
                 case "PLANNING_ROLE":
                     throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT);
+                case "JURY_MEMBER_ROLE":
+                    throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER);
                 default:
                     throw new CustomRuntimeException("Unexpected role value: " + role);
             }

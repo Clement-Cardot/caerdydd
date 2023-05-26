@@ -248,6 +248,10 @@ public class TeamController {
                 logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
@@ -266,6 +270,10 @@ public class TeamController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);

@@ -1,6 +1,7 @@
 package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.isNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +25,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -285,66 +288,75 @@ public class TeamMemberServiceTest {
 
     @Test
     void testUpdateTeamMember_Nominal() {
+        // Arrange
         TeamDTO teamDTO = new TeamDTO();
         UserDTO userDTO = new UserDTO(1, "firstname3", "lastname3", "login3", "password3", "email3", "J2EE");
-
         TeamMemberDTO input = new TeamMemberDTO(userDTO, teamDTO);
-
+    
         int teamMemberId = 1;
         TeamMemberEntity teamMemberEntity = new TeamMemberEntity(
             new UserEntity(teamMemberId, "firstname3", "lastname3", "login3", "password3", "email3", "J2EE"),
             new TeamEntity()
         );
-        when(teamMemberRepository.findById(teamMemberId)).thenReturn(Optional.of(teamMemberEntity));
+        
+        // Stubbing
+        when(teamMemberRepository.findById(isNull())).thenReturn(Optional.of(teamMemberEntity));
         when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenReturn(teamMemberEntity);
-
-        TeamMemberDTO result = new TeamMemberDTO();
+    
+        // Act
+        TeamMemberDTO result = null;
         try {
             result = teamMemberService.updateTeamMember(input);
         } catch (CustomRuntimeException e) {
             fail();
         }
-
-        verify(teamMemberRepository, times(1)).findById(teamMemberId);
+    
+        // Assert
+        verify(teamMemberRepository, times(1)).findById(isNull());
         verify(teamMemberRepository, times(1)).save(any(TeamMemberEntity.class));
         assertEquals(input.toString(), result.toString());
     }
 
     @Test
     void testUpdateTeamMemberUserNotFound() {
-        TeamDTO teamDTO = new TeamDTO();
-        UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+    // Arrange
+    TeamDTO teamDTO = new TeamDTO();
+    UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+    TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
 
-        TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
-        
-        when(teamMemberRepository.findById(1)).thenReturn(Optional.empty());
-        
-        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
-            teamMemberService.updateTeamMember(teamMemberDTO);
-        });
-        assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
+    // Stubbing
+    doReturn(Optional.empty()).when(teamMemberRepository).findById(ArgumentMatchers.isNull());
+
+    // Act and Assert
+    CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+        teamMemberService.updateTeamMember(teamMemberDTO);
+    });
+    assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
     }
 
     @Test
-    void testUpdateTeamMember_ServiceError() throws Exception {
-        TeamDTO teamDTO = new TeamDTO();
-        UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+void testUpdateTeamMember_ServiceError() {
+    // Arrange
+    TeamDTO teamDTO = new TeamDTO();
+    UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+    TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
 
-        TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
+    TeamEntity team = new TeamEntity();
+    UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
 
-        TeamEntity team = new TeamEntity();
-        UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+    TeamMemberEntity teamMemberEntity = new TeamMemberEntity(user, team);
 
-        TeamMemberEntity teamMemberEntity = new TeamMemberEntity(user, team);
+    when(teamMemberRepository.findById(any())).thenReturn(Optional.of(teamMemberEntity));
 
-        when(teamMemberRepository.findById(teamMemberEntity.getIdUser())).thenReturn(Optional.of(teamMemberEntity));
-        when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenThrow(new RuntimeException());
+    when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenThrow(new RuntimeException("Service Error"));
 
-        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
-            teamMemberService.updateTeamMember(teamMemberDTO);
-        });
-        assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
-    }
+    // Act and Assert
+    CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
+        teamMemberService.updateTeamMember(teamMemberDTO);
+    });
+    assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
+}
+
     @Test
     void testSetIndividualMarkByIdSuccess() throws CustomRuntimeException {
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());

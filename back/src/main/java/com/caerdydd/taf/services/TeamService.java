@@ -201,16 +201,13 @@ public class TeamService {
     
     public TeamDTO setTeamWorkMarkById(Integer id, Integer teamWorkMark)throws CustomRuntimeException{
         // Check if the current user is a jury member 
-        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
+        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
 
       // Check if the value of the bonus is correct.
       TeamServiceRules.checkTeamWorkMark(teamWorkMark);
 
 
       TeamDTO team = getTeamById(id);
-
-      // TODO faire une rules pour vérifier que la note total est < 20
-      //teamMemberServiceRules.checkTeamMemberMarkAfterBonus(teamMember, individualMark);
 
       team.setTeamWorkMark(teamWorkMark);
       return saveTeam(team);
@@ -219,7 +216,7 @@ public class TeamService {
 
     public TeamDTO setTeamValidationMarkById(Integer id, Integer teamValidationMark)throws CustomRuntimeException{
         // Check if the current user is a jury member 
-        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
+        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
 
     // Check if the value of the bonus is correct.
     TeamServiceRules.checkTeamValidationMark(teamValidationMark);
