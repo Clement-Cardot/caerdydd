@@ -1,6 +1,7 @@
 <div id="projectFileComponent">
+  <label for="">Cahier des charges :</label>
   <form class="inputFileForm" id="teamScopeForm"  [formGroup]="importTSSform" (ngSubmit)="upload('teamScopeStatement')" *ngIf="!isThereFinalStateScope()">
-    <label for="">Cahier des charges :</label>
+
     <div class="sameRow">
       <mat-form-field class="inputForm" appearance="fill">
         <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" [formControl]="fileFormControl" [accept]="'.pdf'">
@@ -18,6 +19,8 @@
       </button>
     </div>
   </form>
+
+  <button mat-raised-button color="accent" (click)="getFile('teamScopeStatement')" class="downloadButton" [disabled]="!isThereStateScope()">Télécharger le document</button>
 
   <form class="inputFileForm" id="analysisForm"  [formGroup]="importAnalysisform" (ngSubmit)="upload('analysis')">
     <label for="">Analyse du cahier des charges :</label>
@@ -59,7 +62,7 @@
     </div>
   </form>
 
-  <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFinalStateScope()">Télécharger le document</button>
+
 
     <form [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
       <mat-form-field  class="inputForm" appearance="fill">
