@@ -170,6 +170,7 @@ public class TeamController {
         logger.info("Process request : Get test book link dev of team: {}", idTeam);
         try {
             // TODO : move this logical in service
+            // TODO : move this logical in service
             String testBookLinkDev = teamService.getTestBookLinkDev(idTeam);
             if (testBookLinkDev == null) {
                 throw new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND);
@@ -180,8 +181,10 @@ public class TeamController {
                 case CustomRuntimeException.TEAM_NOT_FOUND:
                 case CustomRuntimeException.LINK_NOT_FOUND:
                     logger.warn(e.getMessage());
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
@@ -202,8 +205,10 @@ public class TeamController {
                 case CustomRuntimeException.TEAM_NOT_FOUND:
                 case CustomRuntimeException.LINK_NOT_FOUND:
                     logger.warn(e.getMessage());
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
@@ -224,6 +229,7 @@ public class TeamController {
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 case CustomRuntimeException.INCORRECT_FILE_FORMAT:
                     logger.warn(e.getMessage());
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
                 default:
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -241,9 +247,11 @@ public class TeamController {
             return new ResponseEntity<>(team, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if(e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER)) {
@@ -262,9 +270,11 @@ public class TeamController {
             return new ResponseEntity<>(team, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if(e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER)) {

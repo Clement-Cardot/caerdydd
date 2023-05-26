@@ -41,6 +41,8 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_ID_SHOULD_BE_NULL = "User id should be null";
 
 
+
+
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
     public static final String FILE_EXCEPTION = "File exception";
@@ -53,8 +55,8 @@ public class CustomRuntimeException extends Exception{
     public static final String JURY_NOT_FOUND = "Jury not found";
     public static final String JURY_ALREADY_EXISTS = "This jury already exists";
     public static final String TEACHING_STAFF_ARE_THE_SAME = "You cannot create a jury with only one teaching staff";
-    public static final String TEAM_MEMBER_INCORRECT_TEAM_MARK = "The team mark of the team member is under 0 or above 5";
     public static final String TEAM_MEMBER_INCORRECT_INDIVIDUAL_MARK = "The individual mark of the team member is under 0 or above 10";
+    public static final String TEAM_MEMBER_INCORRECT_TEAM_MARK = "The team mark of the team member is under 0 or above 5";
     public static final String TEAM_MEMBER_INCORRECT_FINAL_MARK = "The final mark of the team member is under 0 or above 20";
 
     public CustomRuntimeException(String message) {
