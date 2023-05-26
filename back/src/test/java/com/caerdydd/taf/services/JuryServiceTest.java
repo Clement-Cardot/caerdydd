@@ -11,6 +11,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -97,7 +99,6 @@ public class JuryServiceTest {
         user1.setId(1);
         UserEntity user2 = new UserEntity();
         user2.setId(2);
-        
         TeachingStaffEntity ts1 = new TeachingStaffEntity(user1);
         TeachingStaffEntity ts2 = new TeachingStaffEntity(user2);
         JuryEntity juryEntity = new JuryEntity(ts1, ts2);
@@ -107,9 +108,6 @@ public class JuryServiceTest {
 
         when(teachingStaffService.getTeachingStaffById(1)).thenReturn(devMember);
         when(teachingStaffService.getTeachingStaffById(2)).thenReturn(archiMember);
-
-        when(roleService.assignRoleToUser(1, "JURY_MEMBER_ROLE")).thenReturn(new RoleDTO());
-        when(roleService.assignRoleToUser(2, "JURY_MEMBER_ROLE")).thenReturn(new RoleDTO());
 
         // Call the method to be tested
         JuryDTO result = juryService.addJury(1, 2);
@@ -123,5 +121,41 @@ public class JuryServiceTest {
         assertNotNull(result);
         assertEquals(devMember.getIdUser(), result.getTs1().getIdUser());
         assertEquals(archiMember.getIdUser(), result.getTs2().getIdUser());
+    }
+
+    @Test
+    public void findJuryByTs1AndTs2_ValidJury1_ReturnsJuryDTO() throws CustomRuntimeException {
+        // Arrange
+        TeachingStaffDTO ts1 = new TeachingStaffDTO();
+        TeachingStaffDTO ts2 = new TeachingStaffDTO();
+        TeachingStaffEntity tsEntity1 = new TeachingStaffEntity();
+        TeachingStaffEntity tsEntity2 = new TeachingStaffEntity();
+        JuryEntity juryEntity = new JuryEntity();
+        JuryDTO expectedJuryDTO = new JuryDTO();
+
+        when(modelMapper.map(ts1, TeachingStaffEntity.class)).thenReturn(tsEntity1);
+        when(modelMapper.map(ts2, TeachingStaffEntity.class)).thenReturn(tsEntity2);
+
+        Optional<JuryEntity> optionalJury = Optional.of(juryEntity);
+        when(juryRepository.findByTs1AndTs2(any(), any())).thenReturn(optionalJury);
+
+        when(modelMapper.map(juryEntity, JuryDTO.class)).thenReturn(expectedJuryDTO);
+
+        // Act
+        JuryDTO result = juryService.findJuryByTs1AndTs2(ts1, ts2);
+
+        // Assert
+        assertEquals(expectedJuryDTO, result);
+        verify(modelMapper, times(1)).map(juryEntity, JuryDTO.class);
+    }
+
+    @Test
+    public void findJuryByTs1AndTs2_NoJuryFound_ThrowsCustomRuntimeException() {
+        TeachingStaffDTO ts12 = new TeachingStaffDTO();
+        TeachingStaffDTO ts22 = new TeachingStaffDTO();
+
+        when(juryRepository.findByTs1AndTs2(any(), any())).thenReturn(Optional.empty());
+
+        assertThrows(CustomRuntimeException.class, () -> juryService.findJuryByTs1AndTs2(ts12, ts22));
     }
 }

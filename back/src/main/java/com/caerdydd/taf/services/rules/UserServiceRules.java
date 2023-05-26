@@ -35,27 +35,6 @@ public class UserServiceRules {
         }
     }
 
-    public void checkUserNotThisRole(UserDTO user, String role) throws CustomRuntimeException{
-        if(user.getRoles().stream().anyMatch(r -> r.getRole().equals(role))){
-            switch (role) {
-                case "STUDENT_ROLE":
-                    throw new CustomRuntimeException(CustomRuntimeException.USER_IS_A_STUDENT);
-                case "TEACHING_STAFF_ROLE":
-                    throw new CustomRuntimeException(CustomRuntimeException.USER_IS_A_TEACHING_STAFF);
-                case "OPTION_LEADER_ROLE":
-                    throw new CustomRuntimeException(CustomRuntimeException.USER_IS_AN_OPTION_LEADER);
-                case "TEAM_MEMBER_ROLE":
-                    throw new CustomRuntimeException(CustomRuntimeException.USER_IS_A_TEAM_MEMBER);
-                case "PLANNING_ROLE":
-                    throw new CustomRuntimeException(CustomRuntimeException.USER_IS_A_PLANNING_ASSISTANT);
-                case "JURY_MEMBER_ROLE":
-                    throw new CustomRuntimeException(CustomRuntimeException.USER_IS_A_JURY_MEMBER);
-                default:
-                    throw new CustomRuntimeException("Unexpected role value: " + role);
-            }
-        }
-    }
-
     public void checkCurrentUser(UserDTO user) throws CustomRuntimeException{
         if(!Objects.equals(user.getId(), securityConfig.getCurrentUser().getId())){
             throw new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER);
