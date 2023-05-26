@@ -59,6 +59,7 @@ public class JuryService {
         // TODO CHECK SPECIALITY
 
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
+        checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
 
         TeachingStaffDTO juryMemberDev = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
         TeachingStaffDTO juryMemberArchi = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
