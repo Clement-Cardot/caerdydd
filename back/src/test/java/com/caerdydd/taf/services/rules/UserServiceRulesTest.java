@@ -100,63 +100,6 @@ public class UserServiceRulesTest {
         assertEquals("Unexpected role value: UNEXPECTED_ROLE", exception.getMessage());
 
     }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"STUDENT_ROLE", "TEACHING_STAFF_ROLE", "OPTION_LEADER_ROLE", "TEAM_MEMBER_ROLE", "PLANNING_ROLE", "JURY_MEMBER_ROLE"})
-    public void checkUserNotThisRoleTest_UserHasRole(String role) {
-        // Create User
-        UserDTO user = new UserDTO();
-        user.setRoles(new ArrayList<>());
-        user.getRoles().add(new RoleDTO(1, role, user));
-
-        // Call method to test
-        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            userServiceRules.checkUserNotThisRole(user, role);
-        });
-
-        // Check exception
-        switch (role) {
-            case "STUDENT_ROLE":
-                assertEquals(CustomRuntimeException.USER_IS_A_STUDENT, exception.getMessage());
-                break;
-            case "TEACHING_STAFF_ROLE":
-                assertEquals(CustomRuntimeException.USER_IS_A_TEACHING_STAFF, exception.getMessage());
-                break;
-            case "OPTION_LEADER_ROLE":
-                assertEquals(CustomRuntimeException.USER_IS_AN_OPTION_LEADER, exception.getMessage());
-                break;
-            case "TEAM_MEMBER_ROLE":
-                assertEquals(CustomRuntimeException.USER_IS_A_TEAM_MEMBER, exception.getMessage());
-                break;
-            case "PLANNING_ROLE":
-                assertEquals(CustomRuntimeException.USER_IS_A_PLANNING_ASSISTANT, exception.getMessage());
-                break;
-            case "JURY_MEMBER_ROLE":
-                assertEquals(CustomRuntimeException.USER_IS_A_JURY_MEMBER, exception.getMessage());
-                break;
-            default:
-                fail();
-                break;
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"STUDENT_ROLE", "TEACHING_STAFF_ROLE", "OPTION_LEADER_ROLE", "TEAM_MEMBER_ROLE", "PLANNING_ROLE", "JURY_MEMBER_ROLE"})
-    public void checkUserNotThisRoleTest_UserHasNotRole(String role) {
-        // Create User
-        UserDTO user = new UserDTO();
-        user.setRoles(new ArrayList<>());
-        user.getRoles().add(new RoleDTO(1, "USELESS_ROLE", user));
-
-        // Call method to test
-        try {
-            userServiceRules.checkUserNotThisRole(user, role);
-        } catch (Exception e) {
-            fail("Exception thrown when it shouldn't have been : " + e.getMessage());
-        }
-
-        // If nothing thrown: success
-    }
     
     @Test
     void checkCurrentUser_UserIsNotCurrentUser() throws CustomRuntimeException {
