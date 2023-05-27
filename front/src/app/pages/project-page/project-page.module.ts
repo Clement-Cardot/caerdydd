@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MaterialModule } from 'src/app/material.module';
 import { ProjectPageComponent } from './project-page.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -9,7 +10,7 @@ import { ProjectPageComponent } from './project-page.component';
   ],
   imports: [
     MaterialModule,
-    
+    RouterModule,
   ]
 })
 export class ProjectPageModule { }
