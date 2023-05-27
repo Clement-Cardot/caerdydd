@@ -62,7 +62,7 @@
     </div>
   </form>
 
-
+  <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFinalStateScope()">Télécharger le document</button>
 
     <form [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
       <mat-form-field  class="inputForm" appearance="fill">
