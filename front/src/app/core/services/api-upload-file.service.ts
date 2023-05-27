@@ -37,6 +37,8 @@ export class ApiUploadFileService {
       console.error('Une erreur est survenue, veuillez réessayer plus tard:', error.error);
     } else if (error.status === 415) {
       console.error("Le fichier n'est pas un pdf :", error.error);
+    } else if (error.status === 404) {
+      console.error("Le fichier est introuvable :", error.error);
     } else {
       console.error(
         `Le Backend à retourné un code erreur: ${error.status}, le corp était: `, error.error);

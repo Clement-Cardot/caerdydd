@@ -145,8 +145,17 @@ export class ProjectFilesComponent implements OnInit {
         a.download = fileName;
         a.href = window.URL.createObjectURL(blob);
         a.click();
+      },
+      error => {
+        {this.showErrorDownload()} 
       });
     }
+  }
+
+  showErrorDownload() {
+    this._snackBar.open("Une erreur est survenue lors du téléchargement", "Fermer", {
+      duration: 5000,
+    });
   }
 
   openSnackBar() {
@@ -158,6 +167,8 @@ export class ProjectFilesComponent implements OnInit {
       duration: 5000,
     });
   }
+
+
 
   showError(error: { status: number; }) {
     this.fileFormControl.setErrors({apiError: true});
