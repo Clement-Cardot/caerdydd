@@ -173,7 +173,7 @@ java-deploy-dev:
 
 selenium-test:
   stage: selenium
-  image: markhobson/maven-chrome
+  image: srv-proxy.openstack.etudis.eseo.fr:1973/markhobson/maven-chrome
   script:
     - cd selenium
     - mvn $MAVEN_CLI_OPTS test -P dev
