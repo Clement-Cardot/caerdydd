@@ -5,6 +5,10 @@
     </mat-card-header>
     <mat-card-content>
       <div class="sameRow">
+        <p>Analyse du cahier des charges :</p>
+        <button mat-raised-button color="accent" (click)="getFile('analysis')" class="downloadButton" [disabled]="!isThereAnalysis()">Télécharger le document</button>
+      </div>
+      <div class="sameRow">
         <p>Cahier des charges finale :</p>
         <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFinalStateScope()">Télécharger le document</button>
       </div>
