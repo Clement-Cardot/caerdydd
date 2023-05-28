@@ -106,6 +106,10 @@ export class ValidationProjectPageComponent implements OnInit {
     }
   }
 
+  isThereStateScope() {
+    return (this.validationTeam?.filePathScopeStatement != null);
+  }
+
   isThereFinalStateScope() {
     return (this.validationTeam?.filePathFinalScopeStatement != null);
   }
