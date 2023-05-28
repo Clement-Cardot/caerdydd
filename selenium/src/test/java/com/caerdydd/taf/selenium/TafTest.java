@@ -60,7 +60,6 @@ public class TafTest {
 				password="root";
 				break;
 		}	
-		options.addArguments("--headless");
 		options.addArguments("--remote-allow-origins=*");
 		this.driver = new ChromeDriver(options);
 	}
