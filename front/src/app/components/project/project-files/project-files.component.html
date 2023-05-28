@@ -42,6 +42,8 @@
     </div>
   </form>
 
+  <button mat-raised-button color="accent" (click)="getFile('analysis')" class="downloadButton" [disabled]="!isThereAnalysis()">Télécharger le document</button>
+
   <form class="inputFileForm" id="finalteamScopeForm"  [formGroup]="importFTSSform" (ngSubmit)="upload('finalTeamScopeStatement')">
     <label for="">Cahier des charges final :</label>
     <div class="sameRow">
