@@ -33,6 +33,10 @@ public class TafTest {
 	String password;
 
 	public void setupWebDriver() throws Exception{
+
+		WebDriverManager.chromedriver().setup();
+		ChromeOptions options = new ChromeOptions();
+
 		String appConfigPath = "src/test/resources/application.properties";
 		Properties properties = new Properties();
 		properties.load(new FileInputStream(appConfigPath));
@@ -45,7 +49,7 @@ public class TafTest {
 				mariaDBUrl="jdbc:mariadb://172.24.1.10:3306/ProjetGL";
 				username="webuser";
 				password="mNifUKDq10MPD3pP";
-
+				options.addArguments("--headless");
 				break;
 			case "local" :
 			case "@activatedProperties@" :
@@ -56,10 +60,8 @@ public class TafTest {
 				password="root";
 				break;
 		}	
-
-		WebDriverManager.chromedriver().setup();
-		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless");
+		options.addArguments("--remote-allow-origins=*");
 		this.driver = new ChromeDriver(options);
 	}
 

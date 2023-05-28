@@ -11,14 +11,15 @@ public class TeamsTest {
 	@BeforeEach
 	public void setup() throws Exception {
 		tafTest.setupWebDriver();
-		tafTest.runSqlScript("../../sql/tablesBdd.sql");
-		tafTest.runSqlScript("../../sql/populateTables.sql");
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		tafTest.runSqlScript("../sql/tablesBdd.sql");
+		tafTest.runSqlScript("../sql/populateTables.sql");
 	}
 
 	@AfterEach
 	public void cleanup() throws Exception {
 		tafTest.cleanupWebDriver();
-		tafTest.runSqlScript("../../sql/tablesBdd.sql");
+		tafTest.runSqlScript("../sql/tablesBdd.sql");
 	}
 
     @Test
