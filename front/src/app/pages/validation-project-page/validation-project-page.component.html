@@ -1,7 +1,17 @@
-<mat-card *ngIf="testBookLinkValidation">
-    <mat-card-title>Lien vers le cahier de test pour validation</mat-card-title>
+<div id="validationPage">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title *ngIf="validationTeam">{{validationTeam.name}}</mat-card-title>
+    </mat-card-header>
     <mat-card-content>
-      <a mat-button color="primary" [href]="testBookLinkValidation" target="_blank">{{ testBookLinkValidation }}</a>
+      <div class="sameRow">
+        <p>Cahier des charges finale :</p>
+        <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFinalStateScope()">Télécharger le document</button>
+      </div>
+      <div class="sameRow">
+        <p>Cahier de tests :</p>
+        <a mat-button color="primary" [href]="testBookLinkValidation" target="_blank">{{ testBookLinkValidation }}</a>
+      </div>
     </mat-card-content>
   </mat-card>
-  
+</div>
