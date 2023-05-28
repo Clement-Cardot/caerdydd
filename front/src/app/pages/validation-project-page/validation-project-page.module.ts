@@ -1,8 +1,10 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { BrowserModule } from '@angular/platform-browser';
 import { ValidationProjectPageComponent } from './validation-project-page.component';
+import { MaterialModule } from 'src/app/material.module';
+
+
 
 
 @NgModule({
@@ -11,8 +13,7 @@ import { ValidationProjectPageComponent } from './validation-project-page.compon
   ],
   imports: [
     CommonModule,
-    BrowserModule,
-    MatCardModule
+    MaterialModule
   ]
 })
 export class ValidationProjectPageModule { }
