@@ -19,6 +19,7 @@ export class ValidationProjectPageComponent implements OnInit {
   validationTeam!: Team;
   testBookLinkValidation!: string | null;
 
+
   constructor(
     private userDataService: UserDataService,
     private apiTeamService: ApiTeamService,
@@ -27,12 +28,14 @@ export class ValidationProjectPageComponent implements OnInit {
     private uploadFileService: ApiUploadFileService
   ) { }
 
+
   ngOnInit(): void {
     this.currentUser = this.userDataService.getCurrentUser().value;
     if (this.currentUser) {
       this.getTeamMember(this.currentUser.id);
     }
   }
+
 
   getTeamMember(userId: number) {
     this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
@@ -44,6 +47,7 @@ export class ValidationProjectPageComponent implements OnInit {
       }
     );
   }
+
 
   getTeam(teamId: number) {
     this.apiTeamService.getTeam(teamId).subscribe(
