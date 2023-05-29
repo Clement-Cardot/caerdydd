@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -84,6 +85,32 @@ public class ConsultingController {
                 case CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.CONFLICT);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }
+
+    @PostMapping("/replaceTeachingStaff")
+    public ResponseEntity<ConsultingDTO> replaceTeachingStaff(@RequestBody ConsultingDTO consultingDTO) {
+        logger.info("Process request : Replace teaching staff from consulting {}", consultingDTO.getIdConsulting());
+        try {
+            ConsultingDTO updateConsultingDTO = consultingService.replaceTeachingStaff(consultingDTO);
+            return new ResponseEntity<>(updateConsultingDTO, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.CONSULTING_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
+                case CustomRuntimeException.TEACHING_STAFF_IS_NOT_AVAILABLE:
+                case CustomRuntimeException.CONSULTING_IS_IN_PAST:                
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 case CustomRuntimeException.SERVICE_ERROR:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

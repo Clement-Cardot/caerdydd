@@ -16,6 +16,7 @@ public class CustomRuntimeException extends Exception{
     public static final String PRESENTATION_NOT_FOUND = "Presentation not found";
     public static final String PLANNED_TIMING_CONSULTING_NOT_FOUND = "Planned timing consulting not found";
     public static final String PLANNED_TIMING_AVAILABILITY_NOT_FOUND = "Planned timing availability not found";
+    public static final String CONSULTING_NOT_FOUND = "Consulting not found";
 
     // Already exist messages
     public static final String USER_ALREADY_EXISTS = "User already exist";
@@ -43,6 +44,8 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_IS_NOT_OWNER_OF_AVAILABILITY = "User is not owner of availability";
     public static final String PLANNED_TIMING_IS_IN_PAST = "Planned timing is in past";
     public static final String PLANNED_TIMING_IS_ALREADY_TAKEN = "Planned timing is already taken";
+    public static final String CONSULTING_IS_IN_PAST = "Consulting is in past";
+    public static final String TEACHING_STAFF_IS_NOT_AVAILABLE = "Teaching staff is not available";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";

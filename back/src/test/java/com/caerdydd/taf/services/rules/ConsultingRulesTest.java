@@ -11,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
@@ -122,28 +121,27 @@ public class ConsultingRulesTest {
     }
 
     @Test
-    void testCheckPlannedTimingIsNotAlreadyTaken_True() {
+    void testCheckTeachingStaffIsAvailable_True() {
         // Prepare Input
         PlannedTimingAvailabilityDTO plannedTimingAvailabilityDTO = new PlannedTimingAvailabilityDTO();
 
         // Call method to test
         try {
-            consultingRules.checkPlannedTimingIsNotAlreadyTaken(plannedTimingAvailabilityDTO);
+            consultingRules.checkTeachingStaffIsAvailable(plannedTimingAvailabilityDTO);
         } catch (CustomRuntimeException e) {
             fail(e);
         }
     }
 
     @Test
-    void testCheckPlannedTimingIsNotAlreadyTaken_False() {
+    void testCheckTeachingStaffIsAvailable_False() {
         // Prepare Input
-        ConsultingDTO consultingDTO = new ConsultingDTO();
         PlannedTimingAvailabilityDTO plannedTimingAvailabilityDTO = new PlannedTimingAvailabilityDTO();
-        plannedTimingAvailabilityDTO.setConsulting(consultingDTO);
+        plannedTimingAvailabilityDTO.setIsAvailable(false);
 
         // Call method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            consultingRules.checkPlannedTimingIsNotAlreadyTaken(plannedTimingAvailabilityDTO);
+            consultingRules.checkTeachingStaffIsAvailable(plannedTimingAvailabilityDTO);
         });
             
         // Verify the result
