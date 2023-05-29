@@ -16,6 +16,7 @@ public class CustomRuntimeException extends Exception{
     public static final String PRESENTATION_NOT_FOUND = "Presentation not found";
     public static final String PLANNED_TIMING_CONSULTING_NOT_FOUND = "Planned timing consulting not found";
     public static final String PLANNED_TIMING_AVAILABILITY_NOT_FOUND = "Planned timing availability not found";
+    public static final String CONSULTING_NOT_FOUND = "Consulting not found";
 
     // Already exist messages
     public static final String USER_ALREADY_EXISTS = "User already exist";
@@ -39,10 +40,13 @@ public class CustomRuntimeException extends Exception{
     public static final String TEAM_MEMBER_IMPOSSIBLE_TOTAL_MARK = "The total mark of the team member is under 0 or above 20";
     public static final String TEAM_MEMBER_INCORRECT_BONUS_PENALTY = "The bonus of the team member is under -4 or above 4";
     public static final String USER_ID_SHOULD_BE_NULL = "User id should be null";
-
-
-
-
+    public static final String USER_NOT_IN_ASSOCIATED_TEAM = "User is not associated in a team";
+    public static final String USER_NOT_IN_A_TEAM = "User is not in a team";
+    public static final String USER_IS_NOT_OWNER_OF_AVAILABILITY = "User is not owner of availability";
+    public static final String PLANNED_TIMING_IS_IN_PAST = "Planned timing is in past";
+    public static final String PLANNED_TIMING_IS_ALREADY_TAKEN = "Planned timing is already taken";
+    public static final String CONSULTING_IS_IN_PAST = "Consulting is in past";
+    public static final String TEACHING_STAFF_IS_NOT_AVAILABLE = "Teaching staff is not available";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
@@ -57,9 +61,7 @@ public class CustomRuntimeException extends Exception{
     public static final String JURY_NOT_FOUND = "Jury not found";
     public static final String JURY_ALREADY_EXISTS = "This jury already exists";
     public static final String TEACHING_STAFF_ARE_THE_SAME = "You cannot create a jury with only one teaching staff";
-    public static final String TEAM_MEMBER_INCORRECT_TEAM_MARK = "The team mark of the team member is under 0 or above 5";
-    public static final String TEAM_MEMBER_INCORRECT_INDIVIDUAL_MARK = "The individual mark of the team member is under 0 or above 10";
-    public static final String TEAM_MEMBER_INCORRECT_FINAL_MARK = "The final mark of the team member is under 0 or above 20";
+
 
     public CustomRuntimeException(String message) {
         super(message);
