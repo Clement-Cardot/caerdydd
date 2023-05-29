@@ -22,6 +22,7 @@ import { ApiProjectService } from './core/services/api-project.service';
 import { DevProjectModule } from './dev-project/dev-project.module';
 import { ErrorInterceptor } from './core/services/error.interceptor';
 import { ValidationProjectModule } from './validation-project/validation-project.module';
+import { ApiPresentationService } from './core/services/api-presentation.service';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ValidationProjectModule } from './validation-project/validation-project
     ApiTeamService,
     ApiUserService,
     ApiProjectService,
+    ApiPresentationService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide : LocationStrategy, useClass: HashLocationStrategy}
   ],

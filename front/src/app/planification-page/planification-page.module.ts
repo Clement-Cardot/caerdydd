@@ -10,13 +10,20 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { StudentImportComponent } from './student-import/student-import.component';
 import { JuryCreationComponent } from './jury-creation/jury-creation.component';
+import { CreatePresentationComponent } from './create-presentation/create-presentation.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+
+
 
 @NgModule({
   declarations: [
     PlanificationPageComponent,
     ConsultingImportComponent,
     StudentImportComponent,
-    JuryCreationComponent
+    JuryCreationComponent,
+    CreatePresentationComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +35,10 @@ import { JuryCreationComponent } from './jury-creation/jury-creation.component';
     FormsModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule
   ]
 })
 export class PlanificationPageModule { }

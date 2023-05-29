@@ -19,6 +19,8 @@ import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 import com.caerdydd.taf.services.rules.JuryServiceRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -125,6 +127,14 @@ public class JuryService {
         }
         return modelMapper.map(optionalJury.get(), JuryDTO.class);
     }
+
+    public List<JuryDTO> getAllJuries() {
+        List<JuryEntity> juryEntities = juryRepository.findAll();
+        return juryEntities.stream()
+                .map(juryEntity -> modelMapper.map(juryEntity, JuryDTO.class))
+                .collect(Collectors.toList());
+    }
+    
     
 
 
