@@ -32,6 +32,9 @@ public class PlannedTimingConsultingEntity implements Serializable {
     @OneToMany(mappedBy = "plannedTimingConsulting", cascade = CascadeType.ALL)
     private List<PlannedTimingAvailabilityEntity> teachingStaffAvailabilities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "plannedTimingConsulting", cascade = CascadeType.ALL)
+    private List<ConsultingEntity> consultings = new ArrayList<>();
+
     public PlannedTimingConsultingEntity() {
     }
 

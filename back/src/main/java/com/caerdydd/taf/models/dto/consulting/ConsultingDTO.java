@@ -19,6 +19,8 @@ public class ConsultingDTO {
 
     private PlannedTimingAvailabilityDTO plannedTimingAvailability;
 
+    private PlannedTimingConsultingDTO plannedTimingConsulting;
+
     private TeamDTO team;
 
     public ConsultingDTO() {

@@ -110,9 +110,11 @@ CREATE TABLE consulting (
     is_reserved BOOLEAN NOT NULL,
     id_team INT NOT NULL,
     id_planned_timing_availability INT NOT NULL,
+    id_planned_timing_consulting INT NOT NULL,
     PRIMARY KEY(id_consulting),
     FOREIGN KEY (id_team) REFERENCES team (id_team),
-    FOREIGN KEY (id_planned_timing_availability) REFERENCES planned_timing_availability (id_planned_timing_availability)
+    FOREIGN KEY (id_planned_timing_availability) REFERENCES planned_timing_availability (id_planned_timing_availability),
+    FOREIGN KEY (id_planned_timing_consulting) REFERENCES planned_timing_consulting (id_planned_timing_consulting)
 );
 
 CREATE TABLE team_member (
