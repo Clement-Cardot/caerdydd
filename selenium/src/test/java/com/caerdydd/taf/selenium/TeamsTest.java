@@ -10,22 +10,24 @@ public class TeamsTest {
 
 	@BeforeEach
 	public void setup() throws Exception {
+		System.out.println("setup");
 		tafTest.setupWebDriver();
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		tafTest.runSqlScript("../sql/tablesBdd.sql");
 		tafTest.runSqlScript("../sql/populateTables.sql");
 	}
 
 	@AfterEach
 	public void cleanup() throws Exception {
+		System.out.println("cleanup");
 		tafTest.cleanupWebDriver();
 		tafTest.runSqlScript("../sql/tablesBdd.sql");
+		tafTest.runSqlScript("../sql/populateTables.sql");
 	}
 
     @Test
 	public void testEquipes() throws Exception {
         tafTest.openConnexionPage();
-		tafTest.connexion("srousseau", "srousseau");
+		tafTest.connexion("rousseso", "rousseso");
 		tafTest.goToPage("Equipes");
 		tafTest.generateTeams(2);
 		tafTest.deconnexion();
