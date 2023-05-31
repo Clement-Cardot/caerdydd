@@ -45,7 +45,7 @@ public class TafTest {
 
 		switch(profil) {
 			case "dev":
-				websiteUrl="172.24.1.10:8080/taf/#";
+				websiteUrl="http://172.24.1.10:8080/taf/#";
 				mariaDBUrl="jdbc:mariadb://172.24.1.10:3306/ProjetGL";
 				username="webuser";
 				password="mNifUKDq10MPD3pP";
@@ -54,7 +54,7 @@ public class TafTest {
 			case "local" :
 			case "@activatedProperties@" :
 			default:
-				websiteUrl="localhost:4200/taf/#";
+				websiteUrl="http://localhost:4200/taf/#";
 				mariaDBUrl="jdbc:mariadb://localhost:3306/ProjetGL";
 				username="root";
 				password="root";
