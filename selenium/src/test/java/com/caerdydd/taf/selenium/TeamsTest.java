@@ -1,14 +1,14 @@
 package com.caerdydd.taf.selenium;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TeamsTest {
 
     TafTest tafTest = new TafTest();
 
-	@BeforeEach
+	@Before
 	public void setup() throws Exception {
 		System.out.println("setup");
 		tafTest.setupWebDriver();
@@ -16,7 +16,7 @@ public class TeamsTest {
 		tafTest.runSqlScript("../sql/populateTables.sql");
 	}
 
-	@AfterEach
+	@After
 	public void cleanup() throws Exception {
 		System.out.println("cleanup");
 		tafTest.cleanupWebDriver();

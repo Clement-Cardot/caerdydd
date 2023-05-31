@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.time.Duration;
 import java.util.Properties;
 
-import org.junit.jupiter.api.Assertions;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -22,6 +22,7 @@ import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.junit.Assert;
 
 public class TafTest {
     
@@ -58,7 +59,7 @@ public class TafTest {
 				password="root";
 				break;
 		}
-		options.addArguments("--headless=new");
+		//options.addArguments("--headless=new");
 		options.addArguments("--remote-allow-origins=*");
 		this.driver = new ChromeDriver(options);
 	}
@@ -73,7 +74,7 @@ public class TafTest {
 		driver.manage().window().setSize(new Dimension(1098, 875));
 		
 		//Assertions
-		Assertions.assertEquals("Login - Taf", driver.getTitle());
+		Assert.assertEquals("Login - Taf", driver.getTitle());
 	}
 
 	public void runSqlScript(String scriptName) throws SQLException, FileNotFoundException {
@@ -97,12 +98,14 @@ public class TafTest {
 		driver.findElement(By.id("inputPassword")).sendKeys(password);
 		// Click on the submit button
 		driver.findElement(By.cssSelector(".mdc-button__label")).submit();
+
+		
 		
 		new WebDriverWait(driver, Duration.ofSeconds(10))
 			.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")));
 
 		//Assertions
-		Assertions.assertEquals("Tableau de bord - Taf", driver.getTitle());
+		Assert.assertEquals("Tableau de bord - Taf", driver.getTitle());
   }
 
 	public void goToPage(String pageName) {
@@ -115,7 +118,7 @@ public class TafTest {
 		// Click on the page button
 		driver.findElement(By.linkText(pageName)).click();
 		//Assertions
-		Assertions.assertEquals(pageName+" - Taf", driver.getTitle());
+		Assert.assertEquals(pageName+" - Taf", driver.getTitle());
 	}
 
 	public void generateTeams(int teamPairsNumber) throws InterruptedException {
@@ -131,7 +134,7 @@ public class TafTest {
 		// Click on the "Générer des équipes" button
 		driver.findElement(By.cssSelector("#buttonCreateTeam > .mdc-button__label")).click();
 		//Assertions
-		Assertions.assertTrue(driver.findElement(By.cssSelector(".mat-mdc-snack-bar-action > .mdc-button__label")).isDisplayed());
+		Assert.assertTrue(driver.findElement(By.cssSelector(".mat-mdc-snack-bar-action > .mdc-button__label")).isDisplayed());
 	}
 
 	public void deconnexion() {
@@ -142,12 +145,12 @@ public class TafTest {
 		// Click on the "Déconnexion" button
 		driver.findElement(By.cssSelector(".mdc-button__label")).click();
 		//Assertions
-		Assertions.assertEquals("Login - Taf", driver.getTitle());
+		Assert.assertEquals("Login - Taf", driver.getTitle());
 	}
 
 	public void applyInATeam(int teamId) {
 		driver.findElement(By.id("buttonJoinTeam"+teamId)).click();
-		Assertions.assertTrue(driver.findElement(By.cssSelector(".mat-mdc-cell:nth-child(2)")).isDisplayed());
+		Assert.assertTrue(driver.findElement(By.cssSelector(".mat-mdc-cell:nth-child(2)")).isDisplayed());
 		
 	}
 
