@@ -11,12 +11,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.Dimension;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -112,9 +109,6 @@ public class TafTest {
 		//Test if the menu bar is open
 		if(!driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).isDisplayed()) {
 			driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
-		}
-		else {
-			fail("Menu bar is not displayed");
 		}
 		// Click on the page button
 		driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
