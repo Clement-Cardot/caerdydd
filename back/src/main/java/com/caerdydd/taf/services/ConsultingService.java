@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
@@ -181,5 +183,30 @@ public class ConsultingService {
         plannedTimingAvailability.setIsAvailable(plannedTimingAvailabilityDTO.getIsAvailable());
         return savePlannedTimingAvailability(plannedTimingAvailability);
     }
-        
+
+
+    // Create a consulting
+    public ConsultingDTO createConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {
+        ConsultingEntity consultingEntity = modelMapper.map(consultingDTO, ConsultingEntity.class);
+
+        // Verify that user is a Team Member
+        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+
+        // Verify that the demand is made on time
+        logger.info("ConsultingDTO1: {}", consultingDTO.toString());
+        logger.info("ConsultingDTO2: {}", consultingDTO.getPlannedTimingAvailability().toString());
+        logger.info("ConsultingDTO3: {}", consultingDTO.getPlannedTimingAvailability().getPlannedTimingConsulting().toString());
+        logger.info("ConsultingDTO4: {}", consultingDTO.getPlannedTimingAvailability().getPlannedTimingConsulting().getDatetimeEnd().toString());
+        logger.info("ConsultingDTO5: {}", consultingDTO.getPlannedTimingAvailability().getPlannedTimingConsulting().getDatetimeEnd().minusDays(2).toString());
+        consultingRules.checkDemandIsMadeOnTime(consultingDTO);
+
+        ConsultingEntity response = null;
+        try {
+            response = consultingRepository.save(consultingEntity);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+
+        return modelMapper.map(response, ConsultingDTO.class);
+    }
 }
