@@ -176,7 +176,7 @@ selenium-test:
   image: srv-proxy.openstack.etudis.eseo.fr:1973/markhobson/maven-chrome:jdk-11
   script:
     - cd selenium
-    - mvn $MAVEN_CLI_OPTS test -P dev
+    - mvn $MAVEN_CLI_OPTS clean verify -P dev
   artifacts:
     reports:
       junit: selenium/target/surefire-reports/TEST*.xml

@@ -16,6 +16,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.Dimension;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,14 +29,14 @@ import org.apache.ibatis.jdbc.ScriptRunner;
 public class TafTest {
     
     WebDriver driver;
-	String websiteUrl;
-	String mariaDBUrl;
-	String username;
-	String password;
+	String websiteUrl="http://localhost:4200/taf/#";
+	String mariaDBUrl="jdbc:mariadb://localhost:3306/ProjetGL";
+	String username="root";
+	String password="root";
 
 	public void setupWebDriver() throws Exception{
 
-		WebDriverManager.chromedriver().setup();
+		// WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
 
 		String appConfigPath = "src/test/resources/application.properties";
@@ -49,7 +51,6 @@ public class TafTest {
 				mariaDBUrl="jdbc:mariadb://172.24.1.10:3306/ProjetGL";
 				username="webuser";
 				password="mNifUKDq10MPD3pP";
-				options.addArguments("--headless");
 				break;
 			case "local" :
 			case "@activatedProperties@" :
@@ -59,7 +60,8 @@ public class TafTest {
 				username="root";
 				password="root";
 				break;
-		}	
+		}
+		options.addArguments("--headless=new");
 		options.addArguments("--remote-allow-origins=*");
 		this.driver = new ChromeDriver(options);
 	}
@@ -103,13 +105,16 @@ public class TafTest {
 			.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")));
 
 		//Assertions
-		Assertions.assertEquals("Dashboard - Taf", driver.getTitle());
+		Assertions.assertEquals("Tableau de bord - Taf", driver.getTitle());
   }
 
 	public void goToPage(String pageName) {
 		//Test if the menu bar is open
 		if(!driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).isDisplayed()) {
 			driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
+		}
+		else {
+			fail("Menu bar is not displayed");
 		}
 		// Click on the page button
 		driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
