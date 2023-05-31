@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -93,5 +94,32 @@ public class ConsultingController {
             }
         }
     }
-    
+
+    @PutMapping("/createConsulting")
+    public ResponseEntity<ConsultingDTO> createConsulting(@RequestBody ConsultingDTO consultingDTO) {
+        logger.info("Process request : Create consulting");
+        try {
+            ConsultingDTO newConsulting = consultingService.createConsulting(consultingDTO);
+            return new ResponseEntity<>(newConsulting, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.USER_IS_NOT_A_TEAM_MEMBER:
+                case CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST:                
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }
 }
