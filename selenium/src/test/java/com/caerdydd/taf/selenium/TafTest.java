@@ -1,9 +1,7 @@
 package com.caerdydd.taf.selenium;
 
-import java.io.FileInputStream;
 import java.sql.DriverManager;
 import java.time.Duration;
-import java.util.Properties;
 
 
 import org.openqa.selenium.By;
@@ -37,19 +35,24 @@ public class TafTest {
 		// WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
 
-		String appConfigPath = "src/test/resources/application.properties";
-		Properties properties = new Properties();
-		properties.load(new FileInputStream(appConfigPath));
+		String profil = "dev";
 
-		String profil = properties.getProperty("activeProfile");
+		System.out.println("PROFIL SELECTIONNE : "+ profil);
 
 		switch(profil) {
+			/*
+			* PROFIL SERVEUR TOMCAT DEV
+			*/
 			case "dev":
 				websiteUrl="http://172.24.1.10:8080/taf/#";
 				mariaDBUrl="jdbc:mariadb://172.24.1.10:3306/ProjetGL";
-				username="webuser";
-				password="mNifUKDq10MPD3pP";
+				username="devuser";
+				password="WAl_UPpmE27V4ixh";
 				break;
+
+			/*
+			* PROFIL SERVEUR TOMCAT LOCAL
+			*/
 			case "local" :
 			case "@activatedProperties@" :
 			default:
@@ -59,7 +62,7 @@ public class TafTest {
 				password="root";
 				break;
 		}
-		//options.addArguments("--headless=new");
+		options.addArguments("--headless=new");
 		options.addArguments("--remote-allow-origins=*");
 		this.driver = new ChromeDriver(options);
 	}

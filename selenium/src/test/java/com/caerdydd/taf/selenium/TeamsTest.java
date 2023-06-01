@@ -10,7 +10,6 @@ public class TeamsTest {
 
 	@Before
 	public void setup() throws Exception {
-		System.out.println("setup");
 		tafTest.setupWebDriver();
 		tafTest.runSqlScript("../sql/tablesBdd.sql");
 		tafTest.runSqlScript("../sql/populateTables.sql");
@@ -18,7 +17,6 @@ public class TeamsTest {
 
 	@After
 	public void cleanup() throws Exception {
-		System.out.println("cleanup");
 		tafTest.cleanupWebDriver();
 		tafTest.runSqlScript("../sql/tablesBdd.sql");
 		tafTest.runSqlScript("../sql/populateTables.sql");
