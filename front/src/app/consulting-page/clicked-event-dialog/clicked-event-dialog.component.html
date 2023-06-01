@@ -10,7 +10,7 @@
                 <form>
                     <mat-card-title>Professeurs disponibles :</mat-card-title>
                     <mat-card-subtitle *ngFor="let availability of data.event.availabilities">
-                        <p *ngIf="availability.isAvailable">    {{availability.teachingStaff.user.firstname}} {{availability.teachingStaff.user.lastname}}</p>
+                        <p *ngIf="availability.isAvailable"> {{availability.teachingStaff.user.firstname}} {{availability.teachingStaff.user.lastname}}</p>
                     </mat-card-subtitle>
                     <mat-card-title>Demander un consulting :</mat-card-title>
                     <mat-radio-group>

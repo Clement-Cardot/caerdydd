@@ -28,12 +28,14 @@ mat-card-actions {
     mat-card-subtitle {
         font-size: 1rem;
         font-weight: 400;
-        margin-bottom: 10px;
         padding-left: 10px;
     }
     form {
         display: flex;
         flex-direction: column;
+    }
+    p {
+        margin-bottom: 10px;
     }
 }
 
