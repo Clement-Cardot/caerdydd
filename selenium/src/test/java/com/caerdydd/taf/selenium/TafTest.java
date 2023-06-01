@@ -32,9 +32,9 @@ public class TafTest {
 
 	public void setupWebDriver() throws Exception{
 
-		// WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
 
+		// Pour debug sur votre serveur local, mettez "local" à la place de "dev" ci dessous
 		String profil = "dev";
 
 		System.out.println("PROFIL SELECTIONNE : "+ profil);
@@ -48,21 +48,22 @@ public class TafTest {
 				mariaDBUrl="jdbc:mariadb://172.24.1.10:3306/ProjetGL";
 				username="devuser";
 				password="WAl_UPpmE27V4ixh";
+				options.addArguments("--headless=new");
 				break;
 
 			/*
 			* PROFIL SERVEUR TOMCAT LOCAL
 			*/
 			case "local" :
-			case "@activatedProperties@" :
 			default:
 				websiteUrl="http://localhost:4200/taf/#";
 				mariaDBUrl="jdbc:mariadb://localhost:3306/ProjetGL";
 				username="root";
 				password="root";
+				// options.addArguments("--headless=new"); // Décommanter pour actver le headless en local
 				break;
 		}
-		options.addArguments("--headless=new");
+		
 		options.addArguments("--remote-allow-origins=*");
 		this.driver = new ChromeDriver(options);
 	}
