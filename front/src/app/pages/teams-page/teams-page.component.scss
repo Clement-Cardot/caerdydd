@@ -1,0 +1,20 @@
+app-team-list {
+    margin: 5px;
+    display: grid;
+    justify-items: center;
+    align-content: start;
+}
+
+#generateTeamsButton {
+    padding: 20px;
+    font-weight: 500;
+    font-size: 20px;
+    border-radius: 20px;
+}
+
+#generateTeams {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}

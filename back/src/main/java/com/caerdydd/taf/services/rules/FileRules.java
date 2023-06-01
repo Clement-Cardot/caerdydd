@@ -26,5 +26,18 @@ public class FileRules {
         }
         
     }
+
+    public void checkFileIsPDF(MultipartFile file) throws CustomRuntimeException {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        try {
+            if (!fileName.endsWith(".pdf")){
+                throw new CustomRuntimeException(CustomRuntimeException.INCORRECT_FILE_FORMAT);
+            }
+        } catch (NullPointerException e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+        
+    }
     
 }

@@ -73,5 +73,30 @@ public class FileRulesTest {
         assertEquals(CustomRuntimeException.INCORRECT_FILE_FORMAT, exception.getMessage());
     }
 
-    
+    @Test
+    void checkFileIsPDF_FileIsPDF() {
+        // Create a empty file
+        MultipartFile file = new MockMultipartFile("file", "file.pdf", "text/plain", "some test".getBytes());
+
+        // Call method to test
+        try {
+            fileRules.checkFileIsPDF(file);
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void checkFileIsPDF_FileIsNotPDF() {
+        // Create a empty file
+        MultipartFile file = new MockMultipartFile("file", "file.txt", "text/plain", "some xml".getBytes());
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            fileRules.checkFileIsPDF(file);
+        });
+        
+        // Verify the result
+        assertEquals(CustomRuntimeException.INCORRECT_FILE_FORMAT, exception.getMessage());
+    }
 }
