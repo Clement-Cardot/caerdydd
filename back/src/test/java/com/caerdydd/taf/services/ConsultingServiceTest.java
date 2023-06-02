@@ -65,7 +65,6 @@ public class ConsultingServiceTest {
 
     @Mock
     private PlannedTimingAvailabilityRepository plannedTimingAvailabilityRepository;
-
     @Mock
     private ConsultingRepository consultingRepository;
 
