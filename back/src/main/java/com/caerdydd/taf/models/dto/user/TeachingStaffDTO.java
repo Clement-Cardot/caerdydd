@@ -30,20 +30,6 @@ public class TeachingStaffDTO {
     private Boolean isOptionLeader = false;
     private Boolean isSubjectValidator = false;
 
-    @JsonIgnore
-    private List<JuryDTO> juries1;
-
-    @JsonIgnore
-    private List<JuryDTO> juries2;
-
-    @JsonGetter("juries")
-    private List<JuryDTO> juries(){
-        List<JuryDTO> juries = new ArrayList<>();
-        juries.addAll(juries1);
-        juries.addAll(juries2);
-        return juries;
-    }
-
     public TeachingStaffDTO() {
     }
 
