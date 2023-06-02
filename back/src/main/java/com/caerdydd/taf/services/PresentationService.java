@@ -1,5 +1,6 @@
 package com.caerdydd.taf.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,7 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.project.PresentationDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
+import com.caerdydd.taf.models.entities.project.ProjectEntity;
+import com.caerdydd.taf.models.entities.project.TeamEntity;
+import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 import com.caerdydd.taf.repositories.PresentationRepository;
+import com.caerdydd.taf.repositories.TeachingStaffRepository;
+import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.PresentationServiceRule;
 import com.caerdydd.taf.services.rules.UserServiceRules;
@@ -29,6 +35,10 @@ public class PresentationService {
 
     @Autowired
     private PresentationServiceRule presentationServiceRule;
+
+    @Autowired
+    private TeamRepository teamRepository;
+
 
 
     @Autowired
@@ -82,6 +92,39 @@ public class PresentationService {
         // Save Presentation (Convert the saved PresentationEntity back to PresentationDTO)
         return savePresentation(presentation);
     }
+
+    public List<PresentationDTO> getTeamPresentations(Integer teamId) throws CustomRuntimeException {
+        TeamEntity team = teamRepository.findById(teamId).orElseThrow(() -> new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+        ProjectEntity projectDev = team.getProjectDev();
+        ProjectEntity projectValidation = team.getProjectValidation();
+    
+        List<PresentationEntity> presentations = new ArrayList<>();
+        presentations.addAll(presentationRepository.findByProject(projectDev));
+        presentations.addAll(presentationRepository.findByProject(projectValidation));
+    
+        try {
+            return presentations.stream()
+                    .map(presentation -> modelMapper.map(presentation, PresentationDTO.class))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
+
+    public List<PresentationDTO> getTeachingStaffPresentations(Integer staffId) throws CustomRuntimeException {
+        List<PresentationEntity> presentations = presentationRepository.findByTeachingStaff(staffId);
+    
+        try {
+            return presentations.stream()
+                    .map(presentation -> modelMapper.map(presentation, PresentationDTO.class))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
+    
+    
+    
 
     
     
