@@ -87,17 +87,15 @@ export class MarksComponent {
 				console.log("Individual mark saved for user:", teamMember.user.id);
 			}
 		} 
-			if(this.team.teamWorkMark != null) 
-			{
-		  await this.apiTeamService.setTeamWorkMarkTeam(this.team.idTeam, this.team.teamWorkMark).toPromise();
-		  console.log("Team work mark saved!");
-			}
-
-			if(this.team.teamValidationMark != null)
-			{
-		  await this.apiTeamService.setTeamValidationMarkTeam(this.team.idTeam, this.team.teamValidationMark).toPromise();
-		  console.log("Validation mark saved!");
-			}
+		if (this.team.teamWorkMark !== null) {
+			await this.apiTeamService.setTeamMarks(this.team.idTeam, this.team.teamWorkMark, this.team.teamValidationMark).toPromise();
+			console.log("Team work mark saved!");
+		  }
+		  
+		  if (this.team.teamValidationMark !== null) {
+			await this.apiTeamService.setTeamMarks(this.team.idTeam, this.team.teamWorkMark, this.team.teamValidationMark).toPromise();
+			console.log("Validation mark saved!");
+		  }
 
 		  console.log("Marks saved!");
 		} catch (error) {

@@ -63,32 +63,15 @@ export class ApiTeamService {
     );
   }
 
-    setTeamWorkMarkTeam(teamId: number, teamWorkmark: number): Observable<Team> {
-        const url = `${this.baseUrl}/teamWorkMark`;
-        const formData: FormData = new FormData();
-        formData.append('teamId', teamId.toString());
-        formData.append('teamWorkMark', teamWorkmark.toString());
-        return this.http.post(url, formData)
-        .pipe(
-            map((data: any) => this.teamAdapter.adapt(data))
-        )
-        .pipe(
-            catchError(this.handleError)
-        );
-    }
-
-  setTeamValidationMarkTeam(teamId: number, teamValidationMark: number): Observable<Team> {
-      const url = `${this.baseUrl}/teamValidationMark`;
-      const formData: FormData = new FormData();
-      formData.append('teamId', teamId.toString());
-      formData.append('teamValidationMark', teamValidationMark.toString());
-      return this.http.post(url, formData)
-      .pipe(
-          map((data: any) => this.teamAdapter.adapt(data))
-      )
-      .pipe(
-          catchError(this.handleError)
-      );
+  addTestBookLink(team: Team): Observable<Team> {
+    const url = `${this.baseUrl}/testBookLink`;
+    return this.http.put<Team>(url, team)
+    .pipe( 
+      map((data: any) => this.teamAdapter.adapt(data))
+    )
+    .pipe(
+      catchError(this.handleError)
+    );
   }
 
   getTestBookLinkDev(teamId: number): Observable<string> {
@@ -107,31 +90,17 @@ export class ApiTeamService {
       );
   }
 
-  setTeamWorkMarkTeam(teamId: number, teamWorkmark: number): Observable<Team> {
-    const url = `${this.baseUrl}/teamWorkMark`;
+    setTeamMarks(teamId: number, teamWorkmark: number, teamValidationMark: number): Observable<Team> {
+    const url = `${this.baseUrl}/teamMarks`;
     const formData: FormData = new FormData();
     formData.append('teamId', teamId.toString());
     formData.append('teamWorkMark', teamWorkmark.toString());
+    formData.append('teamValidationMark', teamValidationMark.toString());
+    
     return this.http.post(url, formData)
-    .pipe(
-        map((data: any) => this.teamAdapter.adapt(data))
-    )
-    .pipe(
+      .pipe(
+        map((data: any) => this.teamAdapter.adapt(data)),
         catchError(this.handleError)
-    );
-  }
-
-  setTeamValidationMarkTeam(teamId: number, teamValidationMark: number): Observable<Team> {
-      const url = `${this.baseUrl}/teamValidationMark`;
-      const formData: FormData = new FormData();
-      formData.append('teamId', teamId.toString());
-      formData.append('teamValidationMark', teamValidationMark.toString());
-      return this.http.post(url, formData)
-      .pipe(
-          map((data: any) => this.teamAdapter.adapt(data))
-      )
-      .pipe(
-          catchError(this.handleError)
       );
   }
 
