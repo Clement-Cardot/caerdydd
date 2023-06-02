@@ -2,6 +2,7 @@ package com.caerdydd.taf.models.entities.user;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -23,6 +24,9 @@ public class TeamMemberEntity implements Serializable {
 
     @Id
     private Integer idUser;
+
+    @Column(name = "id_team", insertable = false, updatable = false)
+    private Integer idTeam;
     private Integer individualMark;
     private Integer bonusPenalty;
 
@@ -42,6 +46,7 @@ public class TeamMemberEntity implements Serializable {
         this.user = user;
         this.team = team;
         this.idUser = user.getId();
+        this.idTeam = team.getIdTeam();
     }
 
     @Override

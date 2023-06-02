@@ -1,5 +1,7 @@
 package com.caerdydd.taf.controllers;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,52 @@ public class PresentationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/team/{teamId}")
+    public ResponseEntity<List<PresentationDTO>> getTeamPresentations(@PathVariable("teamId") Integer teamId) {
+        try {
+            List<PresentationDTO> presentations = presentationService.getTeamPresentations(teamId);
+            return new ResponseEntity<>(presentations, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/teachingStaff/{staffId}")
+    public ResponseEntity<List<PresentationDTO>> getTeachingStaffPresentations(@PathVariable Integer staffId) {
+        try {
+            List<PresentationDTO> presentations = presentationService.getTeachingStaffPresentations(staffId);
+            return ResponseEntity.ok(presentations);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PresentationDTO>> listAllPresentations() {
+        logger.info("Process request : List all presentations");
+        try {
+            List<PresentationDTO> presentations = presentationService.listAllPresentations();
+            return new ResponseEntity<>(presentations, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
 }

@@ -10,10 +10,12 @@ mat-card-header {
 form {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
 }
 
 button {
     margin-bottom: 24px;
-    margin-left: 24px;
+    margin-left: 0px;
+    align-self: center;
 }
