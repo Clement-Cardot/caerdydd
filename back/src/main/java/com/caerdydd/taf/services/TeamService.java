@@ -169,12 +169,22 @@ public class TeamService {
     }
 
 
-    public TeamDTO addTestBookLink(Integer idTeam, String testBookLink) throws CustomRuntimeException {
-        TeamDTO teamDTO = getTeamById(idTeam);
-        TeamEntity teamEntity = modelMapper.map(teamDTO, TeamEntity.class); // Convertissez TeamDTO en TeamEntity
-        teamEntity.setTestBookLink(testBookLink);
-        teamRepository.save(teamEntity); // Enregistrez l'entité TeamEntity
-        return modelMapper.map(teamEntity, TeamDTO.class); // Convertissez l'entité TeamEntity mise à jour en TeamDTO et retournez-la
+    public TeamDTO addTestBookLink(TeamDTO team) throws CustomRuntimeException {
+
+        // Check if the Team exists
+        TeamDTO teamDTO = getTeamById(team.getIdTeam());
+
+        // Check if the user is a team member
+        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+
+        // Check if the user is a member of the team
+        teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
+
+        // Check if Link is valid
+        teamServiceRules.isValidLink(team.getTestBookLink());
+        
+        teamDTO.setTestBookLink(team.getTestBookLink());
+        return saveTeam(teamDTO);
     }
     
 

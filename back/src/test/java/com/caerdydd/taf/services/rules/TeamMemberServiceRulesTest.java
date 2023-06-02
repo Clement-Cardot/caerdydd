@@ -20,7 +20,7 @@ public class TeamMemberServiceRulesTest {
     private TeamMemberServiceRules teamMemberServiceRules;
 
     @Test
-    public void checkTeamMemberBonusValue_IncorrectValue(){
+    void checkTeamMemberBonusValue_IncorrectValue(){
         int bonusToAdd = 5;
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
             teamMemberServiceRules.checkTeamMemberBonusValue(bonusToAdd);
@@ -31,7 +31,7 @@ public class TeamMemberServiceRulesTest {
     }
 
     @Test
-    public void checkTeamMemberTotalMark_ImpossibleMark(){
+    void checkTeamMemberTotalMark_ImpossibleMark(){
         UserDTO user = new UserDTO();
         TeamDTO team = new TeamDTO();
         team.setTeamValidationMark(5);

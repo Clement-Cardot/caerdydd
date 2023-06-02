@@ -1,6 +1,8 @@
 package com.caerdydd.taf.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
 
@@ -29,7 +32,7 @@ public class TeachingStaffControllerTest {
     private TeachingStaffService teachingStaffService;
 
     @Test
-    public void testList_Nominal() throws CustomRuntimeException{
+    void testList_Nominal() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         List<TeachingStaffDTO> mockedAnswer = new ArrayList<TeachingStaffDTO>();
 
@@ -40,7 +43,7 @@ public class TeachingStaffControllerTest {
         ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
         
         // Call the method to test
-        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.list();
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
 
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());
@@ -48,7 +51,7 @@ public class TeachingStaffControllerTest {
     }
 
     @Test
-    public void testList_Empty() throws CustomRuntimeException{
+    void testList_Empty() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         List<TeachingStaffDTO> mockedAnswer = new ArrayList<TeachingStaffDTO>();
         when(teachingStaffService.listAllTeachingStaff()).thenReturn(mockedAnswer);
@@ -57,7 +60,7 @@ public class TeachingStaffControllerTest {
         ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
         
         // Call the method to test
-        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.list();
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
 
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());
@@ -65,7 +68,7 @@ public class TeachingStaffControllerTest {
     }
 
     @Test
-    public void testList_ServiceError() throws CustomRuntimeException{
+    void testList_ServiceError() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         when(teachingStaffService.listAllTeachingStaff()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
@@ -73,7 +76,7 @@ public class TeachingStaffControllerTest {
         ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         
         // Call the method to test
-        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.list();
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
 
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());
@@ -81,7 +84,7 @@ public class TeachingStaffControllerTest {
     }
 
     @Test
-    public void testList_UnexpectedError() throws CustomRuntimeException{
+    void testList_UnexpectedError() throws CustomRuntimeException{
         // Mock userService.listAllUsers() method
         when(teachingStaffService.listAllTeachingStaff()).thenThrow(new CustomRuntimeException("Unexpected error"));
 
@@ -89,10 +92,227 @@ public class TeachingStaffControllerTest {
         ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         
         // Call the method to test
-        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.list();
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.    getAllTeachingStaff();
 
         // Check the result
         assertEquals(expectedAnswer.toString(), result.toString());
         verify(teachingStaffService, times(1)).listAllTeachingStaff();
+    }
+
+    @Test
+    public void testGetAllTeachingStaff_Nominal() throws CustomRuntimeException {
+        // Mock teachingStaffService.listAllTeachingStaff() method
+        List<TeachingStaffDTO> mockedAnswer = new ArrayList<>();
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+        UserDTO user2 = new UserDTO(2, "firstName2", "lastName2", "login2", "password2", "email2", null);
+
+        mockedAnswer.add(new TeachingStaffDTO(user1));
+        mockedAnswer.add(new TeachingStaffDTO(user2));
+        when(teachingStaffService.listAllTeachingStaff()).thenReturn(mockedAnswer);
+
+        // Define the expected response
+        ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).listAllTeachingStaff();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    public void testGetAllTeachingStaff_Empty() throws CustomRuntimeException {
+        // Mock teachingStaffService.listAllTeachingStaff() method
+        List<TeachingStaffDTO> mockedAnswer = new ArrayList<>();
+        when(teachingStaffService.listAllTeachingStaff()).thenReturn(mockedAnswer);
+    
+        // Define the expected response
+        ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+    
+        // Call the method to test
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
+    
+        // Verify the result
+        verify(teachingStaffService, times(1)).listAllTeachingStaff();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    public void testGetAllTeachingStaff_ServiceError() throws CustomRuntimeException {
+        // Mock teachingStaffService.listAllTeachingStaff() method
+        when(teachingStaffService.listAllTeachingStaff()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Define the expected response
+        ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // Call the method to test
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).listAllTeachingStaff();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    public void testGetAllTeachingStaff_UnexpectedError() throws CustomRuntimeException {
+        // Mock teachingStaffService.listAllTeachingStaff() method
+        when(teachingStaffService.listAllTeachingStaff()).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Define the expected response
+        ResponseEntity<List<TeachingStaffDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Call the method to test
+        ResponseEntity<List<TeachingStaffDTO>> result = teachingStaffController.getAllTeachingStaff();
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).listAllTeachingStaff();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTeachingStaffById_Nominal() throws CustomRuntimeException {
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+
+        // Mock teachingStaffService.getTeachingStaffById() method
+        TeachingStaffDTO mockedAnswer = new TeachingStaffDTO(user1);
+        when(teachingStaffService.getTeachingStaffById(1)).thenReturn(mockedAnswer);
+
+        // Define the expected response
+        ResponseEntity<TeachingStaffDTO> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.getTeachingStaffById(1);
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).getTeachingStaffById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTeachingStaffById_TeachingStaffNotFound() throws CustomRuntimeException {
+        // Mock teachingStaffService.getTeachingStaffById() method
+        when(teachingStaffService.getTeachingStaffById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
+
+        // Define the expected response
+        ResponseEntity<TeachingStaffDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.getTeachingStaffById(1);
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).getTeachingStaffById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTeachingStaffById_ServiceError() throws CustomRuntimeException {
+        // Mock teachingStaffService.getTeachingStaffById() method
+        when(teachingStaffService.getTeachingStaffById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Define the expected response
+        ResponseEntity<TeachingStaffDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.getTeachingStaffById(1);
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).getTeachingStaffById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testGetTeachingStaffById_UnexpectedError() throws CustomRuntimeException {
+        // Mock teachingStaffService.getTeachingStaffById() method
+        when(teachingStaffService.getTeachingStaffById(1)).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Define the expected response
+        ResponseEntity<TeachingStaffDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.getTeachingStaffById(1);
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).getTeachingStaffById(anyInt());
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testSubmitSpeciality_Nominal() throws CustomRuntimeException {
+        // Mock teachingStaffService.updateTeachingStaff() method
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+
+        TeachingStaffDTO mockedAnswer = new TeachingStaffDTO(user1);
+        when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenReturn(mockedAnswer);
+        
+        // Define the expected answer
+        ResponseEntity<TeachingStaffDTO> expectedAnswer = new ResponseEntity<>(mockedAnswer, HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.submitSpeciality(mockedAnswer);
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).updateTeachingStaff(any(TeachingStaffDTO.class));
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    @Test
+    void testSubmitSpeciality_CurrentUserIsNotRequestUser() throws CustomRuntimeException {
+        // Mock teachingStaffService.updateTeachingStaff() method
+        when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER));
+
+        // Create a sample TeachingStaffDTO object for the request body
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+
+        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO(user1);
+        // Set the necessary properties of the requestTeachingStaffDTO object
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.submitSpeciality(requestTeachingStaffDTO);
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).updateTeachingStaff(any(TeachingStaffDTO.class));
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
+    @Test
+    void testSubmitSpeciality_TeachingStaffNotFound() throws CustomRuntimeException {
+        // Mock teachingStaffService.updateTeachingStaff() method
+        when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
+
+        // Create a sample TeachingStaffDTO object for the request body
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+
+        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO(user1);
+        // Set the necessary properties of the requestTeachingStaffDTO object
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.submitSpeciality(requestTeachingStaffDTO);
+
+        // Verify the result
+        verify(teachingStaffService, times(1)).updateTeachingStaff(any(TeachingStaffDTO.class));
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
+
+    @Test
+    public void testSubmitSpeciality_UnexpectedError() throws CustomRuntimeException {
+        // Mock teachingStaffService.updateTeachingStaff() method
+        when(teachingStaffService.updateTeachingStaff(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
+
+        // Create a sample TeachingStaffDTO object for the request body
+        UserDTO user1 = new UserDTO(1, "firstName1", "lastName1", "login1", "password1", "email1", "LD");
+
+        TeachingStaffDTO requestTeachingStaffDTO = new TeachingStaffDTO(user1);
+        // Set the necessary properties of the requestTeachingStaffDTO object
+
+        // Define the expected answer
+        ResponseEntity<TeachingStaffDTO> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = teachingStaffController.submitSpeciality(requestTeachingStaffDTO);
+
+        // Check the result
+        assertEquals(expectedAnswer.toString(), result.toString());
+        verify(teachingStaffService, times(1)).updateTeachingStaff(any(TeachingStaffDTO.class));
     }
 }

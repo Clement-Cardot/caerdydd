@@ -1,5 +1,6 @@
 package com.caerdydd.taf.services;
 
+import java.util.Optional;
 
 import java.util.Optional;
 
@@ -31,17 +32,20 @@ public class JuryService {
     @Autowired 
     private TeachingStaffService teachingStaffService;
 
+    @Autowired 
+    private RoleService roleService;
+
     @Autowired
     private JuryServiceRules juryServiceRules;
+
+    @Autowired
+    private UserServiceRules userServiceRules;
 
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     SecurityConfig securityConfig;
-
-    @Autowired
-    UserServiceRules userServiceRules;
 
     public JuryDTO findJuryByTs1AndTs2(TeachingStaffDTO ts1DTO, TeachingStaffDTO ts2DTO) throws CustomRuntimeException {
 
@@ -63,7 +67,6 @@ public class JuryService {
         if(optionalJury1.isPresent()){
             return modelMapper.map(optionalJury1.get(), JuryDTO.class);
         }
-
         return modelMapper.map(optionalJury2.get(), JuryDTO.class);
         
     }
@@ -84,32 +87,23 @@ public class JuryService {
         
     }
     
-    public JuryDTO addJuryMembers(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
+    public JuryDTO addJury(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
         userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
 
-        // TODO CHECK SPECIALITY
 
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
         checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
 
-        TeachingStaffDTO ts1 = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
-        TeachingStaffDTO ts2 = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
+        TeachingStaffDTO juryMemberDev = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
+        TeachingStaffDTO juryMemberArchi = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
 
-        JuryDTO juryDTO = new JuryDTO(ts1, ts2);
+        JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
         return updateJury(juryDTO);
     }
 
     public JuryDTO updateJury(JuryDTO juryDTO) throws CustomRuntimeException {
         JuryEntity juryEntity = modelMapper.map(juryDTO, JuryEntity.class);
         
-        // TODO verifier que un user est LD et l'autre CSS -> userRules
-        // TODO verifier que le jury n'existe pas deja -> juryRules
-        /* TODO verifier les 2 users 
-        Optional<TeamMemberEntity> optionalUser = juryRepository.findById(teamMemberEntity.getIdUser());
-        if (optionalUser.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
-        }*/
-
         JuryEntity response = null;
         try {
             response = juryRepository.save(juryEntity);

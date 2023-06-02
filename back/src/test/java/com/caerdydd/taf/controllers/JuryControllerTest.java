@@ -24,12 +24,12 @@ public class JuryControllerTest {
     private JuryService juryService;
 
     @Test
-    public void testCreateJury_nominal() throws CustomRuntimeException {
+    void testCreateJury_nominal() throws CustomRuntimeException {
         // Given
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
         JuryDTO juryDTO = new JuryDTO();
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenReturn(juryDTO);
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenReturn(juryDTO);
 
         // When
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
@@ -40,25 +40,25 @@ public class JuryControllerTest {
     }
 
     @Test
-    public void createJury_userNotPlanningAssistant_returnNotFound() throws CustomRuntimeException {
+    void createJury_userNotPlanningAssistant_returnNotFound() throws CustomRuntimeException {
         // Arrange
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT));
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT));
 
         // Act
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
 
         // Assert
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
 
     @Test
-    public void createJury_serviceError_returnInternalServerError() throws CustomRuntimeException {
+    void createJury_serviceError_returnInternalServerError() throws CustomRuntimeException {
         // Arrange
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
         // Act
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
@@ -68,10 +68,10 @@ public class JuryControllerTest {
     }
 
     @Test
-    public void testCreateJury_UnexpectedError() throws CustomRuntimeException{
+    void testCreateJury_UnexpectedError() throws CustomRuntimeException{
         Integer juryMemberDevId = 1;
         Integer juryMemberArchiId = 2;
-        when(juryService.addJuryMembers(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException("Unexpected exception"));
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException("Unexpected exception"));
         
         ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
 

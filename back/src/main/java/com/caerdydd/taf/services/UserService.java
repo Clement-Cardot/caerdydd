@@ -45,11 +45,10 @@ public class UserService {
         try {
             optionalUser = userRepository.findById(id);
         } catch (Exception e) {
-            logger.error("Error getting user by id:", e);
+            logger.error("Error findById", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
         if (optionalUser.isEmpty()) {
-            logger.error("User not found");
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
         return modelMapper.map(optionalUser.get(), UserDTO.class);
@@ -60,11 +59,10 @@ public class UserService {
         try{
             optionalUser = userRepository.findByLogin(login);
         } catch (Exception e) {
-            logger.error("Error getting user by login:", e);
+            logger.error("Error findByLogin", e);
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
         if (optionalUser.isEmpty()) {
-            logger.error("User not found");
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
         return modelMapper.map(optionalUser.get(), UserDTO.class);
@@ -94,7 +92,6 @@ public class UserService {
         
         Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
         if (optionalUser.isEmpty()){
-            logger.error("User not found");
             throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
         }
 

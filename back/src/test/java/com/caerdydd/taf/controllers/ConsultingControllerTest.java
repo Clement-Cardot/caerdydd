@@ -1,6 +1,7 @@
 package com.caerdydd.taf.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ConsultingService;
@@ -32,7 +34,7 @@ public class ConsultingControllerTest {
     private ConsultingService consultingService;
 
     @Test
-    public void testGetAllConsultings_Nominal() throws CustomRuntimeException {
+    void testGetAllConsultings_Nominal() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
         List<PlannedTimingConsultingDTO> mockedConsultings = List.of(
             new PlannedTimingConsultingDTO(
@@ -53,7 +55,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testGetAllConsultings_Empty() throws CustomRuntimeException {
+    void testGetAllConsultings_Empty() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
         List<PlannedTimingConsultingDTO> mockedConsultings = new ArrayList<>();
         when(consultingService.listAllPlannedTimingConsultings()).thenReturn(mockedConsultings);
@@ -67,7 +69,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testGetAllConsultings_UnexpectedError() throws CustomRuntimeException {
+    void testGetAllConsultings_UnexpectedError() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
         when(consultingService.listAllPlannedTimingConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
@@ -79,7 +81,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_Nominal() throws CustomRuntimeException, IOException {
+    void testuploadConsulting_Nominal() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/csv", "mock".getBytes());
 
@@ -103,7 +105,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_EmptyFile() throws CustomRuntimeException, IOException {
+    void testuploadConsulting_EmptyFile() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "".getBytes());
 
@@ -118,7 +120,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_UnsupportedMediaType() throws CustomRuntimeException, IOException {
+    void testuploadConsulting_UnsupportedMediaType() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
 
@@ -133,7 +135,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    public void testuploadConsulting_UnexpectedException() throws CustomRuntimeException, IOException {
+    void testuploadConsulting_UnexpectedException() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "mock".getBytes());
 
@@ -142,6 +144,104 @@ public class ConsultingControllerTest {
 
         // Call method to test
         ResponseEntity<List<PlannedTimingConsultingDTO>> response = consultingController.uploadPlannedTimingConsultings(file);
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+
+    @Test 
+    void testUpdateAvailability_Nominal() throws CustomRuntimeException {
+        // Mock consultingService.updateAvailability()
+        PlannedTimingAvailabilityDTO mockedConsulting = new PlannedTimingAvailabilityDTO();
+        when(consultingService.updatePlannedTimingAvailability(mockedConsulting)).thenReturn(mockedConsulting);
+
+        // Call method to test
+        ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(mockedConsulting);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsulting, response.getBody());
+    }
+
+    @Test 
+    void testUpdateAvailability_AvailabilityNotFound() throws CustomRuntimeException {
+        // Mock consultingService.updateAvailability()
+        when(consultingService.updatePlannedTimingAvailability(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND));
+
+        // Call method to test
+        ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(new PlannedTimingAvailabilityDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test 
+    void testUpdateAvailability_UserNotTeachingStaff() throws CustomRuntimeException {
+        // Mock consultingService.updateAvailability()
+        when(consultingService.updatePlannedTimingAvailability(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
+
+        // Call method to test
+        ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(new PlannedTimingAvailabilityDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test 
+    void testUpdateAvailability_UserIsNotOwnerOfAvailability() throws CustomRuntimeException {
+        // Mock consultingService.updateAvailability()
+        when(consultingService.updatePlannedTimingAvailability(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY));
+
+        // Call method to test
+        ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(new PlannedTimingAvailabilityDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test 
+    void testUpdateAvailability_PlannedTimingIsPast() throws CustomRuntimeException {
+        // Mock consultingService.updateAvailability()
+        when(consultingService.updatePlannedTimingAvailability(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST));
+
+        // Call method to test
+        ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(new PlannedTimingAvailabilityDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test 
+    void testUpdateAvailability_PlannedTimingIsAlreadyTaken() throws CustomRuntimeException {
+        // Mock consultingService.updateAvailability()
+        when(consultingService.updatePlannedTimingAvailability(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN));
+
+        // Call method to test
+        ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(new PlannedTimingAvailabilityDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    }
+
+    @Test 
+    void testUpdateAvailability_ServiceError() throws CustomRuntimeException {
+        // Mock consultingService.updateAvailability()
+        when(consultingService.updatePlannedTimingAvailability(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(new PlannedTimingAvailabilityDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test 
+    void testUpdateAvailability_UnexpectedException() throws CustomRuntimeException {
+        // Mock consultingService.updateAvailability()
+        when(consultingService.updatePlannedTimingAvailability(any())).thenThrow(new CustomRuntimeException("Unexpected exception"));
+
+        // Call method to test
+        ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(new PlannedTimingAvailabilityDTO());
 
         // Assertions
         assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());

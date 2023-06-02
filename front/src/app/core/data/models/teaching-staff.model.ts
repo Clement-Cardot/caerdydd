@@ -1,6 +1,6 @@
-import { User, UserAdapter } from "./user.model";
-import { Injectable } from "@angular/core";
-import { Adapter } from "../adapter";
+import { User, UserAdapter } from './user.model';
+import { Injectable } from '@angular/core';
+import { Adapter } from '../adapter';
 
 export class TeachingStaff{
     constructor(
@@ -15,9 +15,9 @@ export class TeachingStaff{
 }
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
-export class TeachingStaffAdapter implements Adapter<TeachingStaff>{
+export class TeachingStaffAdapter implements Adapter<TeachingStaff> {
 
     constructor(private userAdapter: UserAdapter) { }
 

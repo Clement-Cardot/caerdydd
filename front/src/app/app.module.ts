@@ -4,30 +4,22 @@ import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angu
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginPageModule } from './login-page/login-page.module';
 import { CoreModule } from './core/core.module';
-import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
-import { ProjectsPageModule } from './page-validate-subject/page-validate-subject.module';
-import { TeamsPageModule } from './teams-page/teams-page.module';
 import { UserDataService } from './core/services/user-data.service';
 import { ApiAuthService } from './core/services/api-auth.service';
 import { ApiTeamService } from './core/services/api-team.service';
 import { ApiUserService } from './core/services/api-user.service';
 import { SidenavModule } from './sidenav/sidenav.module';
-import { NotationModule } from './notation-page/notation.module';
-import { HashLocationStrategy, LocationStrategy  } from '@angular/common';
-import { ConsultingPageModule } from './consulting-page/consulting-page.module';
-import { PlanificationPageModule } from './planification-page/planification-page.module';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ApiProjectService } from './core/services/api-project.service';
-import { DevProjectModule } from './dev-project/dev-project.module';
 import { ErrorInterceptor } from './core/services/error.interceptor';
-import { ValidationProjectModule } from './validation-project/validation-project.module';
 import { ApiPresentationService } from './core/services/api-presentation.service';
+import { ApiTeachingStaffService } from './core/services/api-teaching-staff.service';
+import { PagesModule } from './pages/pages.module';
+import { LoginPageModule } from './pages/login-page/login-page.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   providers: [
     UserDataService,
     ApiAuthService,
@@ -35,8 +27,9 @@ import { ApiPresentationService } from './core/services/api-presentation.service
     ApiUserService,
     ApiProjectService,
     ApiPresentationService,
+    ApiTeachingStaffService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    { provide : LocationStrategy, useClass: HashLocationStrategy}
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   imports: [
     CoreModule,
@@ -45,18 +38,10 @@ import { ApiPresentationService } from './core/services/api-presentation.service
     HttpClientModule,
     HttpClientXsrfModule.withOptions({cookieName: 'XSRF-TOKEN'}),
     BrowserAnimationsModule,
-    LoginPageModule,
-    ProjectDescriptionPageModule,
     SidenavModule,
-    TeamsPageModule,
-    NotationModule,
-    ConsultingPageModule,
-    PlanificationPageModule,
-    DevProjectModule,
-    ProjectsPageModule,
-    TeamsPageModule,
-    ValidationProjectModule
+    PagesModule,
+    LoginPageModule
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

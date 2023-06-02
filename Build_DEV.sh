@@ -1,5 +1,11 @@
 # This Script is used to build the project and run it in a docker container.
 
+echo "Step 0 --> Clean up"
+rm -rf back/src/main/resources/static/*
+rm -rf back/target/*
+rm -rf taf.war
+rm -rf front/dist/front/*
+
 # 1. Build Front-end
 echo "Step 1 --> Build Front-end"
 

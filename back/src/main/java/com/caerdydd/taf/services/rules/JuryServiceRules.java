@@ -3,10 +3,6 @@ package com.caerdydd.taf.services.rules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.caerdydd.taf.models.entities.user.JuryEntity;
-import com.caerdydd.taf.models.entities.user.UserEntity;
-import com.caerdydd.taf.repositories.JuryRepository;
-import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
 

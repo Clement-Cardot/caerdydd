@@ -26,6 +26,7 @@ import com.caerdydd.taf.services.UserService;
 public class UserController {
 
     private static final Logger logger = LogManager.getLogger(UserController.class);
+    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
 
     @Autowired
     UserService userService;
@@ -41,8 +42,10 @@ public class UserController {
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
@@ -55,11 +58,14 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
@@ -72,11 +78,14 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             if (e.getMessage().equals(CustomRuntimeException.USER_ALREADY_EXISTS)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
@@ -89,11 +98,14 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }        
     }
@@ -107,14 +119,18 @@ public class UserController {
         } catch (CustomRuntimeException e) {
             logger.warn(e.getMessage());
             if (e.getMessage().equals(CustomRuntimeException.FILE_IS_EMPTY)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             }
             if (e.getMessage().equals(CustomRuntimeException.INCORRECT_FILE_FORMAT)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }

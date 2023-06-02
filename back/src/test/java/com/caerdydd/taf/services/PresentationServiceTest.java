@@ -1,7 +1,6 @@
 package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -113,7 +112,7 @@ class PresentationServiceTest {
     }
 
     @Test
-    public void testGetPresentationById_Nominal() throws CustomRuntimeException {
+    void testGetPresentationById_Nominal() throws CustomRuntimeException {
         // Mock presentationRepository.findById() method
         Optional<PresentationEntity> mockedAnswer = Optional.of(new PresentationEntity(1));
         when(presentationRepository.findById(any(Integer.class))).thenReturn(mockedAnswer);
@@ -130,7 +129,7 @@ class PresentationServiceTest {
     }
 
     @Test
-    public void testGetPresentationById_PresentationNotFound() {
+    void testGetPresentationById_PresentationNotFound() {
         // Mock presentationRepository.findById() method
         Optional<PresentationEntity> mockedAnswer = Optional.empty();
         when(presentationRepository.findById(any(Integer.class))).thenReturn(mockedAnswer);

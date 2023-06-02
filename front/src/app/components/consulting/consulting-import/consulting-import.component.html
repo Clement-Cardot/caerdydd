@@ -1,0 +1,35 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title> 
+            <h2>Importation des Consultings</h2> 
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form id="consultingForm"  [formGroup]="consultingForm" (ngSubmit)="upload()">
+
+            <mat-form-field class="inputForm" appearance="fill">
+                <ngx-mat-file-input 
+                    valuePlaceholder="Choisir un fichier*" 
+                    [formControl]="fileFormControl" 
+                    [accept]="'.csv'">
+                </ngx-mat-file-input>
+                <mat-icon matSuffix>attachment</mat-icon>
+
+                <mat-error *ngIf="fileFormControl.hasError('required')">
+                    Vous devez choisir un fichier
+                </mat-error>
+
+                <mat-error *ngIf="fileFormControl.hasError('apiError')">
+                    {{errorMessage}}
+                </mat-error>
+
+            </mat-form-field>
+
+            <button mat-fab color="primary" [disabled]="fileFormControl.invalid">
+                <mat-icon>upload</mat-icon>
+            </button>
+
+        </form>
+    </mat-card-content>
+</mat-card>
+

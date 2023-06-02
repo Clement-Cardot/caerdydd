@@ -31,7 +31,7 @@ private ProjectController projectController;
 private ProjectService projectService;
 
     @Test
-    public void testGetProject_Nominal() throws CustomRuntimeException {
+    void testGetProject_Nominal() throws CustomRuntimeException {
         Integer projectId = 1;
         ProjectDTO project = new ProjectDTO();
 
@@ -48,7 +48,7 @@ private ProjectService projectService;
 
 
 @Test
-public void testGetProject_ProjectNotFound() throws CustomRuntimeException {
+void testGetProject_ProjectNotFound() throws CustomRuntimeException {
     Integer projectId = 1;
 
     when(projectService.getProjectById(projectId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND));
@@ -62,7 +62,7 @@ public void testGetProject_ProjectNotFound() throws CustomRuntimeException {
 }
 
 @Test
-public void testGetProject_ServiceError() throws CustomRuntimeException {
+void testGetProject_ServiceError() throws CustomRuntimeException {
     Integer projectId = 1;
 
     when(projectService.getProjectById(projectId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
@@ -76,7 +76,7 @@ public void testGetProject_ServiceError() throws CustomRuntimeException {
 }
 
 @Test
-public void testGetProject_UnexpectedException() throws CustomRuntimeException {
+void testGetProject_UnexpectedException() throws CustomRuntimeException {
     Integer projectId = 1;
 
     when(projectService.getProjectById(projectId)).thenThrow(new CustomRuntimeException("Unexpected error"));
@@ -90,7 +90,7 @@ public void testGetProject_UnexpectedException() throws CustomRuntimeException {
 }
 
 @Test
-public void testUpdateDescription_UnexpectedException() throws CustomRuntimeException {
+void testUpdateDescription_UnexpectedException() throws CustomRuntimeException {
     ProjectDTO projectToUpdate = new ProjectDTO();
 
     when(projectService.updateDescription(any(ProjectDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
@@ -104,7 +104,7 @@ public void testUpdateDescription_UnexpectedException() throws CustomRuntimeExce
 }
 
 @Test
-public void testUpdateDescription_ServiceError() throws CustomRuntimeException {
+void testUpdateDescription_ServiceError() throws CustomRuntimeException {
     ProjectDTO projectToUpdate = new ProjectDTO();
 
     when(projectService.updateDescription(any(ProjectDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
@@ -118,7 +118,7 @@ public void testUpdateDescription_ServiceError() throws CustomRuntimeException {
 }
 
 @Test
-public void testUpdateDescription_Nominal() throws CustomRuntimeException {
+void testUpdateDescription_Nominal() throws CustomRuntimeException {
     ProjectDTO projectToUpdate = new ProjectDTO();
     ProjectDTO updatedProject = new ProjectDTO();
 
@@ -135,7 +135,7 @@ public void testUpdateDescription_Nominal() throws CustomRuntimeException {
 // Similar tests for updateValidation method
 
 @Test
-public void testUpdateValidation_UnexpectedException() throws CustomRuntimeException {
+void testUpdateValidation_UnexpectedException() throws CustomRuntimeException {
     ProjectDTO projectToUpdate = new ProjectDTO();
 
     when(projectService.updateValidation(any(ProjectDTO.class))).thenThrow(new CustomRuntimeException("Unexpected error"));
@@ -149,7 +149,7 @@ public void testUpdateValidation_UnexpectedException() throws CustomRuntimeExcep
 }
 
 @Test
-public void testUpdateValidation_ServiceError() throws CustomRuntimeException {
+void testUpdateValidation_ServiceError() throws CustomRuntimeException {
     ProjectDTO projectToUpdate = new ProjectDTO();
 
     when(projectService.updateValidation(any(ProjectDTO.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
@@ -163,7 +163,7 @@ public void testUpdateValidation_ServiceError() throws CustomRuntimeException {
 }
 
 @Test
-public void testUpdateValidation_Nominal() throws CustomRuntimeException {
+void testUpdateValidation_Nominal() throws CustomRuntimeException {
     ProjectDTO projectToUpdate = new ProjectDTO();
     ProjectDTO updatedProject = new ProjectDTO();
 
@@ -178,7 +178,7 @@ public void testUpdateValidation_Nominal() throws CustomRuntimeException {
 }
 
 @Test
-public void testGetAllProjects_Nominal() throws CustomRuntimeException {
+void testGetAllProjects_Nominal() throws CustomRuntimeException {
     List<ProjectDTO> projects = Arrays.asList(new ProjectDTO(), new ProjectDTO());
 
     when(projectService.listAllProjects()).thenReturn(projects);
@@ -192,7 +192,7 @@ public void testGetAllProjects_Nominal() throws CustomRuntimeException {
 }
 
 @Test
-public void testGetAllProjects_ServiceError() throws CustomRuntimeException {
+void testGetAllProjects_ServiceError() throws CustomRuntimeException {
     when(projectService.listAllProjects()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
     ResponseEntity<List<ProjectDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -204,7 +204,7 @@ public void testGetAllProjects_ServiceError() throws CustomRuntimeException {
 }
 
 @Test
-public void testGetAllProjects_UnexpectedException() throws CustomRuntimeException {
+void testGetAllProjects_UnexpectedException() throws CustomRuntimeException {
     when(projectService.listAllProjects()).thenThrow(new CustomRuntimeException("Unexpected error"));
 
     ResponseEntity<List<ProjectDTO>> expectedAnswer = new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);

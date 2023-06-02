@@ -34,7 +34,7 @@ public class ConsultingController {
 
     @GetMapping("/plannedTiming")
     public ResponseEntity<List<PlannedTimingConsultingDTO>> getAllPlannedTimingConsultings() {
-        logger.info("Process request : Get all consultings");
+        logger.info("Process request : Get all planned timing consultings");
         try {
             List<PlannedTimingConsultingDTO> plannedTimingConsultingDTOs = consultingService.listAllPlannedTimingConsultings();
             return new ResponseEntity<>(plannedTimingConsultingDTOs, HttpStatus.OK);
@@ -46,18 +46,20 @@ public class ConsultingController {
 
     @PutMapping("/plannedTiming")
     public ResponseEntity<List<PlannedTimingConsultingDTO>> uploadPlannedTimingConsultings(@RequestParam("file") MultipartFile file) {
-        logger.info("Process request : Upload consulting");
+        logger.info("Process request : Upload planned timing consultings");
         try {
             List<PlannedTimingConsultingDTO> savedplannedTimingConsultingDTOs = consultingService.uploadPlannedTimingConsultings(file);
             return new ResponseEntity<>(savedplannedTimingConsultingDTOs, HttpStatus.OK);
         } catch (CustomRuntimeException | IOException e) {
-            logger.warn(e.getMessage());
             if (e.getMessage().equals(CustomRuntimeException.FILE_IS_EMPTY)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             }
             if (e.getMessage().equals(CustomRuntimeException.INCORRECT_FILE_FORMAT)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
         
@@ -70,8 +72,25 @@ public class ConsultingController {
             PlannedTimingAvailabilityDTO savedPlannedTimingAvailabilityDTO = consultingService.updatePlannedTimingAvailability(plannedTimingAvailabilityDTO);
             return new ResponseEntity<>(savedPlannedTimingAvailabilityDTO, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            switch (e.getMessage()) {
+                case CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
+                case CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY:
+                case CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST:                
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
         }
     }
     

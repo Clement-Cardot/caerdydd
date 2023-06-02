@@ -29,6 +29,7 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_IS_NOT_AN_OPTION_LEADER = "Requested user is not a option leader";
     public static final String USER_IS_NOT_A_TEAM_MEMBER = "Requested user is not a team member";
     public static final String USER_IS_NOT_A_PLANNING_ASSISTANT = "Requested user is not a planning assistant";
+    public static final String USER_IS_NOT_A_JURY_MEMBER = "Requested user is not a jury member";
 
     // Règles métiers messages <- A traduire en anglais ^^
     public static final String NB_TEAMS_SHOULD_BE_EVEN = "The number of teams should be even";
@@ -40,11 +41,15 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_ID_SHOULD_BE_NULL = "User id should be null";
     public static final String USER_NOT_IN_ASSOCIATED_TEAM = "User is not associated in a team";
     public static final String USER_NOT_IN_A_TEAM = "User is not in a team";
+    public static final String USER_IS_NOT_OWNER_OF_AVAILABILITY = "User is not owner of availability";
+    public static final String PLANNED_TIMING_IS_IN_PAST = "Planned timing is in past";
+    public static final String PLANNED_TIMING_IS_ALREADY_TAKEN = "Planned timing is already taken";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
     public static final String FILE_EXCEPTION = "File exception";
     public static final String FILE_IS_EMPTY = "File is empty";
+    public static final String FILE_NOT_FOUND = "File not found";
     
     // Invalid messages
     public static final String INVALID_LINK = "The provided text is not a valid link";

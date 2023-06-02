@@ -61,7 +61,7 @@ public class TeamMemberServiceTest {
     private ModelMapper modelMapper;
 
     @Test
-    public void testListAllTeamMembers_Nominal() {
+    void testListAllTeamMembers_Nominal() {
         // Mock teamMemberRepository.findAll() method
         List<TeamMemberEntity> mockedAnswer = new ArrayList<TeamMemberEntity>();
         TeamEntity team = new TeamEntity(
@@ -105,7 +105,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testListAllTeamMembers_Empty() {
+    void testListAllTeamMembers_Empty() {
           // Mock teamMemberRepository.findAll() method
           List<TeamMemberEntity> mockedAnswer = new ArrayList<TeamMemberEntity>();
           when(teamMemberRepository.findAll()).thenReturn(mockedAnswer);
@@ -128,7 +128,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testListAllTeamMembers_ServiceError() {
+    void testListAllTeamMembers_ServiceError() {
           // Mock teamMemberRepository.findAll() method
           when(teamMemberRepository.findAll()).thenThrow(new NoSuchElementException());
   
@@ -143,7 +143,7 @@ public class TeamMemberServiceTest {
     }
     
     @Test
-    public void testGetTeamMembersById_Nominal(){
+    void testGetTeamMembersById_Nominal(){
         // Mock teamMemberRepository.findById() method
         TeamEntity team = new TeamEntity(
                                         1, 
@@ -179,7 +179,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testGetTeamMembersById_TeamMemberNotFound(){
+    void testGetTeamMembersById_TeamMemberNotFound(){
         // Mock teamMemberRepository.findById() method
         Optional<TeamMemberEntity> mockedAnswer = Optional.empty();
         when(teamMemberRepository.findById(1)).thenReturn(mockedAnswer);
@@ -195,7 +195,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testGetTeamMembersById_ServiceError(){
+    void testGetTeamMembersById_ServiceError(){
         // Mock teamMemberRepository.findById() method
         when(teamMemberRepository.findById(1)).thenThrow(new NoSuchElementException());
 
@@ -210,7 +210,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testSaveTeamMember_Nominal(){
+    void testSaveTeamMember_Nominal(){
         // Mock teamMemberRepository.save() method
         TeamEntity team = new TeamEntity(
                                     1, 
@@ -240,7 +240,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testSetBonusTeamMember_Nominal() throws CustomRuntimeException {
+    void testSetBonusTeamMember_Nominal() throws CustomRuntimeException {
         // Mock teamMemberRepository.save() method
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
 
@@ -266,7 +266,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testSetBonusTeamMember_CurrentUserNotOptionLeader() throws CustomRuntimeException{
+    void testSetBonusTeamMember_CurrentUserNotOptionLeader() throws CustomRuntimeException{
         doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER)).when(userServiceRules).checkCurrentUserRole(anyString());
 
         RoleDTO role = new RoleDTO();
@@ -283,7 +283,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testUpdateTeamMember_Nominal() {
+    void testUpdateTeamMember_Nominal() {
         TeamDTO teamDTO = new TeamDTO();
         UserDTO userDTO = new UserDTO(1, "firstname3", "lastname3", "login3", "password3", "email3", "J2EE");
 
@@ -325,7 +325,7 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    public void testUpdateTeamMember_ServiceError() throws Exception {
+    void testUpdateTeamMember_ServiceError() throws Exception {
         TeamDTO teamDTO = new TeamDTO();
         UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
 

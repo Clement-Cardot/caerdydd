@@ -36,8 +36,7 @@ public class TeamEntity implements Serializable {
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
 
-    @OneToMany
-    @JoinColumn(name = "id_team")
+    @OneToMany(mappedBy = "team")
     private List<TeamMemberEntity> teamMembers;
 
     @OneToOne(cascade = CascadeType.ALL)

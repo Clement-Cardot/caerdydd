@@ -16,4 +16,6 @@ public interface JuryRepository extends JpaRepository<JuryEntity, Integer>{
     List<JuryEntity> findAll();
     @Query("SELECT ts FROM TeachingStaffEntity ts WHERE ts.id IN (SELECT j.ts1.id FROM JuryEntity j WHERE j.id = :idJury) OR ts.id IN (SELECT j.ts2.id FROM JuryEntity j WHERE j.id = :idJury)")
     List<TeachingStaffEntity> findTeachingStaffMembers(@Param("idJury") Integer idJury);
+    Optional<JuryEntity> findByTs1(TeachingStaffEntity ts1);
+    Optional<JuryEntity> findByTs2(TeachingStaffEntity ts2);
 }

@@ -42,7 +42,7 @@ public class StudentServiceTest {
     UserService userService;
     
     @Test
-    public void uploadStudentsTest_Nominal_1Line() throws CustomRuntimeException {
+    void uploadStudentsTest_Nominal_1Line() throws CustomRuntimeException {
         // Mock userServiceRules.checkCurrentUserRole();
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
 
@@ -72,7 +72,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    public void uploadStudentsTest_Nominal_3Line() throws CustomRuntimeException {
+    void uploadStudentsTest_Nominal_3Line() throws CustomRuntimeException {
         // Mock userServiceRules.checkCurrentUserRole();
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
 
@@ -99,7 +99,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    public void uploadStudentsTest_UserNotPlanningAssistant() throws CustomRuntimeException {
+    void uploadStudentsTest_UserNotPlanningAssistant() throws CustomRuntimeException {
         // Mock userServiceRules.checkCurrentUserRole();
         doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT)).when(userServiceRules).checkCurrentUserRole(anyString());
 
@@ -116,7 +116,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    public void uploadStudentsTest_FileEmpty() throws CustomRuntimeException {
+    void uploadStudentsTest_FileEmpty() throws CustomRuntimeException {
         // Mock userServiceRules.checkCurrentUserRole();
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
 
@@ -136,7 +136,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    public void uploadStudentsTest_FileNotCSV() throws CustomRuntimeException {
+    void uploadStudentsTest_FileNotCSV() throws CustomRuntimeException {
         // Mock userServiceRules.checkCurrentUserRole();
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
 
@@ -159,7 +159,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    public void uploadStudentsTest_ReadingError() throws CustomRuntimeException {
+    void uploadStudentsTest_ReadingError() throws CustomRuntimeException {
         // Mock userServiceRules.checkCurrentUserRole();
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
 
@@ -182,7 +182,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    public void readCsvFileTest_Nominal() throws CustomRuntimeException {
+    void readCsvFileTest_Nominal() throws CustomRuntimeException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "clement,cardot,cardotcl,clement.cardot@reseau.eseo.fr,LD".getBytes());
 
@@ -200,7 +200,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    public void readCsvFileTest_WrongFormat() {
+    void readCsvFileTest_WrongFormat() {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "bad input".getBytes());
 

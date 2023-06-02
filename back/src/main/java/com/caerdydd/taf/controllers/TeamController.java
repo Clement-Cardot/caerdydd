@@ -1,14 +1,13 @@
 package com.caerdydd.taf.controllers;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
@@ -50,6 +47,7 @@ public class TeamController {
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -65,9 +63,11 @@ public class TeamController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -83,9 +83,11 @@ public class TeamController {
             return new ResponseEntity<>(teamMembers, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -102,8 +104,10 @@ public class TeamController {
         } catch (CustomRuntimeException e) {
             switch(e.getMessage()) {
             case CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER:
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             case CustomRuntimeException.SERVICE_ERROR:
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             default:
                 logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -119,59 +123,48 @@ public class TeamController {
             UserDTO updatedUser = teamService.applyInATeam(idTeam, idUser);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
-            logger.warn(e.getMessage());
             switch (e.getMessage()) {
             case CustomRuntimeException.CURRENT_USER_IS_NOT_REQUEST_USER:
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             case CustomRuntimeException.USER_IS_NOT_A_STUDENT:
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             case CustomRuntimeException.TEAM_IS_FULL:
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             case CustomRuntimeException.TEAM_ALREADY_HAS_2_CSS:
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.TEAM_ALREADY_HAS_4_LD:
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.USER_ALREADY_IN_A_TEAM:
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             case CustomRuntimeException.USER_NOT_FOUND:
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case CustomRuntimeException.TEAM_NOT_FOUND:
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case CustomRuntimeException.SERVICE_ERROR:
+                logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             default:
+                logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                 return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
     }
-
-    private boolean isValidLink(String link) {
-        try {
-            new URL(link).toURI();
-            return true;
-        } catch (MalformedURLException | URISyntaxException e) {
-            return false;
-        }
-    }
     
-    @PutMapping("/{idTeam}/testBookLink")
-    public ResponseEntity<TeamDTO> addTestBookLink(@PathVariable Integer idTeam,  @RequestBody Map<String, String> testBookLinkJson) {
-        logger.info("Process request : Add test book link in team: {} with link {}", idTeam, testBookLinkJson.get("testBookLink"));
-        String testBookLink = testBookLinkJson.get("testBookLink");
+    @PutMapping("/testBookLink")
+    public ResponseEntity<TeamDTO> addTestBookLink(@RequestBody TeamDTO team) {
+        logger.info("Process request : Add test book link in team: {} with link {}", team.getIdTeam(), team.getTestBookLink());
         try {
-            if (!isValidLink(testBookLink)) {
-                throw new CustomRuntimeException(CustomRuntimeException.INVALID_LINK);
-            }
-            TeamDTO updatedTeam = teamService.addTestBookLink(idTeam, testBookLink);
+            TeamDTO updatedTeam = teamService.addTestBookLink(team);
             return new ResponseEntity<>(updatedTeam, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
                 case CustomRuntimeException.TEAM_NOT_FOUND:
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.INVALID_LINK:
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 default:
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
     }
@@ -192,7 +185,7 @@ public class TeamController {
                 case CustomRuntimeException.LINK_NOT_FOUND:
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
     }
@@ -213,7 +206,7 @@ public class TeamController {
                 case CustomRuntimeException.LINK_NOT_FOUND:
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
     }
@@ -229,12 +222,40 @@ public class TeamController {
             switch (e.getMessage()) {
                 case CustomRuntimeException.SERVICE_ERROR:
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                case CustomRuntimeException.TEAM_NOT_FOUND:
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.INCORRECT_FILE_FORMAT:
                     return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
                 default:
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
+        }
+    }
+
+    @GetMapping("/download/{teamId}/{fileType}")
+    public ResponseEntity<InputStreamResource> viewFile(@PathVariable("teamId") int id, @PathVariable("fileType") String type) {
+        try {
+            Resource file = fileService.loadFileAsResource(id, type);
+            InputStreamResource resource = new InputStreamResource(file.getInputStream());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDispositionFormData("attachment", "Equipe-" + id + "_" + type + ".pdf");
+
+            return new ResponseEntity<>(resource, headers, HttpStatus.ACCEPTED);
+        } catch (CustomRuntimeException e) { 
+            switch (e.getMessage()) {
+                case CustomRuntimeException.SERVICE_ERROR:
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                case CustomRuntimeException.FILE_NOT_FOUND:
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        } catch (IOException e) {
+            logger.warn("Could not retrieve the file. Error: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

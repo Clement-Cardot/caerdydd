@@ -42,7 +42,7 @@ public class UserServiceTest {
     private ModelMapper modelMapper;
 
     @Test
-    public void testListAllUsers_Nominal(){
+    void testListAllUsers_Nominal(){
         // Mock userRepository.findAll() method
         List<UserEntity> mockedAnswer = new ArrayList<UserEntity>();
         mockedAnswer.add(new UserEntity("firstName1", "lastName1", "login1", "password1", "email1", "LD"));
@@ -69,7 +69,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testListAllUsers_Empty(){
+    void testListAllUsers_Empty(){
         // Mock userRepository.findAll() method
         List<UserEntity> mockedAnswer = new ArrayList<UserEntity>();
         when(userRepository.findAll()).thenReturn(mockedAnswer);
@@ -92,7 +92,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testListAllUsers_ServiceError(){
+    void testListAllUsers_ServiceError(){
         // Mock userRepository.findAll() method
         when(userRepository.findAll()).thenThrow(new NoSuchElementException());
         
@@ -107,7 +107,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserById_Nominal(){
+    void testGetUserById_Nominal(){
         // Mock userRepository.findById() method
         Optional<UserEntity> mockedAnswer = Optional.of(new UserEntity("firstName1", "lastName1", "login1", "password1", "email1", "LD"));
         when(userRepository.findById(1)).thenReturn(mockedAnswer);
@@ -129,7 +129,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserById_UserNotFound(){
+    void testGetUserById_UserNotFound(){
         // Mock userRepository.findById() method
         Optional<UserEntity> mockedAnswer = Optional.empty();
         when(userRepository.findById(1)).thenReturn(mockedAnswer);
@@ -145,7 +145,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserById_ServiceError(){
+    void testGetUserById_ServiceError(){
         // Mock userRepository.findById() method
         when(userRepository.findById(1)).thenThrow(new NoSuchElementException());
 
@@ -160,7 +160,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserByLogin_Nominal(){
+    void testGetUserByLogin_Nominal(){
         // Mock userRepository.findByLogin() method
         Optional<UserEntity> mockedAnswer = Optional.of(new UserEntity("jean", "dupont", "jdupont", "password1", "email1", "LD"));
         when(userRepository.findByLogin("jdupont")).thenReturn(mockedAnswer);
@@ -182,7 +182,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserByLogin_UserNotFound(){
+    void testGetUserByLogin_UserNotFound(){
         // Mock userRepository.findByLogin() method
         Optional<UserEntity> mockedAnswer = Optional.empty();
         when(userRepository.findByLogin("jdupont")).thenReturn(mockedAnswer);
@@ -198,7 +198,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserByLogin_ServiceError(){
+    void testGetUserByLogin_ServiceError(){
         // Mock userRepository.findByLogin() method
         when(userRepository.findByLogin("jdupont")).thenThrow(new NoSuchElementException());
 
@@ -213,7 +213,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testSaveUser_Nominal(){
+    void testSaveUser_Nominal(){
         // Mock userRepository.save() method
         UserEntity mockedAnswer = new UserEntity("jean", "dupont", "jdupont", "password1", "email1", "LD");
         when(userRepository.save(any(UserEntity.class))).thenReturn(mockedAnswer);
@@ -235,7 +235,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testDeleteUserById_Nominal(){
+    void testDeleteUserById_Nominal(){
         // Mock userRepository.deleteById() method
         // UserEntity mockedAnswer = new UserEntity(1, "jean", "dupont", "jdupont", "password1", "email1", "LD");
         Mockito.doNothing().when(userRepository).deleteById(anyInt());

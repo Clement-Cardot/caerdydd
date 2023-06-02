@@ -20,7 +20,7 @@ public class FileRulesTest {
     private FileRules fileRules;
 
     @Test
-    public void checkFileIsNotEmpty_FileIsEmpty() {
+    void checkFileIsNotEmpty_FileIsEmpty() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", new byte[0]);
 
@@ -34,7 +34,7 @@ public class FileRulesTest {
     }
 
     @Test
-    public void checkFileIsNotEmpty_FileIsNotEmpty() {
+    void checkFileIsNotEmpty_FileIsNotEmpty() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.txt", "text/plain", "some xml".getBytes());
 
@@ -47,7 +47,7 @@ public class FileRulesTest {
     }
 
     @Test
-    public void checkFileIsCSV_FileIsCSV() {
+    void checkFileIsCSV_FileIsCSV() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.csv", "text/plain", "some xml".getBytes());
 
@@ -60,7 +60,7 @@ public class FileRulesTest {
     }
 
     @Test
-    public void checkFileIsCSV_FileIsNotCSV() {
+    void checkFileIsCSV_FileIsNotCSV() {
         // Create a empty file
         MultipartFile file = new MockMultipartFile("file", "file.txt", "text/plain", "some xml".getBytes());
 
@@ -73,5 +73,30 @@ public class FileRulesTest {
         assertEquals(CustomRuntimeException.INCORRECT_FILE_FORMAT, exception.getMessage());
     }
 
-    
+    @Test
+    void checkFileIsPDF_FileIsPDF() {
+        // Create a empty file
+        MultipartFile file = new MockMultipartFile("file", "file.pdf", "text/plain", "some test".getBytes());
+
+        // Call method to test
+        try {
+            fileRules.checkFileIsPDF(file);
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void checkFileIsPDF_FileIsNotPDF() {
+        // Create a empty file
+        MultipartFile file = new MockMultipartFile("file", "file.txt", "text/plain", "some xml".getBytes());
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            fileRules.checkFileIsPDF(file);
+        });
+        
+        // Verify the result
+        assertEquals(CustomRuntimeException.INCORRECT_FILE_FORMAT, exception.getMessage());
+    }
 }

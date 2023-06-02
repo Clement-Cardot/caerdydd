@@ -1,0 +1,55 @@
+.inputForm {
+    margin: 5px 15px;
+    margin-bottom: 30px;
+}
+
+#teamCreationBox {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    padding: 25px 5%;
+}
+
+#teamCreationComponent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+}
+
+@media (max-width: 900px) {
+    #teamCreationComponent {
+        width: 80%;
+    }
+}
+
+#titleTeamCreation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px 0;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+#subtitleTeamCreation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+    font-size: 18px;
+}
+#buttonCreateTeam {
+    padding: 15px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+#teamCreationForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
