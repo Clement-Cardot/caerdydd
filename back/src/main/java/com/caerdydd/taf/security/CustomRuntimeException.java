@@ -47,6 +47,8 @@ public class CustomRuntimeException extends Exception{
     public static final String PLANNED_TIMING_IS_ALREADY_TAKEN = "Planned timing is already taken";
     public static final String CONSULTING_IS_IN_PAST = "Consulting is in past";
     public static final String TEACHING_STAFF_IS_NOT_AVAILABLE = "Teaching staff is not available";
+    public static final String TEAM_MEMBER_INCORRECT_INDIVIDUAL_MARK = "The individual mark of the team member is under 0 or above 10";
+    public static final String TEAM_MEMBER_INCORRECT_TEAM_MARK = "The team mark of the team member is under 0 or above 5";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
