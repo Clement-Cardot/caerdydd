@@ -1,6 +1,13 @@
 package com.caerdydd.taf.models.dto.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.mapping.Array;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -22,6 +29,20 @@ public class TeachingStaffDTO {
     private Boolean isModelingSpecialist = false;
     private Boolean isOptionLeader = false;
     private Boolean isSubjectValidator = false;
+
+    @JsonIgnore
+    private List<JuryDTO> juries1;
+
+    @JsonIgnore
+    private List<JuryDTO> juries2;
+
+    @JsonGetter("juries")
+    private List<JuryDTO> juries(){
+        List<JuryDTO> juries = new ArrayList<>();
+        juries.addAll(juries1);
+        juries.addAll(juries2);
+        return juries;
+    }
 
     public TeachingStaffDTO() {
     }
