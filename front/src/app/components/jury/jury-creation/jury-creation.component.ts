@@ -56,14 +56,15 @@ export class JuryCreationComponent {
   }
 
   showSuccess(data : Jury) {
-    this._snackBar.open("Le jury, constitué de " + data.ts1.lastname + " et " + data.ts2.lastname + ", a bien été créé.", "Fermer", {
+    this._snackBar.open("Le jury, constitué de " + data.ts1.user.lastname + " et " + data.ts2.user.lastname + ", a bien été créé.", "Fermer", {
       duration: 5000,
     });
+    this.errorMessage = "";
   }
 
-  showError(error: { status: number; }) {
-    switch (error.status) {
-      case 418:
+  showError(errorCode : number) {
+    switch (errorCode) {
+      case 409:
         this.errorMessage = "Le jury existe déjà";
         break;
       case 500:
