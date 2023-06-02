@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -99,6 +100,49 @@ public class UserServiceRulesTest {
         // Check exception
         assertEquals("Unexpected role value: UNEXPECTED_ROLE", exception.getMessage());
 
+    }
+
+    @Test
+    void checkUserRoleTest_UserHasRoles() {
+        List<String> roles = new ArrayList<String>();
+        roles.add("TEACHING_ROLE");
+        roles.add("JURY_MEMBER_ROLE");
+        roles.add("OPTION_LEADER_ROLE");
+
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        for(String role : roles) {
+            user.getRoles().add(new RoleDTO(1, role, user));
+        }
+        // Call method to test
+        try {
+            userServiceRules.checkUserRoles(user, roles);
+        } catch (Exception e) {
+            fail("Exception thrown when it shouldn't have been : " + e.getMessage());
+        }
+
+        // If nothing throw : success
+    }
+
+    @Test
+    public void checkUserRolesTest_UserHasNotRoles() {
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        user.getRoles().add(new RoleDTO(1, "PLANNING_ASSISTANT_ROLE", user));
+
+        List<String> roles = new ArrayList<String>();
+        roles.add("STUDENT_ROLE");
+        roles.add("TEAM_MEMBER_ROLE");
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            userServiceRules.checkUserRoles(user, roles);
+        });
+
+        // Check exception
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, exception.getMessage());
     }
     
     @Test

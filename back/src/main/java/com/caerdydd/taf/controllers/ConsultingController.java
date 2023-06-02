@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ConsultingService;
 
@@ -41,6 +43,50 @@ public class ConsultingController {
         } catch (CustomRuntimeException e) {
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @GetMapping("/TeachingStaff")
+    public ResponseEntity<List<ConsultingDTO>> getConsultingsForCurrentTeachingStaff() {
+        logger.info("Process request : Get all consultings finished for current teaching staff");
+        try {
+            List<ConsultingDTO> consultingDTOs = consultingService.getConsultingsForCurrentTeachingStaff();
+            return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);
+        }
+        catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            if(e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @GetMapping("/team")
+    public ResponseEntity<List<ConsultingDTO>> getConsultingsForATeam(@RequestBody TeamDTO team) {
+        logger.info("Process request : Get all consultings for a team");
+        try {
+            List<ConsultingDTO> consultingDTOs = consultingService.getConsultingsForATeam(team);
+            return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);
+        }
+        catch (CustomRuntimeException e) {
+            switch(e.getMessage()) {
+                case CustomRuntimeException.USER_IS_NOT_AUTHORIZED:
+                case CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
         }
     }
 
