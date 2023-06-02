@@ -67,4 +67,32 @@
   <mat-error *ngIf="getSumBonus() != 0">
     Pour valider, la somme des bonus/malus de l'équipe doit être 0, actuellement elle est de {{getSumBonus()}}
   </mat-error>
+
+  <div class="button-container">
+    <div class="sameRow">
+      <!-- TeamWorkMark Input -->
+      <div class="input-container">
+        <mat-form-field class="example-full-width">
+          <mat-label>Saisie note de groupe</mat-label>
+          <input matInput type="number" [(ngModel)]="team.teamWorkMark" min="0" max="5">
+        </mat-form-field>
+      </div>
+    
+      <!-- ValidationMark Input -->
+      <div class="input-container">
+        <mat-form-field class="example-full-width">
+          <mat-label>Saisie note de validation</mat-label>
+          <input matInput type="number" [(ngModel)]="team.teamValidationMark" min="0" max="5">
+        </mat-form-field>
+      </div>
+    </div>
+    
+  
+    <div class="button-group">
+      <button mat-raised-button color="primary" [disabled]="checkFinalMarks(team)" (click)="saveMarks()">Valider</button>
+      <mat-error *ngIf="checkFinalMarks(team)">
+        Toutes les notes finales doivent être entre 0 et 20.
+      </mat-error>
+    </div>
+  </div>
 </mat-expansion-panel>
