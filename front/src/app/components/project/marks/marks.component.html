@@ -27,9 +27,11 @@
     <!-- IndividualMark Column -->
     <ng-container matColumnDef="individualMark">
       <th mat-header-cell *matHeaderCellDef>Note Individuelle</th>
-      <td mat-cell *matCellDef="let element">{{element.individualMark}}</td>
+      <td mat-cell *matCellDef="let element">
+        <input type="number" [(ngModel)]="element.individualMark" min="0" max="10" (ngModelChange)="calculateFinalMark(element)">
+      </td>
     </ng-container>
-  
+
     <!-- TeamMark Column -->
     <ng-container matColumnDef="teamMark">
       <th mat-header-cell *matHeaderCellDef>Note du travail d'équipe</th>
@@ -62,14 +64,10 @@
     <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
   </table>
   
-  <!-- Button to send data to DB -->
-  <button mat-raised-button color="primary" [disabled]="getSumBonus() != 0" (click)="saveBonus()">Valider</button>
-  <mat-error *ngIf="getSumBonus() != 0">
-    Pour valider, la somme des bonus/malus de l'équipe doit être 0, actuellement elle est de {{getSumBonus()}}
-  </mat-error>
 
   <div class="button-container">
     <div class="sameRow">
+      
       <!-- TeamWorkMark Input -->
       <div class="input-container">
         <mat-form-field class="example-full-width">
@@ -89,10 +87,19 @@
     
   
     <div class="button-group">
-      <button mat-raised-button color="primary" [disabled]="checkFinalMarks(team)" (click)="saveMarks()">Valider</button>
-      <mat-error *ngIf="checkFinalMarks(team)">
-        Toutes les notes finales doivent être entre 0 et 20.
-      </mat-error>
+      <div style="display: inline-block; margin-right: 10px;">
+        <button mat-raised-button color="primary" [disabled]="checkFinalMarks(team)" (click)="saveMarks()">Valider les notes</button>
+        <mat-error *ngIf="checkFinalMarks(team)">
+          Toutes les notes finales doivent être entre 0 et 20.
+        </mat-error>
+      </div>
+      
+      <div style="display: inline-block;">
+        <button mat-raised-button color="primary" [disabled]="getSumBonus() !== 0" (click)="saveBonus()">Valider les bonus/malus</button>
+        <mat-error *ngIf="getSumBonus() !== 0">
+          Pour valider, la somme des bonus/malus de l'équipe doit être 0, actuellement elle est de {{ getSumBonus() }}
+        </mat-error>
+      </div>
     </div>
   </div>
 </mat-expansion-panel>
