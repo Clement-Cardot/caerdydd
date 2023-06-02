@@ -38,6 +38,12 @@ public class TeachingStaffEntity implements Serializable{
     @OneToMany(mappedBy = "teachingStaff", fetch = FetchType.LAZY)
     private List<PlannedTimingAvailabilityEntity> availabilities;
 
+    @OneToMany(mappedBy = "ts1", fetch = FetchType.LAZY)
+    private List<JuryEntity> juries1;
+
+    @OneToMany(mappedBy = "ts2", fetch = FetchType.LAZY)
+    private List<JuryEntity> juries2;
+
     public TeachingStaffEntity() {
     }
 

@@ -30,7 +30,6 @@ public class ProjectDTO {
     @JsonManagedReference(value="project")
     private List<PresentationDTO> presentations;
 
-    @JsonBackReference
     private JuryDTO jury;
 
     public ProjectDTO() {

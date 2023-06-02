@@ -2,8 +2,6 @@ package com.caerdydd.taf.models.dto.user;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.Getter;
 import lombok.Setter;
 
