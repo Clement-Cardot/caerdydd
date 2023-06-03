@@ -3,6 +3,7 @@ import { PlanificationPageComponent } from './planification-page.component';
 import { ConsultingModule } from 'src/app/components/consulting/consulting.module';
 import { JuryModule } from 'src/app/components/jury/jury.module';
 import { TeamModule } from 'src/app/components/project/project.module';
+import { PresentationModule } from 'src/app/components/presentation/presentation.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { TeamModule } from 'src/app/components/project/project.module';
   imports: [
     ConsultingModule,
     JuryModule,
-    TeamModule
+    TeamModule,
+    PresentationModule
   ]
 })
 export class PlanificationPageModule { }
