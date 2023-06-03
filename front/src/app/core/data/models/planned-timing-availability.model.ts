@@ -5,6 +5,7 @@ import { Adapter } from "../adapter";
 export class PlannedTimingAvailability {
     constructor(
         public idPlannedTimingAvailability: number,
+        public idPlannedTimingConsulting: number,
         public isAvailable: boolean,
         public teachingStaff: TeachingStaff,
     ) {}
@@ -17,10 +18,10 @@ export class PlannedTimingAvailabilityAdapter implements Adapter<PlannedTimingAv
 
     constructor(private teachingStaffAdapter: TeachingStaffAdapter) { }
 
-
     adapt(item: any): PlannedTimingAvailability {
         return new PlannedTimingAvailability(
             item.idPlannedTimingAvailability,
+            item.idPlannedTimingConsulting,
             item.isAvailable,
             this.teachingStaffAdapter.adapt(item.teachingStaff),
         );

@@ -82,7 +82,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
       // All except Student
       if (!this.currentUser.getRoles().includes('STUDENT_ROLE')) {
-        this.navLink.push('Consultings');
+        this.navLink.push('Calendrier');
       }
 
       // Teaching Staff

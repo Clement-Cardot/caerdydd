@@ -30,7 +30,7 @@ export class CalendarComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.currentUser = user;
       this.loadConsultings();
