@@ -53,7 +53,9 @@
         <mat-label>Project</mat-label>
         <mat-select formControlName="idProject">
           <ng-container *ngFor="let project of projects">
-            <mat-option [value]="project.idProject">{{project.name}}</mat-option>
+            <mat-option [value]="project.idProject">
+              {{project.name}} - Dernier jury associé: {{project.jury?.idJury ?? 'Aucun'}}
+            </mat-option>
           </ng-container>
         </mat-select>
         <mat-error *ngIf="presentationForm.get('idProject')?.touched && presentationForm.get('idProject')?.invalid">
