@@ -17,7 +17,14 @@ export class Project {
     providedIn: 'root'
 })
 export class ProjectAdapter implements Adapter<Project>{
+
+    constructor(private juryAdapter: JuryAdapter) { }
+
     adapt(item: any): Project {
+        let jury: Jury | null = null; 
+        if (item.jury) {
+            jury = this.juryAdapter.adapt(item.jury);
+        }
         return new Project(
             item.idProject,
             item.name,

@@ -81,6 +81,8 @@ export class CreatePresentationComponent implements OnInit {
       duration: 5000,
     });
     this.presentationForm.reset();
+    // Update the projects list after creating the presentation
+    this.apiProjectService.getAllSubjects().subscribe(projects => this.projects = projects);
   }
 
   showError(error: any) {
