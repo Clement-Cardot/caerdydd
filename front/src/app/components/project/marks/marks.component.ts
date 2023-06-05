@@ -1,16 +1,20 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { Team } from 'src/app/core/data/models/team.model';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
-
+import { UserDataService } from 'src/app/core/services/user-data.service';
+import { User } from 'src/app/core/data/models/user.model';
 @Component({
 	selector: 'app-marks',
 	templateUrl: './marks.component.html',
 	styleUrls: ['./marks.component.scss']
 })
 
-export class MarksComponent {
+export class MarksComponent implements OnInit {
+
+	currentUser!: User | null;
+
 	displayedColumns = [
 		'name',
 		'firstname',
@@ -23,9 +27,15 @@ export class MarksComponent {
 	
 	@Input() team!: Team;
 
+	public ngOnInit():void {
+		this.userService.getCurrentUser().subscribe((user: User | null) => {
+		  this.currentUser = user;
+		});
+	  }
+
 	panelOpenState = false;
 
-	constructor(private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService) {
+	constructor(private userService: UserDataService, private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService) {
 	}
 
 	calculateFinalMark(teamMember: TeamMember): number {
@@ -101,5 +111,19 @@ export class MarksComponent {
 		} catch (error) {
 		  console.error("Error while saving marks:", error);
 		}
-	  }
+	}
+
+	isJuryOfTeam(team: Team): boolean {
+		if(this.currentUser && team.projectDev.jury) {
+			if(team.projectDev.jury.ts1.idUser == this.currentUser.id || team.projectDev.jury.ts2.idUser == this.currentUser.id) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+ 			return false;
+		}
+	}
 }
