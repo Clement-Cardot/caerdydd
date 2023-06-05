@@ -11,6 +11,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -157,4 +159,55 @@ public class JuryServiceTest {
 
         assertThrows(CustomRuntimeException.class, () -> juryService.findJuryByTs1AndTs2(ts12, ts22));
     }
+
+    @Test
+void testGetJury_Nominal() throws CustomRuntimeException {
+    // Mock methods
+    Integer juryId = 1;
+    JuryEntity jury = new JuryEntity();
+    when(juryRepository.findById(juryId)).thenReturn(Optional.of(jury));
+
+    // Call method
+    JuryDTO result = juryService.getJury(juryId);
+
+    // Check results
+    verify(juryRepository, times(1)).findById(juryId); 
+    assertNotNull(result); // Assuming the modelMapper works correctly
+}
+
+@Test
+void testGetJury_JuryNotFound() {
+    // Mock methods
+    Integer juryId = 1;
+    when(juryRepository.findById(juryId)).thenReturn(Optional.empty()); // Return empty optional to trigger the exception
+
+    // Call method and catch the exception
+    CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+        juryService.getJury(juryId);
+    });
+
+    // Check the exception message
+    assertEquals(CustomRuntimeException.JURY_NOT_FOUND, exception.getMessage());
+
+    // Check interactions
+    verify(juryRepository, times(1)).findById(juryId); 
+}
+
+@Test
+void testGetAllJuries_Nominal() {
+    // Mock methods
+    List<JuryEntity> juries = new ArrayList<>();
+    juries.add(new JuryEntity());
+    when(juryRepository.findAll()).thenReturn(juries);
+
+    // Call method
+    List<JuryDTO> result = juryService.getAllJuries();
+
+    // Check results
+    verify(juryRepository, times(1)).findAll(); 
+    assertEquals(juries.size(), result.size()); // Assuming the modelMapper works correctly
+}
+
+
+
 }

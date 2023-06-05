@@ -215,6 +215,42 @@ void testGetAllProjects_UnexpectedException() throws CustomRuntimeException {
     verify(projectService, times(1)).listAllProjects();
 }
 
+@Test
+    void testGetProjectId_Success() throws CustomRuntimeException {
+        // Given
+        when(projectService.getProjectId(any(Integer.class))).thenReturn(new ProjectDTO());
+
+        // When
+        ResponseEntity<ProjectDTO> response = projectController.getProjectId(1);
+
+        // Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void testGetProjectId_ProjectNotFound() throws CustomRuntimeException {
+        // Given
+        when(projectService.getProjectId(any(Integer.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.PROJECT_NOT_FOUND));
+
+        // When
+        ResponseEntity<ProjectDTO> response = projectController.getProjectId(1);
+
+        // Then
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testGetProjectId_ServiceError() throws CustomRuntimeException {
+        // Given
+        when(projectService.getProjectId(any(Integer.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // When
+        ResponseEntity<ProjectDTO> response = projectController.getProjectId(1);
+
+        // Then
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
 
 
 
