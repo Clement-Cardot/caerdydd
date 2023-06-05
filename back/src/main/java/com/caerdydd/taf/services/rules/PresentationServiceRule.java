@@ -53,19 +53,16 @@ public class PresentationServiceRule {
 
     public void checkTeachingStaffAvailability(Integer idJury, LocalDateTime begin, LocalDateTime end) throws CustomRuntimeException {
         List<TeachingStaffEntity> teachingStaffMembers = juryRepository.findTeachingStaffMembers(idJury);
-
+    
         for (TeachingStaffEntity teachingStaffMember : teachingStaffMembers) {
             List<PresentationEntity> presentations = presentationRepository.findTeachingStaffPresentationsInTimeframe(teachingStaffMember.getIdUser(), end, begin);
-
-            // Convertir List<PresentationEntity> en List<PresentationDTO>
-            Type listType = new TypeToken<List<PresentationDTO>>() {}.getType();
-            List<PresentationDTO> presentationDTOs = modelMapper.map(presentations, listType);
-
-            if (!presentationDTOs.isEmpty()) {
+    
+            if (!presentations.isEmpty()) {
                 throw new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_AVAILABLE);
             }
         }
     }
+    
     
     public void checkPresentationTimeframe(LocalDateTime begin, LocalDateTime end) throws CustomRuntimeException {
         if (end.isBefore(begin)) {

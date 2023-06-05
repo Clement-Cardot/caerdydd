@@ -16,11 +16,13 @@ import javax.persistence.Table;
 
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode(exclude = "presentations")
 @Entity
 @Table(name = "jury")
 public class JuryEntity implements Serializable {

@@ -1,6 +1,7 @@
 package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -444,5 +445,39 @@ void testListAllProjects_ServiceError() {
     verify(projectRepository, times(1)).findAll();
     assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
 }
+
+@Test
+void testGetProjectId_Nominal() throws CustomRuntimeException {
+    // Mock methods
+    Integer projectId = 1;
+    ProjectEntity project = new ProjectEntity();
+    when(projectRepository.findById(projectId)).thenReturn(Optional.of(project));
+
+    // Call method
+    ProjectDTO result = projectService.getProjectId(projectId);
+
+    // Check results
+    verify(projectRepository, times(1)).findById(projectId); 
+    assertNotNull(result); // Assuming the modelMapper works correctly
+}
+
+@Test
+void testGetProjectId_ProjectNotFound() {
+    // Mock methods
+    Integer projectId = 1;
+    when(projectRepository.findById(projectId)).thenReturn(Optional.empty()); // Return empty optional to trigger the exception
+
+    // Call method and catch the exception
+    CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+        projectService.getProjectId(projectId);
+    });
+
+    // Check the exception message
+    assertEquals(CustomRuntimeException.PROJECT_NOT_FOUND, exception.getMessage());
+
+    // Check interactions
+    verify(projectRepository, times(1)).findById(projectId); 
+}
+
 
 }
