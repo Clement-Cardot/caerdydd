@@ -18,19 +18,19 @@ import lombok.Setter;
 public class JuryDTO {
     private Integer idJury;
 
-    @JsonIgnore
+    // @JsonIgnore
     private TeachingStaffDTO ts1;
     
-    @JsonIgnore
+    // @JsonIgnore
     private TeachingStaffDTO ts2;
 
-    @JsonGetter("teachingStaff")
-    private List<TeachingStaffDTO> teachingStaff(){
-        List<TeachingStaffDTO> teachingStaff = new ArrayList<>();
-        teachingStaff.add(ts1);
-        teachingStaff.add(ts2);
-        return teachingStaff;
-    }
+    // @JsonGetter("teachingStaff")
+    // private List<TeachingStaffDTO> teachingStaff(){
+    //     List<TeachingStaffDTO> teachingStaff = new ArrayList<>();
+    //     teachingStaff.add(ts1);
+    //     teachingStaff.add(ts2);
+    //     return teachingStaff;
+    // }
 
     public JuryDTO() {
     }

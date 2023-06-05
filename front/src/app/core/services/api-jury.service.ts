@@ -30,6 +30,8 @@ export class ApiJuryService {
         );
     }
 
+    
+
     private handleError(error: HttpErrorResponse) {
         console.log(error.status);
         if (error.status === 0) {
