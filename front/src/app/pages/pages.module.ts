@@ -15,6 +15,7 @@ import { TeamsPageModule } from './teams-page/teams-page.module';
 import { ValidateSubjectPageModule } from './validate-subject-page/validate-subject-page.module';
 import { ValidationProjectPageModule } from './validation-project-page/validation-project-page.module';
 import { ProjectPageModule } from './project-page/project-page.module';
+import { PresentationCommentaryPageModule } from './presentation-commentary-page/presentation-commentary-page.module';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { ProjectPageModule } from './project-page/project-page.module';
     TeachingStaffPageModule,
     TeamsPageModule,
     ValidateSubjectPageModule,
-    ValidationProjectPageModule
+    ValidationProjectPageModule,
+    PresentationCommentaryPageModule
   ]
 })
 export class PagesModule { }

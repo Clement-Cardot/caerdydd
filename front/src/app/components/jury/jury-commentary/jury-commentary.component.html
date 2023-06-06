@@ -1,0 +1,21 @@
+
+<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+  
+    <mat-expansion-panel-header>
+        <mat-panel-title> 
+          Nom equipe
+        </mat-panel-title>
+        <mat-panel-description>
+          type de presentation
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <form>      
+        <mat-form-field id="commentary">
+          <mat-label>Commentaire de la présentation</mat-label>
+          <textarea matInput placeholder=""></textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" id="submitButton" (click)="onSubmit()">Enregistrer</button>
+    </form>
+</mat-expansion-panel>
