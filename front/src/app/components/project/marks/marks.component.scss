@@ -2,6 +2,19 @@
         margin: 15px
 }
 
+th {
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+.tableinput {
+    border:groove;
+    text-align: center;
+}
+
 .sameRow {
         display: flex;
         flex-direction: row;

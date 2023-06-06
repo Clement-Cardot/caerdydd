@@ -126,4 +126,9 @@ export class MarksComponent implements OnInit {
  			return false;
 		}
 	}
+
+	isOptionLeader(): boolean {
+		if (this.currentUser?.getRoles().includes("OPTION_LEADER_ROLE") == undefined) return false;
+		return this.currentUser.getRoles().includes("OPTION_LEADER_ROLE");
+	}
 }
