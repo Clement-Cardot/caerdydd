@@ -58,6 +58,15 @@ public class CustomRuntimeException extends Exception{
     public static final String JURY_ALREADY_EXISTS = "This jury already exists";
     public static final String TEACHING_STAFF_ARE_THE_SAME = "You cannot create a jury with only one teaching staff";
 
+    //Not available 
+    public static final String ROOM_NOT_AVAILABLE = "Room is not available";
+    public static final String JURY_NOT_AVAILABLE = "Jury is not available ";
+    public static final String TEACHING_STAFF_NOT_AVAILABLE = "Teaching Staff is not available ";
+
+    //time 
+    public static final String PRESENTATION_END_BEFORE_BEGIN = "Presentation end time is before its start time.";
+    public static final String PRESENTATION_DID_NOT_BEGIN = "Presentation did not start yet.";
+
     public CustomRuntimeException(String message) {
         super(message);
     }
