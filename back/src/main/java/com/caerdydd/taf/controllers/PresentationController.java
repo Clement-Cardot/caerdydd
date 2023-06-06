@@ -1,6 +1,7 @@
 package com.caerdydd.taf.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -139,6 +141,29 @@ public class PresentationController {
         }
     }
 
+    @PostMapping("/updateJuryNotes")
+    public ResponseEntity<PresentationDTO> updateNotesJury(@RequestBody Map<String, Object> requestBody) {
+        logger.info("Process request : update jury notes");
+
+        Integer idPresentation = (Integer) requestBody.get("idPresentation");
+        String note = (String) requestBody.get("note");
+
+        try {
+            PresentationDTO presentation = presentationService.setJuryNotes(idPresentation, note);
+            return new ResponseEntity<>(presentation, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.JURY_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.PRESENTATION_DID_NOT_BEGIN)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 }
