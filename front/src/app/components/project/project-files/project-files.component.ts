@@ -33,20 +33,27 @@ export class ProjectFilesComponent implements OnInit {
   importTSSform: FormGroup;
   importAnalysisform: FormGroup;
   importFTSSform: FormGroup;
+  importReportform: FormGroup;
 
-  fileFormControl = new FormControl(['', Validators.required]);
+  teamScopeFormControl = new FormControl(['', Validators.required]);
+  analysisFormControl = new FormControl(['', Validators.required]);
+  finalTeamScopeFormControl = new FormControl(['', Validators.required]);
+  reportFormControl = new FormControl(['', Validators.required]);
 
   errorMessage!: string;
 
   constructor(private apiTeamMemberService: ApiTeamMemberService, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, public userDataService: UserDataService, private formBuilder: FormBuilder, private _snackBar: MatSnackBar) {
     this.importTSSform = this.formBuilder.group({
-      file: this.fileFormControl
+      teamScopeStatement: this.teamScopeFormControl
     });
     this.importAnalysisform = this.formBuilder.group({
-      file: this.fileFormControl
+      analysis: this.analysisFormControl
     });
     this.importFTSSform = this.formBuilder.group({
-      file: this.fileFormControl
+      finalTeamScopeStatement: this.finalTeamScopeFormControl
+    });
+    this.importReportform = this.formBuilder.group({
+      report: this.reportFormControl
     });
     this.testBookLinkForm = this.formBuilder.group({
       testBookLink: ['', [Validators.required, linkValidator]]
@@ -60,22 +67,49 @@ export class ProjectFilesComponent implements OnInit {
     });
   }
 
-  upload(fileName: string) {
+  upload(fileName: string, type: number) {
     if (this.currentUser != null && this.currentTeam != null) {
       let id = this.currentTeam.idTeam;
-      this.fileFormControl.setErrors({'apiError': null});
-      this.fileFormControl.updateValueAndValidity();
-      if(this.importTSSform.invalid){
+      let importForm: FormGroup;
+      if (type === 1) {
+        importForm = this.importTSSform;
+      } else if (type === 2) {
+        importForm = this.importAnalysisform;
+      } else if (type === 3) {
+        importForm = this.importFTSSform;
+      } else {
+        importForm = this.importReportform;
+      }
+
+      if(importForm.invalid){
         console.log("Invalid form");
       } else {
-        const file_form: FileInput = this.importTSSform.get('file')?.value;
+        const file_form: FileInput = importForm.get(fileName)?.value;
         const file = file_form.files[0];
         this.uploadFileService.upload(file, id, fileName).subscribe(
           data => {
             this.getTeam(id);
             this.showSuccess();
           },
-          error => {this.showError(error)},
+          error => {
+            if (type === 1) {
+              this.teamScopeFormControl.setErrors({'apiError': null});
+              this.teamScopeFormControl.updateValueAndValidity();
+              this.showError(error, this.teamScopeFormControl)
+            } else if (type === 2) {
+              this.analysisFormControl.setErrors({'apiError': null});
+              this.analysisFormControl.updateValueAndValidity();
+              this.showError(error, this.analysisFormControl)
+            } else if (type === 3) {
+              this.analysisFormControl.setErrors({'apiError': null});
+              this.analysisFormControl.updateValueAndValidity();
+              this.showError(error, this.finalTeamScopeFormControl)
+            } else {
+              this.analysisFormControl.setErrors({'apiError': null});
+              this.analysisFormControl.updateValueAndValidity();
+              this.showError(error, this.reportFormControl)
+            }
+          },
         );
       }
     }
@@ -174,8 +208,9 @@ export class ProjectFilesComponent implements OnInit {
 
 
 
-  showError(error: { status: number; }) {
-    this.fileFormControl.setErrors({apiError: true});
+  showError(error: { status: number; }, formControl : FormControl) {
+    formControl.setErrors({apiError: true});
+    console.log(error);
     switch (error.status) {
       case 415:
         this.errorMessage = "Le fichier n'est pas au bon format";
