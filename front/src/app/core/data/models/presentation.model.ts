@@ -30,7 +30,7 @@ export class Presentation implements CalendarEvent {
         this.id = idPresentation;
         this.start = datetimeBegin;
         this.end = datetimeEnd;
-        this.title = `Présentation ${type} en ${room} de ${datetimeBegin.toLocaleTimeString()} à ${datetimeEnd.toLocaleTimeString()}`;
+        this.title = `${type} en Salle ${room} de ${datetimeBegin.toLocaleTimeString()} à ${datetimeEnd.toLocaleTimeString()}`;
         this.color = {primary: '#40A798', secondary: '#D1F2EB'};
     }
 }
