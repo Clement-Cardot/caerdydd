@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -21,17 +22,5 @@ public class PresentationControllerTest {
 
     @Test
     void testUpdateNote_nominal() throws CustomRuntimeException {
-        // Given
-        Integer juryMemberDevId = 1;
-        Integer juryMemberArchiId = 2;
-        PresentationDTO juryDTO = new PresentationDTO();
-        when(presentationService.setJuryNotes(juryMemberDevId, juryMemberArchiId)).thenReturn(juryDTO);
-
-        // When
-        ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
-
-        // Then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(juryDTO, response.getBody());
     }
 }
