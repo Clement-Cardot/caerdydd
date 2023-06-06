@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Project } from '../../../core/data/models/project.model';
 import { ApiProjectService } from '../../../core/services/api-project.service';
 
