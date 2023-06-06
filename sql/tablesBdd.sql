@@ -133,12 +133,3 @@ CREATE TABLE notification (
     PRIMARY KEY(id_notification),
     FOREIGN KEY (id_user) REFERENCES user (id)
 );
-
-CREATE TABLE assigned_consulting (
-    id_ts INT NOT NULL,
-    id_consulting INT NOT NULL,
-    PRIMARY KEY(id_ts, id_consulting),
-    FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user),
-    FOREIGN KEY (id_consulting) REFERENCES consulting (id_consulting)
-);
-
