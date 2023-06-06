@@ -1,10 +1,13 @@
 package com.caerdydd.taf.controllers;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +31,7 @@ public class JuryController {
     public ResponseEntity<JuryDTO> createJury(@PathVariable Integer juryLD, @PathVariable Integer juryCSS) {
         logger.info("Process request : Put jury");
         try {
-            JuryDTO jury = juryService.addJuryMembers(juryLD, juryCSS);
+            JuryDTO jury = juryService.addJury(juryLD, juryCSS);
             return new ResponseEntity<>(jury, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch(e.getMessage()){
@@ -53,4 +56,30 @@ public class JuryController {
             }
         }
     }
+    
+    @GetMapping("/{idJury}")
+    public ResponseEntity<JuryDTO> getJury(@PathVariable Integer idJury) {
+        try {
+            JuryDTO jury = juryService.getJury(idJury);
+            return new ResponseEntity<>(jury, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.JURY_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<JuryDTO>> getAllJuries() {
+    try {
+        List<JuryDTO> juries = juryService.getAllJuries();
+        return new ResponseEntity<>(juries, HttpStatus.OK);
+    } catch (Exception e) {
+        logger.error("Error while getting all juries", e);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
 }

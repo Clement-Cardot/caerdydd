@@ -2,6 +2,8 @@ package com.caerdydd.taf.models.dto.user;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +17,6 @@ public class JuryDTO {
     private TeachingStaffDTO ts1;
     
     private TeachingStaffDTO ts2;
-
 
     public JuryDTO() {
     }

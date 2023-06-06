@@ -29,6 +29,7 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_IS_NOT_AN_OPTION_LEADER = "Requested user is not a option leader";
     public static final String USER_IS_NOT_A_TEAM_MEMBER = "Requested user is not a team member";
     public static final String USER_IS_NOT_A_PLANNING_ASSISTANT = "Requested user is not a planning assistant";
+    public static final String USER_IS_NOT_A_JURY_MEMBER = "Requested user is not a jury member";
 
     // Règles métiers messages <- A traduire en anglais ^^
     public static final String NB_TEAMS_SHOULD_BE_EVEN = "The number of teams should be even";
@@ -58,6 +59,15 @@ public class CustomRuntimeException extends Exception{
     public static final String JURY_NOT_FOUND = "Jury not found";
     public static final String JURY_ALREADY_EXISTS = "This jury already exists";
     public static final String TEACHING_STAFF_ARE_THE_SAME = "You cannot create a jury with only one teaching staff";
+
+
+    //Not available 
+    public static final String ROOM_NOT_AVAILABLE = "Room is not available";
+    public static final String JURY_NOT_AVAILABLE = "Jury is not available ";
+    public static final String TEACHING_STAFF_NOT_AVAILABLE = "Teaching Staff is not available ";
+
+    //time 
+    public static final String PRESENTATION_END_BEFORE_BEGIN = "Presentation end time is before its start time.";
 
     public CustomRuntimeException(String message) {
         super(message);

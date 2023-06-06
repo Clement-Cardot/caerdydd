@@ -29,7 +29,7 @@ const routes: Routes = [
 
   // Planification pages
   { path: 'planning', title: 'Planification' + websiteName, component: PlanificationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['PLANNING_ROLE']}},
-  { path: 'consultings', title: 'Consultings' + websiteName, component: CalendarPageComponent, canActivate: [AuthGuard] },
+  { path: 'calendar', title: 'Calendrier' + websiteName, component: CalendarPageComponent, canActivate: [AuthGuard] },
 
   // Notation pages
   { path: 'marks', title: 'Notes' + websiteName, component: NotationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},

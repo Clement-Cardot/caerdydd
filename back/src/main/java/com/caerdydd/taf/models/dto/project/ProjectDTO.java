@@ -4,12 +4,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Getter;
 import lombok.Setter;
 
+
+@JsonIdentityInfo(
+  generator = ObjectIdGenerators.PropertyGenerator.class, 
+  property = "idProject")
 @Getter
 @Setter
 @Component
@@ -26,11 +33,7 @@ public class ProjectDTO {
     @JsonBackReference(value="projectValidation")
     private TeamDTO teamValidation;
 
-    @JsonManagedReference(value="project")
-    private List<PresentationDTO> presentations;
-
-    //@JsonBackReference
-    //private JuryDTO jury;
+    private JuryDTO jury;
 
     public ProjectDTO() {
     }
@@ -50,7 +53,6 @@ public class ProjectDTO {
                 ", isValidated=" + isValidated +
                 ", idTeamDev=" + teamDev +
                 ", idTeamValidation=" + teamValidation +
-                ", presentations=" + presentations +
                 ']';
     }
 }
