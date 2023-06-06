@@ -14,13 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.project.PresentationDTO;
-import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.project.TeamEntity;
-import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.repositories.PresentationRepository;
-import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.PresentationServiceRule;
@@ -42,9 +39,6 @@ public class PresentationService {
 
     @Autowired
     private TeamRepository teamRepository;
-    
-    @Autowired
-    private TeamMemberService teamMemberService;
 
     @Autowired
     private UserServiceRules userServiceRules;
@@ -161,8 +155,8 @@ public class PresentationService {
         }
     }
 
-    public List<PresentationDTO> getTeachingStaffPresentations(Integer userId) throws CustomRuntimeException {
-        List<PresentationEntity> presentations = presentationRepository.findByTeachingStaff(userId);
+    public List<PresentationDTO> getTeachingStaffPresentations(Integer staffId) throws CustomRuntimeException {
+        List<PresentationEntity> presentations = presentationRepository.findByTeachingStaff(staffId);
     
         try {
             return presentations.stream()
@@ -172,10 +166,4 @@ public class PresentationService {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
-
-    public List<PresentationDTO> getTeamMemberPresentations(Integer userId) throws CustomRuntimeException {
-        TeamMemberDTO teamMember = teamMemberService.getTeamMemberById(userId);
-        return this.getTeamPresentations(teamMember.getTeam().getIdTeam());
-    }
-    
 }
