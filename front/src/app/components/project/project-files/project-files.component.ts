@@ -35,10 +35,10 @@ export class ProjectFilesComponent implements OnInit {
   importFTSSform: FormGroup;
   importReportform: FormGroup;
 
-  teamScopeFormControl = new FormControl(['', Validators.required]);
-  analysisFormControl = new FormControl(['', Validators.required]);
-  finalTeamScopeFormControl = new FormControl(['', Validators.required]);
-  reportFormControl = new FormControl(['', Validators.required]);
+  teamScopeFormControl = new FormControl('', [Validators.required]);
+  analysisFormControl = new FormControl('', [Validators.required]);
+  finalTeamScopeFormControl = new FormControl('', [Validators.required]);
+  reportFormControl = new FormControl('', [Validators.required]);
 
   errorMessage!: string;
 
@@ -71,17 +71,29 @@ export class ProjectFilesComponent implements OnInit {
     if (this.currentUser != null && this.currentTeam != null) {
       let id = this.currentTeam.idTeam;
       let importForm: FormGroup;
+      let formControl: FormControl;
       if (type === 1) {
         importForm = this.importTSSform;
+        formControl = this.teamScopeFormControl;
+        this.teamScopeFormControl.setErrors({'apiError': null});
+        this.teamScopeFormControl.updateValueAndValidity();
       } else if (type === 2) {
         importForm = this.importAnalysisform;
+        formControl = this.analysisFormControl;
+        this.analysisFormControl.setErrors({'apiError': null});
+        this.analysisFormControl.updateValueAndValidity();
       } else if (type === 3) {
         importForm = this.importFTSSform;
+        formControl = this.finalTeamScopeFormControl;
+        this.analysisFormControl.setErrors({'apiError': null});
+        this.analysisFormControl.updateValueAndValidity();
       } else {
         importForm = this.importReportform;
+        formControl = this.reportFormControl;
+        this.analysisFormControl.setErrors({'apiError': null});
+        this.analysisFormControl.updateValueAndValidity();
       }
-
-      if(importForm.invalid){
+      if(importForm.invalid) {
         console.log("Invalid form");
       } else {
         const file_form: FileInput = importForm.get(fileName)?.value;
@@ -92,23 +104,7 @@ export class ProjectFilesComponent implements OnInit {
             this.showSuccess();
           },
           error => {
-            if (type === 1) {
-              this.teamScopeFormControl.setErrors({'apiError': null});
-              this.teamScopeFormControl.updateValueAndValidity();
-              this.showError(error, this.teamScopeFormControl)
-            } else if (type === 2) {
-              this.analysisFormControl.setErrors({'apiError': null});
-              this.analysisFormControl.updateValueAndValidity();
-              this.showError(error, this.analysisFormControl)
-            } else if (type === 3) {
-              this.analysisFormControl.setErrors({'apiError': null});
-              this.analysisFormControl.updateValueAndValidity();
-              this.showError(error, this.finalTeamScopeFormControl)
-            } else {
-              this.analysisFormControl.setErrors({'apiError': null});
-              this.analysisFormControl.updateValueAndValidity();
-              this.showError(error, this.reportFormControl)
-            }
+            this.showError(error, formControl)
           },
         );
       }
@@ -210,7 +206,6 @@ export class ProjectFilesComponent implements OnInit {
 
   showError(error: { status: number; }, formControl : FormControl) {
     formControl.setErrors({apiError: true});
-    console.log(error);
     switch (error.status) {
       case 415:
         this.errorMessage = "Le fichier n'est pas au bon format";
