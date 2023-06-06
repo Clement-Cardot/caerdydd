@@ -13,10 +13,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.Dimension;
 
+import static org.junit.Assert.fail;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -30,12 +33,14 @@ public class TafTest {
 	String username="root";
 	String password="root";
 
+	String projectDir = System.getProperty("user.dir");
+
 	public void setupWebDriver() throws Exception{
 
 		ChromeOptions options = new ChromeOptions();
 
 		// Pour debug sur votre serveur local, mettez "local" à la place de "dev" ci dessous
-		String profil = "dev";
+		String profil = "local";
 
 		System.out.println("PROFIL SELECTIONNE : "+ profil);
 
@@ -71,15 +76,6 @@ public class TafTest {
 	public void cleanupWebDriver() {
 		this.driver.close();
 	}
-	
-	public void openConnexionPage() {
-		//Interactions avec Selenium
-		this.driver.get(this.websiteUrl);
-		driver.manage().window().setSize(new Dimension(1098, 875));
-		
-		//Assertions
-		Assert.assertEquals("Login - Taf", driver.getTitle());
-	}
 
 	public void runSqlScript(String scriptName) throws SQLException, FileNotFoundException {
 		//Registering the Driver
@@ -93,6 +89,15 @@ public class TafTest {
 		Reader reader = new BufferedReader(new FileReader(scriptName));
 		//Running the script
 		sr.runScript(reader);
+	}
+
+	public void openConnexionPage() {
+		//Interactions avec Selenium
+		this.driver.get(this.websiteUrl);
+		driver.manage().window().setSize(new Dimension(1098, 875));
+		
+		//Assertions
+		Assert.assertEquals("Login - Taf", driver.getTitle());
 	}
 	
   	public void connexion(String username, String password) {
@@ -112,13 +117,26 @@ public class TafTest {
 		Assert.assertEquals("Tableau de bord - Taf", driver.getTitle());
   }
 
-	public void goToPage(String pageName) {
+	public void deconnexion() {
 		//Test if the menu bar is open
 		if(!driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).isDisplayed()) {
 			driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
 		}
-		// Click on the page button
-		driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
+		// Click on the "Déconnexion" button
+		driver.findElement(By.cssSelector(".mdc-button__label")).click();
+		//Assertions
+		Assert.assertEquals("Login - Taf", driver.getTitle());
+	}
+
+	public void goToPage(String pageName) throws InterruptedException {
+		//Test if the menu bar is open
+		if(!driver.findElement(By.tagName("mat-sidenav")).isDisplayed()) {
+			// Click on the page button
+			driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
+		}
+
+		Thread.sleep(250);
+
 		// Click on the page button
 		driver.findElement(By.linkText(pageName)).click();
 		//Assertions
@@ -141,21 +159,32 @@ public class TafTest {
 		Assert.assertTrue(driver.findElement(By.cssSelector(".mat-mdc-snack-bar-action > .mdc-button__label")).isDisplayed());
 	}
 
-	public void deconnexion() {
-		//Test if the menu bar is open
-		if(!driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).isDisplayed()) {
-			driver.findElement(By.cssSelector(".mdc-icon-button > .mat-mdc-button-touch-target")).click();
-		}
-		// Click on the "Déconnexion" button
-		driver.findElement(By.cssSelector(".mdc-button__label")).click();
-		//Assertions
-		Assert.assertEquals("Login - Taf", driver.getTitle());
-	}
-
 	public void applyInATeam(int teamId) {
 		driver.findElement(By.id("buttonJoinTeam"+teamId)).click();
 		Assert.assertTrue(driver.findElement(By.cssSelector(".mat-mdc-cell:nth-child(2)")).isDisplayed());
 		
 	}
 
+	public void importStudent() throws InterruptedException {
+
+		// Add path to upload file
+		String path = projectDir + "\\..\\demo-resources\\students.csv";
+		String normalizedPath = Path.of(path).normalize().toString();
+		driver.findElement(By.cssSelector("#ngx-mat-file-input-1 > input")).sendKeys(normalizedPath);
+		
+		// Click on Upload
+		driver.findElement(By.cssSelector("#studentsForm > button")).click();
+
+		// Wait for snack bar
+		for (int i = 0; i < 10; i++) {
+			try {
+				driver.findElement(By.cssSelector(".mat-mdc-snack-bar-action > .mdc-button__label"));
+				return;
+			} catch (Exception e) {
+				// Nothing here
+			}
+			Thread.sleep(1000);
+		}
+		fail("Snack bar not found after importing students !");
+	}
 }

@@ -38,7 +38,7 @@ const routes: Routes = [
   { path: 'subjects',title: 'Sujets' + websiteName, component: ValidateSubjectPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
 
   // Teams pages
-  { path: 'teams', title: 'Teams' + websiteName, component: TeamsPageComponent, canActivate: [AuthGuard] },
+  { path: 'teams', title: 'Equipes' + websiteName, component: TeamsPageComponent, canActivate: [AuthGuard] },
 
   // Projects pages
   { path: 'project/:id', title: 'Projet' + websiteName, component: ProjectPageComponent, canActivate: [AuthGuard]},

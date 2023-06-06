@@ -22,6 +22,14 @@ public class TeamsTest {
 		tafTest.runSqlScript("../sql/populateTables.sql");
 	}
 
+	@Test
+	public void testImportEtudiants() throws Exception {
+		tafTest.openConnexionPage();
+		tafTest.connexion("bouvieal", "bouvieal");
+		tafTest.goToPage("Planification");
+		tafTest.importStudent();
+	}
+
     @Test
 	public void testEquipes() throws Exception {
         tafTest.openConnexionPage();
@@ -34,5 +42,6 @@ public class TeamsTest {
 		tafTest.applyInATeam(1);
 		tafTest.deconnexion();
 	}
+
     
 }
