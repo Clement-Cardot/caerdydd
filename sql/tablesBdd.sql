@@ -133,27 +133,3 @@ CREATE TABLE notification (
     PRIMARY KEY(id_notification),
     FOREIGN KEY (id_user) REFERENCES user (id)
 );
-
-CREATE TABLE assigned_consulting (
-    id_ts INT NOT NULL,
-    id_consulting INT NOT NULL,
-    PRIMARY KEY(id_ts, id_consulting),
-    FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user),
-    FOREIGN KEY (id_consulting) REFERENCES consulting (id_consulting)
-);
-
-CREATE TABLE planned_timing_consulting (
-    id_planned_timing_consulting INT NOT NULL AUTO_INCREMENT,
-    datetime_begin DATETIME NOT NULL,
-    datetime_end DATETIME NOT NULL,
-    PRIMARY KEY(id_planned_timing_consulting)
-);
-
-CREATE TABLE planned_timing_availability (
-    id_planned_timing_consulting INT NOT NULL AUTO_INCREMENT,
-    id_ts INT NOT NULL,
-    is_available BOOLEAN NOT NULL DEFAULT 1,
-    PRIMARY KEY(id_planned_timing_consulting, id_ts),
-    FOREIGN KEY (id_planned_timing_consulting) REFERENCES planned_timing_consulting (id_planned_timing_consulting),
-    FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user)
-);
