@@ -94,6 +94,10 @@ export class ProjectFilesComponent implements OnInit {
     return (this.currentTeam?.filePathFinalScopeStatement != null);
   }
 
+  isThereReport() {
+    return (this.currentTeam?.filePathReport != null);
+  }
+
   isCurrentUserInTeam(): boolean {
     return !!(this.currentUser && this.currentTeam);
   }
@@ -147,7 +151,7 @@ export class ProjectFilesComponent implements OnInit {
         a.click();
       },
       error => {
-        {this.showErrorDownload()} 
+        {this.showErrorDownload()}
       });
     }
   }

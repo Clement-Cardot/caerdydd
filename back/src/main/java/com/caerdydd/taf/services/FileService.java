@@ -50,11 +50,13 @@ public class FileService {
             TeamDTO team = teamService.getTeamById(id);
 
             if (type.equals("teamScopeStatement")) {
-                team.setFilePathScopeStatement(path + "/" + fileName);
+                team.setFilePathScopeStatement(path + fileName);
             } else if (type.equals("analysis")) {
-                team.setFilePathScopeStatementAnalysis(path + "/" + fileName);
+                team.setFilePathScopeStatementAnalysis(path + fileName);
             } else if (type.equals("finalTeamScopeStatement")) {
-                team.setFilePathFinalScopeStatement(path + "/" + fileName);
+                team.setFilePathFinalScopeStatement(path + fileName);
+            } else if (type.equals("report")) {
+                team.setFilePathFinalScopeStatement(path + fileName);
             }
 
             teamService.saveTeam(team);

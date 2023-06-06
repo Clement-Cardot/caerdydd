@@ -25,6 +25,5 @@ public class TafApplication extends SpringBootServletInitializer {
 	@Override
   	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
     	return builder.sources(TafApplication.class);
-  }
-
+	}
 }
