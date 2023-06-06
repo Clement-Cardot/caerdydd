@@ -3,10 +3,11 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs/internal/Observable";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
-import { map } from "rxjs";
+import { Cons, map } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { PlannedTimingConsultingAdapter, PlannedTimingConsulting } from "../data/models/planned-timing-consulting.model";
 import { PlannedTimingAvailability, PlannedTimingAvailabilityAdapter } from "../data/models/planned-timing-availability.model";
+import { Consulting, ConsultingAdapter } from "../data/models/consulting.model";
 
 @Injectable({
     providedIn: "root"
@@ -17,7 +18,8 @@ export class ApiConsultingService {
     constructor(
         private http: HttpClient, 
         private plannedTimingConsultingAdapter: PlannedTimingConsultingAdapter,
-        private plannedTimingAvailabilityAdapter: PlannedTimingAvailabilityAdapter
+        private plannedTimingAvailabilityAdapter: PlannedTimingAvailabilityAdapter,
+        private consultingAdapter: ConsultingAdapter
         ) {
     }
 
@@ -51,6 +53,17 @@ export class ApiConsultingService {
         return this.http.post<PlannedTimingAvailability>(url, consulting)
         .pipe(
             map((data: any) => this.plannedTimingAvailabilityAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    createConsulting(consulting: Consulting): Observable<Consulting> {
+        const url = `${this.baseUrl}/createConsulting`;
+        return this.http.post<Consulting>(url, consulting)
+        .pipe(
+            map((data: any) => this.consultingAdapter.adapt(data))
         )
         .pipe(
             catchError(this.handleError)
