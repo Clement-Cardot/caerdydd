@@ -29,10 +29,10 @@
       <th mat-header-cell *matHeaderCellDef>Note Individuelle</th>
       <td mat-cell *matCellDef="let element">
         <ng-container *ngIf="isJuryOfTeam(team)">
-          <input type="number" [(ngModel)]="element.individualMark" min="0" max="10" (ngModelChange)="calculateFinalMark(element)">
+          <input class="tableinput" type="number" [(ngModel)]="element.individualMark" min="0" max="10" (ngModelChange)="calculateFinalMark(element)">
         </ng-container>
         <ng-container *ngIf="!isJuryOfTeam(team)">
-          {{ element.individualMark }}
+          {{ element.individualMark || "-" }}
         </ng-container>
       </td>
     </ng-container>
@@ -40,23 +40,31 @@
     <!-- TeamMark Column -->
     <ng-container matColumnDef="teamMark">
       <th mat-header-cell *matHeaderCellDef>Note du travail d'équipe</th>
-      <td mat-cell *matCellDef="let element">{{team.teamWorkMark}}</td>
+      <td mat-cell *matCellDef="let element">{{team.teamWorkMark || "-" }}</td>
     </ng-container>
   
     <!-- ValidationMark Column -->
     <ng-container matColumnDef="validationMark">
       <th mat-header-cell *matHeaderCellDef>Note validation</th>
-      <td mat-cell *matCellDef="let element">{{team.teamValidationMark}}</td>
+      <td mat-cell *matCellDef="let element">{{team.teamValidationMark || "-" }}</td>
     </ng-container>
   
      <!-- Bonus/Malus Column -->
      <ng-container matColumnDef="bonusMalus">
       <th mat-header-cell *matHeaderCellDef>Bonus/Malus</th>
       <td mat-cell *matCellDef="let element">
-	      <ng-container *ngIf="isJuryOfTeam(team)">
-          <input type="number" [(ngModel)]="element.bonusPenalty" 
-          min="{{getMinValue(element)}}" max="{{getMaxValue(element)}}"
-          (ngModelChange)="calculateFinalMark(element)" onkeydown="return false">
+	      <ng-container *ngIf="isOptionLeader()">
+          <input
+            class="tableinput" 
+            type="number" 
+            [(ngModel)]="element.bonusPenalty" 
+            min="{{getMinValue(element)}}" 
+            max="{{getMaxValue(element)}}"
+            (ngModelChange)="calculateFinalMark(element)" 
+            onkeydown="return false">
+        </ng-container>
+        <ng-container *ngIf="!isOptionLeader()">
+          {{ element.bonusPenalty || "-" }}
         </ng-container>
       </td>
     </ng-container>
@@ -64,7 +72,7 @@
     <!-- FinalMark Column -->
     <ng-container matColumnDef="FinalMark">
       <th mat-header-cell *matHeaderCellDef>Note finale</th>
-      <td mat-cell *matCellDef="let element">{{calculateFinalMark(element)}}</td>
+      <td mat-cell *matCellDef="let element">{{calculateFinalMark(element) || "-" }}</td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -79,7 +87,7 @@
       <div class="input-container" *ngIf="isJuryOfTeam(team)">
         <mat-form-field class="example-full-width">
           <mat-label>Saisie note de groupe</mat-label>
-          <input matInput type="number" [(ngModel)]="team.teamWorkMark" min="0" max="5">
+          <input matInput type="number"  [(ngModel)]="team.teamWorkMark" min="0" max="5">
         </mat-form-field>
       </div>
   
@@ -92,15 +100,15 @@
       </div>
     </div>
     
-    <div class="button-group" *ngIf="isJuryOfTeam(team)">
-      <div style="display: inline-block; margin-right: 10px;">
+    <div class="button-group" >
+      <div style="display: inline-block; margin-right: 10px;" *ngIf="isJuryOfTeam(team)">
         <button mat-raised-button color="primary" [disabled]="checkFinalMarks(team)" (click)="saveMarks()">Valider les notes</button>
         <mat-error *ngIf="checkFinalMarks(team)">
           Toutes les notes finales doivent être entre 0 et 20.
         </mat-error>
       </div>
       
-      <div style="display: inline-block;">
+      <div style="display: inline-block;" *ngIf="isOptionLeader()">
         <button mat-raised-button color="primary" [disabled]="getSumBonus() !== 0" (click)="saveBonus()">Valider les bonus/malus</button>
         <mat-error *ngIf="getSumBonus() !== 0">
           Pour valider, la somme des bonus/malus de l'équipe doit être 0, actuellement elle est de {{ getSumBonus() }}

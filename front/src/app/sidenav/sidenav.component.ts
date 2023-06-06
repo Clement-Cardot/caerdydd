@@ -69,6 +69,11 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         this.navLink.push("Sujets");
       }
 
+      // Jury Members
+      if (this.currentUser.getRoles().includes("JURY_MEMBER_ROLE") && !this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
+        this.navLink.push("Notes");
+      }
+
       // Planning
       if (this.currentUser.getRoles().includes('PLANNING_ROLE')) {
         this.navLink.push('Planification');
