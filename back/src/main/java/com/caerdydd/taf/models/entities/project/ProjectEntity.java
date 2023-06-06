@@ -39,7 +39,7 @@ public class ProjectEntity implements Serializable {
     @OneToOne(mappedBy = "projectValidation")
     private TeamEntity teamValidation;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project")
     private List<PresentationEntity> presentations;
 
     @OneToOne

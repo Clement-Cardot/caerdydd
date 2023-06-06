@@ -28,7 +28,26 @@ export class ApiJuryService {
         .pipe(
             catchError(this.handleError)
         );
+    }   
+
+    getAllJuries(): Observable<Jury[]> {
+        return this.http.get<any[]>(this.baseUrl)
+            .pipe(
+                map(data => {
+                    console.log(this.juryAdapter.adapt(data[0]));
+                    const juries = data.map((item: any) =>
+                     this.juryAdapter.adapt(item)
+                     );
+                    
+                    return juries;
+                })
+            )
+            .pipe(
+                catchError(this.handleError)
+            );
     }
+    
+    
 
     
 
