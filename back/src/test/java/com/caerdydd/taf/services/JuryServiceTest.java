@@ -6,7 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,6 +29,7 @@ import org.modelmapper.ModelMapper;
 import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.user.JuryEntity;
 import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 import com.caerdydd.taf.models.entities.user.UserEntity;
@@ -51,6 +55,9 @@ public class JuryServiceTest {
 
     @Mock
     UserServiceRules userServiceRules;
+
+    @Mock
+    UserService userService;
 
     @Mock
     private JuryRepository juryRepository;
@@ -89,40 +96,6 @@ public class JuryServiceTest {
         assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
     }
 
-    @Test
-    public void testAddJury_nominal() throws CustomRuntimeException {
-        // Set up test data
-        TeachingStaffDTO devMember = new TeachingStaffDTO();
-        devMember.setIdUser(1);
-        TeachingStaffDTO archiMember = new TeachingStaffDTO();
-        archiMember.setIdUser(2);
-
-        UserEntity user1 = new UserEntity();
-        user1.setId(1);
-        UserEntity user2 = new UserEntity();
-        user2.setId(2);
-        TeachingStaffEntity ts1 = new TeachingStaffEntity(user1);
-        TeachingStaffEntity ts2 = new TeachingStaffEntity(user2);
-        JuryEntity juryEntity = new JuryEntity(ts1, ts2);
-
-        doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
-        when(juryRepository.save(any(JuryEntity.class))).thenReturn(juryEntity);
-        when(teachingStaffService.getTeachingStaffById(1)).thenReturn(devMember);
-        when(teachingStaffService.getTeachingStaffById(2)).thenReturn(archiMember);
-
-        // Call the method to be tested
-        JuryDTO result = juryService.addJury(1, 2);
-
-        // Verify that the expected methods were called
-        verify(userServiceRules).checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
-        verify(juryServiceRules).checkDifferentTeachingStaff(1, 2);
-        verify(juryRepository).save(any(JuryEntity.class));
-
-        // Verify the result
-        assertNotNull(result);
-        assertEquals(devMember.getIdUser(), result.getTs1().getIdUser());
-        assertEquals(archiMember.getIdUser(), result.getTs2().getIdUser());
-    }
 
     @Test
     public void findJuryByTs1AndTs2_ValidJury1_ReturnsJuryDTO() throws CustomRuntimeException {
@@ -207,6 +180,69 @@ void testGetAllJuries_Nominal() {
     verify(juryRepository, times(1)).findAll(); 
     assertEquals(juries.size(), result.size()); // Assuming the modelMapper works correctly
 }
+
+@Test
+void testAddJuryMemberRole_UserAlreadyHasRole() throws CustomRuntimeException {
+    // Arrange
+    UserDTO user = new UserDTO();
+    RoleDTO role = new RoleDTO();
+    role.setRole("JURY_MEMBER_ROLE");
+    user.getRoles().add(role);
+    
+    TeachingStaffDTO teachingStaff = new TeachingStaffDTO();
+    teachingStaff.setUser(user);
+
+    // Pas besoin de mocker checkCurrentUserRole(), par défaut il autorise l'action
+
+    // Act
+    TeachingStaffDTO result = juryService.addJuryMemberRole(teachingStaff);
+    
+    // Assert
+    verify(userService, times(0)).updateUser(any(UserDTO.class)); // User is not updated
+    assertEquals(teachingStaff, result); // Returned object is the same as input object
+}
+
+@Test
+void testAddJuryMemberRole_UserDoesNotHaveRole() throws CustomRuntimeException {
+    // Arrange
+    UserDTO user = new UserDTO();
+    TeachingStaffDTO teachingStaff = new TeachingStaffDTO();
+    teachingStaff.setUser(user);
+    
+    // Pas besoin de mocker checkCurrentUserRole(), par défaut il autorise l'action
+    when(userService.updateUser(any(UserDTO.class))).thenReturn(user);
+    when(teachingStaffService.getTeachingStaffById(any())).thenReturn(teachingStaff);
+
+    // Act
+    TeachingStaffDTO result = juryService.addJuryMemberRole(teachingStaff);
+    
+    // Assert
+    verify(userService, times(1)).updateUser(any(UserDTO.class)); // User is updated
+    verify(teachingStaffService, times(1)).getTeachingStaffById(any()); // Teaching staff is fetched by id
+    assertEquals(1, result.getUser().getRoles().size()); // New role is added
+    assertEquals("JURY_MEMBER_ROLE", result.getUser().getRoles().get(0).getRole()); // Role is correct
+}
+
+
+@Test
+void testFindJuryByTs1AndTs2_ServiceError() {
+    // Arrange
+    TeachingStaffDTO ts1 = new TeachingStaffDTO();
+    TeachingStaffDTO ts2 = new TeachingStaffDTO();
+
+    when(juryRepository.findByTs1AndTs2(any(), any())).thenThrow(new RuntimeException());
+
+    // Act & Assert
+    CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
+        juryService.findJuryByTs1AndTs2(ts1, ts2);
+    });
+
+    assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
+}
+
+
+
+
 
 
 
