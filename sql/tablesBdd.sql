@@ -120,6 +120,7 @@ CREATE TABLE notification (
     message VARCHAR(250) NOT NULL,
     link VARCHAR(100), 
     id_user INT NOT NULL,
+    is_read BOOLEAN NOT NULL,
     PRIMARY KEY(id_notification),
     FOREIGN KEY (id_user) REFERENCES user (id)
 );
