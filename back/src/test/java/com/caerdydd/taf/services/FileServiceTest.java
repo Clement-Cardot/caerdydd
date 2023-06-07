@@ -186,7 +186,7 @@ public class FileServiceTest {
 
         MultipartFile file = new MockMultipartFile("file", "file.pdf", "text/plain", "some xml".getBytes());
         
-        fileService.saveFile(file, 1, "teamScopeStatement");
+        fileService.saveFile(file, 1, "test");
 
         try {
             fileService.loadFileAsResource(1, "test");
