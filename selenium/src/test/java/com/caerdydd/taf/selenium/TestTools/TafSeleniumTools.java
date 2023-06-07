@@ -13,8 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.Dimension;
 
-import static org.junit.Assert.fail;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,6 +30,9 @@ public class TafSeleniumTools {
 	String mariaDBUrl="jdbc:mariadb://localhost:3306/ProjetGL";
 	String username="root";
 	String password="root";
+
+	// Pour debug sur votre serveur local, mettez "local" à la place de "dev" ci dessous
+	String profil = "dev";
 
 	String projectDir = System.getProperty("user.dir");
 
@@ -110,9 +111,6 @@ public class TafSeleniumTools {
 	public void setupWebDriver() throws Exception{
 
 		ChromeOptions options = new ChromeOptions();
-
-		// Pour debug sur votre serveur local, mettez "local" à la place de "dev" ci dessous
-		String profil = "local";
 
 		System.out.println("PROFIL SELECTIONNE : "+ profil);
 
