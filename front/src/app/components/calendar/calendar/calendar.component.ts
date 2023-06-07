@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarEvent } from 'angular-calendar';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
@@ -6,6 +6,9 @@ import { PlannedTimingConsulting } from 'src/app/core/data/models/planned-timing
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { User } from 'src/app/core/data/models/user.model';
 import { ClickedConsultingDialogComponent } from '../clicked-consulting-dialog/clicked-consulting-dialog.component';
+import { Subject } from 'rxjs';
+import { first} from 'rxjs/operators';
+
 
 class ClickEvent {
   event!: CalendarEvent;
@@ -16,13 +19,15 @@ class ClickEvent {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   
   currentUser: User | null = null;
   
   viewDate: Date = new Date();
   events: PlannedTimingConsulting[] = [];
   refresh: any;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private userDataService: UserDataService,
@@ -31,7 +36,9 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser()
+    .pipe(first())
+    .subscribe((user: User | null) => {
       this.currentUser = user;
       this.loadConsultings();
     });
