@@ -53,6 +53,10 @@ import { ApiUploadFileService } from "src/app/core/services/api-upload-file.serv
     isThereFinalStateScope() {
       return (this.team?.filePathFinalScopeStatement != null);
     }
+
+    isThereReport() {
+      return (this.team?.filePathReport != null);
+    }
   
     showErrorDownload() {
       this._snackBar.open("Une erreur est survenue lors du téléchargement", "Fermer", {
