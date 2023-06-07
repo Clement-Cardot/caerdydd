@@ -56,7 +56,61 @@ public class FileServiceTest {
         when(env.getProperty("file.upload-dir")).thenReturn("test/");
 
         try {
-            fileService.saveFile(file, 1, "test");
+            fileService.saveFile(file, 1, "teamScopeStatement");
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testSaveFile_TheFileIsAnalysis() throws IOException, CustomRuntimeException {
+        TeamDTO mockedAnswer = new TeamDTO(1, null, null, null);
+        when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
+
+        MultipartFile file = mock(MultipartFile.class);
+        doNothing().when(file).transferTo(any(File.class));
+        
+        // Mock env
+        when(env.getProperty("file.upload-dir")).thenReturn("test/");
+
+        try {
+            fileService.saveFile(file, 1, "analysis");
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testSaveFile_TheFileIsFinalScopeStatement() throws IOException, CustomRuntimeException {
+        TeamDTO mockedAnswer = new TeamDTO(1, null, null, null);
+        when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
+
+        MultipartFile file = mock(MultipartFile.class);
+        doNothing().when(file).transferTo(any(File.class));
+        
+        // Mock env
+        when(env.getProperty("file.upload-dir")).thenReturn("test/");
+
+        try {
+            fileService.saveFile(file, 1, "finalTeamScopeStatement");
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testSaveFile_TheFileIsReport() throws IOException, CustomRuntimeException {
+        TeamDTO mockedAnswer = new TeamDTO(1, null, null, null);
+        when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
+
+        MultipartFile file = mock(MultipartFile.class);
+        doNothing().when(file).transferTo(any(File.class));
+        
+        // Mock env
+        when(env.getProperty("file.upload-dir")).thenReturn("test/");
+
+        try {
+            fileService.saveFile(file, 1, "report");
         } catch (CustomRuntimeException e) {
             fail("Exception thrown: " + e.getMessage());
         }
@@ -132,7 +186,7 @@ public class FileServiceTest {
 
         MultipartFile file = new MockMultipartFile("file", "file.pdf", "text/plain", "some xml".getBytes());
         
-        fileService.saveFile(file, 1, "test");
+        fileService.saveFile(file, 1, "teamScopeStatement");
 
         try {
             fileService.loadFileAsResource(1, "test");
@@ -143,7 +197,6 @@ public class FileServiceTest {
 
     @Test
     void testLoadFileAsResource_TheFileIsNotPresent() throws CustomRuntimeException {
-        // Call method to test
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
             fileService.loadFileAsResource(1, "notExistingFile");
         });
