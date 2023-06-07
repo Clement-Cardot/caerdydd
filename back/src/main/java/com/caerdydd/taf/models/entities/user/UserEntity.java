@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.caerdydd.taf.models.entities.notification.NotificationEntity;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,8 +45,8 @@ public class UserEntity implements Serializable {
     @PrimaryKeyJoinColumn
     private TeachingStaffEntity teachingStaff;
 
-    // @OneToMany(mappedBy = "user")
-    // private List<NotificationEntity> notifications;
+    @OneToMany(mappedBy = "user")
+    private List<NotificationEntity> notifications;
 
     public UserEntity() {
     }
