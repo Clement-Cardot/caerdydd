@@ -6,6 +6,8 @@ import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { Jury, JuryAdapter } from "../data/models/jury.model";
+import { TeachingStaff } from "../data/models/teaching-staff.model";
+
 
 @Injectable({
     providedIn: "root"
@@ -29,7 +31,6 @@ export class ApiJuryService {
             catchError(this.handleError)
         );
     }
-
     
 
     private handleError(error: HttpErrorResponse) {
