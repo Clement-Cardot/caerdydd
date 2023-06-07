@@ -5,6 +5,7 @@ import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { User } from 'src/app/core/data/models/user.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
 	selector: 'app-marks',
 	templateUrl: './marks.component.html',
@@ -35,7 +36,7 @@ export class MarksComponent implements OnInit {
 
 	panelOpenState = false;
 
-	constructor(private userService: UserDataService, private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService) {
+	constructor(private userService: UserDataService, private apiTeamService: ApiTeamService, private apiTeamMemberService: ApiTeamMemberService, private _snackBar: MatSnackBar) {
 	}
 
 	calculateFinalMark(teamMember: TeamMember): number {
@@ -71,14 +72,15 @@ export class MarksComponent implements OnInit {
 		return bonusPenaltySum;
 	}
 
-	saveBonus(){
+	saveBonus() {
 		this.team.teamMembers.forEach(teamMember => {
-			this.apiTeamMemberService.setBonusTeamMember(teamMember.user.id, teamMember.bonusPenalty).subscribe((response) => {
-				console.log(response);
-			  });
-			})
-		console.log("Bonus/Penalty saved");
-	}
+		  this.apiTeamMemberService.setBonusTeamMember(teamMember.user.id, teamMember.bonusPenalty).subscribe((response) => {
+			console.log(response);
+		  });
+		});
+		this.showSnackbar("Les bonus/malus ont été enregistrés avec succès!"); 
+		console.log("Bonus/malus saved");
+	  }
 	
 	checkFinalMarks(team: Team): boolean{
 		for(let teamMember of team.teamMembers){
@@ -92,26 +94,29 @@ export class MarksComponent implements OnInit {
 	async saveMarks(): Promise<void> {
 		try {
 		  for (const teamMember of this.team.teamMembers) {
-			if(teamMember.individualMark != null) {
-				await this.apiTeamMemberService.setIndividualMarkTeamMember(teamMember.user.id, teamMember.individualMark).toPromise();
-				console.log("Individual mark saved for user:", teamMember.user.id);
+			if (teamMember.individualMark != null) {
+			  await this.apiTeamMemberService.setIndividualMarkTeamMember(teamMember.user.id, teamMember.individualMark).toPromise();
+			  console.log("Individual mark saved for user:", teamMember.user.id);
 			}
-		} 
-		if (this.team.teamWorkMark !== null) {
+		  }
+	  
+		  if (this.team.teamWorkMark !== null) {
 			await this.apiTeamService.setTeamMarks(this.team.idTeam, this.team.teamWorkMark, this.team.teamValidationMark).toPromise();
 			console.log("Team work mark saved!");
 		  }
-		  
+	  
 		  if (this.team.teamValidationMark !== null) {
 			await this.apiTeamService.setTeamMarks(this.team.idTeam, this.team.teamWorkMark, this.team.teamValidationMark).toPromise();
 			console.log("Validation mark saved!");
 		  }
-
+		  this.showSnackbar("Les notes ont été enregistrées avec succès!");
 		  console.log("Marks saved!");
 		} catch (error) {
 		  console.error("Error while saving marks:", error);
+		  this.showSnackbar("Une erreur s'est produite lors de l'enregistrement des notes.");
 		}
-	}
+	  }
+	  
 
 	isJuryOfTeam(team: Team): boolean {
 		if(this.currentUser && team.projectDev.jury) {
@@ -130,5 +135,11 @@ export class MarksComponent implements OnInit {
 	isOptionLeader(): boolean {
 		if (this.currentUser?.getRoles().includes("OPTION_LEADER_ROLE") == undefined) return false;
 		return this.currentUser.getRoles().includes("OPTION_LEADER_ROLE");
+	}
+
+	showSnackbar(message: string) {
+		this._snackBar.open(message, "Fermer", {
+		  duration: 5000,
+		});
 	}
 }
