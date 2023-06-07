@@ -2,6 +2,7 @@ package com.caerdydd.taf.services;
 
 import java.util.Optional;
 
+
 import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,9 @@ import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 import com.caerdydd.taf.services.rules.JuryServiceRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class JuryService {
@@ -49,10 +53,10 @@ public class JuryService {
     @Autowired
     SecurityConfig securityConfig;
 
-    public JuryDTO findJuryByTs1AndTs2(TeachingStaffDTO ts12, TeachingStaffDTO ts22) throws CustomRuntimeException {
+    public JuryDTO findJuryByTs1AndTs2(TeachingStaffDTO ts1DTO, TeachingStaffDTO ts2DTO) throws CustomRuntimeException {
 
-        TeachingStaffEntity ts1 = modelMapper.map(ts12, TeachingStaffEntity.class);
-        TeachingStaffEntity ts2 = modelMapper.map(ts22, TeachingStaffEntity.class);
+        TeachingStaffEntity ts1 = modelMapper.map(ts1DTO, TeachingStaffEntity.class);
+        TeachingStaffEntity ts2 = modelMapper.map(ts2DTO, TeachingStaffEntity.class);
 
         Optional<JuryEntity> optionalJury1 = Optional.empty();
         Optional<JuryEntity> optionalJury2 = Optional.empty();
@@ -70,6 +74,7 @@ public class JuryService {
             return modelMapper.map(optionalJury1.get(), JuryDTO.class);
         }
         return modelMapper.map(optionalJury2.get(), JuryDTO.class);
+        
     }
 
     public void checkJuryExists(Integer idTs1, Integer idTs2) throws CustomRuntimeException {
@@ -90,6 +95,7 @@ public class JuryService {
     
     public JuryDTO addJury(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
         userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
+
 
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
         checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
@@ -140,4 +146,20 @@ public class JuryService {
         return this.teachingStaffService.getTeachingStaffById(user.getId());
     }
 
+
+    public JuryDTO getJury(Integer idJury) throws CustomRuntimeException {
+        Optional<JuryEntity> optionalJury = juryRepository.findById(idJury);
+        if (!optionalJury.isPresent()) {
+            throw new CustomRuntimeException(CustomRuntimeException.JURY_NOT_FOUND);
+        }
+        return modelMapper.map(optionalJury.get(), JuryDTO.class);
+    }
+
+    public List<JuryDTO> getAllJuries() {
+        List<JuryEntity> juryEntities = juryRepository.findAll();
+        return juryEntities.stream()
+                .map(juryEntity -> modelMapper.map(juryEntity, JuryDTO.class))
+                .collect(Collectors.toList());
+    }
+   
 }

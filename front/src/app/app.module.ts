@@ -13,6 +13,7 @@ import { SidenavModule } from './sidenav/sidenav.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ApiProjectService } from './core/services/api-project.service';
 import { ErrorInterceptor } from './core/services/error.interceptor';
+import { ApiPresentationService } from './core/services/api-presentation.service';
 import { ApiTeachingStaffService } from './core/services/api-teaching-staff.service';
 import { PagesModule } from './pages/pages.module';
 import { LoginPageModule } from './pages/login-page/login-page.module';
@@ -25,6 +26,7 @@ import { LoginPageModule } from './pages/login-page/login-page.module';
     ApiTeamService,
     ApiUserService,
     ApiProjectService,
+    ApiPresentationService,
     ApiTeachingStaffService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy },

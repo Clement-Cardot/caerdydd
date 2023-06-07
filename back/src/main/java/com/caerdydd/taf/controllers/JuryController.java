@@ -1,5 +1,7 @@
 package com.caerdydd.taf.controllers;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,4 +77,30 @@ public ResponseEntity<TeachingStaffDTO> addJuryMemberRole(@RequestBody TeachingS
         }
     }
 }
+    
+    @GetMapping("/{idJury}")
+    public ResponseEntity<JuryDTO> getJury(@PathVariable Integer idJury) {
+        try {
+            JuryDTO jury = juryService.getJury(idJury);
+            return new ResponseEntity<>(jury, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.JURY_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<JuryDTO>> getAllJuries() {
+    try {
+        List<JuryDTO> juries = juryService.getAllJuries();
+        return new ResponseEntity<>(juries, HttpStatus.OK);
+    } catch (Exception e) {
+        logger.error("Error while getting all juries", e);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
 }
