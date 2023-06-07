@@ -1,5 +1,5 @@
 <div id="teamCreationBox">
-    <mat-card id="teamCreationComponent">
+    <mat-card id="teamCreationCard">
         <mat-card-header>
             <mat-card-title id="titleTeamCreation">Création d'équipe</mat-card-title>
             <mat-card-subtitle id="subtitleTeamCreation">Sélectionnez un nombre de paires d'équipes à créer</mat-card-subtitle>
@@ -9,7 +9,7 @@
         <form id="teamCreationForm" [formGroup]="teamCreationForm" (ngSubmit)="createTeams()">
 
             <mat-form-field class="inputForm" appearance="fill" color="accent">
-                <mat-label class="labelForm">Nombre de paires</mat-label>
+                <mat-label class="labelForm" id="nbPaire" >Nombre de paires</mat-label>
                 <input matInput  id="inputNumberTeamPairs" type="number" min="1" [formControl]="nbTeamsFormControl"/>
                 <mat-error *ngIf="nbTeamsFormControl.hasError('required')">
                     Un nombre d'équipe est <strong>requis</strong>

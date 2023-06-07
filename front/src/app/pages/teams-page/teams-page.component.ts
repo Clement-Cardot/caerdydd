@@ -63,6 +63,7 @@ export class TeamsPageComponent implements OnInit {
 
   closeTeamsCreation(componentDisplayed: boolean) {
     this.openTeamsCreation = componentDisplayed;
+    this.getAllData();
   }
 
   isCurrentUserAnOptionLeader() {

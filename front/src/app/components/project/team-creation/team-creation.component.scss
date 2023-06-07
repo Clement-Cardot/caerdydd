@@ -10,14 +10,7 @@
     padding: 25px 5%;
 }
 
-#teamCreationBox {
-    display: flex;
-    justify-content: center;
-    width: 90%;
-    padding: 25px 5%;
-}
-
-#teamCreationComponent {
+#teamCreationCard {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,7 +19,7 @@
 }
 
 @media (max-width: 900px) {
-    #teamCreationComponent {
+    #teamCreationCard {
         width: 80%;
     }
 }

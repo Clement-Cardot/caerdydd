@@ -1,4 +1,4 @@
-package com.caerdydd.taf.selenium;
+package com.caerdydd.taf.selenium.VueTests;
 
 import org.junit.After;
 import org.junit.Before;
@@ -6,11 +6,11 @@ import org.junit.Test;
 
 import com.caerdydd.taf.selenium.TestTools.TafSeleniumTools;
 
-public class TeamsTest {
-
+public class PlanningRoleVueTests {
+    
     TafSeleniumTools tafSeleniumTools = new TafSeleniumTools();
 
-	@Before
+    @Before
 	public void setup() throws Exception {
 		tafSeleniumTools.setupWebDriver();
 		tafSeleniumTools.runSqlScript("../sql/tablesBdd.sql");
@@ -24,28 +24,21 @@ public class TeamsTest {
 		tafSeleniumTools.runSqlScript("../sql/populateTables.sql");
 	}
 
-	@Test
-	public void testImportEtudiants() throws Exception {
+    @Test
+	public void testInitPagePlanification() throws Exception {
 		tafSeleniumTools.openConnexionPage();
 		tafSeleniumTools.connexion("bouvieal", "bouvieal");
 		tafSeleniumTools.goToPage("Planification");
-		tafSeleniumTools.importStudent();
+        tafSeleniumTools.checkPlanificationPage();
 		tafSeleniumTools.deconnexion();
 	}
 
-    @Test
-	public void testEquipes() throws Exception {
-		testImportEtudiants();
-        tafSeleniumTools.openConnexionPage();
-		tafSeleniumTools.connexion("rousseso", "rousseso");
-		tafSeleniumTools.goToPage("Equipes");
-		tafSeleniumTools.generateTeams(2);
-		tafSeleniumTools.deconnexion();
-		tafSeleniumTools.connexion("cardotcl", "cardotcl");
-		tafSeleniumTools.goToPage("Equipes");
-		tafSeleniumTools.applyInATeam(1);
+	@Test
+	public void testInitPageCalendrier() throws Exception {
+		tafSeleniumTools.openConnexionPage();
+		tafSeleniumTools.connexion("bouvieal", "bouvieal");
+		tafSeleniumTools.goToPage("Calendrier");
+        tafSeleniumTools.checkCalendrierPage();
 		tafSeleniumTools.deconnexion();
 	}
-
-    
 }
