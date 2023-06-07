@@ -85,13 +85,13 @@ export class ProjectFilesComponent implements OnInit {
       } else if (type === 3) {
         importForm = this.importFTSSform;
         formControl = this.finalTeamScopeFormControl;
-        this.analysisFormControl.setErrors({'apiError': null});
-        this.analysisFormControl.updateValueAndValidity();
+        this.finalTeamScopeFormControl.setErrors({'apiError': null});
+        this.finalTeamScopeFormControl.updateValueAndValidity();
       } else {
         importForm = this.importReportform;
         formControl = this.reportFormControl;
-        this.analysisFormControl.setErrors({'apiError': null});
-        this.analysisFormControl.updateValueAndValidity();
+        this.reportFormControl.setErrors({'apiError': null});
+        this.reportFormControl.updateValueAndValidity();
       }
       if(importForm.invalid) {
         console.log("Invalid form");

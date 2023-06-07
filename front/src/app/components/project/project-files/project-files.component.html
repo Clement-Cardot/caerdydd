@@ -69,10 +69,10 @@
         <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" formControlName="report" [accept]="'.pdf'">
         </ngx-mat-file-input>
         <mat-icon matSuffix>attachment</mat-icon>
-        <mat-error *ngIf="importReportform.hasError('required')">
+        <mat-error *ngIf="reportFormControl.hasError('required')">
             Vous devez choisir un fichier
         </mat-error>
-        <mat-error *ngIf="importReportform.hasError('apiError')">
+        <mat-error *ngIf="reportFormControl.hasError('apiError')">
             {{errorMessage}}
         </mat-error>
       </mat-form-field>
@@ -81,6 +81,7 @@
       </button>
     </div>
   </form>
+  <button mat-raised-button color="accent" (click)="getFile('report')" class="downloadButton" [disabled]="!isThereReport()">Télécharger le document</button>
 
   <form [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
     <mat-form-field  class="inputForm" appearance="fill">
