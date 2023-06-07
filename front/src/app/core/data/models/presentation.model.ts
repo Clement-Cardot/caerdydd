@@ -2,6 +2,8 @@ import { CalendarEvent} from "angular-calendar/modules/common/calendar-common.mo
 import { EventColor, EventAction } from "calendar-utils";
 import { Adapter } from "../adapter";
 import { Injectable } from "@angular/core";
+import { Jury, JuryAdapter } from "./jury.model";
+import { Project, ProjectAdapter } from "./project.model";
 
 export class Presentation implements CalendarEvent {
     id: string | number | undefined;
@@ -24,8 +26,8 @@ export class Presentation implements CalendarEvent {
         public room: string,
         public jury1Notes: string,
         public jury2Notes: string,
-        public idJury: number,
-        public idProject: number,
+        public jury: Jury,
+        public project: Project
     ) {
         this.id = idPresentation;
         this.start = datetimeBegin;
@@ -52,6 +54,10 @@ export interface PresentationPayload {
     providedIn: 'root'
 })
 export class PresentationAdapter implements Adapter<Presentation> {
+
+    constructor(private juryAdapter: JuryAdapter,
+                private projectAdapter: ProjectAdapter) {}
+
     adapt(item: any): Presentation {
         return new Presentation(
             item.idPresentation,
@@ -61,8 +67,8 @@ export class PresentationAdapter implements Adapter<Presentation> {
             item.room,
             item.jury1Notes,
             item.jury2Notes,
-            item.idJury,
-            item.idProject,
+            this.juryAdapter.adapt(item.jury),
+            this.projectAdapter.adapt(item.project)
         );
     }
 }
