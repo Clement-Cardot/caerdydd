@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 
@@ -28,6 +29,13 @@ public class UserServiceRulesTest {
 
     @Mock
     SecurityConfig securityConfig;
+
+
+    @InjectMocks
+    private UserServiceRules userServiceRule;
+    
+    @Mock
+    private UserRepository userRepository;
 
     @ParameterizedTest
     @ValueSource(strings = {"STUDENT_ROLE", "TEACHING_STAFF_ROLE", "OPTION_LEADER_ROLE", "TEAM_MEMBER_ROLE", "PLANNING_ROLE"})
@@ -140,5 +148,35 @@ public class UserServiceRulesTest {
         
         // If nothing throw : success
 
+    }
+
+
+    @Test
+    void testCheckUserExists_True() {
+        // Prepare Input
+        Integer idUser = 1;
+        when(userRepository.existsById(idUser)).thenReturn(true);
+
+        // Call method to test
+        try {
+            userServiceRule.checkUserExists(idUser);
+        } catch (CustomRuntimeException e) {
+            Assertions.fail(e);
+        }
+    }
+
+    @Test
+    void testCheckUserExists_False() {
+        // Prepare Input
+        Integer idUser = 1;
+        when(userRepository.existsById(idUser)).thenReturn(false);
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrows(CustomRuntimeException.class, () -> {
+            userServiceRule.checkUserExists(idUser);
+        });
+
+        // Verify the result
+        Assertions.assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
     }
 }
