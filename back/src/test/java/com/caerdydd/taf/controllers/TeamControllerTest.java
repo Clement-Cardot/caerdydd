@@ -1,12 +1,16 @@
 package com.caerdydd.taf.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -923,5 +927,78 @@ public class TeamControllerTest {
         verify(teamService).setTeamValidationMarkById(teamId, teamValidationMark);
         
     }
+    @Test
+public void testSetTeamMarks_Success() throws CustomRuntimeException {
+    // Mock the required objects and data
+    Integer teamId = 1;
+    Integer teamWorkMark = 80;
+    Integer teamValidationMark = 90;
+    TeamDTO team = new TeamDTO();
+    // ... set up the team object
+    
+    // Set up the mock behavior
+    when(teamService.setTeamWorkMarkById(teamId, teamWorkMark)).thenReturn(team);
+    when(teamService.setTeamValidationMarkById(teamId, teamValidationMark)).thenReturn(team);
+    
+    // Call the method to be tested
+    ResponseEntity<TeamDTO> response = teamController.setTeamMarks(teamId, teamWorkMark, teamValidationMark);
+    
+    // Verify the behavior
+    verify(teamService).setTeamWorkMarkById(teamId, teamWorkMark);
+    verify(teamService).setTeamValidationMarkById(teamId, teamValidationMark);
+    
+    // Perform assertions on the response or any other necessary verifications
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals(team, response.getBody());
+}
+
+@Test
+public void testSetTeamMarks_TeamNotFound() throws CustomRuntimeException {
+    // Mock the required objects and data
+    Integer teamId = 1;
+    Integer teamWorkMark = 80;
+    Integer teamValidationMark = 90;
+
+    // Set up the mock behavior to throw an exception indicating team not found
+    when(teamService.setTeamWorkMarkById(eq(teamId), eq(teamWorkMark)))
+        .thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+    // Call the method to be tested
+    ResponseEntity<TeamDTO> response = teamController.setTeamMarks(teamId, teamWorkMark, teamValidationMark);
+
+    // Verify the behavior
+    verify(teamService).setTeamWorkMarkById(eq(teamId), eq(teamWorkMark));
+
+    // Perform assertions on the response or any other necessary verifications
+    assertNotNull(response);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+}
+
+@Test
+public void testSetTeamMarks_ServiceError() throws CustomRuntimeException {
+    // Mock the required objects and data
+    Integer teamId = 1;
+    Integer teamWorkMark = 80;
+    Integer teamValidationMark = 90;
+
+    // Set up the mock behavior to throw a service error exception
+    when(teamService.setTeamWorkMarkById(eq(teamId), eq(teamWorkMark)))
+        .thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+    // Call the method to be tested
+    ResponseEntity<TeamDTO> response = teamController.setTeamMarks(teamId, teamWorkMark, teamValidationMark);
+
+    // Verify the behavior
+    verify(teamService).setTeamWorkMarkById(eq(teamId), eq(teamWorkMark));
+    verifyNoMoreInteractions(teamService); // Ensure no other interactions occurred
+
+    // Perform assertions on the response or any other necessary verifications
+    assertNotNull(response);
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+}
+
+
+
     
 }
