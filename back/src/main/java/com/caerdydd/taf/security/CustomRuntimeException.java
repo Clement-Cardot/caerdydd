@@ -67,6 +67,7 @@ public class CustomRuntimeException extends Exception{
 
     //time 
     public static final String PRESENTATION_END_BEFORE_BEGIN = "Presentation end time is before its start time.";
+    
 
     public CustomRuntimeException(String message) {
         super(message);
