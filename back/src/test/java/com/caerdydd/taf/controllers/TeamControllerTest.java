@@ -902,4 +902,26 @@ public class TeamControllerTest {
         verify(fileService, times(1)).loadFileAsResource(any(Integer.class), any(String.class));
         assertEquals(expectedAnswer.toString(), result.toString());
     }
+    @Test
+    public void testSetTeamMarks() throws CustomRuntimeException {
+        // Mock the required objects and data
+        Integer teamId = 1;
+        Integer teamWorkMark = 80;
+        Integer teamValidationMark = 90;
+        TeamDTO team = new TeamDTO();
+        // ... set up the team object
+        
+        // Set up the mock behavior
+        when(teamService.setTeamWorkMarkById(teamId, teamWorkMark)).thenReturn(team);
+        when(teamService.setTeamValidationMarkById(teamId, teamValidationMark)).thenReturn(team);
+        
+        // Call the method to be tested
+        ResponseEntity<TeamDTO> response = teamController.setTeamMarks(teamId, teamWorkMark, teamValidationMark);
+        
+        // Verify the behavior
+        verify(teamService).setTeamWorkMarkById(teamId, teamWorkMark);
+        verify(teamService).setTeamValidationMarkById(teamId, teamValidationMark);
+        
+    }
+    
 }
