@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 
@@ -29,6 +30,13 @@ public class UserServiceRulesTest {
 
     @Mock
     SecurityConfig securityConfig;
+
+
+    @InjectMocks
+    private UserServiceRules userServiceRule;
+    
+    @Mock
+    private UserRepository userRepository;
 
     @ParameterizedTest
     @ValueSource(strings = {"STUDENT_ROLE", "TEACHING_STAFF_ROLE", "OPTION_LEADER_ROLE", "TEAM_MEMBER_ROLE", "PLANNING_ROLE"})
