@@ -16,7 +16,8 @@ public class NotificationEntity implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id_notification")
+    private Integer idNotification;
     private String message;
     private String link;
     @Column(name = "is_read")
@@ -36,8 +37,8 @@ public class NotificationEntity implements Serializable{
         this.isRead = isRead;
     }
 
-    public NotificationEntity(Integer id, String message, String link, UserEntity user, Boolean isRead) {
-        this.id = id;
+    public NotificationEntity(Integer idNotification, String message, String link, UserEntity user, Boolean isRead) {
+        this.idNotification = idNotification;
         this.message = message;
         this.link = link;
         this.user = user;

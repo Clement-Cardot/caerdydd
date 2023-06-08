@@ -16,7 +16,8 @@ public class CustomRuntimeException extends Exception{
     public static final String PRESENTATION_NOT_FOUND = "Presentation not found";
     public static final String PLANNED_TIMING_CONSULTING_NOT_FOUND = "Planned timing consulting not found";
     public static final String PLANNED_TIMING_AVAILABILITY_NOT_FOUND = "Planned timing availability not found";
-
+    public static final String NOTIFICATION_NOT_FOUND = "Notification not found";
+    
     // Already exist messages
     public static final String USER_ALREADY_EXISTS = "User already exist";
     public static final String USER_ALREADY_IN_A_TEAM = "User is already in a team";
@@ -67,6 +68,7 @@ public class CustomRuntimeException extends Exception{
 
     //time 
     public static final String PRESENTATION_END_BEFORE_BEGIN = "Presentation end time is before its start time.";
+    
 
     public CustomRuntimeException(String message) {
         super(message);
