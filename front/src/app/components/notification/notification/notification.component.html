@@ -1,0 +1,22 @@
+<button mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-icon matBadge="{{unreadNotifications()}}" matBadgeColor="warn">notifications</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent>
+    <div *ngFor="let notification of notifications" [ngClass]="{'unread': !notification.isRead, 'read': notification.isRead}">
+      <button mat-menu-item (click)="$event.stopPropagation(); markAsRead(notification)">
+        <div class="message">{{ notification.message }}</div>
+        <div class="status"><span>({{ notification.isRead ? 'Lu' : 'Non lu' }})</span></div>
+      </button>
+    </div>
+
+    <div *ngIf="notifications.length === 0">
+      <button mat-menu-item disabled>Aucune notification</button>
+    </div>
+
+    <div class="menu-bottom">
+      <button mat-menu-item (click)="closeMenu()">Fermer</button>
+    </div>
+  </ng-template>
+</mat-menu>
