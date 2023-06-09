@@ -4,7 +4,7 @@ import { Observable } from "rxjs/internal/Observable";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 import { map, tap } from "rxjs/operators";
-import { Presentation, PresentationAdapter, PresentationPayload } from "../data/models/presentation.model";
+import { Presentation, PresentationAdapter} from "../data/models/presentation.model";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -28,14 +28,14 @@ export class ApiPresentationService {
         );
     }
 
-    createPresentation(presentation: PresentationPayload): Observable<Presentation> {
+    createPresentation(presentation: Presentation): Observable<Presentation> {
         const url = `${this.baseUrl}`;
         return this.http.put<any>(url, presentation)
             .pipe(
                 map((data: any) => this.presentationAdapter.adapt(data)),
                 catchError(this.handleError)
             );
-    }
+    }      
 
     getTeamPresentations(teamId: number): Observable<Presentation[]> {
         const url = `${this.baseUrl}/team/${teamId}`;

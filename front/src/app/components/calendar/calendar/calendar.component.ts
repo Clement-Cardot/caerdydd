@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarEvent } from 'angular-calendar';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
@@ -13,6 +13,9 @@ import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ClickedConsultingDialogComponent } from '../clicked-consulting-dialog/clicked-consulting-dialog.component';
+import { Subject } from 'rxjs';
+import { first} from 'rxjs/operators';
+
 
 class ClickEvent {
   event!: CalendarEvent;
@@ -24,7 +27,7 @@ class ClickEvent {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   
   currentUser: User | null = null;
   currentTeam: Team | null = null;
@@ -32,6 +35,8 @@ export class CalendarComponent implements OnInit {
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
   refresh: any;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private userDataService: UserDataService,
@@ -43,7 +48,9 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser()
+    .pipe(first())
+    .subscribe((user: User | null) => {
       this.currentUser = user;
       if (this.currentUser) {
         let currentUserRoles = this.currentUser.getRoles();
@@ -58,7 +65,9 @@ export class CalendarComponent implements OnInit {
   }
 
   getTeamMember(userId: number) {
-    this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
+    this.apiTeamMemberService.getTeamMemberById(userId)
+    .pipe(first())
+    .subscribe(
       (teamMember: TeamMember) => {
         if (teamMember.idTeam !== null) {
           this.getTeam(teamMember.idTeam);
@@ -73,7 +82,9 @@ export class CalendarComponent implements OnInit {
   }
   
   getTeam(teamId: number) {
-    this.apiTeamService.getTeam(teamId).subscribe(
+    this.apiTeamService.getTeam(teamId)
+    .pipe(first())
+    .subscribe(
       (team: Team) => {
         this.currentTeam = team;
         this.loadEvents();
@@ -86,6 +97,8 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.refresh) {
       clearInterval(this.refresh);
     }
@@ -93,7 +106,9 @@ export class CalendarComponent implements OnInit {
 
   loadEvents() {
     this.events=[];
-    this.apiConsultingService.getAllConsultings().subscribe(data => {
+    this.apiConsultingService.getAllConsultings()
+    .pipe(first())
+    .subscribe(data => {
       this.events = [...this.events, ...data];
       this.filterConsultingsByRole();
     });
@@ -161,7 +176,9 @@ export class CalendarComponent implements OnInit {
 
  filterPresentationsTeamMember() {
     if (this.currentTeam) {
-      this.apiPresentationService.getTeamPresentations(this.currentTeam.idTeam).subscribe(data => {
+      this.apiPresentationService.getTeamPresentations(this.currentTeam.idTeam)
+      .pipe(first())
+      .subscribe(data => {
         this.events = [...this.events, ...data];
       });
     }
@@ -169,13 +186,17 @@ export class CalendarComponent implements OnInit {
 
 filterPresentationsTeachingStaff() {
     if (this.currentUser) {
-      this.apiPresentationService.getTeachingStaffPresentations(this.currentUser.id).subscribe(data => {
+      this.apiPresentationService.getTeachingStaffPresentations(this.currentUser.id)
+      .pipe(first())
+      .subscribe(data => {
         this.events = [...this.events, ...data];      });
     }
 }
 
 filterPresentationsPlanning() {
-    this.apiPresentationService.listAllPresentations().subscribe(data => {
+    this.apiPresentationService.listAllPresentations()
+    .pipe(first())
+    .subscribe(data => {
       this.events = [...this.events, ...data];    });
 }
 
