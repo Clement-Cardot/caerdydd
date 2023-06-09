@@ -1,29 +1,3 @@
-import {Injectable} from '@angular/core';
-import {Adapter} from '../adapter';
-import { Team, TeamAdapter } from './team.model';
-import { PlannedTimingAvailability, PlannedTimingAvailabilityAdapter } from './planned-timing-availability.model';
-import { PlannedTimingConsulting, PlannedTimingConsultingAdapter } from './planned-timing-consulting.model';
-
-export class Consulting {
-    constructor(
-        public idConsulting: number,
-        public speciality: string,
-        public notes: string,
-        public team: Team,
-        public plannedTimingAvailability: PlannedTimingAvailability,
-        public plannedTimingConsulting: PlannedTimingConsulting
-    ) {}
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-
-export class ConsultingAdapter implements Adapter<Consulting>{
-
-    constructor(private teamAdapter: TeamAdapter, 
-        private plannedTimingAvailabilityAdapter: PlannedTimingAvailabilityAdapter, 
-        private plannedTimingConsultingAdapter: PlannedTimingConsultingAdapter) { }
 
     adapt(item: any): Consulting {
         return new Consulting(
