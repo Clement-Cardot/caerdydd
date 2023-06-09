@@ -31,7 +31,7 @@ import com.caerdydd.taf.services.TeamService;
 public class TeamController {
 
     private static final Logger logger = LogManager.getLogger(TeamController.class);
-    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
+    static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
 
     @Autowired
     private TeamService teamService;
