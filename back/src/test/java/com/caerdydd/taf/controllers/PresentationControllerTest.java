@@ -11,11 +11,16 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 
 public class PresentationControllerTest {
 
@@ -319,5 +324,109 @@ void testCreatePresentation_UnexpectedError() throws CustomRuntimeException {
 }
 
 
+    @Test
+    void testUpdateNotesJury_Nominal() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes()
+        PresentationDTO mockedPresentation = new PresentationDTO();
+        when(presentationService.setJuryNotes(anyInt(), any())).thenReturn(mockedPresentation);
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesJury(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedPresentation, response.getBody());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setJuryNotes(1, "Excellent presentation");
+    }
+
+    @Test
+    void testUpdateNotesJury_JuryNotFound() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes() to throw CustomRuntimeException with JURY_NOT_FOUND message
+        when(presentationService.setJuryNotes(anyInt(), any()))
+                .thenThrow(new CustomRuntimeException(CustomRuntimeException.JURY_NOT_FOUND));
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesJury(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setJuryNotes(1, "Excellent presentation");
+    }
+
+    @Test
+    void testUpdateNotesJury_PresentationDidNotBegin() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes() to throw CustomRuntimeException with PRESENTATION_DID_NOT_BEGIN message
+        when(presentationService.setJuryNotes(anyInt(), any()))
+                .thenThrow(new CustomRuntimeException(CustomRuntimeException.PRESENTATION_DID_NOT_BEGIN));
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesJury(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setJuryNotes(1, "Excellent presentation");
+    }
+
+    @Test
+    void testUpdateNotesJury_ServiceError() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes() to throw CustomRuntimeException with SERVICE_ERROR message
+        when(presentationService.setJuryNotes(anyInt(), any()))
+                .thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesJury(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setJuryNotes(1, "Excellent presentation");
+    }
+
+    @Test
+    void testUpdateNotesJury_BadRequest() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes() to throw a general CustomRuntimeException
+        when(presentationService.setJuryNotes(anyInt(), any())).thenThrow(new CustomRuntimeException("Some error"));
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesJury(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setJuryNotes(1, "Excellent presentation");
+    }
 
 }
