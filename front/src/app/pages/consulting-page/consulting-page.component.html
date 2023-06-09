@@ -1,1 +1,12 @@
-<p>calendar works!</p>
+<div>
+    <h2>Consultings à venir</h2>
+    <div class="twoColumnDisplay">
+    <app-consulting-info *ngFor="let consulting of consultingProgrammedList" [consulting]="consulting"></app-consulting-info>
+    </div>
+</div>
+<div>
+    <h2>Consultings finis</h2>
+    <div class="twoColumnDisplay" id="consulting-list">
+    <app-consulting-info *ngFor="let consulting of consultingFinishedList" [consulting]="consulting"></app-consulting-info>
+    </div>
+</div>

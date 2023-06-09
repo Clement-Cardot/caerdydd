@@ -48,7 +48,7 @@ public class ConsultingController {
 
     @GetMapping("/TeachingStaff")
     public ResponseEntity<List<ConsultingDTO>> getConsultingsForCurrentTeachingStaff() {
-        logger.info("Process request : Get all consultings finished for current teaching staff");
+        logger.info("Process request : Get all consultings for current teaching staff");
         try {
             List<ConsultingDTO> consultingDTOs = consultingService.getConsultingsForCurrentTeachingStaff();
             return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);

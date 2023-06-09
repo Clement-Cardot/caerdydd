@@ -15,6 +15,7 @@ import { ProjectDescriptionPageComponent } from './pages/project-description-pag
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { TeachingStaffPageComponent } from './pages/teaching-staff-page/teaching-staff-page.component';
 import { ProjectPageComponent } from './pages/project-page/project-page.component';
+import { ConsultingPageComponent } from './pages/consulting-page/consulting-page.component';
 
 const websiteName = " - Taf"
 
@@ -29,7 +30,8 @@ const routes: Routes = [
 
   // Planification pages
   { path: 'planning', title: 'Planification' + websiteName, component: PlanificationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['PLANNING_ROLE']}},
-  { path: 'consultings', title: 'Consultings' + websiteName, component: CalendarPageComponent, canActivate: [AuthGuard] },
+  { path: 'calendar', title: 'Calendrier' + websiteName, component: CalendarPageComponent, canActivate: [AuthGuard] },
+  { path: 'consultings', title: 'Consulting' + websiteName, component: ConsultingPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEACHING_STAFF_ROLE']}},
 
   // Notation pages
   { path: 'marks', title: 'Notation' + websiteName, component: NotationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},

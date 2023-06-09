@@ -31,7 +31,7 @@ public class PlannedTimingConsultingDTO {
     private List<PlannedTimingAvailabilityDTO> teachingStaffAvailabilities;
 
     @JsonBackReference(value = "consultingTiming")
-    private ConsultingDTO consulting;
+    private List<ConsultingDTO> consultings;
 
     public PlannedTimingConsultingDTO() {
     }

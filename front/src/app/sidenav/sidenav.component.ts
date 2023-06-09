@@ -61,6 +61,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       }
       // Global
       this.navLink.push('Tableau de bord');
+      this.navLink.push('Calendrier');
 
       // Option Leader
       if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
@@ -111,6 +112,9 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'Planification':
         this.router.navigateByUrl('/planning');
+        break;
+      case 'Calendrier' :
+        this.router.navigateByUrl('/calendar');
         break;
       case 'Consultings':
         this.router.navigateByUrl('/consultings');
