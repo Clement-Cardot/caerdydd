@@ -10,8 +10,10 @@
       <mat-form-field appearance="fill">
         <mat-label>Type de présentation</mat-label>
         <mat-select formControlName="type">
-          <mat-option value="intermediate">Intermédiaire</mat-option>
-          <mat-option value="final">Finale</mat-option>
+          <mat-option value="Présentation intermédiaire">Présentation intermédiaire</mat-option>
+          <mat-option value="Présentation finale">Présentation finale</mat-option>
+          <mat-option value="Audit CSS">Audit CSS</mat-option>
+          <mat-option value="Audit LD">Audit LD</mat-option>
         </mat-select>
         <mat-error *ngIf="presentationForm.get('type')?.touched && presentationForm.get('type')?.invalid">
           Ce champ est requis.
