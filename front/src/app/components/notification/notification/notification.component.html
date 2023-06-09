@@ -1,5 +1,7 @@
 <button mat-icon-button [matMenuTriggerFor]="menu">
-  <mat-icon matBadge="{{unreadNotifications()}}" matBadgeColor="warn">notifications</mat-icon>
+  <div class="my-notification-component">
+    <mat-icon matBadge="{{unreadNotifications()}}" matBadgeColor="warn">notifications</mat-icon>
+  </div>
 </button>
 
 <mat-menu #menu="matMenu">
