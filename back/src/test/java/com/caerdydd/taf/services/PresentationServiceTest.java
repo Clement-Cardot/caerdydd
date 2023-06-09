@@ -4,16 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,11 +30,14 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.caerdydd.taf.models.dto.project.PresentationDTO;
 import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.user.JuryDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.project.TeamEntity;
@@ -359,6 +366,33 @@ void testGetTeamPresentations_ServiceError() {
 }
 
 
+@Test
+public void testSetJury1Notes() throws CustomRuntimeException {
+    // Créer une instance de présentation fictive avec des notes vides
+    PresentationDTO presentationDTO = new PresentationDTO();
+    presentationDTO.setIdPresentation(1);
+    presentationDTO.setJury1Notes("");
+
+    // Créer une instance de présentation fictive avec des notes mises à jour
+    PresentationDTO updatedPresentationDTO = new PresentationDTO();
+    updatedPresentationDTO.setIdPresentation(1);
+    updatedPresentationDTO.setJury1Notes("Nouvelles notes du jury 1");
+
+    // Mock la méthode findById pour renvoyer la présentation fictive
+    when(presentationRepository.findById(any())).thenReturn(Optional.of(new PresentationEntity()));
+
+    // Mock la méthode updatePresentation pour renvoyer la présentation mise à jour
+    when(presentationService.updatePresentation(any())).thenReturn(updatedPresentationDTO);
+
+    // Appeler la fonction à tester
+    PresentationDTO result = presentationService.setJury1Notes(1, "Nouvelles notes du jury 1");
+
+    // Vérifier que la présentation renvoyée correspond à la présentation mise à jour
+    assertEquals(updatedPresentationDTO, result);
+
+    // Vérifier que la méthode updatePresentation a été appelée avec la présentation mise à jour
+    verify(presentationService).updatePresentation(any());
+}
 
 
 }
