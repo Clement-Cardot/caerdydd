@@ -24,7 +24,7 @@ export class TeamsPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllData();
-    this.refresh = setInterval(() => { this.getAllData() },  5000 );
+    //this.refresh = setInterval(() => { this.getAllData() },  5000 );
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.currentUser = user;
     });
