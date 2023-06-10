@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Jury } from 'src/app/core/data/models/jury.model';
 import { Project } from 'src/app/core/data/models/project.model';
 import { ApiJuryService } from 'src/app/core/services/api-jury.service';
@@ -9,7 +9,7 @@ import { ApiProjectService } from 'src/app/core/services/api-project.service';
   templateUrl: './planification-page.component.html',
   styleUrls: ['./planification-page.component.scss']
 })
-export class PlanificationPageComponent implements OnInit {
+export class PlanificationPageComponent implements OnInit, OnDestroy {
   juries!: Jury[];
   projects!: Project[];
 
@@ -24,6 +24,10 @@ export class PlanificationPageComponent implements OnInit {
   ngOnInit(): void {
     this.getAllData();
     this.refresh = setInterval(() => { this.getAllData() },  5000 );
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.refresh);
   }
 
   getAllData(): void {

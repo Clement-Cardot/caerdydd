@@ -16,7 +16,7 @@ export class TeamListComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'surname', 'speciality'];
 
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
 
   panelOpenState = false;
 
@@ -26,7 +26,7 @@ export class TeamListComponent implements OnInit {
   
   
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
                                       this.currentUser = user;
                                     });
   }

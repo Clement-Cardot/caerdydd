@@ -17,7 +17,7 @@ export class TeamsPageComponent implements OnInit {
 
   openTeamsCreation: boolean = false;
 
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
 
   constructor(private apiTeamService: ApiTeamService, public userDataService: UserDataService) {
   }
@@ -25,7 +25,7 @@ export class TeamsPageComponent implements OnInit {
   ngOnInit(): void {
     this.getAllData();
     this.refresh = setInterval(() => { this.getAllData() },  5000 );
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
   }

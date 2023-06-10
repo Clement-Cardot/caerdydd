@@ -26,7 +26,7 @@ export class LoginPageComponent implements OnInit {
   passwordFormControl = new FormControl('', [Validators.required]);
   public showPassword: boolean = false;
 
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
 
   constructor(private router: Router,
     private formBuilder: FormBuilder,
@@ -53,7 +53,7 @@ export class LoginPageComponent implements OnInit {
           userResponse => {
             if(userResponse) {
                 this.userDataService.setCurrentUser(userResponse);
-                this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+                this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
                   this.currentUser = user;
                 });
 

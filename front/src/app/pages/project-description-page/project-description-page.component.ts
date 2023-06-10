@@ -18,7 +18,8 @@ import { Location } from '@angular/common';
 export class ProjectDescriptionPageComponent implements OnInit {
   project!: Project;
   projectForm!: FormGroup;
-  currentUser!: User | null;
+
+  currentUser: User | undefined = undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,12 +29,10 @@ export class ProjectDescriptionPageComponent implements OnInit {
     private apiTeamService: ApiTeamService,
     private location: Location 
 
-  ) {
-    
-  }
+  ) { }
 
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
     if (this.currentUser == null) {

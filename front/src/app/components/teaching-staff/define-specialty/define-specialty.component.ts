@@ -14,7 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class DefineSpecialtyComponent implements OnInit {
   teachingStaff!: TeachingStaff;
   ngOptions: any[] = [];
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
 
   constructor(
     private apiTeachingStaffService: ApiTeachingStaffService,
@@ -24,10 +24,10 @@ export class DefineSpecialtyComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
-    if (this.currentUser == null) {
+    if (this.currentUser == undefined) {
       console.log('User is not connected');
     } else {
       this.apiTeachingStaffService

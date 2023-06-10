@@ -27,7 +27,7 @@ function linkValidator(control: AbstractControl): { [key: string]: any } | null 
 export class ProjectFilesComponent implements OnInit {
 
   testBookLinkForm: FormGroup;
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
   currentTeam!: Team | null;
 
   importTSSform: FormGroup;
@@ -61,7 +61,7 @@ export class ProjectFilesComponent implements OnInit {
   }
 
   public ngOnInit():void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
       this.getTeamMember();
     });

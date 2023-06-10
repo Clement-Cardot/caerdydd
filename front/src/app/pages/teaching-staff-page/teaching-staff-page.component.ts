@@ -11,7 +11,7 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
 })
 export class TeachingStaffPageComponent {
   teachingStaffs!: TeachingStaff[];
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
 
   constructor(
     private apiTeachingStaffService: ApiTeachingStaffService,
@@ -20,7 +20,7 @@ export class TeachingStaffPageComponent {
 
   ngOnInit(): void {
     this.getAllTS();
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
   }

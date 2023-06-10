@@ -14,7 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class MarksComponent implements OnInit {
 
-	currentUser!: User | null;
+	currentUser: User | undefined = undefined;
 
 	displayedColumns = [
 		'name',
@@ -29,7 +29,7 @@ export class MarksComponent implements OnInit {
 	@Input() team!: Team;
 
 	public ngOnInit():void {
-		this.userService.getCurrentUser().subscribe((user: User | null) => {
+		this.userService.getCurrentUser().subscribe((user: User | undefined) => {
 		  this.currentUser = user;
 		});
 	  }

@@ -12,7 +12,7 @@ import { User } from './core/data/models/user.model';
 })
 export class AppComponent implements OnInit {
   title = 'TAF';
-  currentUser: User | null = null;
+  currentUser: User | undefined = undefined;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private userDataService: UserDataService, private apiUserService: ApiUserService) {
     router.events.pipe(
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
   }

@@ -14,7 +14,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
   notifications: Notification[] = [];
-  currentUser: User | null = null;
+  currentUser: User | undefined = undefined;
 
   refresh: any;
 
@@ -25,22 +25,21 @@ export class NotificationComponent implements OnInit, OnDestroy {
   
 
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
-      if (this.currentUser) {
-        let idUser = this.currentUser.id;
-        this.getNotifications(idUser);
-        this.refresh = setInterval(() => { this.getNotifications(idUser) },  5000 );
-      }
+      this.getNotifications();
+      
     });
+    this.refresh = setInterval(() => { this.getNotifications() },  30000 );
   }
 
   ngOnDestroy(): void {
     clearInterval(this.refresh);
   }
 
-  getNotifications(userId: number): void {
-    this.apiNotificationService.getNotificationsByUserId(userId).subscribe(
+  getNotifications(): void {
+    if(this.currentUser === undefined) return;
+    this.apiNotificationService.getNotificationsByUserId(this.currentUser.id).subscribe(
       (notifications) => {
         this.notifications = notifications;
       },

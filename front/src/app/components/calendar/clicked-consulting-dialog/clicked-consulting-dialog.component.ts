@@ -17,7 +17,7 @@ interface DialogData {
 })
 export class ClickedConsultingDialogComponent {
 
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
   userRole!: string;
   myAvailability!: PlannedTimingAvailability;
 
