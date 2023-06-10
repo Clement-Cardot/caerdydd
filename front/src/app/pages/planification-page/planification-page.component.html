@@ -9,9 +9,9 @@
         <app-create-presentation class="component"></app-create-presentation>
     </div>
     <div class="div4"> 
-        <app-jury-creation class="component"></app-jury-creation>
+        <app-jury-creation class="component" (juryCreation)="addCreatedJury($event)"></app-jury-creation>
     </div>
     <div class="div5"> 
-        
+        <app-jury-entity *ngFor="let jury of juries" [jury]="jury"></app-jury-entity>
     </div>
 </div>

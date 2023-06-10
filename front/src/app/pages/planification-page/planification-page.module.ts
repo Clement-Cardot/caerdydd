@@ -4,12 +4,14 @@ import { ConsultingModule } from 'src/app/components/consulting/consulting.modul
 import { JuryModule } from 'src/app/components/jury/jury.module';
 import { TeamModule } from 'src/app/components/project/project.module';
 import { PresentationModule } from 'src/app/components/presentation/presentation.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
     PlanificationPageComponent
   ],
   imports: [
+    CommonModule,
     ConsultingModule,
     JuryModule,
     TeamModule,

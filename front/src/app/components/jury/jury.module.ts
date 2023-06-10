@@ -3,10 +3,12 @@ import { CommonModule } from "@angular/common";
 import { MaterialModule } from "src/app/material.module";
 import { JuryCreationComponent } from "./jury-creation/jury-creation.component";
 import { FormsModule } from "@angular/forms";
+import { JuryEntityComponent } from './jury-entity/jury-entity.component';
 
 @NgModule({
     declarations: [
-      JuryCreationComponent
+      JuryCreationComponent,
+      JuryEntityComponent
     ],
     imports: [
       CommonModule,
@@ -14,7 +16,8 @@ import { FormsModule } from "@angular/forms";
       FormsModule
     ],
     exports: [
-      JuryCreationComponent
+      JuryCreationComponent,
+      JuryEntityComponent
     ]
   })
   export class JuryModule { }
