@@ -14,8 +14,7 @@ export class TeamCreationComponent implements OnInit {
   teamCreationForm!: FormGroup;
   matcher = new MyErrorStateMatcher();
   nbTeamsFormControl = new FormControl('', Validators.required);
-  teams!: Team[];
-  @Output() componentDisplayed = new EventEmitter<boolean>();
+  @Output() componentDisplayed = new EventEmitter<Team[]>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,9 +34,8 @@ export class TeamCreationComponent implements OnInit {
     } else {
       this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(response => {
         console.log("Team Creation Response : " + JSON.stringify(response));
-        this.teams = response;
+        this.componentDisplayed.emit(response);
       });
-      this.componentDisplayed.emit(false);
     }
   }
 
