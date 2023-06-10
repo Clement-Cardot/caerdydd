@@ -83,7 +83,7 @@ public class ConsultingController {
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 case CustomRuntimeException.SERVICE_ERROR:
-                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 default:
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());

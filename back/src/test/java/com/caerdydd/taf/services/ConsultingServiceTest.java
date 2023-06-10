@@ -68,6 +68,9 @@ public class ConsultingServiceTest {
 
     @Mock
     private ConsultingRepository consultingRepository;
+
+    @Mock
+    private TeamService teamService;
     
     @Mock
     private UserServiceRules userServiceRules;
@@ -659,6 +662,13 @@ public class ConsultingServiceTest {
     // Get the consultings for a team
     @Test
     void testGetConsultingsForATeam_NominalTeachingStaff() throws CustomRuntimeException {
+        // Mock teamService.getTeamById()
+        TeamDTO input = new TeamDTO();
+        input.setIdTeam(1);
+        input.setName("Team 1");
+
+        when(teamService.getTeamById(1)).thenReturn(input);
+        
         // Mock userServiceRules.checkCurrentUserRoles()
         List<String> roles = new ArrayList<>();
         roles.add("TEACHING_STAFF_ROLE");
@@ -716,13 +726,10 @@ public class ConsultingServiceTest {
         mockedConsultings.add(mockedConsulting2);
         when(consultingRepository.findAll()).thenReturn(mockedConsultings);
 
-        // Prepare the input
-        TeamDTO input = new TeamDTO();
-        input.setIdTeam(1);
-        input.setName("Team 1");
+        
 
         // Call method to test
-        //List<ConsultingDTO> result = consultingService.getConsultingsForATeam(input);
+        List<ConsultingDTO> result = consultingService.getConsultingsForATeam(1);
 
         // Expected Answer
         PlannedTimingAvailabilityDTO mockedAvailabilityDTO = new PlannedTimingAvailabilityDTO(
@@ -742,13 +749,19 @@ public class ConsultingServiceTest {
         expectedAnswer.add(mockedConsultingDTO);
 
         // Assertions
-        //assertEquals(expectedAnswer.size(), result.size());
-        //assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
+        assertEquals(expectedAnswer.size(), result.size());
+        assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
         
     }
 
     @Test
     void testGetConsultingsForATeam_NominalTeamMember() throws CustomRuntimeException {
+        // MOock teamService.getTeamById()
+        TeamDTO team = new TeamDTO();
+        team.setIdTeam(1);
+        team.setName("Team 1");
+        when(teamService.getTeamById(1)).thenReturn(team);
+        
         // Mock userServiceRules.checkCurrentUserRoles()
         List<String> roles = new ArrayList<>();
         roles.add("TEACHING_STAFF_ROLE");
@@ -756,9 +769,6 @@ public class ConsultingServiceTest {
         doNothing().when(userServiceRules).checkCurrentUserRoles(roles);
 
         // Mock userServiceRules.getCurentUser().getRoles()
-        TeamDTO team = new TeamDTO();
-        team.setIdTeam(1);
-        team.setName("Team 1");
         UserDTO mockedUser = new UserDTO(1, "Bob", "Smith", "login", "password", "email", null);
         RoleDTO mockedRole = new RoleDTO();
         mockedRole.setIdRole(1);
@@ -816,7 +826,7 @@ public class ConsultingServiceTest {
         when(consultingRepository.findAll()).thenReturn(mockedConsultings);
 
         // Call method to test
-        //List<ConsultingDTO> result = consultingService.getConsultingsForATeam(team);
+        List<ConsultingDTO> result = consultingService.getConsultingsForATeam(1);
 
         // Expected Answer
         PlannedTimingAvailabilityDTO mockedAvailabilityDTO = new PlannedTimingAvailabilityDTO(
@@ -836,8 +846,8 @@ public class ConsultingServiceTest {
         expectedAnswer.add(mockedConsultingDTO);
 
         // Assertions
-        //assertEquals(expectedAnswer.size(), result.size());
-        //assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
+        assertEquals(expectedAnswer.size(), result.size());
+        assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
         
     }
 
@@ -850,16 +860,22 @@ public class ConsultingServiceTest {
         doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED)).when(userServiceRules).checkCurrentUserRoles(roles);
 
         // Call method to test
-        // CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-        //     consultingService.getConsultingsForATeam(new TeamDTO());
-        // });
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+             consultingService.getConsultingsForATeam(1);
+        });
         
         // Assertions
-        //assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, exception.getMessage());
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, exception.getMessage());
     }
 
     @Test
     void testGetConsultingsForATeam_UserIsNotMemberOfTheTeam() throws CustomRuntimeException {
+        // Mock teamService.getTeamById()
+        TeamDTO mockedTeam = new TeamDTO();
+        mockedTeam.setIdTeam(1);
+        mockedTeam.setName("Team 1");
+        when(teamService.getTeamById(1)).thenReturn(mockedTeam);
+        
         // Mock userServiceRules.checkCurrentUserRoles()
         List<String> roles = new ArrayList<>();
         roles.add("TEACHING_STAFF_ROLE");
@@ -878,18 +894,150 @@ public class ConsultingServiceTest {
         when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
 
         // Mock teamServiceRules.checkUserIsMemberOfTheTeam()
-        TeamDTO mockedTeam = new TeamDTO();
-        mockedTeam.setIdTeam(1);
-        mockedTeam.setName("Team 1");
-
         doThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM)).when(teamServiceRules).checkIfUserIsMemberOfTeam(mockedTeam);
 
         // Call method to test
-        // CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-        //     consultingService.getConsultingsForATeam(mockedTeam);
-        // });
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            consultingService.getConsultingsForATeam(1);
+        });
 
         // Assertions
-        //assertEquals(CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM, exception.getMessage());
+        assertEquals(CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM, exception.getMessage());
     }
+
+    @Test
+    void testGetConsultingsForATeam_TeamDoesNotExist() throws CustomRuntimeException {
+        // Mock teamService.getTeamById()
+        doThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND)).when(teamService).getTeamById(1);
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            consultingService.getConsultingsForATeam(1);
+        });
+
+        // Assertions
+        assertEquals(CustomRuntimeException.TEAM_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_ServiceError() throws CustomRuntimeException {
+        // Mock teamService.getTeamById()
+        when(teamService.getTeamById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            consultingService.getConsultingsForATeam(1);
+        });
+
+        // Assertions
+        assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_NoConsultingsFound() throws CustomRuntimeException {
+        // Mock teamService.getTeamById()
+        TeamDTO mockedTeam = new TeamDTO();
+        mockedTeam.setIdTeam(1);
+        mockedTeam.setName("Team 1");
+        when(teamService.getTeamById(1)).thenReturn(mockedTeam);
+        
+        // Mock userServiceRules.checkCurrentUserRoles()
+        List<String> roles = new ArrayList<>();
+        roles.add("TEACHING_STAFF_ROLE");
+        roles.add("TEAM_MEMBER_ROLE");
+        doNothing().when(userServiceRules).checkCurrentUserRoles(roles);
+
+        // Mock userServiceRules.getCurentUser().getRoles()
+        UserDTO mockedUser = new UserDTO(1, "Bob", "Smith", "login", "password", "email", null);
+        RoleDTO mockedRole = new RoleDTO();
+        mockedRole.setIdRole(1);
+        mockedRole.setRole("TEACHING_STAFF_ROLE");
+        mockedRole.setUser(mockedUser);
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
+
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+
+        // Mock consultingRepository.findAll()
+        when(consultingRepository.findAll()).thenReturn(new ArrayList<ConsultingEntity>());
+
+        // Call method to test
+        List<ConsultingDTO> result = consultingService.getConsultingsForATeam(1);
+
+        // Assertions
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_NoConsultingsForTeam() throws CustomRuntimeException{
+        // Mock teamService.getTeamById()
+        TeamDTO input = new TeamDTO();
+        input.setIdTeam(1);
+        input.setName("Team 1");
+
+        when(teamService.getTeamById(1)).thenReturn(input);
+        
+        // Mock userServiceRules.checkCurrentUserRoles()
+        List<String> roles = new ArrayList<>();
+        roles.add("TEACHING_STAFF_ROLE");
+        roles.add("TEAM_MEMBER_ROLE");
+        doNothing().when(userServiceRules).checkCurrentUserRoles(roles);
+
+        // Mock userServiceRules.getCurentUser().getRoles()
+        UserDTO mockedUser = new UserDTO(1, "Bob", "Smith", "login", "password", "email", null);
+        RoleDTO mockedRole = new RoleDTO();
+        mockedRole.setIdRole(1);
+        mockedRole.setRole("TEACHING_STAFF_ROLE");
+        mockedRole.setUser(mockedUser);
+        mockedUser.setRoles(new ArrayList<RoleDTO>());
+        mockedUser.getRoles().add(mockedRole);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+
+        // Mock consultingRepository.findAll()
+        PlannedTimingAvailabilityEntity mockedAvailability = new PlannedTimingAvailabilityEntity(
+            new PlannedTimingConsultingEntity(
+                LocalDateTime.of(2023, 1, 1, 10, 0, 0),
+                LocalDateTime.of(2023, 1, 1, 10, 30, 0)
+            ),
+            new TeachingStaffEntity(
+                new UserEntity(1, "Bob", "Smith", "login", "password", "email", null)
+            )
+        );
+        PlannedTimingAvailabilityEntity mockedAvailability2 = new PlannedTimingAvailabilityEntity(
+            new PlannedTimingConsultingEntity(
+                LocalDateTime.of(2023, 1, 1, 11, 0, 0),
+                LocalDateTime.of(2023, 1, 1, 11, 30, 0)
+            ),
+            new TeachingStaffEntity(
+                new UserEntity(1, "Bob", "Smith", "login", "password", "email", null)
+            )
+        );
+
+        TeamEntity mockedTeam2 = new TeamEntity();
+        mockedTeam2.setIdTeam(2);
+        mockedTeam2.setName("Team 2");
+
+        ConsultingEntity mockedConsulting = new ConsultingEntity();
+        mockedConsulting.setIdConsulting(1);
+        mockedConsulting.setPlannedTimingAvailability(mockedAvailability);
+        mockedConsulting.setTeam(mockedTeam2);
+        ConsultingEntity mockedConsulting2 = new ConsultingEntity();
+        mockedConsulting2.setIdConsulting(2);
+        mockedConsulting2.setPlannedTimingAvailability(mockedAvailability2);
+        mockedConsulting2.setTeam(mockedTeam2);
+        List<ConsultingEntity> mockedConsultings = new ArrayList<>();
+        mockedConsultings.add(mockedConsulting);
+        mockedConsultings.add(mockedConsulting2);
+        when(consultingRepository.findAll()).thenReturn(mockedConsultings);
+
+        // Call method to test
+        List<ConsultingDTO> result = consultingService.getConsultingsForATeam(1);
+
+        // Expected Answer
+        List<ConsultingDTO> expectedAnswer = new ArrayList<>();
+
+        // Assertions
+        assertEquals(expectedAnswer.size(), result.size());
+        }
+
 }
