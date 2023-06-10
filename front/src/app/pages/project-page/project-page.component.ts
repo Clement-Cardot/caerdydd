@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
+import { Consulting } from "src/app/core/data/models/consulting.model";
 import { Team } from "src/app/core/data/models/team.model";
+import { ApiConsultingService } from "src/app/core/services/api-consulting.service";
 import { ApiTeamService } from "src/app/core/services/api-team.service";
 import { ApiUploadFileService } from "src/app/core/services/api-upload-file.service";
 
@@ -14,14 +16,16 @@ import { ApiUploadFileService } from "src/app/core/services/api-upload-file.serv
     
     id!: string;
     team!: Team;
+    consultingsList: Consulting[] = [];
 
-    constructor(private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar) {  }
+    constructor(private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private consultingService: ApiConsultingService) {  }
 
     ngOnInit(): void {
       this.id = this.route.snapshot.params['id'];
       this.apiTeamService.getTeam(+this.id).subscribe(data => {
         this.team = data;
-      });
+        this.getAllConsultingsForCurrentTeam();
+      }); 
     }
 
     getFile(file: string) {
@@ -58,6 +62,18 @@ import { ApiUploadFileService } from "src/app/core/services/api-upload-file.serv
       this._snackBar.open("Une erreur est survenue lors du téléchargement", "Fermer", {
         duration: 5000,
       });
+    }
+
+    getAllConsultingsForCurrentTeam(){
+      if(this.team) {
+        this.consultingService.getConsultingForATeam(this.team.idTeam)
+        .subscribe(data => {
+            this.consultingsList = data;
+            this.consultingsList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());
+
+          }
+        );
+      }
     }
   
   }

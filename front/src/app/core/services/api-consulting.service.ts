@@ -8,6 +8,7 @@ import { environment } from "../../../environments/environment";
 import { PlannedTimingConsultingAdapter, PlannedTimingConsulting } from "../data/models/planned-timing-consulting.model";
 import { PlannedTimingAvailability, PlannedTimingAvailabilityAdapter } from "../data/models/planned-timing-availability.model";
 import { Consulting, ConsultingAdapter } from "../data/models/consulting.model";
+import { Team } from "../data/models/team.model";
 
 @Injectable({
     providedIn: "root"
@@ -43,6 +44,17 @@ export class ApiConsultingService {
         .pipe(
             catchError(this.handleError)
         );
+    }
+
+    getConsultingForATeam(teamId : number) : Observable<Consulting[]> {
+        const url = `${this.baseUrl}/team/${teamId}`;
+        return this.http.get<any>(url)
+        .pipe(
+            map((data: any[]) => data.map((item) => this.consultingAdapter.adapt(item)))
+        )
+        .pipe(
+            catchError(this.handleError)
+        ); 
     }
     
     upload(file: File): Observable<PlannedTimingConsulting[]> {

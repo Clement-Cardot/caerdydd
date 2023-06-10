@@ -1,4 +1,4 @@
-div {
+#projectFile {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -51,4 +51,16 @@ mat-card-content {
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+}
+
+app-consulting-info {
+    margin: 5px;
+    display: grid;
+    justify-items: center;
+    align-content: start;
+}
+
+h2 {
+    text-align: center;
+    margin: 20px;
 }

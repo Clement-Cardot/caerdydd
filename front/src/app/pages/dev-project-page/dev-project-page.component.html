@@ -2,6 +2,12 @@
   <app-project-file></app-project-file>
   <button id="buttonModifyProject" mat-raised-button color="primary" routerLink="/projectD">Modifier le projet de développement</button>
 </div>
+<div>
+  <h2>Consultings</h2>
+  <div class="twoColumnDisplay" id="consulting-list">
+  <app-consulting-info *ngFor="let consulting of consultingsList" [consulting]="consulting"></app-consulting-info>
+  </div>  
+</div>
 
 
 

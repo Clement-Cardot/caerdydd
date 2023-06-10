@@ -21,7 +21,9 @@ export class Consulting {
 
 export class ConsultingAdapter implements Adapter<Consulting>{
 
-    constructor(private teamAdapter: TeamAdapter, private plannedTimingAvailabilityAdapter: PlannedTimingAvailabilityAdapter, private plannedTimingConsultingAdapter: PlannedTimingConsultingAdapter) { }
+    constructor(private teamAdapter: TeamAdapter, 
+        private plannedTimingAvailabilityAdapter: PlannedTimingAvailabilityAdapter, 
+        private plannedTimingConsultingAdapter: PlannedTimingConsultingAdapter) { }
 
     adapt(item: any): Consulting {
         return new Consulting(

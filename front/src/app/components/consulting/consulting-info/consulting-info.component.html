@@ -10,7 +10,7 @@
         <p> Spécialité : {{consulting.speciality}} </p>
         <p> Enseignant : {{consulting.plannedTimingAvailability.teachingStaff.user.firstname}} {{consulting.plannedTimingAvailability.teachingStaff.user.lastname}}</p>
     </mat-card-content>
-    <mat-card-actions *ngIf="isFinished()">
+    <mat-card-actions *ngIf="isFinished() && isCurrentUserATeachingStaff()">
         <button mat-raised-button (click)="openDialog()">Commentaires</button>
     </mat-card-actions>
 </mat-card>

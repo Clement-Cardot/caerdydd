@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,11 +68,12 @@ public class ConsultingController {
         }
     }
 
-    @GetMapping("/team")
-    public ResponseEntity<List<ConsultingDTO>> getConsultingsForATeam(@RequestBody TeamDTO team) {
+    @GetMapping("/team/{idTeam}")
+    public ResponseEntity<List<ConsultingDTO>> getConsultingsForATeam(@PathVariable Integer idTeam) {
         logger.info("Process request : Get all consultings for a team");
         try {
-            List<ConsultingDTO> consultingDTOs = consultingService.getConsultingsForATeam(team);
+            List<ConsultingDTO> consultingDTOs = consultingService.getConsultingsForATeam(idTeam);
+            logger.info("Consulting for a team" + consultingDTOs);
             return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);
         }
         catch (CustomRuntimeException e) {

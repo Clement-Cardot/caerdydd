@@ -60,6 +60,9 @@ public class ConsultingService {
     private TeamServiceRules teamServiceRules;
 
     @Autowired
+    private TeamService teamService;
+
+    @Autowired
     private FileRules fileRules;
 
     @Autowired
@@ -221,7 +224,10 @@ public class ConsultingService {
     }
 
     // Get all the consultings for a team
-    public List<ConsultingDTO> getConsultingsForATeam(TeamDTO teamDTO) throws CustomRuntimeException {
+    public List<ConsultingDTO> getConsultingsForATeam(Integer idTeam) throws CustomRuntimeException {
+        TeamDTO teamDTO = teamService.getTeamById(idTeam);
+
+        
 
         // Verify that user has access to the information
         List<String> roles = new ArrayList<>();

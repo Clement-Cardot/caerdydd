@@ -1,4 +1,4 @@
-<div>
+<div id="projectFile">
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{team.name}}</mat-card-title>
@@ -23,4 +23,10 @@
       </mat-card-content>
     </mat-card>
     <button mat-raised-button color="primary" [routerLink]="['/teams']">Retour à la page d'équipes</button>
+</div>
+<div>
+  <h2>Consultings</h2>
+  <div class="twoColumnDisplay" id="consulting-list">
+  <app-consulting-info *ngFor="let consulting of consultingsList" [consulting]="consulting"></app-consulting-info>
+  </div>
 </div>
