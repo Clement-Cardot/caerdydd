@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild  } from '@angular/core';
+import { Component, OnInit, OnDestroy ,ViewChild  } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Notification } from 'src/app/core/data/models/notification.model';
 import { User } from 'src/app/core/data/models/user.model';
@@ -10,7 +10,7 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
   notifications: Notification[] = [];
@@ -35,7 +35,9 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  
+  ngOnDestroy(): void {
+    clearInterval(this.refresh);
+  }
 
   getNotifications(userId: number): void {
     this.apiNotificationService.getNotificationsByUserId(userId).subscribe(

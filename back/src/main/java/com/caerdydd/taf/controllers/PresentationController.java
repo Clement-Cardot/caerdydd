@@ -35,7 +35,7 @@ public class PresentationController {
         logger.info("Process request : Create presentation");
         try {
             PresentationDTO savedPresentationDTO = presentationService.createPresentation(presentation);
-            return new ResponseEntity<>(savedPresentationDTO, HttpStatus.CREATED);
+            return new ResponseEntity<>(savedPresentationDTO, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             logger.warn(e.getMessage());
             switch (e.getMessage()) {

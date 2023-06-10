@@ -6,7 +6,7 @@
         <app-student-import class="component"></app-student-import>
     </div>
     <div class="div3"> 
-        <app-create-presentation class="component"></app-create-presentation>
+        <app-create-presentation class="component" [juries]="juries" [projects]="projects"></app-create-presentation>
     </div>
     <div class="div4"> 
         <app-jury-creation class="component" (juryCreation)="addCreatedJury($event)"></app-jury-creation>
