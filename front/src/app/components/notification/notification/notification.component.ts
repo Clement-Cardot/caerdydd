@@ -16,6 +16,8 @@ export class NotificationComponent implements OnInit {
   notifications: Notification[] = [];
   currentUser: User | null = null;
 
+  refresh: any;
+
   constructor(
     private apiNotificationService: ApiNotificationService,
     private userDataService: UserDataService
@@ -26,7 +28,9 @@ export class NotificationComponent implements OnInit {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.currentUser = user;
       if (this.currentUser) {
-        this.getNotifications(this.currentUser.id);
+        let idUser = this.currentUser.id;
+        this.getNotifications(idUser);
+        this.refresh = setInterval(() => { this.getNotifications(idUser) },  5000 );
       }
     });
   }
