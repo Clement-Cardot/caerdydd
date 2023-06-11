@@ -78,6 +78,7 @@ CREATE TABLE team (
     file_path_final_scope_statement VARCHAR(100),
     file_path_scope_statement_analysis VARCHAR(100),
     file_path_report VARCHAR(100),
+    is_report_annotation BOOLEAN,
     id_project_dev INT NOT NULL,
     id_project_validation INT NOT NULL,
     PRIMARY KEY(id_team),

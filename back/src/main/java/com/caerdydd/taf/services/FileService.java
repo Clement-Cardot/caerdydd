@@ -56,6 +56,8 @@ public class FileService {
                 team.setFilePathFinalScopeStatement(path + fileName);
             } else if (type.equals("report")) {
                 team.setFilePathReport(path + fileName);
+            } else if (type.equals("annotedReport")) {
+                team.setIsReportAnnotation(true);
             }
 
             teamService.saveTeam(team);
