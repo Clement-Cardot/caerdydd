@@ -1,5 +1,11 @@
 <div id="dev-projectComponent">
-  <app-project-file></app-project-file>
+  <div id="cards-list" *ngIf="team != undefined">
+    <app-project-file [team]="team" [fileName]="'teamScopeStatement'"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'analysis'"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'finalTeamScopeStatement'"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'report'"></app-project-file>
+    <app-test-book-link [team]="team"></app-test-book-link>
+  </div>
   <button id="buttonModifyProject" mat-raised-button color="primary" routerLink="/projectD">Modifier le projet de développement</button>
 </div>
 

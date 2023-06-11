@@ -8,8 +8,7 @@ export class Project {
         public name: string,
         public description: string,
         public isValidated: boolean,
-        public jury: Jury | null, 
-        public teamName?: string,
+        public jury: Jury | null
     ) {}
 }
 

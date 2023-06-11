@@ -20,7 +20,7 @@ function linkValidator(control: AbstractControl): { [key: string]: any } | null 
 }
 
 @Component({
-  selector: 'app-project-file',
+  selector: 'app-project-files',
   templateUrl: './project-files.component.html',
   styleUrls: ['./project-files.component.scss']
 })
@@ -133,7 +133,7 @@ export class ProjectFilesComponent implements OnInit {
   }
 
   isProjectDev(): boolean {
-    return !!(this.currentTeam && this.currentTeam.idProjectDev !== null);
+    return !!(this.currentTeam && this.currentTeam.projectDev.idProject !== null);
   }
 
   onSubmit(): void {

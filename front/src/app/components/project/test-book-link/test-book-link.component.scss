@@ -1,6 +1,5 @@
 mat-card {
-    width: 28rem;
-    height: auto;
+    margin: 10px;
     justify-items: center;
     border: 1px solid #ccc;
     box-shadow: 0 0 5px #ccc;
@@ -25,25 +24,18 @@ mat-card-header {
     }
 }
 
-form {
+mat-card-actions {
     display: flex;
-    align-items: center;
     justify-content: center;
 }
 
-button {
-    margin-bottom: 24px;
-    margin-left: 24px;
-    padding: 0px;
-}
-  
-#consultingForm {
-    padding-top: 2rem;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-  
 .inputForm {
-margin: 5px 15px;
+    display: flex;
+    margin-top: 1rem;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.inputForm {
+    margin-right: 10px;
 }

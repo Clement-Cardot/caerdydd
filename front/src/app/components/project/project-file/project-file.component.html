@@ -1,34 +1,28 @@
 <mat-card>
     <mat-card-header>
-        <mat-card-title> 
-            <h3>Importation des Etudiants</h3> 
+        <mat-card-title>
+            <h3>{{fullFileName}}</h3>
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form id="studentsForm"  [formGroup]="studentsForm" (ngSubmit)="upload()">
-
+        <form class="inputFileForm"  [formGroup]="importFileForm" (ngSubmit)="upload()" dis>
             <mat-form-field class="inputForm" appearance="fill">
-                <ngx-mat-file-input 
-                    valuePlaceholder="Choisir un fichier*" 
-                    [formControl]="fileFormControl" 
-                    [accept]="'.csv'">
+                <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" formControlName="file" [accept]="'.pdf'" >
                 </ngx-mat-file-input>
                 <mat-icon matSuffix>attachment</mat-icon>
-
                 <mat-error *ngIf="fileFormControl.hasError('required')">
                     Vous devez choisir un fichier
                 </mat-error>
-
                 <mat-error *ngIf="fileFormControl.hasError('apiError')">
                     {{errorMessage}}
                 </mat-error>
-
             </mat-form-field>
-
-            <button mat-fab color="primary" [disabled]="fileFormControl.invalid">
+            <button mat-fab color="accent" [disabled]="isUploadDisabled()">
                 <mat-icon>upload</mat-icon>
             </button>
-
         </form>
     </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="accent" class="downloadButton" (click)="download()" [disabled]="!isThereFile(fileName)">Télécharger le document</button>
+    </mat-card-actions>
 </mat-card>

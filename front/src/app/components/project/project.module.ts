@@ -9,6 +9,8 @@ import { TeamListComponent } from "./team-list/team-list.component";
 import { StudentImportComponent } from "./student-import/student-import.component";
 import { RouterModule } from "@angular/router";
 import { MaterialFileInputModule } from "ngx-material-file-input";
+import { ProjectFileComponent } from './project-file/project-file.component';
+import { TestBookLinkComponent } from './test-book-link/test-book-link.component';
 import { ProjectFilesComponent } from "./project-files/project-files.component";
 
 @NgModule({
@@ -18,7 +20,9 @@ import { ProjectFilesComponent } from "./project-files/project-files.component";
       ProjectFilesComponent,
       StudentImportComponent,
       TeamCreationComponent,
-      TeamListComponent
+      TeamListComponent,
+      ProjectFileComponent,
+      TestBookLinkComponent
     ],
     imports: [
       CommonModule,
@@ -34,7 +38,9 @@ import { ProjectFilesComponent } from "./project-files/project-files.component";
       ProjectFilesComponent,
       StudentImportComponent,
       TeamCreationComponent,
-      TeamListComponent
+      TeamListComponent,
+      ProjectFileComponent,
+      TestBookLinkComponent
     ]
   })
-  export class TeamModule { }
+  export class ProjectModule { }

@@ -13,7 +13,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class DefineSpecialtyComponent implements OnInit {
   teachingStaff!: TeachingStaff;
-  ngOptions: any[] = [];
   currentUser: User | undefined = undefined;
 
   constructor(
@@ -34,58 +33,19 @@ export class DefineSpecialtyComponent implements OnInit {
         .getTeachingStaff(this.currentUser.id)
         .subscribe((teachingStaff: TeachingStaff) => {
           this.teachingStaff = teachingStaff;
-          this.initializeNgOptions();
         });
     }
   }
 
-  private initializeNgOptions(): void {
-    this.ngOptions = [
-      {
-        value: 'Infrastructure',
-        viewValue: 'Infrastructure',
-        checked: this.teachingStaff.isInfrastructureSpecialist,
-      },
-      {
-        value: 'Developpement',
-        viewValue: 'Développement',
-        checked: this.teachingStaff.isDevelopmentSpecialist,
-      },
-      {
-        value: 'Modelisation',
-        viewValue: 'Modélisation',
-        checked: this.teachingStaff.isModelingSpecialist,
-      },
-    ];
-  }
-
-  openSnackBar() {
-    this._snackBar.open('Spécialités modifiées', 'Fermer', {
-      duration: 5000,
-    });
-  }
-
-  public modifySpeciality() {
-    for (const opt of this.ngOptions) {
-      if (opt.value === 'Infrastructure') {
-        this.teachingStaff.isInfrastructureSpecialist = opt.checked;
-      }
-      if (opt.value === 'Developpement') {
-        this.teachingStaff.isDevelopmentSpecialist = opt.checked;
-      }
-      if (opt.value === 'Modelisation') {
-        this.teachingStaff.isModelingSpecialist = opt.checked;
-      }
-    }
+  modifySpeciality() {
     this.apiTeachingStaffService.setSpeciality(this.teachingStaff).subscribe(
       (response) => {
-        console.log('Response from server: ', response);
+        this.openSnackBar();
       },
       (error) => {
         console.error('Error:', error);
       }
     );
-    this.openSnackBar();
   }
 
   isCurrentUserATeachingStaff() {
@@ -97,5 +57,11 @@ export class DefineSpecialtyComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  openSnackBar() {
+    this._snackBar.open('Spécialités modifiées', 'Fermer', {
+      duration: 5000,
+    });
   }
 }

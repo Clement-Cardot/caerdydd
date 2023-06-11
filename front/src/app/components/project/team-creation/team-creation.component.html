@@ -1,25 +1,27 @@
-<div id="teamCreationBox">
-    <mat-card id="teamCreationComponent">
-        <mat-card-header>
-            <mat-card-title id="titleTeamCreation">Création d'équipe</mat-card-title>
-            <mat-card-subtitle id="subtitleTeamCreation">Sélectionnez un nombre de paires d'équipes à créer</mat-card-subtitle>
-        </mat-card-header>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h3>Création d'équipe</h3>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <h5>Sélectionnez un nombre de paires d'équipes à créer</h5>
+        </mat-card-subtitle>
+    </mat-card-header>
 
-        <mat-card-content>
-        <form id="teamCreationForm" [formGroup]="teamCreationForm" (ngSubmit)="createTeams()">
+    <mat-card-content>
+    <form id="teamCreationForm" [formGroup]="teamCreationForm" (ngSubmit)="createTeams()">
 
-            <mat-form-field class="inputForm" appearance="fill" color="accent">
-                <mat-label class="labelForm">Nombre de paires</mat-label>
-                <input matInput  type="number" min="0" onkeydown="return false" [formControl]="nbTeamsFormControl"/>
-                <mat-error *ngIf="nbTeamsFormControl.hasError('required')">
-                    Un nombre d'équipe est <strong>requis</strong>
-                </mat-error>
-            </mat-form-field>
+        <mat-form-field class="inputForm" appearance="fill" color="accent">
+            <mat-label class="labelForm">Nombre de paires</mat-label>
+            <input matInput  type="number" min="0" onkeydown="return false" [formControl]="nbTeamsFormControl"/>
+            <mat-error *ngIf="nbTeamsFormControl.hasError('required')">
+                Un nombre d'équipe est <strong>requis</strong>
+            </mat-error>
+        </mat-form-field>
 
-            <button mat-raised-button (click)="openSnackBar()" color="primary" id="buttonCreateTeam">Générer les équipes</button>
-        
-        </form>
-        </mat-card-content>
-        
-    </mat-card>
-</div>
+        <button mat-raised-button (click)="openSnackBar()" color="primary" id="buttonCreateTeam">Générer les équipes</button>
+    
+    </form>
+    </mat-card-content>
+    
+</mat-card>
