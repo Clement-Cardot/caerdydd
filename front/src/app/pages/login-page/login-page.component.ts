@@ -55,10 +55,8 @@ export class LoginPageComponent implements OnInit {
                 this.userDataService.setCurrentUser(userResponse);
                 this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
                   this.currentUser = user;
+                  this.redirectUserAfterLogin();
                 });
-
-                console.log("Current User is : " + this.currentUser?.login);
-                this.router.navigateByUrl("dashboard");
             }
           }, 
           error => {
@@ -74,7 +72,46 @@ export class LoginPageComponent implements OnInit {
           }
       );
     }
-}
+  }
+
+  redirectUserAfterLogin(): void {
+    if (this.currentUser != null) {
+      if (this.currentUser.getRoles() == null) {
+        this.router.navigateByUrl('/');
+      }
+
+      // Option Leader
+      if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
+        this.router.navigateByUrl("marks");
+      }
+
+      // Jury Members
+      if (this.currentUser.getRoles().includes("JURY_MEMBER_ROLE") && !this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
+        this.router.navigateByUrl("marks");
+      }
+
+      // Planning
+      if (this.currentUser.getRoles().includes('PLANNING_ROLE')) {
+        this.router.navigateByUrl("planning");
+      }
+
+      // Teaching Staff
+      if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
+        this.router.navigateByUrl("teachingStaff");
+      }
+
+      // Team Member
+      if (this.currentUser.getRoles().includes('TEAM_MEMBER_ROLE')) {
+        this.router.navigateByUrl("dev-project");
+      }
+
+      // Student
+      if (this.currentUser.getRoles().includes('STUDENT_ROLE')) {
+        this.router.navigateByUrl("teams");
+      }
+    }
+    
+  }
 
 
   public togglePasswordVisibility(): void {

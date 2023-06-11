@@ -60,7 +60,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         this.router.navigateByUrl('/');
       }
       // Global
-      this.navLink.push('Tableau de bord');
+      // this.navLink.push('Tableau de bord');
 
       // Option Leader
       if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
