@@ -8,8 +8,8 @@ import { User } from 'src/app/core/data/models/user.model';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    const isSubmitted = form?.submitted;
+    return !!( control?.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
 
@@ -55,8 +55,8 @@ export class LoginPageComponent implements OnInit {
                 this.userDataService.setCurrentUser(userResponse);
                 this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
                   this.currentUser = user;
-                  this.redirectUserAfterLogin();
                 });
+                this.redirectUserAfterLogin();
             }
           }, 
           error => {
@@ -77,37 +77,58 @@ export class LoginPageComponent implements OnInit {
   redirectUserAfterLogin(): void {
     if (this.currentUser != null) {
       if (this.currentUser.getRoles() == null) {
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/').catch(() => {
+            console.error("Error while redirecting to home page");
+          }
+        );
       }
 
       // Option Leader
       if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
-        this.router.navigateByUrl("marks");
+        this.router.navigateByUrl("marks").catch(() => {
+            console.error("Error while redirecting to marks page");
+          }
+        );
       }
 
       // Jury Members
       if (this.currentUser.getRoles().includes("JURY_MEMBER_ROLE") && !this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
-        this.router.navigateByUrl("marks");
+        this.router.navigateByUrl("marks").catch(() => {
+            console.error("Error while redirecting to marks page");
+          }
+        );
       }
 
       // Planning
       if (this.currentUser.getRoles().includes('PLANNING_ROLE')) {
-        this.router.navigateByUrl("planning");
+        this.router.navigateByUrl("planning").catch(() => {
+            console.error("Error while redirecting to planning page");
+          }
+        );
       }
 
       // Teaching Staff
       if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
-        this.router.navigateByUrl("teachingStaff");
+        this.router.navigateByUrl("teachingStaff").catch(() => {
+            console.error("Error while redirecting to teachingStaff page");
+          }
+        );
       }
 
       // Team Member
       if (this.currentUser.getRoles().includes('TEAM_MEMBER_ROLE')) {
-        this.router.navigateByUrl("dev-project");
+        this.router.navigateByUrl("dev-project").catch(() => {
+            console.error("Error while redirecting to dev-project page");
+          }
+        );
       }
 
       // Student
       if (this.currentUser.getRoles().includes('STUDENT_ROLE')) {
-        this.router.navigateByUrl("teams");
+        this.router.navigateByUrl("teams").catch(() => {
+            console.error("Error while redirecting to teams page");
+          }
+        );
       }
     }
     
