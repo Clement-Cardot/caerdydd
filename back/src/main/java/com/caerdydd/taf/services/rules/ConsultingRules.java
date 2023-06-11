@@ -32,7 +32,7 @@ public class ConsultingRules {
 
     public void checkDemandIsMadeOnTime(ConsultingDTO consultingDTO) throws CustomRuntimeException{
         // Check if the demand is made two days under 48h before the consulting
-        if (consultingDTO.getPlannedTimingAvailability().getPlannedTimingConsulting().getDatetimeEnd().minusDays(2).isBefore(LocalDateTime.now())){
+        if (consultingDTO.getPlannedTimingConsulting().getDatetimeEnd().minusDays(2).isBefore(LocalDateTime.now())){
             throw new CustomRuntimeException(CustomRuntimeException.DEMAND_IS_MADE_TOO_LATE);
         }
     }

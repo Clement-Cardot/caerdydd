@@ -31,7 +31,7 @@ public class PlannedTimingAvailabilityEntity implements Serializable{
     @JoinColumn(name = "id_planned_timing_consulting", referencedColumnName = "idPlannedTimingConsulting", nullable = false)
     private PlannedTimingConsultingEntity plannedTimingConsulting;
 
-    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_ts", referencedColumnName = "idUser", nullable = false)
     private TeachingStaffEntity teachingStaff;
 

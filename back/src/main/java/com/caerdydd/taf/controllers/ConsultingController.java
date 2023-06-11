@@ -46,7 +46,18 @@ public class ConsultingController {
         }
     }
 
-
+    @GetMapping("/consultings")
+    public ResponseEntity<List<ConsultingDTO>> getAllConsultings() {
+        logger.info("Process request : Get all planned timing consultings");
+        try {
+            List<ConsultingDTO> plannedTimingConsultingDTOs = consultingService.listAllConsultings();
+            return new ResponseEntity<>(plannedTimingConsultingDTOs, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+    
     @GetMapping("/teachingStaffConsultingInfra")
     public ResponseEntity<List<ConsultingDTO>> getConsultingsBySpecialityInfra() {
         logger.info("Process request : Get all consultings for speciality Infra");

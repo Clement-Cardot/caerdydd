@@ -21,7 +21,7 @@ public class ConsultingDTO {
     @JsonManagedReference(value = "availabilities")
     private PlannedTimingAvailabilityDTO plannedTimingAvailability;
 
-    @JsonManagedReference(value = "consultingTiming")
+    @JsonManagedReference(value = "consulting")
     private PlannedTimingConsultingDTO plannedTimingConsulting;
 
     private TeamDTO team;
