@@ -53,8 +53,11 @@ export class ClickedConsultingDialogComponent {
   }
 
   submit(){
-    this.apiConsultingService.updateAvailability(this.myAvailability).subscribe();
-    this.dialogRef.close();
+    this.apiConsultingService.updateAvailability(this.myAvailability).subscribe(
+      (response) => {
+        this.dialogRef.close(response);
+      }
+    );
   }
 
   onNoClick(): void {

@@ -13,7 +13,7 @@ import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ClickedConsultingDialogComponent } from '../clicked-consulting-dialog/clicked-consulting-dialog.component';
-import { Observable, interval } from 'rxjs';
+import { Observable, Subject, interval } from 'rxjs';
 
 
 class ClickEvent {
@@ -33,6 +33,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
   refresh: any;
+  refreshCalendar: Subject<void> = new Subject();
 
   constructor(
     private userDataService: UserDataService,
@@ -65,7 +66,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         this.loadTeachingStaffEvents(this.currentUser.id);
       } else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
         this.loadTeamMemberEvents(this.currentUser.id);
-      } 
+      }
     }
   }
 
@@ -117,10 +118,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
     newEvents.forEach(newEvent => {
       let correspondingIndex = this.events.findIndex(event => event.id == newEvent.id);
       if (correspondingIndex != -1) {
-        this.events[correspondingIndex] = newEvent;
+        this.events.splice(correspondingIndex, 1);
+        this.events.push(newEvent);
+        this.refreshCalendar.next();
       }
       else {
         this.events.push(newEvent);
+        this.refreshCalendar.next();
       }
     });
   }
@@ -142,9 +146,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   clickOnEvent(clickEvent : ClickEvent) {
     if (clickEvent.event instanceof Presentation) {
-    
+      //TODO : open presentation dialog
     } else if (clickEvent.event instanceof PlannedTimingConsulting) {
-      this.dialog.open(ClickedConsultingDialogComponent, { data: { event: clickEvent.event }});
+      this.dialog.open(ClickedConsultingDialogComponent, { data: { event: clickEvent.event }})
+            .afterClosed().subscribe(result => {
+              if (result) {
+                this.getData()
+              }
+      });
     }
   }
 
