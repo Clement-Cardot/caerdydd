@@ -1,0 +1,34 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h3>Modifier le projet</h3>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Nom du projet</mat-label>
+        <input matInput [(ngModel)]="team.projectDev.name" [value]="team.projectDev.name" required>
+        <mat-error *ngIf="projectForm.controls['name'].hasError('required')">
+          Le nom est obligatoire.
+        </mat-error>
+        <mat-error *ngIf="projectForm.controls['name'].hasError('maxlength')">
+          Le nom ne doit pas dépasser 20 caractères.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Description du projet</mat-label>
+        <textarea matInput type="text" [(ngModel)]="team.projectDev.description" [value]="team.projectDev.description" required></textarea>
+        <mat-error *ngIf="projectForm.controls['description'].hasError('required')">
+          La description est obligatoire.
+        </mat-error>
+        <mat-error *ngIf="projectForm.controls['description'].hasError('maxlength')">
+          La description ne doit pas dépasser 1000 caractères.
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" type="submit" [disabled]="projectForm.invalid" (click)="onSubmit()">Modifier</button>
+  </mat-card-actions>
+</mat-card>

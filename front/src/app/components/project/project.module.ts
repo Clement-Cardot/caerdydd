@@ -11,6 +11,7 @@ import { RouterModule } from "@angular/router";
 import { MaterialFileInputModule } from "ngx-material-file-input";
 import { ProjectFileComponent } from './project-file/project-file.component';
 import { TestBookLinkComponent } from './test-book-link/test-book-link.component';
+import { ProjectDescriptionComponent } from "./project-description/project-description.component";
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import { TestBookLinkComponent } from './test-book-link/test-book-link.component
       TeamCreationComponent,
       TeamListComponent,
       ProjectFileComponent,
-      TestBookLinkComponent
+      TestBookLinkComponent,
+      ProjectDescriptionComponent
     ],
     imports: [
       CommonModule,
@@ -37,7 +39,8 @@ import { TestBookLinkComponent } from './test-book-link/test-book-link.component
       TeamCreationComponent,
       TeamListComponent,
       ProjectFileComponent,
-      TestBookLinkComponent
+      TestBookLinkComponent,
+      ProjectDescriptionComponent
     ]
   })
   export class ProjectModule { }
