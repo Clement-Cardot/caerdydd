@@ -3,14 +3,18 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 90%;
-  padding: 5% 5%;
+  margin: 2rem;
 }
 
 app-project-file {
   width: 100%;
   display: contents;
 }
+
+app-project-description {
+  width: 47rem;
+}
+
 
 #buttonModifyProject {
   margin: 25px 0px;
@@ -20,6 +24,6 @@ app-project-file {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
