@@ -11,13 +11,11 @@ import { RouterModule } from "@angular/router";
 import { MaterialFileInputModule } from "ngx-material-file-input";
 import { ProjectFileComponent } from './project-file/project-file.component';
 import { TestBookLinkComponent } from './test-book-link/test-book-link.component';
-import { ProjectFilesComponent } from "./project-files/project-files.component";
 
 @NgModule({
     declarations: [
       SubjectValidationComponent,
       MarksComponent,
-      ProjectFilesComponent,
       StudentImportComponent,
       TeamCreationComponent,
       TeamListComponent,
@@ -35,7 +33,6 @@ import { ProjectFilesComponent } from "./project-files/project-files.component";
     exports: [
       SubjectValidationComponent,
       MarksComponent,
-      ProjectFilesComponent,
       StudentImportComponent,
       TeamCreationComponent,
       TeamListComponent,

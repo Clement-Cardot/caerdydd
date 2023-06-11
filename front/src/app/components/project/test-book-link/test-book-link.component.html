@@ -5,8 +5,8 @@
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form class="inputForm" [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
-            <mat-form-field  class="inputForm" appearance="fill">
+        <form class="testBookLinkForm" [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
+            <mat-form-field  class="input" appearance="fill">
               <mat-label>Lien TestBook</mat-label>
               <input matInput formControlName="testBookLink" required>
               <mat-icon matSuffix>link</mat-icon>

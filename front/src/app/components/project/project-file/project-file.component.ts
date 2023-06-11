@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileInput } from 'ngx-material-file-input';
-import { Project } from 'src/app/core/data/models/project.model';
 import { Team } from 'src/app/core/data/models/team.model';
 import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.service';
 
