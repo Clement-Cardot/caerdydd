@@ -1,11 +1,11 @@
-<mat-card *ngIf="isCurrentUserATeachingStaff()">
+<mat-card>
   <mat-card-header>
     <mat-card-title>
       <h3>Modifier vos spécialités</h3>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div class="checkboxList">
+    <div class="checkboxList" *ngIf="teachingStaff">
       <mat-checkbox [(ngModel)]="teachingStaff.isInfrastructureSpecialist">
         <div>
           <mat-icon aria-hidden="false">router</mat-icon>

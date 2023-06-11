@@ -34,7 +34,7 @@ export class TeamCreationComponent implements OnInit {
     } else {
       this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(
         response => {
-          this.showSnackbar(response.length + "Equipes créées avec succès !");
+          this.showSnackbar(response.length + " Equipes créées avec succès !");
           this.componentDisplayed.emit(response);
         },
         error => {

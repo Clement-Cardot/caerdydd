@@ -10,7 +10,7 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
   styleUrls: ['./teaching-staff-page.component.scss'],
 })
 export class TeachingStaffPageComponent {
-  teachingStaffs!: TeachingStaff[];
+  teachingStaffs: TeachingStaff[] = [];
   currentUser: User | undefined = undefined;
 
   constructor(
@@ -31,14 +31,7 @@ export class TeachingStaffPageComponent {
     });
   }
 
-  isCurrentUserATeachingStaff() {
-    if (this.currentUser == null) {
-      console.error('User is not connected');
-      return false;
-    }
-    if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
-      return true;
-    }
-    return false;
+  getCurrentTeachingStaff() {
+    return this.teachingStaffs.find(teachingStaff => teachingStaff.user.id === this.currentUser?.id);
   }
 }
