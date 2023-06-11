@@ -18,7 +18,9 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     
     id!: string;
     team!: Team;
-    currentUser!: User | null;
+    currentUser!: User | undefined;
+
+    isJury: boolean = false;
 
     importReportAnnotform: FormGroup;
     reportAnnotFormControl = new FormControl('', [Validators.required]);
@@ -27,15 +29,21 @@ import { UserDataService } from "src/app/core/services/user-data.service";
 
     constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder) { 
       this.importReportAnnotform = this.formBuilder.group({
-        report: this.reportAnnotFormControl
+        reportAnnot: this.reportAnnotFormControl
       });
     }
 
     ngOnInit(): void {
       this.id = this.route.snapshot.params['id'];
-      this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+      this.userDataService.getCurrentUser().subscribe(user => {
         this.currentUser = user;
+        if (user != undefined) {
+          if (user.getRoles().includes("JURY_MEMBER_ROLE")) {
+            this.isJury = true;
+          }
+        }
       });
+  
       this.apiTeamService.getTeam(+this.id).subscribe(data => {
         this.team = data;
       });
@@ -59,44 +67,42 @@ import { UserDataService } from "src/app/core/services/user-data.service";
       }
     }
 
-    uploadFile(fileName: string, type: number) {
-      if (this.currentUser != null && this.team != null) {
-        let id = this.team.idTeam;
+    uploadFile() {
+      if (this.team != null) {
         this.reportAnnotFormControl.setErrors({'apiError': null});
         this.reportAnnotFormControl.updateValueAndValidity();
         if(this.importReportAnnotform.invalid) {
           console.log("Invalid form");
         } else {
-          const file_form: FileInput = this.importReportAnnotform.get(fileName)?.value;
+          const file_form: FileInput = this.importReportAnnotform.get('reportAnnot')?.value;
           const file = file_form.files[0];
-          this.uploadFileService.upload(file, id, fileName).subscribe(
-            data => {
-              // this.getTeam(id);
-              this.showSuccess();
-            },
-            error => {
-              this.showError(error, this.reportAnnotFormControl)
-            },
-          );
+          this.uploadFileService.upload(file, this.team.idTeam, "annotedReport").subscribe(
+          data => {
+            this.showSuccess();
+          },
+          error => {
+            this.showError(error)
+          },
+        );
         }
       }
-  
     }
 
-    isThereStateScope() {
-      return (this.team?.filePathScopeStatement != null);
-    }
-  
-    isThereAnalysis() {
-      return (this.team?.filePathScopeStatementAnalysis != null);
-    }
-  
-    isThereFinalStateScope() {
-      return (this.team?.filePathFinalScopeStatement != null);
-    }
-
-    isThereReport() {
-      return (this.team?.filePathReport != null);
+    isThereFile(fileName: string): boolean {
+      switch (fileName) {
+        case 'teamScopeStatement':
+          return (this.team.filePathScopeStatement != null);
+        case 'analysis':
+          return (this.team.filePathScopeStatementAnalysis != null);
+        case 'finalTeamScopeStatement':
+          return (this.team.filePathFinalScopeStatement != null);
+        case 'report':
+          return (this.team.filePathReport != null);
+        case 'reportAnnotation':
+          return this.team.isReportAnnotation;
+        default:
+          return false;
+      }
     }
 
     showSuccess() {
@@ -105,8 +111,8 @@ import { UserDataService } from "src/app/core/services/user-data.service";
       });
     }
   
-    showError(error: { status: number; }, formControl : FormControl) {
-      formControl.setErrors({apiError: true});
+    showError(error: { status: number; }) {
+      this.reportAnnotFormControl.setErrors({apiError: true});
       switch (error.status) {
         case 415:
           this.errorMessage = "Le fichier n'est pas au bon format";

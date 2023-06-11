@@ -117,6 +117,24 @@ public class FileServiceTest {
     }
 
     @Test
+    void testSaveFile_TheFileIsAnnotedReport() throws IOException, CustomRuntimeException {
+        TeamDTO mockedAnswer = new TeamDTO(1, null, null, null);
+        when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
+
+        MultipartFile file = mock(MultipartFile.class);
+        doNothing().when(file).transferTo(any(File.class));
+        
+        // Mock env
+        when(env.getProperty("file.upload-dir")).thenReturn("test/");
+
+        try {
+            fileService.saveFile(file, 1, "annotedReport");
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
     void testSaveFile_TeamIsNotPresent() throws IOException, CustomRuntimeException {
         when(teamService.getTeamById(1)).thenThrow(new NullPointerException());

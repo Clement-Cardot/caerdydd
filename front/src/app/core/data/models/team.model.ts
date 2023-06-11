@@ -16,8 +16,6 @@ export class Team {
         public filePathScopeStatementAnalysis: string,
         public filePathReport: string,
         public isReportAnnotation: boolean,
-        public idProjectDev: number,
-        public idProjectValidation: number,
 
         public teamMembers: TeamMember[],
         public projectDev: Project,
@@ -50,8 +48,6 @@ export class TeamAdapter implements Adapter<Team> {
                 item.filePathScopeStatementAnalysis,
                 item.filePathReport,
                 item.isReportAnnotation,
-                item.idProjectDev,
-                item.idProjectValidation,
                 teamMemberList,
                 this.projectAdapter.adapt(item.projectDev),
                 this.projectAdapter.adapt(item.projectValidation)
