@@ -4,8 +4,6 @@ import { Jury } from 'src/app/core/data/models/jury.model';
 import { Project } from 'src/app/core/data/models/project.model';
 import { Presentation } from 'src/app/core/data/models/presentation.model';
 import { ApiPresentationService } from 'src/app/core/services/api-presentation.service';
-import { ApiJuryService } from 'src/app/core/services/api-jury.service';
-import { ApiProjectService } from 'src/app/core/services/api-project.service';
 import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 
 @Component({

@@ -105,7 +105,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   switchPage(pageName: string) {
-    console.log(pageName);
     this.pageName = pageName;
     switch (pageName) {
       case 'Tableau de bord':

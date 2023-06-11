@@ -27,7 +27,7 @@ export class DefineSpecialtyComponent implements OnInit {
       this.currentUser = user;
     });
     if (this.currentUser == undefined) {
-      console.log('User is not connected');
+      console.error('User is not connected');
     } else {
       this.apiTeachingStaffService
         .getTeachingStaff(this.currentUser.id)
@@ -50,7 +50,7 @@ export class DefineSpecialtyComponent implements OnInit {
 
   isCurrentUserATeachingStaff() {
     if (this.currentUser == null) {
-      console.log('User is not connected');
+      console.error('User is not connected');
       return false;
     }
     if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {

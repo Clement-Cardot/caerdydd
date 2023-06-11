@@ -33,7 +33,6 @@ export class TestBookLinkComponent {
       this.apiTeamService.addTestBookLink(this.team)
         .subscribe(team => {
           this.team = team;
-          console.log('Lien TestBook ajouté avec succès');
           this.openSnackBar();
         });
     }

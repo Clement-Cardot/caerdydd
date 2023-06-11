@@ -9,6 +9,7 @@ import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { Team } from 'src/app/core/data/models/team.model';
 import { User } from 'src/app/core/data/models/user.model';
 import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-project-description',
@@ -24,6 +25,7 @@ export class ProjectDescriptionComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private apiProjectService: ApiProjectService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -39,12 +41,18 @@ export class ProjectDescriptionComponent implements OnInit {
         .updateProjectDescription(this.team.projectDev)
         .subscribe(
           (response) => {
-            console.log(response);
+            this.showSnackbar("Les infomations de votre projet ont été mises à jour !");
           },
           (error) => {
-            console.error("Error updating project:", error);
+            this.showSnackbar("Une erreur est survenue lors de la mise à jour de votre projet.");
           }
         );
     }
   }
+
+  showSnackbar(message: string) {
+		this._snackBar.open(message, "Fermer", {
+		  duration: 5000,
+		});
+	}
 }

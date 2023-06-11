@@ -63,6 +63,7 @@ public class JuryController {
 
     @PutMapping("/addJuryMember")
     public ResponseEntity<TeachingStaffDTO> addJuryMemberRole(@RequestBody TeachingStaffDTO teachingStaffDTO) {
+        logger.info("Process request : Put jury member role");
         try {
             TeachingStaffDTO updatedTeachingStaff = juryService.addJuryMemberRole(teachingStaffDTO);
             return ResponseEntity.ok(updatedTeachingStaff);
@@ -78,6 +79,7 @@ public class JuryController {
     
     @GetMapping("/{idJury}")
     public ResponseEntity<JuryDTO> getJury(@PathVariable Integer idJury) {
+        logger.info("Process request : Get jury with id {}", idJury);
         try {
             JuryDTO jury = juryService.getJury(idJury);
             return new ResponseEntity<>(jury, HttpStatus.OK);
@@ -91,6 +93,7 @@ public class JuryController {
 
     @GetMapping("")
     public ResponseEntity<List<JuryDTO>> getAllJuries() {
+        logger.info("Process request : Get all juries");
         try {
             List<JuryDTO> juries = juryService.getAllJuries();
             return new ResponseEntity<>(juries, HttpStatus.OK);

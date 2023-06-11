@@ -73,7 +73,7 @@ export class ProjectFileComponent implements OnInit {
     this.fileFormControl.setErrors({'apiError': null});
     this.fileFormControl.updateValueAndValidity();
     if (this.importFileForm.invalid) {
-      console.log('invalid form');
+      console.error('invalid form');
     } else {
       const file_form: FileInput = this.importFileForm.get('file')?.value;
       const file = file_form.files[0];

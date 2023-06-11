@@ -32,14 +32,19 @@ export class TeamCreationComponent implements OnInit {
     if(this.teamCreationForm.invalid){
       return;
     } else {
-      this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(response => {
-        console.log("Team Creation Response : " + JSON.stringify(response));
-        this.componentDisplayed.emit(response);
-      });
+      this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(
+        response => {
+          this.showSnackbar(response.length + "Equipes créées avec succès !");
+          this.componentDisplayed.emit(response);
+        },
+        error => {
+          this.showSnackbar("Une erreur est survenue lors de la création des équipes.");
+        }
+      );
     }
   }
 
-  openSnackBar() {
-    this._snackBar.open(this.teamCreationForm.value.nbTeams*2 + " équipes créées", "Fermer", {duration: 5000});
+  showSnackbar(message : string) {
+    this._snackBar.open(message, "Fermer", {duration: 5000});
   }
 }

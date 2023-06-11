@@ -42,7 +42,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log("ngOnInit")
     this.userDataService.getCurrentUser()
     .subscribe((user: User | undefined) => {
       this.currentUser = user;
@@ -52,7 +51,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    console.log("ngOnDestroy")
     clearInterval(this.refresh);
   }
 

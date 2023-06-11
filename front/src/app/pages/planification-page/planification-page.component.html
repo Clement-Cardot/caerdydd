@@ -12,6 +12,6 @@
         <app-jury-creation class="component" (juryCreation)="addCreatedJury($event)"></app-jury-creation>
     </div>
     <div class="div5"> 
-        <app-jury-entity *ngFor="let jury of juries" [jury]="jury"></app-jury-entity>
+        <app-jury-entity class="juryEntity" *ngFor="let jury of juries" [jury]="jury"></app-jury-entity>
     </div>
 </div>

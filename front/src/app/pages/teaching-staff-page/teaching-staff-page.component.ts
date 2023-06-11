@@ -33,7 +33,7 @@ export class TeachingStaffPageComponent {
 
   isCurrentUserATeachingStaff() {
     if (this.currentUser == null) {
-      console.log('User is not connected');
+      console.error('User is not connected');
       return false;
     }
     if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {

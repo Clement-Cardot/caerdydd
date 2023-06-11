@@ -68,7 +68,7 @@ export class TeamsPageComponent implements OnInit {
 
   isCurrentUserAnOptionLeader() {
     if (this.currentUser == null) {
-      console.log("User is not connected");
+      console.error("User is not connected");
       return false;
     }
     if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")){

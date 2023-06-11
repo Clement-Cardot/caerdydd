@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       map(e => {
-        console.log(e);
+        console.log("NavigationEnd event: " + e.url);
       })
     );
   }
