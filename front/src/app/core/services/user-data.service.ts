@@ -4,14 +4,14 @@ import { BehaviorSubject } from "rxjs";
 
 @Injectable()
 export class UserDataService {
-    currentUser: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+    currentUser: BehaviorSubject<User | undefined> = new BehaviorSubject<User | undefined>(undefined);
 
     constructor(
         private userAdapter: UserAdapter
     ) {}
 
     // Getters and setters
-    public getCurrentUser(): BehaviorSubject<User | null> {
+    public getCurrentUser(): BehaviorSubject<User | undefined> {
         let data = localStorage.getItem("currentUser");
         if (data == null) {
             return this.currentUser;
@@ -30,7 +30,7 @@ export class UserDataService {
     }
 
     public clearCurrentUser(): void {
-        this.currentUser.next(null);
+        this.currentUser.next(undefined);
         localStorage.removeItem("currentUser");
     }
 

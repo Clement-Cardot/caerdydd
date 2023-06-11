@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild  } from '@angular/core';
+import { Component, OnInit, OnDestroy ,ViewChild  } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Notification } from 'src/app/core/data/models/notification.model';
 import { User } from 'src/app/core/data/models/user.model';
@@ -10,11 +10,13 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
   notifications: Notification[] = [];
-  currentUser: User | null = null;
+  currentUser: User | undefined = undefined;
+
+  refresh: any;
 
   constructor(
     private apiNotificationService: ApiNotificationService,
@@ -23,18 +25,21 @@ export class NotificationComponent implements OnInit {
   
 
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
-      if (this.currentUser) {
-        this.getNotifications(this.currentUser.id);
-      }
+      this.getNotifications();
+      
     });
+    this.refresh = setInterval(() => { this.getNotifications() },  30000 );
   }
 
-  
+  ngOnDestroy(): void {
+    clearInterval(this.refresh);
+  }
 
-  getNotifications(userId: number): void {
-    this.apiNotificationService.getNotificationsByUserId(userId).subscribe(
+  getNotifications(): void {
+    if(this.currentUser === undefined) return;
+    this.apiNotificationService.getNotificationsByUserId(this.currentUser.id).subscribe(
       (notifications) => {
         this.notifications = notifications;
       },

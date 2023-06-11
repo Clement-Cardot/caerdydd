@@ -1,6 +1,17 @@
-<div>
-    <app-consulting-import class="component"></app-consulting-import>
-    <app-student-import class="component"></app-student-import>
-    <app-jury-creation class="component"></app-jury-creation>
-    <app-create-presentation class="component"></app-create-presentation>
+<div class="parent">
+    <div class="div1"> 
+        <app-consulting-import class="component"></app-consulting-import>
+    </div>
+    <div class="div2"> 
+        <app-student-import class="component"></app-student-import>
+    </div>
+    <div class="div3"> 
+        <app-create-presentation class="component" [juries]="juries" [projects]="projects"></app-create-presentation>
+    </div>
+    <div class="div4"> 
+        <app-jury-creation class="component" (juryCreation)="addCreatedJury($event)"></app-jury-creation>
+    </div>
+    <div class="div5"> 
+        <app-jury-entity class="juryEntity" *ngFor="let jury of juries" [jury]="jury"></app-jury-entity>
+    </div>
 </div>
