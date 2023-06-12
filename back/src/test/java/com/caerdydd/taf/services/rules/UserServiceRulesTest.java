@@ -215,6 +215,35 @@ public class UserServiceRulesTest {
     }
 
     @Test
+    void testCheckUserExists_True() {
+        // Prepare Input
+        Integer idUser = 1;
+        when(userRepository.existsById(idUser)).thenReturn(true);
+
+        // Call method to test
+        try {
+            userServiceRule.checkUserExists(idUser);
+        } catch (CustomRuntimeException e) {
+            Assertions.fail(e);
+        }
+    }
+
+    @Test
+    void testCheckUserExists_False() {
+        // Prepare Input
+        Integer idUser = 1;
+        when(userRepository.existsById(idUser)).thenReturn(false);
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrows(CustomRuntimeException.class, () -> {
+            userServiceRule.checkUserExists(idUser);
+        });
+
+        // Verify the result
+        Assertions.assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
     void checkCurrentUserRole_UserHasNotRole() throws CustomRuntimeException {
         // Create User
         UserDTO user = new UserDTO();

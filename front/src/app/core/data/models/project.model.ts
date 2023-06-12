@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Adapter } from "../adapter";
-import { Jury } from "./jury.model";
+import { Jury, JuryAdapter } from "./jury.model";
 
 export class Project {
     constructor(
@@ -8,7 +8,7 @@ export class Project {
         public name: string,
         public description: string,
         public isValidated: boolean,
-        public jury: Jury,
+        public jury: Jury | null, 
         public teamName?: string,
     ) {}
 }
@@ -30,7 +30,7 @@ export class ProjectAdapter implements Adapter<Project>{
             item.name,
             item.description,
             item.isValidated,
-            item.jury
+            jury
         );
     }
 }

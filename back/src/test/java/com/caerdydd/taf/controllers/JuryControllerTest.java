@@ -2,6 +2,8 @@ package com.caerdydd.taf.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.caerdydd.taf.models.dto.user.JuryDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.JuryService;
 
@@ -189,8 +192,43 @@ void testGetJury_ServiceError() throws CustomRuntimeException {
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 }
 
+    @Test
+    void testAddJuryMemberRole_Nominal() throws CustomRuntimeException {
+        // Mock juryService.addJuryMemberRole() method
+        TeachingStaffDTO mockedAnswer = new TeachingStaffDTO();
+        when(juryService.addJuryMemberRole(any(TeachingStaffDTO.class))).thenReturn(mockedAnswer);
 
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = juryController.addJuryMemberRole(new TeachingStaffDTO());
 
+        // Verify the result
+        verify(juryService, times(1)).addJuryMemberRole(any(TeachingStaffDTO.class));
+        assertEquals(mockedAnswer, result.getBody());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
 
+    @Test
+    void testAddJuryMemberRole_CustomRuntimeException() throws CustomRuntimeException {
+        // Mock juryService.addJuryMemberRole() method
+        when(juryService.addJuryMemberRole(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException("Custom error"));
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = juryController.addJuryMemberRole(new TeachingStaffDTO());
+
+        // Verify the result
+        verify(juryService, times(1)).addJuryMemberRole(any(TeachingStaffDTO.class));
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
+}
 
 }
+
+
+
+
+
+
+
+
+
+
+

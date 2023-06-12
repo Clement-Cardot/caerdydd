@@ -64,16 +64,17 @@ public class JuryController {
     }
 
     @PutMapping("/addJuryMember")
-public ResponseEntity<TeachingStaffDTO> addJuryMemberRole(@RequestBody TeachingStaffDTO teachingStaffDTO) {
-    try {
-        TeachingStaffDTO updatedTeachingStaff = juryService.addJuryMemberRole(teachingStaffDTO);
-        return ResponseEntity.ok(updatedTeachingStaff);
-    } catch (CustomRuntimeException e) {
-        switch (e.getMessage()) {
-            // Ajoutez ici les cas spécifiques avec les réponses HTTP appropriées
+    public ResponseEntity<TeachingStaffDTO> addJuryMemberRole(@RequestBody TeachingStaffDTO teachingStaffDTO) {
+        try {
+            TeachingStaffDTO updatedTeachingStaff = juryService.addJuryMemberRole(teachingStaffDTO);
+            return ResponseEntity.ok(updatedTeachingStaff);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                // Ajoutez ici les cas spécifiques avec les réponses HTTP appropriées
 
-            default:
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                default:
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
         }
     }
     
@@ -92,15 +93,15 @@ public ResponseEntity<TeachingStaffDTO> addJuryMemberRole(@RequestBody TeachingS
 
     @GetMapping("")
     public ResponseEntity<List<JuryDTO>> getAllJuries() {
-    try {
-        List<JuryDTO> juries = juryService.getAllJuries();
-        return new ResponseEntity<>(juries, HttpStatus.OK);
-    } catch (Exception e) {
-        logger.error("Error while getting all juries", e);
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        try {
+            List<JuryDTO> juries = juryService.getAllJuries();
+            return new ResponseEntity<>(juries, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error while getting all juries", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-}
 
 
 }
-}
+

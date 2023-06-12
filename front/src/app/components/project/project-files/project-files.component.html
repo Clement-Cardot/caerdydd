@@ -60,7 +60,7 @@
       </button>
     </div>
   </form>
-
+  <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFinalStateScope()">Télécharger le document</button>
 
   <form class="inputFileForm" id="reportForm"  [formGroup]="importReportform" (ngSubmit)="upload('report', 4)">
     <label for="">Rapport :</label>

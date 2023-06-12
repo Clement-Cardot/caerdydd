@@ -63,6 +63,47 @@ export class ApiTeamService {
     );
   }
 
+  addTestBookLink(team: Team): Observable<Team> {
+    const url = `${this.baseUrl}/testBookLink`;
+    return this.http.put<Team>(url, team)
+    .pipe( 
+      map((data: any) => this.teamAdapter.adapt(data))
+    )
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getTestBookLinkDev(teamId: number): Observable<string> {
+    const url = `${this.baseUrl}/${teamId}/testBookLinkDev`;
+    return this.http.get(url, { responseType: 'text' })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getTestBookLinkValidation(teamId: number): Observable<string> {
+    const url = `${this.baseUrl}/${teamId}/testBookLinkValidation`;
+    return this.http.get(url, { responseType: 'text' })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+    setTeamMarks(teamId: number, teamWorkmark: number, teamValidationMark: number): Observable<Team> {
+    const url = `${this.baseUrl}/teamMarks`;
+    const formData: FormData = new FormData();
+    formData.append('teamId', teamId.toString());
+    formData.append('teamWorkMark', teamWorkmark.toString());
+    formData.append('teamValidationMark', teamValidationMark.toString());
+    
+    return this.http.post(url, formData)
+      .pipe(
+        map((data: any) => this.teamAdapter.adapt(data)),
+        catchError(this.handleError)
+      );
+  }
+
     private handleError(error: HttpErrorResponse) {
         if (error.status === 0) {
             // A client-side or network error occurred. Handle it accordingly.
