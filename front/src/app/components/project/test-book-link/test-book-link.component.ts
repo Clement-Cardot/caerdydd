@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Team } from 'src/app/core/data/models/team.model';
@@ -18,6 +18,7 @@ function linkValidator(control: AbstractControl): { [key: string]: any } | null 
 })
 export class TestBookLinkComponent {
   @Input() team!: Team;
+  @Output() updatableEvent = new EventEmitter();
 
   testBookLinkForm: FormGroup;
 
@@ -34,6 +35,7 @@ export class TestBookLinkComponent {
         .subscribe(team => {
           this.team = team;
           this.openSnackBar();
+          this.updatableEvent.emit();
         });
     }
   }

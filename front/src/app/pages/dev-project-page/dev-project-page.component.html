@@ -1,11 +1,11 @@
 <div id="dev-projectComponent" *ngIf="team != undefined">
   <app-project-description [team]="team"></app-project-description>
   <div id="cards-list">
-    <app-project-file [team]="team" [fileName]="'teamScopeStatement'"></app-project-file>
-    <app-project-file [team]="team" [fileName]="'analysis'"></app-project-file>
-    <app-project-file [team]="team" [fileName]="'finalTeamScopeStatement'"></app-project-file>
-    <app-project-file [team]="team" [fileName]="'report'"></app-project-file>
-    <app-test-book-link [team]="team"></app-test-book-link>
+    <app-project-file [team]="team" [fileName]="'teamScopeStatement'" (updatableEvent)="getData()"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'analysis'" (updatableEvent)="getData()"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'finalTeamScopeStatement'" (updatableEvent)="getData()"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'report'" (updatableEvent)="getData()"></app-project-file>
+    <app-test-book-link [team]="team" (updatableEvent)="getData()"></app-test-book-link>
   </div>
 </div>
 
