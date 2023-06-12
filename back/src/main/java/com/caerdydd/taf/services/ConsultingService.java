@@ -117,16 +117,16 @@ public class ConsultingService {
         return modelMapper.map(plannedTimingEntity, PlannedTimingConsultingDTO.class);
     }
 
-        // List all consultings
-        public List<ConsultingDTO> listAllConsultings() throws CustomRuntimeException {
-            try {
-                return consultingRepository.findAll().stream()
-                            .map(consultingEntity -> modelMapper.map(consultingEntity, ConsultingDTO.class))
-                            .collect(Collectors.toList()) ;
-            } catch (Exception e) {
-                throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
-            }
+    // List all consultings
+    public List<ConsultingDTO> listAllConsultings() throws CustomRuntimeException {
+        try {
+            return consultingRepository.findAll().stream()
+                        .map(consultingEntity -> modelMapper.map(consultingEntity, ConsultingDTO.class))
+                        .collect(Collectors.toList()) ;
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
+    }
 
     // Get a consulting by Speciality Infra
     public List<ConsultingDTO> getConsultingsBySpecialityInfra() throws CustomRuntimeException {
@@ -304,7 +304,7 @@ public class ConsultingService {
         UserDTO currentUser = this.userService.getUserById(userServiceRules.getCurrentUser().getId());
         
         TeamDTO team = currentUser.getTeamMember().getTeam();
-        
+
         teamServiceRules.checkIfUserIsMemberOfTeam(team);
 
         ConsultingDTO consulting = new ConsultingDTO();

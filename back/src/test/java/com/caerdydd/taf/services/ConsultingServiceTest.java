@@ -459,5 +459,5 @@ public class ConsultingServiceTest {
         assertEquals(input.getIdPlannedTimingAvailability(), result.getIdPlannedTimingAvailability());
         assertEquals(input.getIsAvailable(), result.getIsAvailable());
     }
-    
+
 }
