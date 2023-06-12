@@ -44,10 +44,6 @@ public class ConsultingEntity implements Serializable {
         @JoinColumn(name = "id_team")
         private TeamEntity team;
 
-        @ManyToOne
-        @JoinColumn(name = "id_ts")
-        private TeachingStaffEntity teachingStaff;
-
         public ConsultingEntity(){
         }
 
