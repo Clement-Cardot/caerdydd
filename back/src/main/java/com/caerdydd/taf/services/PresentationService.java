@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.project.PresentationDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.project.TeamEntity;
@@ -42,6 +43,9 @@ public class PresentationService {
 
     @Autowired
     private UserServiceRules userServiceRules;
+
+    @Autowired
+    private TeamMemberService teamMemberService;
 
     public List<PresentationDTO> listAllPresentations() throws CustomRuntimeException {
         try {
@@ -164,4 +168,10 @@ public class PresentationService {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     }
+
+    public List<PresentationDTO> getTeamMemberPresentations(Integer userId) throws CustomRuntimeException {
+        TeamMemberDTO teamMember = teamMemberService.getTeamMemberById(userId);
+        return this.getTeamPresentations(teamMember.getTeam().getIdTeam());
+    }
+
 }
