@@ -46,7 +46,7 @@ CREATE TABLE jury (
 CREATE TABLE project (
     id_project INT NOT NULL AUTO_INCREMENT, 
     name VARCHAR(20) NOT NULL,
-    description VARCHAR(250),
+    description VARCHAR(1000),
     is_validated BOOLEAN NOT NULL,
     id_jury INT,
     PRIMARY KEY(id_project),
@@ -78,6 +78,7 @@ CREATE TABLE team (
     file_path_final_scope_statement VARCHAR(100),
     file_path_scope_statement_analysis VARCHAR(100),
     file_path_report VARCHAR(100),
+    is_report_annotation BOOLEAN,
     id_project_dev INT NOT NULL,
     id_project_validation INT NOT NULL,
     PRIMARY KEY(id_team),

@@ -150,7 +150,7 @@ public class JuryService {
         Optional<JuryEntity> optionalJury = juryRepository.findById(idJury);
         if (!optionalJury.isPresent()) {
             throw new CustomRuntimeException(CustomRuntimeException.JURY_NOT_FOUND);
-}
+        }
         return modelMapper.map(optionalJury.get(), JuryDTO.class);
     }
 

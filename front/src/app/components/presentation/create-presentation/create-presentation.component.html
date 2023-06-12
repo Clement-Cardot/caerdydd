@@ -1,12 +1,12 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title> 
-      <h2>Création de présentation</h2> 
+      <h3>Création de présentation</h3> 
     </mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
-    <form [formGroup]="presentationForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="presentationForm" #formDirective="ngForm" (ngSubmit)="onSubmit(formDirective)">
       <mat-form-field appearance="fill">
         <mat-label>Type de présentation</mat-label>
         <mat-select formControlName="type">

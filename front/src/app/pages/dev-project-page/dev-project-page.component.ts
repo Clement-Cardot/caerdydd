@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Consulting } from 'src/app/core/data/models/consulting.model';
 import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { Team } from 'src/app/core/data/models/team.model';
@@ -14,27 +14,34 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
   templateUrl: './dev-project-page.component.html',
   styleUrls: ['./dev-project-page.component.scss']
 })
-export class DevProjectPageComponent {
+export class DevProjectPageComponent  implements OnInit, OnDestroy {
+  currentUser: User | undefined = undefined;
+  idTeam!: number;
+  team!: Team;
   consultingsList!: Consulting[];
-  currentTeam!: Team;
-  currentUser!: User | null;
-  currentTeamMember!: TeamMember;
 
-  constructor(private consultingService: ApiConsultingService, private userDataService: UserDataService,
-    private apiTeamMemberService: ApiTeamMemberService, private apiTeamService: ApiTeamService) { }
+  refresh: any;
+  constructor(public userDataService: UserDataService, private apiTeamMemberService: ApiTeamMemberService, private apiTeamService: ApiTeamService, private apiConsultingService: ApiConsultingService ) { }
 
-  ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+  public ngOnInit(): void {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
-      if(this.currentUser != null) {
-        this.getTeamMember(this.currentUser.id);
-      }
+      this.getTeamMember();
     });
+    this.refresh = setInterval(() => { this.getData(); }, 10000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.refresh);
+  }
+
+  getData() {
+    this.getTeam();
   }
 
   getAllConsultingsForCurrentTeam() {
-    if(this.currentTeam) {
-      this.consultingService.getConsultingForATeam(this.currentTeam.idTeam)
+    if(this.team) {
+      this.apiConsultingService.getConsultingForATeam(this.team.idTeam)
       .subscribe(data => {
           this.consultingsList = data;
           this.consultingsList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());
@@ -44,21 +51,24 @@ export class DevProjectPageComponent {
     }
   }
 
-  getTeamMember(userId: number) {
-    this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
+  getTeamMember() {
+    let id = this.currentUser?.id;
+    if (id == null || id == undefined) return;
+    this.apiTeamMemberService.getTeamMemberById(id).subscribe(
       (teamMember: TeamMember) => {
-        this.getTeam(teamMember.idTeam);
+        this.idTeam = teamMember.idTeam; 
+        this.getTeam();
       },
-      (error) => {
-        console.error("Error getting team member:", error);
+      (error) => { 
+        console.error("Error getting team member:", error)
       }
     );
   }
 
-  getTeam(teamId: number) {
-    this.apiTeamService.getTeam(teamId).subscribe(
+  getTeam() {
+    this.apiTeamService.getTeam(this.idTeam).subscribe(
       (team: Team) => {
-        this.currentTeam = team;
+        this.team = team;
         this.getAllConsultingsForCurrentTeam();
       },
       (error) => {

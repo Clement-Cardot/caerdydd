@@ -10,17 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.caerdydd.taf.services.JuryService;
-import com.caerdydd.taf.services.TeachingStaffService;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
-import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 
 @RestController
@@ -65,6 +62,7 @@ public class JuryController {
 
     @PutMapping("/addJuryMember")
     public ResponseEntity<TeachingStaffDTO> addJuryMemberRole(@RequestBody TeachingStaffDTO teachingStaffDTO) {
+        logger.info("Process request : Put jury member role");
         try {
             TeachingStaffDTO updatedTeachingStaff = juryService.addJuryMemberRole(teachingStaffDTO);
             return ResponseEntity.ok(updatedTeachingStaff);
@@ -80,6 +78,7 @@ public class JuryController {
     
     @GetMapping("/{idJury}")
     public ResponseEntity<JuryDTO> getJury(@PathVariable Integer idJury) {
+        logger.info("Process request : Get jury with id {}", idJury);
         try {
             JuryDTO jury = juryService.getJury(idJury);
             return new ResponseEntity<>(jury, HttpStatus.OK);
@@ -93,6 +92,7 @@ public class JuryController {
 
     @GetMapping("")
     public ResponseEntity<List<JuryDTO>> getAllJuries() {
+        logger.info("Process request : Get all juries");
         try {
             List<JuryDTO> juries = juryService.getAllJuries();
             return new ResponseEntity<>(juries, HttpStatus.OK);
@@ -101,7 +101,6 @@ public class JuryController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
 }
 

@@ -17,7 +17,7 @@ interface DialogData {
 })
 export class ClickedConsultingDialogComponent {
 
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
   userRole!: string;
   myAvailability!: PlannedTimingAvailability;
 
@@ -53,8 +53,11 @@ export class ClickedConsultingDialogComponent {
   }
 
   submit(){
-    this.apiConsultingService.updateAvailability(this.myAvailability).subscribe();
-    this.dialogRef.close();
+    this.apiConsultingService.updateAvailability(this.myAvailability).subscribe(
+      (response) => {
+        this.dialogRef.close(response);
+      }
+    );
   }
 
   onNoClick(): void {

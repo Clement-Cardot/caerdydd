@@ -1,4 +1,4 @@
-<div id="projectFile">
+<div id="validationPage" *ngIf="team != undefined">
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{team.name}}</mat-card-title>
@@ -6,19 +6,23 @@
       <mat-card-content>
         <div class="sameRow">
           <p>Cahier des charges :</p>
-          <button mat-raised-button color="accent" (click)="getFile('teamScopeStatement')" class="downloadButton" [disabled]="!isThereStateScope()">Télécharger le document</button>
+          <button mat-raised-button color="accent" (click)="getFile('teamScopeStatement')" class="downloadButton" [disabled]="!isThereFile('teamScopeStatement')">Télécharger le document</button>
         </div>
         <div class="sameRow">
           <p>Analyse du cahier des charges :</p>
-          <button mat-raised-button color="accent" (click)="getFile('analysis')" class="downloadButton" [disabled]="!isThereAnalysis()">Télécharger le document</button>
+          <button mat-raised-button color="accent" (click)="getFile('analysis')" class="downloadButton" [disabled]="!isThereFile('analysis')">Télécharger le document</button>
         </div>
         <div class="sameRow">
           <p>Cahier des charges final :</p>
-          <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFinalStateScope()">Télécharger le document</button>
+          <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFile('finalTeamScopeStatement')">Télécharger le document</button>
         </div>
         <div class="sameRow">
           <p>Rapport :</p>
-          <button mat-raised-button color="accent" (click)="getFile('report')" class="downloadButton" [disabled]="!isThereReport()">Télécharger le document</button>
+          <button mat-raised-button color="accent" (click)="getFile('report')" class="downloadButton" [disabled]="!isThereFile('report')">Télécharger le document</button>
+        </div>
+        <div class="sameRow">
+          <p>Rapport annoté:</p>
+          <button mat-raised-button color="accent" (click)="getFile('annotedReport')" class="downloadButton" [disabled]="!isThereFile('reportAnnotation')">Télécharger le document</button>
         </div>
         <div class="sameRow">
           <p>Cahier de tests :</p>
@@ -26,11 +30,39 @@
         </div>
       </mat-card-content>
     </mat-card>
+
+    <mat-card *ngIf="isUserJury()">
+      <mat-card-header>
+          <mat-card-title>
+              <h3>Déposer un rapport annoté</h3>
+          </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+          <form class="inputFileForm"  [formGroup]="importReportAnnotform" (ngSubmit)="uploadFile()">
+              <mat-form-field class="input" appearance="fill">
+                  <ngx-mat-file-input valuePlaceholder="Choisir un fichier*" formControlName="reportAnnot" [accept]="'.pdf'" >
+                  </ngx-mat-file-input>
+                  <mat-icon matSuffix>attachment</mat-icon>
+                  <mat-error *ngIf="reportAnnotFormControl.hasError('required')">
+                      Vous devez choisir un fichier
+                  </mat-error>
+                  <mat-error *ngIf="reportAnnotFormControl.hasError('apiError')">
+                      {{errorMessage}}
+                  </mat-error>
+              </mat-form-field>
+              <button mat-fab color="accent" [disabled]="importReportAnnotform.invalid">
+                  <mat-icon>upload</mat-icon>
+              </button>
+          </form>
+      </mat-card-content>
+    </mat-card>
+
     <button mat-raised-button color="primary" [routerLink]="['/teams']">Retour à la page d'équipes</button>
+
 </div>
 <div>
   <h2>Consultings</h2>
   <div class="twoColumnDisplay" id="consulting-list">
-  <app-consulting-info *ngFor="let consulting of consultingsList" [consulting]="consulting"></app-consulting-info>
+    <app-consulting-info *ngFor="let consulting of consultingsList" [consulting]="consulting"></app-consulting-info>
   </div>
 </div>

@@ -3,10 +3,12 @@ import { DefineSpecialtyComponent } from "./define-specialty/define-specialty.co
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MaterialModule } from "src/app/material.module";
+import { TeachingStaffEntityComponent } from './teaching-staff-entity/teaching-staff-entity.component';
 
 @NgModule({
     declarations: [
-        DefineSpecialtyComponent
+        DefineSpecialtyComponent,
+        TeachingStaffEntityComponent
     ],
     imports: [
       CommonModule,
@@ -15,7 +17,8 @@ import { MaterialModule } from "src/app/material.module";
       ReactiveFormsModule,
     ],
     exports: [
-      DefineSpecialtyComponent
+      DefineSpecialtyComponent,
+      TeachingStaffEntityComponent
     ]
   })
   export class TeachingStaffModule { }
