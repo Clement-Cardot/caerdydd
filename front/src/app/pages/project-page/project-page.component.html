@@ -28,6 +28,16 @@
           <p>Cahier de tests :</p>
           <a mat-button color="primary" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
         </div>
+        <br>
+        <form action="" id="formReportComment">
+          <div class="sameRow" *ngIf="isUserOptionLeader() || isUserJury()">
+            <p>Commentaire sur le rapport :</p>
+            <p></p>
+          </div>
+          <mat-form-field id="reportComment">
+            <textarea matInput [disabled]="isUserOptionLeader() && !isUserJury()" rows="5">{{ team.reportComments }}</textarea>
+          </mat-form-field>
+        </form>
       </mat-card-content>
     </mat-card>
     <mat-card *ngIf="isUserJury()">

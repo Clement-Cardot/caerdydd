@@ -58,6 +58,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     getTeam() {
       this.apiTeamService.getTeam(+this.id).subscribe(data => {
         this.team = data;
+        console.log(this.team);
       });
     }
 
@@ -67,6 +68,10 @@ import { UserDataService } from "src/app/core/services/user-data.service";
       let ts2 = this.team.projectDev.jury?.ts2.idUser;
       let statement = this.currentUser?.getRoles().includes("JURY_MEMBER_ROLE") && (ts1 == userID || ts2 == userID)
       return statement;
+    }
+
+    isUserOptionLeader() {
+      return this.currentUser?.getRoles().includes("OPTION_LEADER_ROLE");
     }
 
     getFile(file: string) {

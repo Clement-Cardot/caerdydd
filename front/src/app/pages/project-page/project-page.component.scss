@@ -52,3 +52,32 @@ mat-card-content {
     align-items: center;
     justify-content: space-evenly;
 }
+
+#reportComment {
+  width: 50%;
+}
+
+#formReportComment {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (max-width: 1200px) {
+  #reportComment {
+    width: 70%;
+  }
+  .sameRow {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #reportComment {
+    width: 80%;
+  }
+  .sameRow {
+    width: 80%;
+  }
+}
