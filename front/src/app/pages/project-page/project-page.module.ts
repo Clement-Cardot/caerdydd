@@ -4,6 +4,7 @@ import { ProjectPageComponent } from './project-page.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
@@ -11,6 +12,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     ProjectPageComponent
   ],
   imports: [
+    CommonModule,
     MaterialModule,
     RouterModule,
     FormsModule,

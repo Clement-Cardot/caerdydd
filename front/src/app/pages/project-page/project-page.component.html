@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="team != undefined">
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{team.name}}</mat-card-title>
@@ -26,7 +26,7 @@
         </div>
       </mat-card-content>
     </mat-card>
-    <mat-card *ngIf="isJury">
+    <mat-card *ngIf="isUserJury()">
       <mat-card-header>
           <mat-card-title>
               <h3>Déposer un rapport annoté</h3>
