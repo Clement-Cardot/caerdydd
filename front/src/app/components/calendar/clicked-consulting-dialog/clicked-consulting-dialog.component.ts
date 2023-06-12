@@ -1,9 +1,13 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { Consulting } from 'src/app/core/data/models/consulting.model';
 import { PlannedTimingAvailability } from 'src/app/core/data/models/planned-timing-availability.model';
 import { PlannedTimingConsulting } from 'src/app/core/data/models/planned-timing-consulting.model';
+import { Team } from 'src/app/core/data/models/team.model';
 import { User } from 'src/app/core/data/models/user.model';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
+import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 
 interface DialogData {
@@ -20,13 +24,16 @@ export class ClickedConsultingDialogComponent {
   currentUser: User | undefined = undefined;
   userRole!: string;
   myAvailability!: PlannedTimingAvailability;
+  myConsulting: Consulting;
 
   constructor(
     private apiConsultingService: ApiConsultingService,
+    private apiTeamService: ApiTeamService,
     private userDataService: UserDataService,
     public dialogRef: MatDialogRef<ClickedConsultingDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
+    this.myConsulting = new Consulting("", this.data.event);
     this.changeDialogDependingOnUserRole();
   }
 
@@ -53,11 +60,20 @@ export class ClickedConsultingDialogComponent {
   }
 
   submit(){
-    this.apiConsultingService.updateAvailability(this.myAvailability).subscribe(
-      (response) => {
-        this.dialogRef.close(response);
-      }
-    );
+    if (this.userRole == "TEAM_MEMBER_ROLE") {
+      // TODO: send datas to DB
+      this.apiConsultingService.createConsulting(this.myConsulting).subscribe(
+        (response) => {
+          this.dialogRef.close(response);
+        }
+      );
+    } else if (this.userRole == "TEACHING_STAFF_ROLE") {
+      this.apiConsultingService.updateAvailability(this.myAvailability).subscribe(
+        (response) => {
+          this.dialogRef.close(response);
+        }
+      );
+    }
   }
 
   onNoClick(): void {

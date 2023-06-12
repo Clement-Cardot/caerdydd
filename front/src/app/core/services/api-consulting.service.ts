@@ -61,7 +61,7 @@ export class ApiConsultingService {
 
     createConsulting(consulting: Consulting): Observable<Consulting> {
         const url = `${this.baseUrl}/createConsulting`;
-        return this.http.post<Consulting>(url, consulting)
+        return this.http.put<Consulting>(url, consulting)
         .pipe(
             map((data: any) => this.consultingAdapter.adapt(data))
         )

@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { PlannedTimingAvailability, PlannedTimingAvailabilityAdapter } from './planned-timing-availability.model';
 import { Team, TeamAdapter } from './team.model';
 import { Adapter } from '../adapter';
+import { PlannedTimingConsulting } from './planned-timing-consulting.model';
 
 export class Consulting {
     constructor(
-        public idConsulting: number,
-        public specialty: string,
-        public notes: string,
-        public isValidated: boolean,
-        public isReserved: boolean,
-        public plannedTimingAvailability: PlannedTimingAvailability,
-        public team: Team,
+        public speciality: string,
+        public plannedTimingConsulting: PlannedTimingConsulting,
+        public team?: Team,
+        public idConsulting?: number,
+        public notes?: string,
+        public plannedTimingAvailability?: PlannedTimingAvailability
     ) {}
 }
 
@@ -24,13 +24,8 @@ export class ConsultingAdapter implements Adapter<Consulting>{
 
     adapt(item: any): Consulting {
         return new Consulting(
-            item.idConsulting,
-            item.Specialty,
-            item.Notes,
-            item.IsValidated,
-            item.IsReserved,
-            this.plannedTimingAvailabilityAdapter.adapt(item.plannedTimingAvailability),
-            this.teamAdapter.adapt(item.team),
+            item.speciality,
+            item.plannedTimingConsulting
         );
     }
 }
