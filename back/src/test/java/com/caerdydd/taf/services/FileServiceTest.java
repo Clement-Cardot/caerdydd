@@ -92,9 +92,6 @@ public class FileServiceTest {
         assertDoesNotThrow(() -> fileService.saveFile(file, 1, "teamScopeStatement"));
     }
 
-
-
-
     @Test
     void testSaveFile_AndCreateNotification() throws IOException, CustomRuntimeException {
         // Mock ProjectDTO
@@ -127,11 +124,9 @@ public class FileServiceTest {
         verify(notificationService, times(2)).createNotification(any());
     }
 
-
-
     @Test
     void testSaveFile_TheFileIsAnnotedReport() throws IOException, CustomRuntimeException {
-        TeamDTO mockedAnswer = new TeamDTO(1, null, null, null);
+        TeamDTO mockedAnswer = new TeamDTO(1, null, new ProjectDTO(), null);
         when(teamService.getTeamById(1)).thenReturn(mockedAnswer);
 
         MultipartFile file = mock(MultipartFile.class);
@@ -210,39 +205,39 @@ public class FileServiceTest {
     }
 
     @Test
-@MockitoSettings(strictness = Strictness.LENIENT)
-void testLoadFileAsResource_Nominal() throws CustomRuntimeException, IOException {
-    // Mock env
-    when(env.getProperty("file.upload-dir")).thenReturn("test/");
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void testLoadFileAsResource_Nominal() throws CustomRuntimeException, IOException {
+        // Mock env
+        when(env.getProperty("file.upload-dir")).thenReturn("test/");
 
-    // Mock TeamDTO
-    TeamDTO mockedTeam = new TeamDTO();
-    mockedTeam.setIdTeam(1);
-    when(teamService.getTeamById(1)).thenReturn(mockedTeam);
+        // Mock TeamDTO
+        TeamDTO mockedTeam = new TeamDTO();
+        mockedTeam.setIdTeam(1);
+        when(teamService.getTeamById(1)).thenReturn(mockedTeam);
 
-    // Create a temporary file
-    File tempFile = File.createTempFile("test", ".pdf");
+        // Create a temporary file
+        File tempFile = File.createTempFile("test", ".pdf");
 
-    // Write some content to it
-    FileWriter writer = new FileWriter(tempFile);
-    writer.write("some content");
-    writer.close();
+        // Write some content to it
+        FileWriter writer = new FileWriter(tempFile);
+        writer.write("some content");
+        writer.close();
 
-    // Now we pretend that this is the file that was saved
-    String path = tempFile.getAbsolutePath();
-    mockedTeam.setFilePathScopeStatement(path);
+        // Now we pretend that this is the file that was saved
+        String path = tempFile.getAbsolutePath();
+        mockedTeam.setFilePathScopeStatement(path);
 
-    // Attempt to load the file as a resource
-    try {
-        Resource resource = fileService.loadFileAsResource(1, "test");
-        assertNotNull(resource);
-    } catch (CustomRuntimeException e) {
-        fail("Exception thrown: " + e.getMessage());
-    } finally {
-        // Delete the temporary file
-        tempFile.delete();
+        // Attempt to load the file as a resource
+        try {
+            Resource resource = fileService.loadFileAsResource(1, "test");
+            assertNotNull(resource);
+        } catch (CustomRuntimeException e) {
+            fail("Exception thrown: " + e.getMessage());
+        } finally {
+            // Delete the temporary file
+            tempFile.delete();
+        }
     }
-}
 
 
     @Test
@@ -257,60 +252,60 @@ void testLoadFileAsResource_Nominal() throws CustomRuntimeException, IOException
 
 
     @Test
-void testSaveFile_TheFileIsAnalysis() throws IOException, CustomRuntimeException {
-    testSaveFile_GivenFileType("analysis");
-}
+    void testSaveFile_TheFileIsAnalysis() throws IOException, CustomRuntimeException {
+        testSaveFile_GivenFileType("analysis");
+    }
 
-@Test
-void testSaveFile_TheFileIsFinalScopeStatement() throws IOException, CustomRuntimeException {
-    testSaveFile_GivenFileType("finalTeamScopeStatement");
-}
+    @Test
+    void testSaveFile_TheFileIsFinalScopeStatement() throws IOException, CustomRuntimeException {
+        testSaveFile_GivenFileType("finalTeamScopeStatement");
+    }
 
-@Test
-void testSaveFile_TheFileIsReport() throws IOException, CustomRuntimeException {
-    testSaveFile_GivenFileType("report");
-}
+    @Test
+    void testSaveFile_TheFileIsReport() throws IOException, CustomRuntimeException {
+        testSaveFile_GivenFileType("report");
+    }
 
-void testSaveFile_GivenFileType(String fileType) throws IOException, CustomRuntimeException {
-    // Mock ProjectDTO
-    ProjectDTO mockedProject = new ProjectDTO();
-    mockedProject.setIdProject(1);
+    void testSaveFile_GivenFileType(String fileType) throws IOException, CustomRuntimeException {
+        // Mock ProjectDTO
+        ProjectDTO mockedProject = new ProjectDTO();
+        mockedProject.setIdProject(1);
 
-    // Mock TeamDTO
-    TeamDTO mockedTeam = new TeamDTO(1, "testName", mockedProject, null);
-    when(teamService.getTeamById(1)).thenReturn(mockedTeam);
+        // Mock TeamDTO
+        TeamDTO mockedTeam = new TeamDTO(1, "testName", mockedProject, null);
+        when(teamService.getTeamById(1)).thenReturn(mockedTeam);
 
-    // Mock file
-    MultipartFile file = mock(MultipartFile.class);
-    doNothing().when(file).transferTo(any(File.class));
+        // Mock file
+        MultipartFile file = mock(MultipartFile.class);
+        doNothing().when(file).transferTo(any(File.class));
 
-    // Mock environment
-    when(env.getProperty("file.upload-dir")).thenReturn("test/");
+        // Mock environment
+        when(env.getProperty("file.upload-dir")).thenReturn("test/");
 
-    assertDoesNotThrow(() -> fileService.saveFile(file, 1, fileType));
-}
+        assertDoesNotThrow(() -> fileService.saveFile(file, 1, fileType));
+    }
 
-@Test
-@MockitoSettings(strictness = Strictness.LENIENT)
-void testGetNotificationFileType() {
-    FileService fileService = new FileService();
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void testGetNotificationFileType() {
+        FileService fileService = new FileService();
 
-    // Test pour "analysis"
-    String result = fileService.getNotificationFileType("analysis");
-    assertEquals("Analyse du cahier des charges", result);
+        // Test pour "analysis"
+        String result = fileService.getNotificationFileType("analysis");
+        assertEquals("Analyse du cahier des charges", result);
 
-    // Test pour "finalTeamScopeStatement"
-    result = fileService.getNotificationFileType("finalTeamScopeStatement");
-    assertEquals("Cahier des charges final", result);
+        // Test pour "finalTeamScopeStatement"
+        result = fileService.getNotificationFileType("finalTeamScopeStatement");
+        assertEquals("Cahier des charges final", result);
 
-    // Test pour "report"
-    result = fileService.getNotificationFileType("report");
-    assertEquals("Rapport", result);
+        // Test pour "report"
+        result = fileService.getNotificationFileType("report");
+        assertEquals("Rapport", result);
 
-    // Test pour un type inconnu
-    result = fileService.getNotificationFileType("unknownType");
-    assertEquals("unknownType", result);
-}
+        // Test pour un type inconnu
+        result = fileService.getNotificationFileType("unknownType");
+        assertEquals("unknownType", result);
+    }
 
 
 }
