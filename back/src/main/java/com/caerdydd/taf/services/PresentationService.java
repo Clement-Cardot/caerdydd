@@ -92,14 +92,12 @@ public class PresentationService {
         return modelMapper.map(response, PresentationDTO.class);
     }
 
-    public PresentationDTO setJury1Notes(Integer id, String notes) throws CustomRuntimeException{
-        PresentationDTO presentation = getPresentationById(id);
+    public PresentationDTO setJury1Notes(PresentationDTO presentation, String notes) throws CustomRuntimeException{
         presentation.setJury1Notes(notes);
         return updatePresentation(presentation);
     }
 
-    public PresentationDTO setJury2Notes(Integer id, String notes) throws CustomRuntimeException{
-        PresentationDTO presentation = getPresentationById(id);
+    public PresentationDTO setJury2Notes(PresentationDTO presentation, String notes) throws CustomRuntimeException{
         presentation.setJury2Notes(notes);
         return updatePresentation(presentation);
     }
@@ -110,10 +108,10 @@ public class PresentationService {
         presentationServiceRule.checkDateBeginPassed(presentation.getDatetimeBegin());
 
         if(userServiceRules.getCurrentUser().getId().equals(presentation.getJury().getTs1().getIdUser())){
-            return setJury1Notes(id, notes);
+            return setJury1Notes(presentation, notes);
         }
         else if(userServiceRules.getCurrentUser().getId().equals(presentation.getJury().getTs2().getIdUser())){
-            return setJury2Notes(id, notes);
+            return setJury2Notes(presentation, notes);
         }
         throw new CustomRuntimeException(CustomRuntimeException.JURY_NOT_FOUND);
     }
