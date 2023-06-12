@@ -11,7 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.caerdydd.taf.models.entities.project.TeamEntity;
+import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,12 +31,14 @@ public class ConsultingEntity implements Serializable {
         private Integer idConsulting;
         private String speciality;
         private String notes;
-        private Boolean isValidated = false;
-        private Boolean isReserved = false;
 
         @OneToOne
         @JoinColumn(name = "id_planned_timing_availability")
         private PlannedTimingAvailabilityEntity plannedTimingAvailability;
+
+        @ManyToOne
+        @JoinColumn(name = "id_planned_timing_consulting")
+        private PlannedTimingConsultingEntity plannedTimingConsulting;
 
         @ManyToOne
         @JoinColumn(name = "id_team")
@@ -44,7 +50,7 @@ public class ConsultingEntity implements Serializable {
         @Override
         public String toString() {
                 return "ConsultingEntity [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes
-                                + ", isValidated=" + isValidated + ", isReserved=" + isReserved + ", team=" + team + "]";
+                        + ", team=" + team + "]";
         }
         
 }

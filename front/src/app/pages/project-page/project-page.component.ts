@@ -1,12 +1,14 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { FileInput } from "ngx-material-file-input";
+import { Consulting } from "src/app/core/data/models/consulting.model";
 import { Team } from "src/app/core/data/models/team.model";
-import { User } from "src/app/core/data/models/user.model";
+import { ApiConsultingService } from "src/app/core/services/api-consulting.service";
 import { ApiTeamService } from "src/app/core/services/api-team.service";
 import { ApiUploadFileService } from "src/app/core/services/api-upload-file.service";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FileInput } from "ngx-material-file-input";
+import { User } from "src/app/core/data/models/user.model";
 import { UserDataService } from "src/app/core/services/user-data.service";
 
 @Component({
@@ -15,10 +17,11 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     styleUrls: ['./project-page.component.scss']
   })
   export class ProjectPageComponent {
-
+    
     id!: string;
     team!: Team;
     currentUser!: User | undefined;
+    consultingsList: Consulting[] = [];
 
     isJury: boolean = false;
 
@@ -29,7 +32,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
 
     refresh: any;
 
-    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder) {
+    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder, private consultingService: ApiConsultingService) {
       this.importReportAnnotform = this.formBuilder.group({
         reportAnnot: this.reportAnnotFormControl
       });
@@ -37,16 +40,17 @@ import { UserDataService } from "src/app/core/services/user-data.service";
 
     ngOnInit(): void {
       this.id = this.route.snapshot.params['id'];
-
-      this.getCurrentUser();
-      this.getTeam();
-      this.refresh = setInterval(() => { this.getTeam() },  5000 );
+      this.getData()
+      this.refresh = setInterval(() => { this.getData() },  5000 );
     }
 
     ngOnDestroy(): void {
-      if (this.refresh) {
-        clearInterval(this.refresh);
-      }
+      clearInterval(this.refresh);
+    }
+
+    getData() {
+      this.getCurrentUser();
+      this.getTeam();
     }
 
     getCurrentUser() {
@@ -58,7 +62,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     getTeam() {
       this.apiTeamService.getTeam(+this.id).subscribe(data => {
         this.team = data;
-        console.log(this.team);
+        this.getAllConsultingsForCurrentTeam();
       });
     }
 
@@ -87,7 +91,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
           a.click();
         },
         error => {
-          {this.showErrorDownload()}
+          {this.showErrorDownload()} 
         });
       }
     }
@@ -156,4 +160,16 @@ import { UserDataService } from "src/app/core/services/user-data.service";
       });
     }
 
+    getAllConsultingsForCurrentTeam(){
+      if(this.team) {
+        this.consultingService.getConsultingForATeam(this.team.idTeam)
+        .subscribe(data => {
+            this.consultingsList = data;
+            this.consultingsList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());
+
+          }
+        );
+      }
+    }
+  
   }

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
 
-import org.springframework.core.io.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -265,7 +265,7 @@ public class FileServiceTest {
     void testSaveFile_TheFileIsReport() throws IOException, CustomRuntimeException {
         testSaveFile_GivenFileType("report");
     }
-
+        
     void testSaveFile_GivenFileType(String fileType) throws IOException, CustomRuntimeException {
         // Mock ProjectDTO
         ProjectDTO mockedProject = new ProjectDTO();
@@ -284,6 +284,7 @@ public class FileServiceTest {
 
         assertDoesNotThrow(() -> fileService.saveFile(file, 1, fileType));
     }
+
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
@@ -306,6 +307,4 @@ public class FileServiceTest {
         result = fileService.getNotificationFileType("unknownType");
         assertEquals("unknownType", result);
     }
-
-
 }

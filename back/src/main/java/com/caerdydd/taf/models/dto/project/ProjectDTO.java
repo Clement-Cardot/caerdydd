@@ -33,8 +33,6 @@ public class ProjectDTO {
     @JsonBackReference(value="projectValidation")
     private TeamDTO teamValidation;
 
-    @JsonManagedReference(value="project")
-    private List<PresentationDTO> presentations;
 
     private JuryDTO jury;
 

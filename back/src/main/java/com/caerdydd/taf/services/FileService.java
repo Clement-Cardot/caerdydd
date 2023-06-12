@@ -1,5 +1,6 @@
 package com.caerdydd.taf.services;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -48,17 +49,17 @@ public class FileService {
 
     
     public void saveFile(MultipartFile multipartFile, int id, String type) throws CustomRuntimeException {
-    try {
-        fileRules.checkFileIsPDF(multipartFile);
-        
-        String path = env.getProperty("file.upload-dir") + String.format("/equipe%d/", id);
-        String fileName = type + ".pdf";
+        try {
+            fileRules.checkFileIsPDF(multipartFile);
+            
+            String path = env.getProperty("file.upload-dir") + String.format("/equipe%d/", id);
+            String fileName = type + ".pdf";
 
-        Files.createDirectories(Paths.get(path));
-        multipartFile.transferTo(new File(path, fileName));
+            Files.createDirectories(Paths.get(path));
+            multipartFile.transferTo(new File(path, fileName));
 
-        TeamDTO team = teamService.getTeamById(id);
-        ProjectDTO project = team.getProjectDev();
+            TeamDTO team = teamService.getTeamById(id);
+            ProjectDTO project = team.getProjectDev();
 
         if (type.equals("teamScopeStatement")) {
             team.setFilePathScopeStatement(path + fileName);
@@ -90,7 +91,6 @@ public class FileService {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         } 
     }
-
 
     public Resource loadFileAsResource(int idTeam, String type) throws CustomRuntimeException {
         try {

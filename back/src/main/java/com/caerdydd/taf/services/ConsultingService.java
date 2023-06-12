@@ -3,6 +3,7 @@ package com.caerdydd.taf.services;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
@@ -26,6 +29,7 @@ import com.caerdydd.taf.repositories.PlannedTimingConsultingRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.ConsultingRules;
 import com.caerdydd.taf.services.rules.FileRules;
+import com.caerdydd.taf.services.rules.TeamServiceRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -53,16 +57,34 @@ public class ConsultingService {
     private UserServiceRules userServiceRules;
 
     @Autowired
-    private FileRules fileRules;
+    private TeamServiceRules teamServiceRules;
+
 
     @Autowired
     private ConsultingRules consultingRules;
+    
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private FileRules fileRules;
 
     // List all planned timing for consultings
     public List<PlannedTimingConsultingDTO> listAllPlannedTimingConsultings() throws CustomRuntimeException {
         try {
             return plannedTimingConsultingRepository.findAll().stream()
                         .map(plannedTimingConsultingEntity -> modelMapper.map(plannedTimingConsultingEntity, PlannedTimingConsultingDTO.class))
+                        .collect(Collectors.toList()) ;
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
+
+    // List all ConsulingDTO
+    public List<ConsultingDTO> listAllConsultings() throws CustomRuntimeException {
+        try {
+            return consultingRepository.findAll().stream()
+                        .map(consultingEntity -> modelMapper.map(consultingEntity, ConsultingDTO.class))
                         .collect(Collectors.toList()) ;
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
@@ -180,6 +202,56 @@ public class ConsultingService {
         // Update entity
         plannedTimingAvailability.setIsAvailable(plannedTimingAvailabilityDTO.getIsAvailable());
         return savePlannedTimingAvailability(plannedTimingAvailability);
+    }
+
+    // Get all the finished consultings of the current teaching staff
+    public List<ConsultingDTO> getConsultingsForCurrentTeachingStaff() throws CustomRuntimeException {
+
+        // Verify that user is a Teaching staff
+        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Get all consultings
+        List<ConsultingDTO> consultings = listAllConsultings();
+
+        // Get all consultings for the current teaching staff
+        List<ConsultingDTO> consultingsCurrentTeachingStaff = new ArrayList<>();
+        for(ConsultingDTO consulting : consultings) {
+            if(consulting.getPlannedTimingAvailability().getTeachingStaff().getIdUser().equals(userServiceRules.getCurrentUser().getId())) {
+                consultingsCurrentTeachingStaff.add(consulting);
+            }
+        }
+
+        return consultingsCurrentTeachingStaff;
+    }
+
+    // Get all the consultings for a team
+    public List<ConsultingDTO> getConsultingsForATeam(Integer idTeam) throws CustomRuntimeException {
+        
+        TeamDTO teamDTO = teamService.getTeamById(idTeam);
+
+        // Verify that user has access to the information
+        List<String> roles = new ArrayList<>();
+        roles.add("TEACHING_STAFF_ROLE");
+        roles.add("TEAM_MEMBER_ROLE");
+        userServiceRules.checkCurrentUserRoles(roles);
+
+        // Verify that user is a member of the team
+        if(userServiceRules.getCurrentUser().getRoles().stream().anyMatch(r -> r.getRole().equals("TEAM_MEMBER_ROLE"))) {
+            teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
+        }
+
+        // Get all consultings
+        List<ConsultingDTO> consultings = listAllConsultings();
+
+        // Get all consultings for a team
+        List<ConsultingDTO> consultingsForTeam = new ArrayList<>();
+        for(ConsultingDTO consulting : consultings) {
+            if(consulting.getTeam().getIdTeam().equals(teamDTO.getIdTeam())) {
+                consultingsForTeam.add(consulting);
+            }
+        }
+
+        return consultingsForTeam;
     }
         
 }

@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -25,12 +26,14 @@ public class PlannedTimingConsultingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPlannedTimingConsulting;
-
     private LocalDateTime datetimeBegin;
     private LocalDateTime datetimeEnd;
 
     @OneToMany(mappedBy = "plannedTimingConsulting", cascade = CascadeType.ALL)
     private List<PlannedTimingAvailabilityEntity> teachingStaffAvailabilities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "plannedTimingConsulting")
+    private List<ConsultingEntity> consultings;
 
     public PlannedTimingConsultingEntity() {
     }

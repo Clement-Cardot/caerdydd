@@ -31,6 +31,7 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_IS_NOT_AN_OPTION_LEADER = "Requested user is not a option leader";
     public static final String USER_IS_NOT_A_TEAM_MEMBER = "Requested user is not a team member";
     public static final String USER_IS_NOT_A_PLANNING_ASSISTANT = "Requested user is not a planning assistant";
+    public static final String USER_IS_NOT_AUTHORIZED = "Requested user is not authorized";
     public static final String USER_IS_NOT_A_JURY_MEMBER = "Requested user is not a jury member";
 
     // Règles métiers messages <- A traduire en anglais ^^
