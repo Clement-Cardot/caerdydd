@@ -9,16 +9,20 @@ import { TeamListComponent } from "./team-list/team-list.component";
 import { StudentImportComponent } from "./student-import/student-import.component";
 import { RouterModule } from "@angular/router";
 import { MaterialFileInputModule } from "ngx-material-file-input";
-import { ProjectFilesComponent } from "./project-files/project-files.component";
+import { ProjectFileComponent } from './project-file/project-file.component';
+import { TestBookLinkComponent } from './test-book-link/test-book-link.component';
+import { ProjectDescriptionComponent } from "./project-description/project-description.component";
 
 @NgModule({
     declarations: [
       SubjectValidationComponent,
       MarksComponent,
-      ProjectFilesComponent,
       StudentImportComponent,
       TeamCreationComponent,
-      TeamListComponent
+      TeamListComponent,
+      ProjectFileComponent,
+      TestBookLinkComponent,
+      ProjectDescriptionComponent
     ],
     imports: [
       CommonModule,
@@ -31,10 +35,12 @@ import { ProjectFilesComponent } from "./project-files/project-files.component";
     exports: [
       SubjectValidationComponent,
       MarksComponent,
-      ProjectFilesComponent,
       StudentImportComponent,
       TeamCreationComponent,
-      TeamListComponent
+      TeamListComponent,
+      ProjectFileComponent,
+      TestBookLinkComponent,
+      ProjectDescriptionComponent
     ]
   })
-  export class TeamModule { }
+  export class ProjectModule { }

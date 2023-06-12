@@ -49,15 +49,17 @@ public class FileService {
             TeamDTO team = teamService.getTeamById(id);
 
             if (type.equals("teamScopeStatement")) {
-                team.setFilePathScopeStatement(path + "/" + fileName);
+                team.setFilePathScopeStatement(path + fileName);
             } else if (type.equals("analysis")) {
-                team.setFilePathScopeStatementAnalysis(path + "/" + fileName);
+                team.setFilePathScopeStatementAnalysis(path + fileName);
             } else if (type.equals("finalTeamScopeStatement")) {
-                team.setFilePathFinalScopeStatement(path + "/" + fileName);
+                team.setFilePathFinalScopeStatement(path + fileName);
+            } else if (type.equals("report")) {
+                team.setFilePathReport(path + fileName);
             }
 
             teamService.saveTeam(team);
-            logger.info("File saved at this location : {} {}", path, fileName);
+            logger.info("File saved at this location : {}{}", path, fileName);
 
         } catch (NullPointerException e) {
             logger.error("The team you are trying to add a file is not existing: {}", e.getMessage());

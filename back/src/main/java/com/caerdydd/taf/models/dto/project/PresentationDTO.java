@@ -7,11 +7,7 @@ import org.springframework.stereotype.Component;
 import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.opencsv.bean.CsvBindByPosition;
-import com.opencsv.bean.CsvDate;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,8 +19,10 @@ import lombok.Setter;
 @Component
 public class PresentationDTO {
     
-    public static final String INTERMEDIATE = "INTERMEDIATE";
-    public static final String FINAL = "FINAL";
+    public static final String PRESENTATION_INTERMEDAIRE = "PRESENTATION_INTERMEDAIRE";
+    public static final String PRESENTATION_FINALE = "PRESENTATION_FINALE";
+    public static final String AUDIT_CSS = "AUDIT_CSS";
+    public static final String AUDIT_LD = "AUDIT_LD";
     
     private Integer idPresentation;
 
@@ -37,6 +35,7 @@ public class PresentationDTO {
 
     private JuryDTO jury;
 
+    @JsonBackReference(value="project")
     private ProjectDTO project;
 
     public PresentationDTO() {

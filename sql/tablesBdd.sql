@@ -46,7 +46,7 @@ CREATE TABLE jury (
 CREATE TABLE project (
     id_project INT NOT NULL AUTO_INCREMENT, 
     name VARCHAR(20) NOT NULL,
-    description VARCHAR(250),
+    description VARCHAR(1000),
     is_validated BOOLEAN NOT NULL,
     id_jury INT,
     PRIMARY KEY(id_project),
@@ -55,7 +55,7 @@ CREATE TABLE project (
 
 CREATE TABLE presentation (
     id_presentation INT NOT NULL AUTO_INCREMENT, 
-    type ENUM('intermediate', 'final'),
+    type ENUM('Présentation intermédiaire', 'Présentation finale','Audit CSS','Audit LD'),
     datetime_begin DATETIME NOT NULL,
     datetime_end DATETIME NOT NULL,
     room VARCHAR(20) NOT NULL,
@@ -133,6 +133,7 @@ CREATE TABLE notification (
     message VARCHAR(250) NOT NULL,
     link VARCHAR(100), 
     id_user INT NOT NULL,
+    is_read BOOLEAN NOT NULL,
     PRIMARY KEY(id_notification),
     FOREIGN KEY (id_user) REFERENCES user (id)
 );

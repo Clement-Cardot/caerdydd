@@ -88,6 +88,21 @@ public class TeamMemberService {
         return updateTeamMember(teamMember);
     }
 
+    public TeamMemberDTO setIndividualMarkById(Integer id, Integer individualMark)throws CustomRuntimeException{
+        
+        // Check if the current user is a jury member 
+        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
+
+        // Check if the value of the Individual Mark is correct.
+        teamMemberServiceRules.checkTeamMemberIndividualMark(individualMark);
+
+
+        TeamMemberDTO teamMember = getTeamMemberById(id);
+
+        teamMember.setIndividualMark(individualMark);
+        return updateTeamMember(teamMember);
+    }
+
     public TeamMemberDTO updateTeamMember(TeamMemberDTO teamMember) throws CustomRuntimeException {
         TeamMemberEntity teamMemberEntity = modelMapper.map(teamMember, TeamMemberEntity.class);
         

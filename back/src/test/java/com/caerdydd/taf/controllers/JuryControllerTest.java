@@ -2,6 +2,8 @@ package com.caerdydd.taf.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.caerdydd.taf.models.dto.user.JuryDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.JuryService;
 
@@ -84,7 +87,7 @@ public class JuryControllerTest {
     }
 
     @Test
-void createJury_teachingStaffAreTheSame_returnBadRequest() throws CustomRuntimeException {
+    void createJury_teachingStaffAreTheSame_returnBadRequest() throws CustomRuntimeException {
     // Arrange
     Integer juryMemberDevId = 1;
     Integer juryMemberArchiId = 2;
@@ -97,100 +100,135 @@ void createJury_teachingStaffAreTheSame_returnBadRequest() throws CustomRuntimeE
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 }
 
-@Test
-void createJury_teachingStaffNotFound_returnNotFound() throws CustomRuntimeException {
-    // Arrange
-    Integer juryMemberDevId = 1;
-    Integer juryMemberArchiId = 2;
-    when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
+    @Test
+    void createJury_teachingStaffNotFound_returnNotFound() throws CustomRuntimeException {
+        // Arrange
+        Integer juryMemberDevId = 1;
+        Integer juryMemberArchiId = 2;
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
 
-    // Act
-    ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
+        // Act
+        ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
 
-    // Assert
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void createJury_juryAlreadyExists_returnConflict() throws CustomRuntimeException {
+        // Arrange
+        Integer juryMemberDevId = 1;
+        Integer juryMemberArchiId = 2;
+        when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.JURY_ALREADY_EXISTS));
+
+        // Act
+        ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
+
+        // Assert
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    }
+
+    @Test
+    void testGetAllJuries_Nominal() throws CustomRuntimeException {
+        // Given
+        List<JuryDTO> mockedJuries = Arrays.asList(new JuryDTO(), new JuryDTO());
+        when(juryService.getAllJuries()).thenReturn(mockedJuries);
+
+        // When
+        ResponseEntity<List<JuryDTO>> response = juryController.getAllJuries();
+
+        // Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedJuries, response.getBody());
+    }
+
+    @Test
+    void testGetAllJuries_ServiceError() throws CustomRuntimeException {
+        // Given
+        when(juryService.getAllJuries()).thenThrow(new RuntimeException());
+
+        // When
+        ResponseEntity<List<JuryDTO>> response = juryController.getAllJuries();
+
+        // Then
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testGetJury_Nominal() throws CustomRuntimeException {
+        // Given
+        JuryDTO mockedJury = new JuryDTO();
+        when(juryService.getJury(any(Integer.class))).thenReturn(mockedJury);
+
+        // When
+        ResponseEntity<JuryDTO> response = juryController.getJury(1);
+
+        // Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedJury, response.getBody());
+    }
+
+    @Test
+    void testGetJury_JuryNotFound() throws CustomRuntimeException {
+        // Given
+        when(juryService.getJury(any(Integer.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.JURY_NOT_FOUND));
+
+        // When
+        ResponseEntity<JuryDTO> response = juryController.getJury(1);
+
+        // Then
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testGetJury_ServiceError() throws CustomRuntimeException {
+        // Given
+        when(juryService.getJury(any(Integer.class))).thenThrow(new CustomRuntimeException("Error"));
+
+        // When
+        ResponseEntity<JuryDTO> response = juryController.getJury(1);
+
+        // Then
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testAddJuryMemberRole_Nominal() throws CustomRuntimeException {
+        // Mock juryService.addJuryMemberRole() method
+        TeachingStaffDTO mockedAnswer = new TeachingStaffDTO();
+        when(juryService.addJuryMemberRole(any(TeachingStaffDTO.class))).thenReturn(mockedAnswer);
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = juryController.addJuryMemberRole(new TeachingStaffDTO());
+
+        // Verify the result
+        verify(juryService, times(1)).addJuryMemberRole(any(TeachingStaffDTO.class));
+        assertEquals(mockedAnswer, result.getBody());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    void testAddJuryMemberRole_CustomRuntimeException() throws CustomRuntimeException {
+        // Mock juryService.addJuryMemberRole() method
+        when(juryService.addJuryMemberRole(any(TeachingStaffDTO.class))).thenThrow(new CustomRuntimeException("Custom error"));
+
+        // Call the method to test
+        ResponseEntity<TeachingStaffDTO> result = juryController.addJuryMemberRole(new TeachingStaffDTO());
+
+        // Verify the result
+        verify(juryService, times(1)).addJuryMemberRole(any(TeachingStaffDTO.class));
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, result.getStatusCode());
+    }   
+
 }
 
-@Test
-void createJury_juryAlreadyExists_returnConflict() throws CustomRuntimeException {
-    // Arrange
-    Integer juryMemberDevId = 1;
-    Integer juryMemberArchiId = 2;
-    when(juryService.addJury(juryMemberDevId, juryMemberArchiId)).thenThrow(new CustomRuntimeException(CustomRuntimeException.JURY_ALREADY_EXISTS));
-
-    // Act
-    ResponseEntity<JuryDTO> response = juryController.createJury(juryMemberDevId, juryMemberArchiId);
-
-    // Assert
-    assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-}
-
-@Test
-void testGetAllJuries_Nominal() throws CustomRuntimeException {
-    // Given
-    List<JuryDTO> mockedJuries = Arrays.asList(new JuryDTO(), new JuryDTO());
-    when(juryService.getAllJuries()).thenReturn(mockedJuries);
-
-    // When
-    ResponseEntity<List<JuryDTO>> response = juryController.getAllJuries();
-
-    // Then
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(mockedJuries, response.getBody());
-}
-
-@Test
-void testGetAllJuries_ServiceError() throws CustomRuntimeException {
-    // Given
-    when(juryService.getAllJuries()).thenThrow(new RuntimeException());
-
-    // When
-    ResponseEntity<List<JuryDTO>> response = juryController.getAllJuries();
-
-    // Then
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-}
-
-@Test
-void testGetJury_Nominal() throws CustomRuntimeException {
-    // Given
-    JuryDTO mockedJury = new JuryDTO();
-    when(juryService.getJury(any(Integer.class))).thenReturn(mockedJury);
-
-    // When
-    ResponseEntity<JuryDTO> response = juryController.getJury(1);
-
-    // Then
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(mockedJury, response.getBody());
-}
-
-@Test
-void testGetJury_JuryNotFound() throws CustomRuntimeException {
-    // Given
-    when(juryService.getJury(any(Integer.class))).thenThrow(new CustomRuntimeException(CustomRuntimeException.JURY_NOT_FOUND));
-
-    // When
-    ResponseEntity<JuryDTO> response = juryController.getJury(1);
-
-    // Then
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-}
-
-@Test
-void testGetJury_ServiceError() throws CustomRuntimeException {
-    // Given
-    when(juryService.getJury(any(Integer.class))).thenThrow(new CustomRuntimeException("Error"));
-
-    // When
-    ResponseEntity<JuryDTO> response = juryController.getJury(1);
-
-    // Then
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-}
 
 
 
 
 
-}
+
+
+
+
+

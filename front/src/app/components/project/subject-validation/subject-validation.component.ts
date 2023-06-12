@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Project } from '../../../core/data/models/project.model';
 import { ApiProjectService } from '../../../core/services/api-project.service';
+import { Team } from 'src/app/core/data/models/team.model';
 
 
 @Component({
@@ -9,12 +9,11 @@ import { ApiProjectService } from '../../../core/services/api-project.service';
   styleUrls: ['./subject-validation.component.scss']
 })
 export class SubjectValidationComponent {
-  @Input() project!: Project;
+  @Input() team!: Team;
   constructor(private projectService: ApiProjectService) { }
 
   validateSubject() {
-    this.project.isValidated = true;
-    console.log(this.project);
-    this.projectService.updateProjectValidation(this.project).subscribe(); // TODO call the write fonction
+    this.team.projectDev.isValidated = true;
+    this.projectService.updateProjectValidation(this.team.projectDev).subscribe(); // TODO call the write fonction
   }
 }

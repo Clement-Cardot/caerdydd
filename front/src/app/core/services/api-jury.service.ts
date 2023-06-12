@@ -6,6 +6,8 @@ import { throwError } from "rxjs/internal/observable/throwError";
 import { map } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { Jury, JuryAdapter } from "../data/models/jury.model";
+import { TeachingStaff } from "../data/models/teaching-staff.model";
+
 
 @Injectable({
     providedIn: "root"
@@ -34,10 +36,9 @@ export class ApiJuryService {
         return this.http.get<any[]>(this.baseUrl)
             .pipe(
                 map(data => {
-                    console.log(this.juryAdapter.adapt(data[0]));
                     const juries = data.map((item: any) =>
-                     this.juryAdapter.adapt(item)
-                     );
+                        this.juryAdapter.adapt(item)
+                    );
                     
                     return juries;
                 })
@@ -47,10 +48,8 @@ export class ApiJuryService {
             );
     }
     
-    
 
     private handleError(error: HttpErrorResponse) {
-        console.log(error.status);
         if (error.status === 0) {
             // A client-side or network error occurred. Handle it accordingly.
             console.error('An error occurred:', error.error);

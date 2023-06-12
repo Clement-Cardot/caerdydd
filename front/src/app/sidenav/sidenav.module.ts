@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../material.module';
 import { SidenavComponent } from './sidenav.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { NotificationModule } from '../components/notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { AppRoutingModule } from '../app-routing.module';
   imports: [
     CommonModule,
     MaterialModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NotificationModule
   ],
   exports: [
     SidenavComponent,

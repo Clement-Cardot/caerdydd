@@ -90,6 +90,20 @@ export class ApiTeamService {
       );
   }
 
+    setTeamMarks(teamId: number, teamWorkmark: number, teamValidationMark: number): Observable<Team> {
+    const url = `${this.baseUrl}/teamMarks`;
+    const formData: FormData = new FormData();
+    formData.append('teamId', teamId.toString());
+    formData.append('teamWorkMark', teamWorkmark.toString());
+    formData.append('teamValidationMark', teamValidationMark.toString());
+    
+    return this.http.post(url, formData)
+      .pipe(
+        map((data: any) => this.teamAdapter.adapt(data)),
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
         // A client-side or network error occurred. Handle it accordingly.
@@ -103,5 +117,4 @@ export class ApiTeamService {
     // Return an observable with a user-facing error message.
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }
-
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 import java.util.Objects;
@@ -13,6 +14,9 @@ public class UserServiceRules {
 
     @Autowired
     SecurityConfig securityConfig;
+
+    @Autowired
+    UserRepository userRepository;
     
     public void checkUserRole(UserDTO user, String role) throws CustomRuntimeException{
         if(user.getRoles().stream().noneMatch(r -> r.getRole().equals(role))){
@@ -47,5 +51,11 @@ public class UserServiceRules {
 
     public UserDTO getCurrentUser() throws CustomRuntimeException {
         return securityConfig.getCurrentUser();
+    }
+
+    public void checkUserExists(Integer idUser) throws CustomRuntimeException {
+        if (!userRepository.existsById(idUser)) {
+            throw new CustomRuntimeException(CustomRuntimeException.USER_NOT_FOUND);
+        }
     }
 }

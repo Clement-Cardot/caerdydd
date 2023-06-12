@@ -23,7 +23,7 @@ export class ApiConsultingService {
         ) {
     }
 
-    getAllConsultings(): Observable<PlannedTimingConsulting[]> {
+    getAllPlannedTimingConsulting(): Observable<PlannedTimingConsulting[]> {
         const url = `${this.baseUrl}/plannedTiming`;
         return this.http.get<any>(url)
         .pipe(

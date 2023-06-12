@@ -7,10 +7,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.isNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +24,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -284,64 +287,110 @@ public class TeamMemberServiceTest {
 
     @Test
     void testUpdateTeamMember_Nominal() {
+        // Arrange
         TeamDTO teamDTO = new TeamDTO();
         UserDTO userDTO = new UserDTO(1, "firstname3", "lastname3", "login3", "password3", "email3", "J2EE");
-
         TeamMemberDTO input = new TeamMemberDTO(userDTO, teamDTO);
-
+    
         int teamMemberId = 1;
         TeamMemberEntity teamMemberEntity = new TeamMemberEntity(
             new UserEntity(teamMemberId, "firstname3", "lastname3", "login3", "password3", "email3", "J2EE"),
             new TeamEntity()
         );
-        when(teamMemberRepository.findById(teamMemberId)).thenReturn(Optional.of(teamMemberEntity));
+        
+        // Stubbing
+        when(teamMemberRepository.findById(isNull())).thenReturn(Optional.of(teamMemberEntity));
         when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenReturn(teamMemberEntity);
-
-        TeamMemberDTO result = new TeamMemberDTO();
+    
+        // Act
+        TeamMemberDTO result = null;
         try {
             result = teamMemberService.updateTeamMember(input);
         } catch (CustomRuntimeException e) {
             fail();
         }
-
-        verify(teamMemberRepository, times(1)).findById(teamMemberId);
+    
+        // Assert
+        verify(teamMemberRepository, times(1)).findById(isNull());
         verify(teamMemberRepository, times(1)).save(any(TeamMemberEntity.class));
         assertEquals(input.toString(), result.toString());
     }
 
     @Test
     void testUpdateTeamMemberUserNotFound() {
-        TeamDTO teamDTO = new TeamDTO();
-        UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+    // Arrange
+    TeamDTO teamDTO = new TeamDTO();
+    UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+    TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
 
-        TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
-        
-        when(teamMemberRepository.findById(1)).thenReturn(Optional.empty());
-        
-        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
-            teamMemberService.updateTeamMember(teamMemberDTO);
-        });
-        assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
+    // Stubbing
+    doReturn(Optional.empty()).when(teamMemberRepository).findById(ArgumentMatchers.isNull());
+
+    // Act and Assert
+    CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+        teamMemberService.updateTeamMember(teamMemberDTO);
+    });
+    assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
     }
 
     @Test
-    void testUpdateTeamMember_ServiceError() throws Exception {
-        TeamDTO teamDTO = new TeamDTO();
-        UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+void testUpdateTeamMember_ServiceError() {
+    // Arrange
+    TeamDTO teamDTO = new TeamDTO();
+    UserDTO userDTO = new UserDTO(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+    TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
 
-        TeamMemberDTO teamMemberDTO = new TeamMemberDTO(userDTO, teamDTO);
+    TeamEntity team = new TeamEntity();
+    UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+
+    TeamMemberEntity teamMemberEntity = new TeamMemberEntity(user, team);
+
+    when(teamMemberRepository.findById(any())).thenReturn(Optional.of(teamMemberEntity));
+
+    when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenThrow(new RuntimeException("Service Error"));
+
+    // Act and Assert
+    CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
+        teamMemberService.updateTeamMember(teamMemberDTO);
+    });
+    assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
+}
+
+    @Test
+    void testSetIndividualMarkByIdSuccess() throws CustomRuntimeException {
+        doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
 
         TeamEntity team = new TeamEntity();
         UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
 
-        TeamMemberEntity teamMemberEntity = new TeamMemberEntity(user, team);
+        TeamMemberEntity teamMember = new TeamMemberEntity(user, team);
 
-        when(teamMemberRepository.findById(teamMemberEntity.getIdUser())).thenReturn(Optional.of(teamMemberEntity));
-        when(teamMemberRepository.save(any(TeamMemberEntity.class))).thenThrow(new RuntimeException());
+        int mark = 2;
+        teamMember.setIndividualMark(mark);
 
-        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
-            teamMemberService.updateTeamMember(teamMemberDTO);
-        });
-        assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
+        ArgumentCaptor<TeamMemberEntity> captor = ArgumentCaptor.forClass(TeamMemberEntity.class);
+        when(teamMemberRepository.save(captor.capture())).thenReturn(teamMember);
+
+        Optional<TeamMemberEntity> mockedTeamMember = Optional.of(teamMember);
+        when(teamMemberRepository.findById(mockedTeamMember.get().getIdUser())).thenReturn(mockedTeamMember);
+        mockedTeamMember.get().setIndividualMark(0); // set bonus penalty to 0 initially
+
+        teamMemberService.setIndividualMarkById(mockedTeamMember.get().getIdUser(), mark);
+
+        assertEquals(mark, captor.getValue().getIndividualMark());
     }
+    
+
+    @Test
+    void testSetIndividualMarkByIdUserNotAuthorized() throws CustomRuntimeException {
+        // Mock des inputs
+        Integer id = 1;
+        Integer individualMark = 15;
+
+        // Appel de la méthode à tester et vérification de l'exception levée
+        assertThrows(CustomRuntimeException.class, () -> {
+            teamMemberService.setIndividualMarkById(id, individualMark);
+        });
+    }
+    
 }

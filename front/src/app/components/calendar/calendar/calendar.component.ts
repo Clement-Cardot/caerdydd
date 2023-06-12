@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CalendarEvent } from 'angular-calendar';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
@@ -13,6 +13,8 @@ import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ClickedConsultingDialogComponent } from '../clicked-consulting-dialog/clicked-consulting-dialog.component';
+import { Observable, Subject, interval } from 'rxjs';
+
 
 class ClickEvent {
   event!: CalendarEvent;
@@ -24,171 +26,134 @@ class ClickEvent {
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   
-  currentUser: User | null = null;
-  currentTeam: Team | null = null;
+  currentUser: User | undefined = undefined;
   
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
   refresh: any;
+  refreshCalendar: Subject<void> = new Subject();
 
   constructor(
     private userDataService: UserDataService,
     private apiConsultingService: ApiConsultingService, 
     private apiPresentationService: ApiPresentationService,
-    private apiTeamMemberService: ApiTeamMemberService,
-    private apiTeamService: ApiTeamService,
     public dialog: MatDialog
   ) {}
 
-  ngOnInit() {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+  ngOnInit(): void {
+    this.userDataService.getCurrentUser()
+    .subscribe((user: User | undefined) => {
       this.currentUser = user;
-      if (this.currentUser) {
-        let currentUserRoles = this.currentUser.getRoles();
-        if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
-          this.getTeamMember(this.currentUser.id);
-        } else {
-          this.loadEvents();
-          this.refresh = setInterval(() => { this.loadEvents() },  10000 );
-        }
-      }
+      this.getData();
     });
-  }
-
-  getTeamMember(userId: number) {
-    this.apiTeamMemberService.getTeamMemberById(userId).subscribe(
-      (teamMember: TeamMember) => {
-        if (teamMember.idTeam !== null) {
-          this.getTeam(teamMember.idTeam);
-        } else {
-          console.error("Current user is not a team member");
-        }
-      },
-      (error) => {
-        console.error("Error getting team member:", error);
-      }
-    );
+    this.refresh = setInterval(() => { this.getData() }, 10000 );
   }
   
-  getTeam(teamId: number) {
-    this.apiTeamService.getTeam(teamId).subscribe(
-      (team: Team) => {
-        this.currentTeam = team;
-        this.loadEvents();
-        this.refresh = setInterval(() => { this.loadEvents() }, 10000 );
-      },
-      (error) => {
-        console.error("Error getting team:", error);
-      }
-    );
+  ngOnDestroy(): void {
+    clearInterval(this.refresh);
   }
 
-  ngOnDestroy() {
-    if (this.refresh) {
-      clearInterval(this.refresh);
-    }
-  }
-
-  loadEvents() {
-    this.events=[];
-    this.apiConsultingService.getAllConsultings().subscribe(data => {
-      this.events = [...this.events, ...data];
-      this.filterConsultingsByRole();
-    });
-
-    this.filterPresentationsByRole();
-    
-}
-
-  filterConsultingsByRole() {
-    let currentUserRoles = this.currentUser?.getRoles();
-    if (currentUserRoles == null || currentUserRoles == undefined || currentUserRoles.length == 0) {
-      return;
-    }
-    else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
-      this.filterConsultingsTeamMember();
-
-    }
-    else if (currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
-      this.filterConsultingsTeachingStaff();
-    }
-    else if (currentUserRoles.includes("PLANNING_ROLE")) {
-      this.filterConsultingsPlanning();
-    }
-  }
-
-  filterConsultingsTeamMember() {
-    // TODO
-  }
-
-  filterConsultingsTeachingStaff() {
-    this.events.forEach(event => {
-        if (event instanceof PlannedTimingConsulting) {
-            let result = event.availabilities.find((availability: PlannedTimingAvailability) => 
-                availability.teachingStaff.user.id == this.currentUser?.id
-            );
-            if (result?.isAvailable) {
-                event.color = {primary: '#1e90ff', secondary: '#D1E8FF'};
-            }
-            else {
-                event.color = {primary: '#ad2121', secondary: '#FAE3E3'};
-            }
-        }
-    });
-}
-
-  filterPresentationsByRole() {
-    let currentUserRoles = this.currentUser?.getRoles();
-    if (currentUserRoles == null || currentUserRoles == undefined || currentUserRoles.length == 0) {
-      return;
-    }
-  
-    this.events = [];
-    
-    if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
-      this.filterPresentationsTeamMember();
-    }
-    else if (currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
-      this.filterPresentationsTeachingStaff();
-    }
-    else if (currentUserRoles.includes("PLANNING_ROLE")) {
-      this.filterPresentationsPlanning();
-    }
-  }
-  
-
- filterPresentationsTeamMember() {
-    if (this.currentTeam) {
-      this.apiPresentationService.getTeamPresentations(this.currentTeam.idTeam).subscribe(data => {
-        this.events = [...this.events, ...data];
-      });
-    }
-  }
-
-filterPresentationsTeachingStaff() {
+  getData() {
     if (this.currentUser) {
-      this.apiPresentationService.getTeachingStaffPresentations(this.currentUser.id).subscribe(data => {
-        this.events = [...this.events, ...data];      });
+      let currentUserRoles = this.currentUser.getRoles();
+      if (currentUserRoles.includes("PLANNING_ROLE")) {
+        this.loadAllEvents();
+      } else if (currentUserRoles.includes("OPTION_LEADER_ROLE")) {
+        this.loadOptionLeaderEvents();
+      } else if (currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
+        this.loadTeachingStaffEvents(this.currentUser.id);
+      } else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
+        this.loadTeamMemberEvents(this.currentUser.id);
+      }
     }
-}
-
-filterPresentationsPlanning() {
-    this.apiPresentationService.listAllPresentations().subscribe(data => {
-      this.events = [...this.events, ...data];    });
-}
-
-  filterConsultingsPlanning() {
-    // TODO
   }
 
+  loadAllEvents() {
+    this.apiConsultingService.getAllPlannedTimingConsulting()
+    .subscribe(data => {
+      this.updateEvents(data);
+    });
+    this.apiPresentationService.getAllPresentations()
+    .subscribe(data => {
+      this.updateEvents(data);
+    });
+  }
+
+  loadOptionLeaderEvents() {
+    this.apiConsultingService.getAllPlannedTimingConsulting()
+    .subscribe(data => {
+      this.updateEvents(this.showTeachingStaffAvailabilitiesForConsulting(data));
+    });
+    this.apiPresentationService.getAllPresentations()
+    .subscribe(data => {
+      this.updateEvents(data);
+    });
+  }
+
+  loadTeachingStaffEvents(idUser: number) {
+    this.apiConsultingService.getAllPlannedTimingConsulting()
+    .subscribe(data => {
+      this.updateEvents(this.showTeachingStaffAvailabilitiesForConsulting(data));
+    });
+    this.apiPresentationService.getTeachingStaffPresentations(idUser)
+      .subscribe(data => {
+        this.updateEvents(data);
+      });
+  }
+
+  loadTeamMemberEvents(idUser: number) {
+    this.apiConsultingService.getAllPlannedTimingConsulting()
+    .subscribe(data => {
+      this.updateEvents(data);
+    });
+    this.apiPresentationService.getTeamMemberPresentations(idUser)
+      .subscribe(data => {
+        this.updateEvents(data);
+      });
+  }
+
+  updateEvents(newEvents: CalendarEvent[]) {
+    newEvents.forEach(newEvent => {
+      let correspondingIndex = this.events.findIndex(event => event.id == newEvent.id);
+      if (correspondingIndex != -1) {
+        this.events.splice(correspondingIndex, 1);
+        this.events.push(newEvent);
+        this.refreshCalendar.next();
+      }
+      else {
+        this.events.push(newEvent);
+        this.refreshCalendar.next();
+      }
+    });
+  }
+
+  showTeachingStaffAvailabilitiesForConsulting(events: PlannedTimingConsulting[]): PlannedTimingConsulting[] {
+    events.forEach(event => {
+        let result = event.availabilities.find((availability: PlannedTimingAvailability) => 
+            availability.teachingStaff.user.id == this.currentUser?.id
+        );
+        if (result?.isAvailable) {
+            event.color = {primary: '#1e90ff', secondary: '#D1E8FF'};
+        }
+        else {
+            event.color = {primary: '#ad2121', secondary: '#FAE3E3'};
+        }
+    });
+    return events;
+  }
 
   clickOnEvent(clickEvent : ClickEvent) {
     if (clickEvent.event instanceof Presentation) {
-    
+      //TODO : open presentation dialog
     } else if (clickEvent.event instanceof PlannedTimingConsulting) {
-      this.dialog.open(ClickedConsultingDialogComponent, { data: { event: clickEvent.event }});
+      this.dialog.open(ClickedConsultingDialogComponent, { data: { event: clickEvent.event }})
+            .afterClosed().subscribe(result => {
+              if (result) {
+                this.getData()
+              }
+      });
     }
   }
 

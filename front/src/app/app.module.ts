@@ -17,6 +17,7 @@ import { ApiPresentationService } from './core/services/api-presentation.service
 import { ApiTeachingStaffService } from './core/services/api-teaching-staff.service';
 import { PagesModule } from './pages/pages.module';
 import { LoginPageModule } from './pages/login-page/login-page.module';
+import { ApiNotificationService } from './core/services/api-notification.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { LoginPageModule } from './pages/login-page/login-page.module';
     ApiProjectService,
     ApiPresentationService,
     ApiTeachingStaffService,
+    ApiNotificationService,
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],

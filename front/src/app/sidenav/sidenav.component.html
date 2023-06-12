@@ -5,17 +5,18 @@
     <div id="title">
       <h1 class="page-name">{{pageName}}</h1>
     </div>
+    <span class="example-fill-remaining-space"></span>
+    <app-notification></app-notification>
   </mat-toolbar>
 
   <mat-sidenav-container [style.marginTop.px]="mobileQuery.matches ? 56 : 0" id="sidenav">
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
       <div id="navLink">
         <mat-nav-list>
-        <a mat-list-item (click)="switchPage(nav)" *ngFor="let nav of navLink">{{nav}}</a>
+          <a mat-list-item (click)="switchPage(nav)" *ngFor="let nav of navLink">{{nav}}</a>
         </mat-nav-list>
         <button mat-stroked-button routerLink="/" color="primary" id="disconnect">Deconnexion</button>
       </div>
-
     </mat-sidenav>
 
     <mat-sidenav-content>
