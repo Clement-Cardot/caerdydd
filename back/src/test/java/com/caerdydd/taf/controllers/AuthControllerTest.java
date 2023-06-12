@@ -57,7 +57,7 @@ public class AuthControllerTest {
 
         // Check response
         assertNotNull(response);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test
