@@ -27,6 +27,8 @@ import { UserDataService } from "src/app/core/services/user-data.service";
 
     errorMessage!: string;
 
+    refresh: any;
+
     constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder) {
       this.importReportAnnotform = this.formBuilder.group({
         reportAnnot: this.reportAnnotFormControl
@@ -35,10 +37,25 @@ import { UserDataService } from "src/app/core/services/user-data.service";
 
     ngOnInit(): void {
       this.id = this.route.snapshot.params['id'];
+
+      this.getCurrentUser();
+      this.getTeam();
+      this.refresh = setInterval(() => { this.getTeam() },  5000 );
+    }
+
+    ngOnDestroy(): void {
+      if (this.refresh) {
+        clearInterval(this.refresh);
+      }
+    }
+
+    getCurrentUser() {
       this.userDataService.getCurrentUser().subscribe(user => {
         this.currentUser = user;
       });
+    }
 
+    getTeam() {
       this.apiTeamService.getTeam(+this.id).subscribe(data => {
         this.team = data;
       });
