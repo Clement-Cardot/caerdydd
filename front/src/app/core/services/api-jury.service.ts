@@ -47,6 +47,18 @@ export class ApiJuryService {
                 catchError(this.handleError)
             );
     }
+
+    setCommentOnReport(idTeam: number, comment: string) {
+        const formData: FormData = new FormData();
+
+        formData.append('idTeam', idTeam.toString());
+        formData.append('comment', comment);
+
+        return this.http.post(`${this.baseUrl}/setCommentOnReport`, formData )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
     
 
     private handleError(error: HttpErrorResponse) {

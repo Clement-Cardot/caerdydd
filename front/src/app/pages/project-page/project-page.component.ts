@@ -10,6 +10,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { FileInput } from "ngx-material-file-input";
 import { User } from "src/app/core/data/models/user.model";
 import { UserDataService } from "src/app/core/services/user-data.service";
+import { ApiJuryService } from "src/app/core/services/api-jury.service";
 
 @Component({
     selector: 'app-project-page',
@@ -28,14 +29,20 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     importReportAnnotform: FormGroup;
     reportAnnotFormControl = new FormControl('', [Validators.required]);
 
+    addReportCommentform: FormGroup;
+    reportCommentFormControl = new FormControl('', [Validators.required]);
+
     errorMessage!: string;
 
     refresh: any;
     currentUserSubscription: any;
 
-    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder, private consultingService: ApiConsultingService) {
+    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private juryService: ApiJuryService,private _snackBar: MatSnackBar, private formBuilder: FormBuilder, private consultingService: ApiConsultingService) {
       this.importReportAnnotform = this.formBuilder.group({
         reportAnnot: this.reportAnnotFormControl
+      });
+      this.addReportCommentform = this.formBuilder.group({
+        reportComment: this.reportCommentFormControl
       });
     }
 
@@ -109,7 +116,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
           const file = file_form.files[0];
           this.uploadFileService.upload(file, this.team.idTeam, "annotedReport").subscribe(
           data => {
-            this.showSuccess();
+            this.showSuccess("Import du fichier avec succès");
           },
           error => {
             this.showError(error)
@@ -136,8 +143,29 @@ import { UserDataService } from "src/app/core/services/user-data.service";
       }
     }
 
-    showSuccess() {
-      this._snackBar.open("Import du fichier avec succès", "Fermer", {
+    uploadComment() {
+      if (this.team != null) {
+        if(this.addReportCommentform.invalid) {
+          console.log("The form is invalid, form was :");
+          console.log(this.addReportCommentform);
+        } else {
+          const comment: string = this.addReportCommentform.get('reportComment')?.value;
+          this.juryService.setCommentOnReport(this.team.idTeam, comment).subscribe(
+            data => {
+              this.showSuccess("Le commentaire à été modifier avec succès");
+            },
+            error => {
+              this.showError(error)
+            },
+          );
+        }
+        // this.reportAnnotFormControl.setErrors({'apiError': null});
+        // this.reportAnnotFormControl.updateValueAndValidity();
+      }
+    }
+
+    showSuccess(message: string) {
+      this._snackBar.open(message, "Fermer", {
         duration: 5000,
       });
     }

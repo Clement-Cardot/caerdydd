@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
@@ -40,6 +41,9 @@ public class JuryService {
 
     @Autowired 
     private RoleService roleService;
+
+    @Autowired 
+    private TeamService teamService;
 
     @Autowired
     private JuryServiceRules juryServiceRules;
@@ -159,6 +163,14 @@ public class JuryService {
         return juryEntities.stream()
                 .map(juryEntity -> modelMapper.map(juryEntity, JuryDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public void setCommentOnReport(Integer idTeam, String comment) throws CustomRuntimeException {
+        // TO DO : ADD JURY MEMBER ROLE TO ROLE DTO
+        // userServiceRules.checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
+        TeamDTO team = this.teamService.getTeamById(idTeam);
+        team.setReportComments(comment);
+        this.teamService.saveTeam(team);
     }
    
 }

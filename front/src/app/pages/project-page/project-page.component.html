@@ -29,14 +29,18 @@
           <a mat-button color="primary" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
         </div>
         <br>
-        <form action="" id="formReportComment">
+        <form [formGroup]="addReportCommentform" id="formReportComment" (ngSubmit)="uploadComment()">
           <div class="sameRow" *ngIf="isUserOptionLeader() || isUserJury()">
             <p>Commentaire sur le rapport :</p>
             <p></p>
           </div>
           <mat-form-field id="reportComment">
-            <textarea matInput [disabled]="isUserOptionLeader() && !isUserJury()" rows="5">{{ team.reportComments }}</textarea>
+            <textarea matInput formControlName="reportComment" rows="5">{{ team.reportComments }}</textarea>
+            <!-- [disabled]="isUserOptionLeader() && !isUserJury()" -->
           </mat-form-field>
+          <button mat-raised-button color="accent" [disabled]="addReportCommentform.invalid" *ngIf="isUserJury()">
+            Envoyer le commentaire
+        </button>
         </form>
       </mat-card-content>
     </mat-card>
