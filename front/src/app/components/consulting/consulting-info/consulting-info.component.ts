@@ -18,12 +18,12 @@ export interface DialogData {
 
 export class ConsultingInfoComponent {
   @Input() consulting!: Consulting;
-  currentUser!: User | null;
+  currentUser!: User | undefined;
 
   constructor(public dialog: MatDialog, public userDataService: UserDataService) {}
 
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
   }
