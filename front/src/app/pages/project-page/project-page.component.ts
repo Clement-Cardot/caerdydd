@@ -15,7 +15,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     styleUrls: ['./project-page.component.scss']
   })
   export class ProjectPageComponent {
-    
+
     id!: string;
     team!: Team;
     currentUser!: User | undefined;
@@ -27,7 +27,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
 
     errorMessage!: string;
 
-    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder) { 
+    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder) {
       this.importReportAnnotform = this.formBuilder.group({
         reportAnnot: this.reportAnnotFormControl
       });
@@ -37,16 +37,19 @@ import { UserDataService } from "src/app/core/services/user-data.service";
       this.id = this.route.snapshot.params['id'];
       this.userDataService.getCurrentUser().subscribe(user => {
         this.currentUser = user;
-        if (user != undefined) {
-          if (user.getRoles().includes("JURY_MEMBER_ROLE")) {
-            this.isJury = true;
-          }
-        }
       });
-  
+
       this.apiTeamService.getTeam(+this.id).subscribe(data => {
         this.team = data;
       });
+    }
+
+    isUserJury() {
+      let userID = this.currentUser?.id
+      let ts1 = this.team.projectDev.jury?.ts1.idUser;
+      let ts2 = this.team.projectDev.jury?.ts2.idUser;
+      let statement = this.currentUser?.getRoles().includes("JURY_MEMBER_ROLE") && (ts1 == userID || ts2 == userID)
+      return statement;
     }
 
     getFile(file: string) {
@@ -62,7 +65,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
           a.click();
         },
         error => {
-          {this.showErrorDownload()} 
+          {this.showErrorDownload()}
         });
       }
     }
@@ -110,7 +113,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
         duration: 5000,
       });
     }
-  
+
     showError(error: { status: number; }) {
       this.reportAnnotFormControl.setErrors({apiError: true});
       switch (error.status) {
@@ -124,11 +127,11 @@ import { UserDataService } from "src/app/core/services/user-data.service";
           this.errorMessage = "Une erreur est survenue, veuillez contacter l'administrateur";
       }
     }
-  
+
     showErrorDownload() {
       this._snackBar.open("Une erreur est survenue lors du téléchargement", "Fermer", {
         duration: 5000,
       });
     }
-  
+
   }
