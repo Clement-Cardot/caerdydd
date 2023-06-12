@@ -8,7 +8,7 @@
     <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="fill">
         <mat-label>Nom du projet</mat-label>
-        <input matInput [(ngModel)]="team.projectDev.name" [value]="team.projectDev.name" required>
+        <input matInput [(ngModel)]="teamNameInput" formControlName="name" required>
         <mat-error *ngIf="projectForm.controls['name'].hasError('required')">
           Le nom est obligatoire.
         </mat-error>
@@ -18,7 +18,7 @@
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Description du projet</mat-label>
-        <textarea matInput type="text" [(ngModel)]="team.projectDev.description" [value]="team.projectDev.description" required></textarea>
+        <textarea matInput type="text" [(ngModel)]="teamDescriptionInput" formControlName="description" required></textarea>
         <mat-error *ngIf="projectForm.controls['description'].hasError('required')">
           La description est obligatoire.
         </mat-error>

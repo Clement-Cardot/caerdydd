@@ -15,6 +15,9 @@ export class ProjectDescriptionComponent implements OnInit {
   @Output() updatableEvent = new EventEmitter();
   projectForm!: FormGroup;
 
+  teamNameInput: string = "";
+  teamDescriptionInput: string = "";
+
   currentUser: User | undefined = undefined;
 
   constructor(
@@ -28,10 +31,14 @@ export class ProjectDescriptionComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(20)]],
       description: ['', [Validators.required, Validators.maxLength(1000)]]
     });
+    this.teamNameInput = this.team.projectDev.name;
+    this.teamDescriptionInput = this.team.projectDev.description;
   }
 
   onSubmit() {
     if (this.projectForm.valid) {
+      this.team.projectDev.name = this.projectForm.get('name')?.value;
+      this.team.projectDev.description = this.projectForm.get('description')?.value;
       this.apiProjectService
         .updateProjectDescription(this.team.projectDev)
         .subscribe(
