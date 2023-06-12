@@ -46,6 +46,65 @@ public class ConsultingController {
         }
     }
 
+    @GetMapping("/plannedAvailability")
+    public ResponseEntity<List<PlannedTimingAvailabilityDTO>> getAllPlannedTimingAvailabilities() {
+        logger.info("Process request : Get all planned timing availabilities");
+        try {
+            List<PlannedTimingAvailabilityDTO> plannedTimingAvailabilitiesDTOs = consultingService.listAllPlannedTimingAvailabilities();
+            logger.info("Process request : Get all planned timing availabilities DONE");
+            return new ResponseEntity<>(plannedTimingAvailabilitiesDTOs, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
+                case CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY:
+                case CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST:                
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }
+
+    @GetMapping("/consultings")
+    public ResponseEntity<List<ConsultingDTO>> getAllConsultings() {
+        logger.info("Process request : Get all planned timing consultings");
+        try {
+            List<ConsultingDTO> consultingDTOs = consultingService.listAllConsultings();
+            logger.info("Process request : Get all planned timing consultings DONE");
+            return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.CONSULTING_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
+                case CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY:
+                case CustomRuntimeException.CONSULTING_IS_IN_PAST:                
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }
 
     @GetMapping("/teachingStaffConsultingInfra")
     public ResponseEntity<List<ConsultingDTO>> getConsultingsBySpecialityInfra() {
@@ -57,15 +116,15 @@ public class ConsultingController {
         }
         catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
-                case CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND:
+                case CustomRuntimeException.CONSULTING_NOT_FOUND:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
                 case CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY:
-                case CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST:                
+                case CustomRuntimeException.CONSULTING_IS_IN_PAST:                
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-                case CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN:
+                case CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.CONFLICT);
                 case CustomRuntimeException.SERVICE_ERROR:
@@ -88,15 +147,15 @@ public class ConsultingController {
         }
         catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
-                case CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND:
+                case CustomRuntimeException.CONSULTING_NOT_FOUND:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
                 case CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY:
-                case CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST:                
+                case CustomRuntimeException.CONSULTING_IS_IN_PAST:                
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-                case CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN:
+                case CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.CONFLICT);
                 case CustomRuntimeException.SERVICE_ERROR:
@@ -111,23 +170,23 @@ public class ConsultingController {
 
     @GetMapping("/teachingStaffConsultingModeling")
     public ResponseEntity<List<ConsultingDTO>> getConsultingsBySpecialityModel() {
-        logger.info("Process request : Get all consultings for speciality Model");
+        logger.info("Process request : Get all consultings for speciality Modeling");
         try {
             List<ConsultingDTO> consultingModelDTOs = consultingService.getConsultingsBySpecialityModeling();
-            logger.info("Process request : Get all consultings for Modeling Infra DONE");
+            logger.info("Process request : Get all consultings for Modeling DONE");
             return new ResponseEntity<>(consultingModelDTOs, HttpStatus.OK);
         }
         catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
-                case CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND:
+                case CustomRuntimeException.CONSULTING_NOT_FOUND:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
                 case CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY:
-                case CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST:                
+                case CustomRuntimeException.CONSULTING_IS_IN_PAST:                
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-                case CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN:
+                case CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.CONFLICT);
                 case CustomRuntimeException.SERVICE_ERROR:
@@ -159,7 +218,6 @@ public class ConsultingController {
             logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
-        
     }
 
     @PostMapping("/availability")
@@ -191,6 +249,34 @@ public class ConsultingController {
         }
     }
 
-    
+    @PostMapping("/consulting")
+    public ResponseEntity<ConsultingDTO> updateConsulting(@RequestBody ConsultingDTO consultingDTO) {
+        logger.info("Process request : Update consulting");
+        try {
+            ConsultingDTO savedConsultingDTO = consultingService.updateConsulting(consultingDTO);
+            logger.info("Process request : Update consulting DONE");
+            return new ResponseEntity<>(savedConsultingDTO, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.CONSULTING_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
+                case CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY:
+                case CustomRuntimeException.CONSULTING_IS_IN_PAST:                
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.CONFLICT);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }
     
 }

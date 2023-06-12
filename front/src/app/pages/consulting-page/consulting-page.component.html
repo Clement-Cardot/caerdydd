@@ -1,1 +1,9 @@
-<p>calendar works!</p>
+<div>
+  <h2>Consultings en attente d'acceptation</h2>
+  <div class="twoColumnDisplay" class="consulting">
+    <app-consulting-teaching-s-accept
+      *ngFor="let consulting of consultings"
+      [consulting]="consulting"
+    ></app-consulting-teaching-s-accept>
+  </div>
+</div>

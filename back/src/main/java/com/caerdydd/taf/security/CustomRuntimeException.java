@@ -42,6 +42,8 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_NOT_IN_ASSOCIATED_TEAM = "User is not associated in a team";
     public static final String USER_NOT_IN_A_TEAM = "User is not in a team";
     public static final String USER_IS_NOT_OWNER_OF_AVAILABILITY = "User is not owner of availability";
+    public static final String CONSULTING_IS_IN_PAST = "Consulting is in past";
+    public static final String CONSULTING_IS_ALREADY_TAKEN = "Consulting is already taken";
     public static final String PLANNED_TIMING_IS_IN_PAST = "Planned timing is in past";
     public static final String PLANNED_TIMING_IS_ALREADY_TAKEN = "Planned timing is already taken";
 

@@ -16,20 +16,32 @@ public class ConsultingDTO {
     private String speciality;
     private String notes;
 
+    private TeamDTO team;
+
     @JsonManagedReference(value = "consulting")
     private PlannedTimingAvailabilityDTO plannedTimingAvailability;
 
     @JsonManagedReference(value = "consultingTiming")
     private PlannedTimingConsultingDTO plannedTimingConsulting;
 
-    private TeamDTO team;
-
     public ConsultingDTO() {
     }
 
     @Override
     public String toString() {
-        return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + ", team=" + team + "]";
+        String idPlannedTimingConsulting = "null";
+        String idPlannedTimingAvailability = "null";
+
+        if (this.plannedTimingConsulting != null){
+            idPlannedTimingConsulting = String.valueOf(this.plannedTimingConsulting.getIdPlannedTimingConsulting());
+        }
+
+        if (this.plannedTimingAvailability != null){
+            idPlannedTimingAvailability = String.valueOf(this.plannedTimingAvailability.getIdPlannedTimingAvailability());
+        }
+
+        return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + ", team=" + team + ", idPlannedTimingConsulting=" + idPlannedTimingConsulting + ", idPlannedTimingAvailability" + idPlannedTimingAvailability + "]";
     }
+
         
 }
