@@ -11,7 +11,6 @@ import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.serv
   styleUrls: ['./project-file.component.scss']
 })
 export class ProjectFileComponent implements OnInit {
-  // @Input() data!: [team:Team, filename: string];
   @Input() team!: Team;
   @Input() fileName!: string;
   fullFileName!: string;

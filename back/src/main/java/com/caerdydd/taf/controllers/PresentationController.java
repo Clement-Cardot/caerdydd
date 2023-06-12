@@ -73,7 +73,7 @@ public class PresentationController {
             } else if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -88,15 +88,14 @@ public class PresentationController {
             } else if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
-
-    @GetMapping("/teachingStaff/{staffId}")
-    public ResponseEntity<List<PresentationDTO>> getTeachingStaffPresentations(@PathVariable Integer staffId) {
+    @GetMapping("/teachingStaff/{userId}")
+    public ResponseEntity<List<PresentationDTO>> getTeachingStaffPresentations(@PathVariable Integer userId) {
         try {
-            List<PresentationDTO> presentations = presentationService.getTeachingStaffPresentations(staffId);
+            List<PresentationDTO> presentations = presentationService.getTeachingStaffPresentations(userId);
             return ResponseEntity.ok(presentations);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND)) {
@@ -104,7 +103,25 @@ public class PresentationController {
             } else if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @GetMapping("/teamMember/{userId}")
+    public ResponseEntity<List<PresentationDTO>> getTeamMemberPresentations(@PathVariable Integer userId) {
+        try {
+            List<PresentationDTO> presentations = presentationService.getTeamMemberPresentations(userId);
+            return ResponseEntity.ok(presentations);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.TEAM_MEMBER_NOT_FOUND:
+                case CustomRuntimeException.TEAM_NOT_FOUND:
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
         }
     }
 
@@ -118,7 +135,7 @@ public class PresentationController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
