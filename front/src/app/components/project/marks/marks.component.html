@@ -9,8 +9,8 @@
         {{team.name}}
       </mat-panel-description>
   </mat-expansion-panel-header>
-  
-  <table mat-table [dataSource]="team.teamMembers" class="mat-elevation-z8">
+  <p id="noStudents" *ngIf="team.teamMembers.length == 0">Cette équipe n'a pas d'étudiants !</p>
+  <table mat-table class="mat-elevation-z8" [dataSource]="team.teamMembers" *ngIf="team.teamMembers.length > 0">
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
@@ -80,7 +80,7 @@
   </table>
   
 
-  <div class="button-container">
+  <div class="button-container" *ngIf="team.teamMembers.length > 0">
     <div class="sameRow">
     
       <!-- TeamWorkMark Input -->

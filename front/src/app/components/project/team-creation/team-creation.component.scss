@@ -1,51 +1,57 @@
-.inputForm {
-    margin: 5px 15px;
-    margin-bottom: 30px;
+mat-card {
+    width: 28rem;
+    height: auto;
+    justify-items: center;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px #ccc;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    
+    &:hover {
+        box-shadow: 0 0 10px #a8a8a8;
+    }
 }
 
-#teamCreationBox {
+mat-card-header {
+    padding: 20px;
     display: flex;
     justify-content: center;
-    width: 90%;
-    padding: 25px 5%;
-}
-
-#teamCreationComponent {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 40%;
+    background: #962051;
+    border-radius: 15px 15px 0 0;
+    mat-card-title {
+        display: flex;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #ffffff;
+    }
+    mat-card-subtitle {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+        color: #ffffff;
+    }
 }
 
 @media (max-width: 900px) {
-    #teamCreationComponent {
+    mat-card {
         width: 80%;
     }
 }
 
-#titleTeamCreation {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 5px 0;
-    font-size: 30px;
-    font-weight: 500;
+.inputForm {
+    margin: 2rem 0 1rem 0;
+    min-width: 260px;
 }
 
-#subtitleTeamCreation {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 0;
-    font-size: 18px;
-}
 #buttonCreateTeam {
-    padding: 15px;
-    color: white;
-    font-weight: 500;
+    height: 3.2rem;
+    width: 12rem;
+    color: #fff;
+    font-weight: 600;
     font-size: 14px;
-    border-radius: 20px;
+    border-radius: 15px;
 }
 
 #teamCreationForm {

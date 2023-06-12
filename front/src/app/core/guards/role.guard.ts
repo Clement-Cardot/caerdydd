@@ -8,10 +8,10 @@ import { User } from '../data/models/user.model';
 })
 export class RoleGuard {
 
-  currentUser: User | null = null;
+  currentUser: User | undefined = undefined;
 
   constructor(private router: Router, private userDataService: UserDataService) {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
   }

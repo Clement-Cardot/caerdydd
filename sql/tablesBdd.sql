@@ -46,7 +46,7 @@ CREATE TABLE jury (
 CREATE TABLE project (
     id_project INT NOT NULL AUTO_INCREMENT, 
     name VARCHAR(20) NOT NULL,
-    description VARCHAR(250),
+    description VARCHAR(1000),
     is_validated BOOLEAN NOT NULL,
     id_jury INT,
     PRIMARY KEY(id_project),

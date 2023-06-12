@@ -16,7 +16,7 @@ export class TeamListComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'surname', 'speciality'];
 
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
 
   panelOpenState = false;
 
@@ -26,18 +26,17 @@ export class TeamListComponent implements OnInit {
   
   
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
                                       this.currentUser = user;
                                     });
   }
 
   applyInTeam(idTeam: number) {
     if (this.currentUser == null) {
-      console.log("User is not connected");
+      console.error("User is not connected");
       return;
     }
     this.apiTeamService.applyForTeam(idTeam, this.currentUser.id).subscribe((userResponse) => {
-      console.log(userResponse);
       this.userDataService.setCurrentUser(userResponse);
       this.update();
       }
@@ -46,7 +45,7 @@ export class TeamListComponent implements OnInit {
 
   isCurrentUserAStudent() {
     if (this.currentUser == null) {
-      console.log("User is not connected");
+      console.error("User is not connected");
       return false;
     }
     if (this.currentUser.getRoles().includes("STUDENT_ROLE")){
@@ -57,7 +56,7 @@ export class TeamListComponent implements OnInit {
 
   isCurrentUserATeachingStaff() {
     if (this.currentUser == null) {
-      console.log("User is not connected");
+      console.error("User is not connected");
       return false;
     }
     if (this.currentUser.getRoles().includes("TEACHING_STAFF_ROLE")){
