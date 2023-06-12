@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, Ng
 import { ErrorStateMatcher } from '@angular/material/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiAuthService } from 'src/app/core/services/api-auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from 'src/app/core/data/models/user.model';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -31,8 +31,8 @@ export class LoginPageComponent implements OnInit {
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private apiAuthService: ApiAuthService,
-    private userDataService: UserDataService,
-    private activatedRoute: ActivatedRoute) {
+    private userDataService: UserDataService
+    ) {
   }
 
   ngOnInit() {
@@ -49,6 +49,12 @@ export class LoginPageComponent implements OnInit {
     if(this.loginForm.invalid){
       return;
     } else {
+      this.usernameFormControl.markAsUntouched();
+      this.passwordFormControl.markAsUntouched();
+
+      this.usernameFormControl.updateValueAndValidity();
+      this.passwordFormControl.updateValueAndValidity();
+
       this.apiAuthService.tryToLogIn(this.loginForm.value.login, this.loginForm.value.password).subscribe(
           userResponse => {
             if(userResponse) {
@@ -65,9 +71,6 @@ export class LoginPageComponent implements OnInit {
                   // Affiche un message si l'authentification a échoué
                   this.usernameFormControl.setErrors({ 'incorrect': true });
                   this.passwordFormControl.setErrors({ 'incorrect': true });
-              } else if (error === 404) {
-                  // Affiche un message si l'utilisateur n'est pas trouvé
-                  this.usernameFormControl.setErrors({ 'notFound': true });
               }
           }
       );
@@ -134,6 +137,16 @@ export class LoginPageComponent implements OnInit {
     
   }
 
+  onChange(): void {
+    this.usernameFormControl.setErrors({ 'incorrect': false });
+    this.passwordFormControl.setErrors({ 'incorrect': false });
+
+    this.usernameFormControl.markAsTouched();
+    this.passwordFormControl.markAsTouched();
+
+    this.usernameFormControl.updateValueAndValidity();
+    this.passwordFormControl.updateValueAndValidity();
+  }
 
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;

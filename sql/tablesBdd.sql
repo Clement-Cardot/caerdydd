@@ -78,6 +78,8 @@ CREATE TABLE team (
     file_path_final_scope_statement VARCHAR(100),
     file_path_scope_statement_analysis VARCHAR(100),
     file_path_report VARCHAR(100),
+    is_report_annotation BOOLEAN,
+    report_comments VARCHAR(4000),
     id_project_dev INT NOT NULL,
     id_project_validation INT NOT NULL,
     PRIMARY KEY(id_team),
@@ -105,7 +107,7 @@ CREATE TABLE planned_timing_availability (
 
 CREATE TABLE consulting (
     id_consulting INT NOT NULL AUTO_INCREMENT,
-    speciality ENUM('infrastructure', 'development', 'modeling'),
+    speciality ENUM('Infrastructure', 'Développement', 'Modélisation'),
     notes VARCHAR(250),
     id_team INT NOT NULL,
     id_planned_timing_availability INT,
@@ -136,12 +138,4 @@ CREATE TABLE notification (
     is_read BOOLEAN NOT NULL,
     PRIMARY KEY(id_notification),
     FOREIGN KEY (id_user) REFERENCES user (id)
-);
-
-CREATE TABLE assigned_consulting (
-    id_ts INT NOT NULL,
-    id_consulting INT NOT NULL,
-    PRIMARY KEY(id_ts, id_consulting),
-    FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user),
-    FOREIGN KEY (id_consulting) REFERENCES consulting (id_consulting)
 );

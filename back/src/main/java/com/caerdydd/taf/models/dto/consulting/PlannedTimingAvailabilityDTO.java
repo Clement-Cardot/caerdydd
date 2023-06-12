@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs/internal/Observable";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
-import { Cons, map } from "rxjs";
+import { map } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { PlannedTimingConsultingAdapter, PlannedTimingConsulting } from "../data/models/planned-timing-consulting.model";
 import { PlannedTimingAvailability, PlannedTimingAvailabilityAdapter } from "../data/models/planned-timing-availability.model";
@@ -32,6 +32,28 @@ export class ApiConsultingService {
         .pipe(
             catchError(this.handleError)
         );
+    }
+
+    getConsultingForCurrentTeachingStaff() : Observable<Consulting[]> {
+        const url = `${this.baseUrl}/TeachingStaff`;
+        return this.http.get<any>(url)
+        .pipe(
+            map((data: any[]) => data.map((item) => this.consultingAdapter.adapt(item)))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    getConsultingForATeam(teamId : number) : Observable<Consulting[]> {
+        const url = `${this.baseUrl}/team/${teamId}`;
+        return this.http.get<any>(url)
+        .pipe(
+            map((data: any[]) => data.map((item) => this.consultingAdapter.adapt(item)))
+        )
+        .pipe(
+            catchError(this.handleError)
+        ); 
     }
     
     upload(file: File): Observable<PlannedTimingConsulting[]> {

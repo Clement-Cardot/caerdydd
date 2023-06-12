@@ -24,6 +24,10 @@ mat-card-header {
   }
 }
 
+mat-card-content {
+  padding-top: 1rem;
+}
+
 mat-card-actions {
   display: flex;
   justify-content: center;

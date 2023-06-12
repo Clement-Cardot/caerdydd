@@ -96,7 +96,6 @@ public class JuryService {
     public JuryDTO addJury(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
         userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
 
-
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
         checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
 
