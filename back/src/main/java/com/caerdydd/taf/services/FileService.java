@@ -59,7 +59,6 @@ public class FileService {
             } else if (type.equals("annotedReport")) {
                 team.setIsReportAnnotation(true);
             }
-
             teamService.saveTeam(team);
             logger.info("File saved at this location : {}{}", path, fileName);
 
