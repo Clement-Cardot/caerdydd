@@ -1,11 +1,11 @@
 <mat-card>
     <mat-card-header>
         <mat-card-title> 
-            <h2>Importation des Etudiants</h2> 
+            <h3>Importation des Etudiants</h3> 
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form id="studentsForm"  [formGroup]="studentsForm" (ngSubmit)="upload()">
+        <form id="studentsForm" [formGroup]="studentsForm" #formDirective="ngForm" (ngSubmit)="upload(formDirective)">
 
             <mat-form-field class="inputForm" appearance="fill">
                 <ngx-mat-file-input 

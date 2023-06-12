@@ -10,8 +10,8 @@ import { UserDataService } from 'src/app/core/services/user-data.service';
   styleUrls: ['./teaching-staff-page.component.scss'],
 })
 export class TeachingStaffPageComponent {
-  teachingStaffs!: TeachingStaff[];
-  currentUser!: User | null;
+  teachingStaffs: TeachingStaff[] = [];
+  currentUser: User | undefined = undefined;
 
   constructor(
     private apiTeachingStaffService: ApiTeachingStaffService,
@@ -20,7 +20,7 @@ export class TeachingStaffPageComponent {
 
   ngOnInit(): void {
     this.getAllTS();
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
   }
@@ -31,14 +31,7 @@ export class TeachingStaffPageComponent {
     });
   }
 
-  isCurrentUserATeachingStaff() {
-    if (this.currentUser == null) {
-      console.log('User is not connected');
-      return false;
-    }
-    if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
-      return true;
-    }
-    return false;
+  getCurrentTeachingStaff() {
+    return this.teachingStaffs.find(teachingStaff => teachingStaff.user.id === this.currentUser?.id);
   }
 }

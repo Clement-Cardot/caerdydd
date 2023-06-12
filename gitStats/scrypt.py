@@ -63,19 +63,23 @@ deletionData = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0
                 [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
                 [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]
 
-for i in range(0, 14):
-    for key in users:
-        index = users.index(key)
-        if weekData[i].keys().__contains__(key):
-            for j in range(i, 15):
-                additionData[j][index] += weekData[i][key][0]
+# Switch to cumulative data
 
 for i in range(0, 14):
     for key in users:
         index = users.index(key)
         if weekData[i].keys().__contains__(key):
-            for j in range(i, 15):
-                deletionData[j][index] += weekData[i][key][1]
+            additionData[i][index] += weekData[i][key][0]
+            # for j in range(i, 15):
+            #     additionData[j][index] += weekData[i][key][0]
+
+for i in range(0, 14):
+    for key in users:
+        index = users.index(key)
+        if weekData[i].keys().__contains__(key):
+            deletionData[i][index] += weekData[i][key][1]
+            # for j in range(i, 15):
+            #     deletionData[j][index] += weekData[i][key][1]
 
 
 df_add = pd.DataFrame(additionData, columns=users)

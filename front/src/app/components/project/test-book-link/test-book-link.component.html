@@ -1,0 +1,31 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h3>Cahier de tests</h3>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form class="testBookLinkForm" [formGroup]="testBookLinkForm" (ngSubmit)="onSubmit()">
+            <mat-form-field  class="input" appearance="fill">
+              <mat-label>Lien TestBook</mat-label>
+              <input matInput formControlName="testBookLink" required>
+              <mat-icon matSuffix>link</mat-icon>
+              <mat-error *ngIf="testBookLinkForm.controls['testBookLink'].hasError('required')">
+                Le lien TestBook est obligatoire.
+              </mat-error>
+              <mat-error *ngIf="testBookLinkForm.controls['testBookLink'].hasError('invalidLink')">
+                Le lien TestBook doit être une URL valide.
+              </mat-error>
+            </mat-form-field>
+            <button mat-fab color="accent" type="submit" [disabled]="testBookLinkForm.invalid">
+              <mat-icon>upload</mat-icon>
+            </button>
+        </form>
+    </mat-card-content>
+    <mat-card-actions *ngIf="team.testBookLink">
+        <div>
+            <h5>Lien vers le cahier de test</h5>
+            <a mat-button color="primary" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
+        </div>
+    </mat-card-actions>
+</mat-card>

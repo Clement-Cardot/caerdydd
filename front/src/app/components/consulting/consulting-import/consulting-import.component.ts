@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileInput } from 'ngx-material-file-input';
 import { PlannedTimingConsulting } from 'src/app/core/data/models/planned-timing-consulting.model';
@@ -29,23 +29,24 @@ export class ConsultingImportComponent {
     });
   }
 
-  upload() {
+  upload(formDirective: FormGroupDirective) {
     this.fileFormControl.setErrors({'apiError': null});
     this.fileFormControl.updateValueAndValidity();
     if(this.consultingForm.invalid){
-      console.log("Invalid form");
+      console.error("Invalid form");
     } else {
       const file_form: FileInput = this.consultingForm.get('file')?.value;
       const file = file_form.files[0];
-      console.log(file);
       this.apiConsultingService.upload(file).subscribe(
-        data => {this.showSuccess(data)},
+        data => {this.showSuccess(data, formDirective)},
         error => {this.showError(error)},
       );
     }
   }
 
-  showSuccess(data : PlannedTimingConsulting[]) {
+  showSuccess(data : PlannedTimingConsulting[], formDirective: FormGroupDirective) {
+    formDirective.resetForm();
+    this.consultingForm.reset();
     let nbConsulting = data.length;
     this._snackBar.open(nbConsulting + " sessions de consulting ont bien été importés", "Fermer", {
       duration: 5000,

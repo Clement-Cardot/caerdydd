@@ -6,10 +6,12 @@ app-team-list {
 }
 
 #generateTeamsButton {
-    padding: 20px;
-    font-weight: 500;
-    font-size: 20px;
-    border-radius: 20px;
+    height: 3.2rem;
+    width: 12rem;
+    color: #fff;
+    font-weight: 600;
+    font-size: 17px;
+    border-radius: 15px;
 }
 
 #generateTeams {
@@ -17,4 +19,11 @@ app-team-list {
     flex-direction: column;
     align-items: center;
     margin: 20px 0;
+}
+
+#teamCreationBox {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    padding: 25px 5%;
 }
