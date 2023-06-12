@@ -108,7 +108,7 @@ CREATE TABLE consulting (
     speciality ENUM('infrastructure', 'development', 'modeling'),
     notes VARCHAR(250),
     id_team INT NOT NULL,
-    id_planned_timing_availability INT NOT NULL,
+    id_planned_timing_availability INT,
     id_planned_timing_consulting INT NOT NULL,
     PRIMARY KEY(id_consulting),
     FOREIGN KEY (id_team) REFERENCES team (id_team),

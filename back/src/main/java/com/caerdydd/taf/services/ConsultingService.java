@@ -19,6 +19,7 @@ import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
@@ -49,6 +50,9 @@ public class ConsultingService {
 
     @Autowired
     private TeachingStaffService teachingStaffService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TeamService teamService;
@@ -297,12 +301,14 @@ public class ConsultingService {
         userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
 
         // Check if user is in the team
-        TeamDTO team = teamService.getTeamById(consultingDTO.getTeam().getIdTeam());
+        UserDTO currentUser = this.userService.getUserById(userServiceRules.getCurrentUser().getId());
+        
+        TeamDTO team = currentUser.getTeamMember().getTeam();
+        
         teamServiceRules.checkIfUserIsMemberOfTeam(team);
 
         ConsultingDTO consulting = new ConsultingDTO();
         consulting.setSpeciality(consultingDTO.getSpeciality());
-        consulting.setNotes(consultingDTO.getNotes());
         consulting.setPlannedTimingConsulting(getPlannedTimingConsultingById(consultingDTO.getPlannedTimingConsulting().getIdPlannedTimingConsulting()));
         consulting.setTeam(team);
 
