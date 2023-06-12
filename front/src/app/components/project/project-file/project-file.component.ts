@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileInput } from 'ngx-material-file-input';
@@ -11,9 +11,9 @@ import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.serv
   styleUrls: ['./project-file.component.scss']
 })
 export class ProjectFileComponent implements OnInit {
-  // @Input() data!: [team:Team, filename: string];
   @Input() team!: Team;
   @Input() fileName!: string;
+  @Output() updatableEvent = new EventEmitter();
   fullFileName!: string;
 
   importFileForm!: FormGroup;
@@ -80,6 +80,7 @@ export class ProjectFileComponent implements OnInit {
       this.uploadFileService.upload(file, this.team.idTeam, this.fileName).subscribe(
         data => {
           this.showSuccess();
+          this.updatableEvent.emit();
         },
         error => {
           this.showError(error)

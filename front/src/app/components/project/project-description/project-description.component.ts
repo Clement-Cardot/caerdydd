@@ -1,14 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiProjectService } from 'src/app/core/services/api-project.service';
-import { Project } from 'src/app/core/data/models/project.model';
-import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
-import { ApiTeamService } from 'src/app/core/services/api-team.service';
-import { TeamMember } from 'src/app/core/data/models/team-member.model';
 import { Team } from 'src/app/core/data/models/team.model';
 import { User } from 'src/app/core/data/models/user.model';
-import { Location } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -18,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ProjectDescriptionComponent implements OnInit {
   @Input() team!: Team;
+  @Output() updatableEvent = new EventEmitter();
   projectForm!: FormGroup;
 
   currentUser: User | undefined = undefined;
@@ -42,6 +37,7 @@ export class ProjectDescriptionComponent implements OnInit {
         .subscribe(
           (response) => {
             this.showSnackbar("Les infomations de votre projet ont été mises à jour !");
+            this.updatableEvent.emit();
           },
           (error) => {
             this.showSnackbar("Une erreur est survenue lors de la mise à jour de votre projet.");

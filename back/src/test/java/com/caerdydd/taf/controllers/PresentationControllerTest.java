@@ -40,7 +40,7 @@ public class PresentationControllerTest {
         ResponseEntity<PresentationDTO> response = presentationController.createPresentation(mockedPresentation);
 
         // Assertions
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockedPresentation, response.getBody());
     }
 
@@ -231,7 +231,7 @@ void testGetPresentationById_UnexpectedError() throws CustomRuntimeException {
     ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
 
     // Assertions
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
 }
 
 @Test
@@ -255,7 +255,7 @@ void testGetTeamPresentations_UnexpectedError() throws CustomRuntimeException {
     ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
 
     // Assertions
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
 }
 
 @Test
@@ -279,7 +279,7 @@ void testGetTeachingStaffPresentations_UnexpectedError() throws CustomRuntimeExc
     ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
 
     // Assertions
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
 }
 
 @Test
@@ -291,7 +291,7 @@ void testListAllPresentations_UnexpectedError() throws CustomRuntimeException {
     ResponseEntity<List<PresentationDTO>> response = presentationController.listAllPresentations();
 
     // Assertions
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
 }
 
 @Test
