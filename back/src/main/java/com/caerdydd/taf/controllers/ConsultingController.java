@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,12 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ConsultingService;
-
-import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 
 @RestController
 @RequestMapping("api/consulting")
@@ -36,7 +36,7 @@ public class ConsultingController {
 
     @GetMapping("/plannedTiming")
     public ResponseEntity<List<PlannedTimingConsultingDTO>> getAllPlannedTimingConsultings() {
-        logger.info("Process request : Get all planned timing consultings");
+        logger.info("Process request : Get all consultings");
         try {
             List<PlannedTimingConsultingDTO> plannedTimingConsultingDTOs = consultingService.listAllPlannedTimingConsultings();
             return new ResponseEntity<>(plannedTimingConsultingDTOs, HttpStatus.OK);
@@ -57,7 +57,51 @@ public class ConsultingController {
             return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
-    
+
+    @GetMapping("/TeachingStaff")
+    public ResponseEntity<List<ConsultingDTO>> getConsultingsForCurrentTeachingStaff() {
+        logger.info("Process request : Get all consultings for current teaching staff");
+        try {
+            List<ConsultingDTO> consultingDTOs = consultingService.getConsultingsForCurrentTeachingStaff();
+            return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);
+        }
+        catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            if(e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @GetMapping("/team/{idTeam}")
+    public ResponseEntity<List<ConsultingDTO>> getConsultingsForATeam(@PathVariable Integer idTeam) {
+        logger.info("Process request : Get all consultings for a team");
+        try {
+            List<ConsultingDTO> consultingDTOs = consultingService.getConsultingsForATeam(idTeam);
+            return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);
+        }
+        catch (CustomRuntimeException e) {
+            switch(e.getMessage()) {
+                case CustomRuntimeException.USER_IS_NOT_AUTHORIZED:
+                case CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }
+
     @GetMapping("/teachingStaffConsultingInfra")
     public ResponseEntity<List<ConsultingDTO>> getConsultingsBySpecialityInfra() {
         logger.info("Process request : Get all consultings for speciality Infra");
@@ -154,7 +198,7 @@ public class ConsultingController {
 
     @PutMapping("/plannedTiming")
     public ResponseEntity<List<PlannedTimingConsultingDTO>> uploadPlannedTimingConsultings(@RequestParam("file") MultipartFile file) {
-        logger.info("Process request : Upload planned timing consultings");
+        logger.info("Process request : Upload consulting");
         try {
             List<PlannedTimingConsultingDTO> savedplannedTimingConsultingDTOs = consultingService.uploadPlannedTimingConsultings(file);
             return new ResponseEntity<>(savedplannedTimingConsultingDTOs, HttpStatus.OK);

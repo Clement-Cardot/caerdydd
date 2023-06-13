@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.user.JuryDTO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @JsonIdentityInfo(
   generator = ObjectIdGenerators.PropertyGenerator.class, 
   property = "idPresentation")
-  @Getter
+@Getter
 @Setter
 @Component
 public class PresentationDTO {
@@ -35,7 +34,6 @@ public class PresentationDTO {
 
     private JuryDTO jury;
 
-    @JsonBackReference(value="project")
     private ProjectDTO project;
 
     public PresentationDTO() {

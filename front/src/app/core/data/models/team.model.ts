@@ -15,6 +15,8 @@ export class Team {
         public filePathFinalScopeStatement: string,
         public filePathScopeStatementAnalysis: string,
         public filePathReport: string,
+        public isReportAnnotation: boolean,
+        public reportComments: string,
 
         public teamMembers: TeamMember[],
         public projectDev: Project,
@@ -28,7 +30,7 @@ export class Team {
 export class TeamAdapter implements Adapter<Team> {
 
     constructor(private teamMemberAdapter: TeamMemberAdapter, private projectAdapter: ProjectAdapter) { }
-    
+
         adapt(item: any): Team {
             let teamMemberList: TeamMember[] = [];
             if (item.teamMembers != null){
@@ -46,6 +48,8 @@ export class TeamAdapter implements Adapter<Team> {
                 item.filePathFinalScopeStatement,
                 item.filePathScopeStatementAnalysis,
                 item.filePathReport,
+                item.isReportAnnotation,
+                item.reportComments,
                 teamMemberList,
                 this.projectAdapter.adapt(item.projectDev),
                 this.projectAdapter.adapt(item.projectValidation)

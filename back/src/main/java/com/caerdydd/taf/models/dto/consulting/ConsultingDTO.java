@@ -33,5 +33,6 @@ public class ConsultingDTO {
     public String toString() {
         return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + ", team=" + team + "]";
     }
+
         
 }

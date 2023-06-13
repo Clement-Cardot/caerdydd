@@ -32,7 +32,7 @@ export class ClickedConsultingDialogComponent {
     private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
-    this.myConsulting = new Consulting("", this.data.event);
+    this.myConsulting = new Consulting(null, "", null, null, null, data.event);
     this.changeDialogDependingOnUserRole();
   }
 

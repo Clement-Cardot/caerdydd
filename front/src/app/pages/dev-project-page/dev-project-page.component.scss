@@ -20,6 +20,18 @@ app-project-description {
   margin: 25px 0px;
 }
 
+app-consulting-info {
+  margin: 5px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+}
+
+h2 {
+  text-align: center;
+  margin: 20px;
+}
+
 #cards-list {
   display: flex;
   flex-direction: row;

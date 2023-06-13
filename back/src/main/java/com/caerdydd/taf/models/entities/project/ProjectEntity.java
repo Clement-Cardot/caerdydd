@@ -29,9 +29,7 @@ public class ProjectEntity implements Serializable {
     private String name;
     private String description;
     private Boolean isValidated;
-
-//    private Integer idJury;
-
+    
     @OneToOne(mappedBy = "projectDev")
     private TeamEntity teamDev;
 
