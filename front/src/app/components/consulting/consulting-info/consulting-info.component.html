@@ -1,0 +1,16 @@
+<mat-card>
+    <mat-card-header>
+        <mat-icon *ngIf="consulting.speciality === 'Infrastructure'" aria-hidden="false" fontIcon="router"></mat-icon>
+        <mat-icon *ngIf="consulting.speciality === 'Modélisation'" aria-hidden="false" fontIcon="create"></mat-icon>
+        <mat-icon *ngIf="consulting.speciality === 'Développement'" aria-hidden="false" fontIcon="laptop"></mat-icon>
+        <mat-card-title>Consulting {{consulting.team?.name}}</mat-card-title>
+        <mat-card-subtitle> {{consulting.plannedTimingConsulting.datetimeBegin | date:'short'}} </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <p> Spécialité : {{consulting.speciality}} </p>
+        <p> Enseignant : {{consulting.plannedTimingAvailability?.teachingStaff?.user?.firstname}} {{consulting.plannedTimingAvailability?.teachingStaff?.user?.lastname}}</p>
+    </mat-card-content>
+    <mat-card-actions *ngIf="isFinished() && isCurrentUserATeachingStaff()">
+        <button mat-raised-button (click)="openDialog()">Commentaires</button>
+    </mat-card-actions>
+</mat-card>

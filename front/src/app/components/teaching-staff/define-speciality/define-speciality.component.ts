@@ -6,11 +6,11 @@ import { ApiUserService } from 'src/app/core/services/api-user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-define-specialty',
-  templateUrl: './define-specialty.component.html',
-  styleUrls: ['./define-specialty.component.scss'],
+  selector: 'app-define-speciality',
+  templateUrl: './define-speciality.component.html',
+  styleUrls: ['./define-speciality.component.scss'],
 })
-export class DefineSpecialtyComponent {
+export class DefineSpecialityComponent {
   @Input() teachingStaff!: TeachingStaff | undefined;
 
   constructor(

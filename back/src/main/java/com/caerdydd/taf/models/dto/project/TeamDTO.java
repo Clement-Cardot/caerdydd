@@ -26,6 +26,7 @@ public class TeamDTO {
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
     private Boolean isReportAnnotation;
+    private String reportComments;
 
     @JsonManagedReference(value="team")
     List<TeamMemberDTO> teamMembers;

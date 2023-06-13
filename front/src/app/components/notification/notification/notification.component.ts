@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy ,ViewChild  } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Notification } from 'src/app/core/data/models/notification.model';
 import { User } from 'src/app/core/data/models/user.model';

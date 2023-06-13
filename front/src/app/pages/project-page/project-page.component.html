@@ -1,4 +1,4 @@
-<div *ngIf="team != undefined">
+<div id="validationPage" *ngIf="team != undefined">
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{team.name}}</mat-card-title>
@@ -28,8 +28,19 @@
           <p>Cahier de tests :</p>
           <a mat-button color="primary" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
         </div>
+        <br>
+        <form action="" id="formReportComment">
+          <div class="sameRow" *ngIf="isUserOptionLeader() || isUserJury()">
+            <p>Commentaire sur le rapport :</p>
+            <p></p>
+          </div>
+          <mat-form-field id="reportComment">
+            <textarea matInput [disabled]="isUserOptionLeader() && !isUserJury()" rows="5">{{ team.reportComments }}</textarea>
+          </mat-form-field>
+        </form>
       </mat-card-content>
     </mat-card>
+
     <mat-card *ngIf="isUserJury()">
       <mat-card-header>
           <mat-card-title>
@@ -55,5 +66,13 @@
           </form>
       </mat-card-content>
     </mat-card>
-    <button mat-raised-button color="primary" [routerLink]="['/teams']">Retour aux équipes</button>
+
+    <button mat-raised-button color="primary" [routerLink]="['/teams']">Retour à la page d'équipes</button>
+
+</div>
+<div>
+  <h2>Consultings</h2>
+  <div class="twoColumnDisplay" id="consulting-list">
+    <app-consulting-info *ngFor="let consulting of consultingsList" [consulting]="consulting"></app-consulting-info>
+  </div>
 </div>

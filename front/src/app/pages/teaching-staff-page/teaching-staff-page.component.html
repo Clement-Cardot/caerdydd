@@ -1,5 +1,5 @@
 <div *ngIf="teachingStaffs.length > 0">
-  <app-define-specialty [teachingStaff]="getCurrentTeachingStaff()"></app-define-specialty>
+  <app-define-speciality [teachingStaff]="getCurrentTeachingStaff()"></app-define-speciality>
 
   <div class="listTS">
     <app-teaching-staff-entity *ngFor="let teachingStaff of teachingStaffs" [teachingStaff]="teachingStaff"></app-teaching-staff-entity>

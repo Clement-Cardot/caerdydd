@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
@@ -29,6 +30,9 @@ public class PlannedTimingConsultingDTO {
 
     @JsonManagedReference(value = "teachingStaffAvailabilities")
     private List<PlannedTimingAvailabilityDTO> teachingStaffAvailabilities;
+
+    @JsonBackReference(value = "consulting")
+    private ConsultingDTO consulting;
 
     public PlannedTimingConsultingDTO() {
     }

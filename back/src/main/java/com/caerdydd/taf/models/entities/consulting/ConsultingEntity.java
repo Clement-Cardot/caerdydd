@@ -2,6 +2,7 @@ package com.caerdydd.taf.models.entities.consulting;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,14 +28,16 @@ public class ConsultingEntity implements Serializable {
         private Integer idConsulting;
         private String speciality;
         private String notes;
-        private Boolean isValidated = false;
-        private Boolean isReserved = false;
 
-        @OneToOne
+        @OneToOne(cascade = CascadeType.MERGE)
         @JoinColumn(name = "id_planned_timing_availability")
         private PlannedTimingAvailabilityEntity plannedTimingAvailability;
 
-        @ManyToOne
+        @ManyToOne(cascade = CascadeType.MERGE)
+        @JoinColumn(name = "id_planned_timing_consulting")
+        private PlannedTimingConsultingEntity plannedTimingConsulting;
+
+        @ManyToOne(cascade = CascadeType.MERGE)
         @JoinColumn(name = "id_team")
         private TeamEntity team;
 
@@ -44,7 +47,7 @@ public class ConsultingEntity implements Serializable {
         @Override
         public String toString() {
                 return "ConsultingEntity [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes
-                                + ", isValidated=" + isValidated + ", isReserved=" + isReserved + ", team=" + team + "]";
+                                + ", team=" + team + "]";
         }
         
 }

@@ -4,10 +4,14 @@ import { MaterialModule } from "src/app/material.module";
 import { MaterialFileInputModule } from "ngx-material-file-input";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ConsultingImportComponent } from "./consulting-import/consulting-import.component";
+import { ConsultingInfoComponent } from './consulting-info/consulting-info.component';
+import { DialogAnnotationsComponent } from './consulting-info/dialog-annotations/dialog-annotations.component';
 
 @NgModule({
     declarations: [
-        ConsultingImportComponent
+        ConsultingImportComponent,
+        ConsultingInfoComponent,
+        DialogAnnotationsComponent
     ],
     imports: [
       CommonModule,
@@ -16,7 +20,8 @@ import { ConsultingImportComponent } from "./consulting-import/consulting-import
       ReactiveFormsModule
     ],
     exports: [
-      ConsultingImportComponent
+      ConsultingImportComponent,
+      ConsultingInfoComponent
     ]
   })
   export class ConsultingModule { }

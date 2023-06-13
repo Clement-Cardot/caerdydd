@@ -86,6 +86,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
       // Teaching Staff
       if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
+        this.navLink.push('Consultings');
         this.navLink.push('Equipes');
         this.navLink.push('Corps Enseignant');
       }
@@ -123,6 +124,9 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'Calendrier':
         this.router.navigateByUrl('/calendar');
+        break;
+      case 'Consultings':
+        this.router.navigateByUrl('/consultings');
         break;
       case 'Notes':
         this.router.navigateByUrl('/marks');

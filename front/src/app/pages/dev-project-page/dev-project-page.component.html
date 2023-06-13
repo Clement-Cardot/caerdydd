@@ -7,6 +7,12 @@
     <app-project-file [team]="team" [fileName]="'report'" (updatableEvent)="getData()"></app-project-file>
     <app-test-book-link [team]="team" (updatableEvent)="getData()"></app-test-book-link>
   </div>
+  <div>
+    <h2>Consultings</h2>
+    <div class="twoColumnDisplay" id="consulting-list">
+      <app-consulting-info *ngFor="let consulting of consultingsList" [consulting]="consulting"></app-consulting-info>
+    </div>
+  </div>
 </div>
 
 

@@ -12,7 +12,6 @@ import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.repositories.PresentationRepository;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

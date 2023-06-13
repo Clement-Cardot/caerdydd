@@ -36,6 +36,7 @@ public class TeamEntity implements Serializable {
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
     private Boolean isReportAnnotation;
+    private String reportComments;
 
     @OneToMany(mappedBy = "team")
     private List<TeamMemberEntity> teamMembers;
