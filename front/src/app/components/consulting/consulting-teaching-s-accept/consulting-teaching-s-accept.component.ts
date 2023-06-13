@@ -17,7 +17,7 @@ import { ApiUserService } from 'src/app/core/services/api-user.service';
 export class ConsultingTeachingSAcceptComponent implements OnInit {
   @Input() consulting!: Consulting;
 
-  currentUser!: User | null;
+  currentUser!: User | undefined;
 
   teachingStaff!: TeachingStaff;
 
@@ -38,7 +38,7 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
     if (this.currentUser == null) {

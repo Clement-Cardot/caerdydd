@@ -19,6 +19,7 @@ import { Consulting, ConsultingAdapter } from '../data/models/consulting.model';
   providedIn: 'root',
 })
 export class ApiConsultingService {
+  
   private baseUrl = environment.apiURL + '/consulting';
 
     constructor(
@@ -49,6 +50,10 @@ export class ApiConsultingService {
         .pipe(
             catchError(this.handleError)
         );
+    }
+
+    getAllWaitingAcceptationConsultings() : Observable<Consulting[]> {
+      throw new Error('Method not implemented.'); // TODO : implement
     }
 
     getConsultingForATeam(teamId : number) : Observable<Consulting[]> {
