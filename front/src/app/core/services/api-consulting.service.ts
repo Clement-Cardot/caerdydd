@@ -53,7 +53,7 @@ export class ApiConsultingService {
     }
 
     getAllWaitingAcceptationConsultings() : Observable<Consulting[]> {
-      throw new Error('Method not implemented.'); // TODO : implement
+      throw new Error('Method not implemented.'); // TODO : implement Back + Front
     }
 
     getConsultingForATeam(teamId : number) : Observable<Consulting[]> {
