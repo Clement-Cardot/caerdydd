@@ -104,30 +104,5 @@ public class JuryController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-     @PostMapping("/setCommentOnReport")
-	public ResponseEntity<HttpStatus> saveFile(@RequestParam("idTeam") int idTeam, @RequestParam("comment") String comment) {
-        logger.info("Process request : Add comment to reportfor team {}", idTeam);
-        try {
-            juryService.setCommentOnReport(idTeam, comment);
-            // fileService.saveFile(file, id, type);
-
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (CustomRuntimeException e) {
-            switch (e.getMessage()) {
-                case CustomRuntimeException.SERVICE_ERROR:
-                    logger.warn(e.getMessage());
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                case CustomRuntimeException.TEAM_NOT_FOUND:
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-                case CustomRuntimeException.INCORRECT_FILE_FORMAT:
-                    logger.warn(e.getMessage());
-                    return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
-                default:
-                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
-                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-            }
-        }
-    }
 }
 

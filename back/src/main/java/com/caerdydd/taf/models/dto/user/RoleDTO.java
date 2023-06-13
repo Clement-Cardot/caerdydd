@@ -18,6 +18,7 @@ public class RoleDTO {
     public static final String TEACHING_STAFF_ROLE = "TEACHING_STAFF_ROLE";
     public static final String OPTION_LEADER_ROLE = "OPTION_LEADER_ROLE";
     public static final String PLANNING_ROLE = "PLANNING_ROLE";
+    public static final String JURY_MEMBER_ROLE = "JURY_MEMBER_ROLE";
     
     private Integer idRole;
     private String role;

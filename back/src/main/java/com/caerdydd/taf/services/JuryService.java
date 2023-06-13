@@ -39,12 +39,6 @@ public class JuryService {
     @Autowired
     private UserService userService;
 
-    @Autowired 
-    private RoleService roleService;
-
-    @Autowired 
-    private TeamService teamService;
-
     @Autowired
     private JuryServiceRules juryServiceRules;
 
@@ -164,13 +158,4 @@ public class JuryService {
                 .map(juryEntity -> modelMapper.map(juryEntity, JuryDTO.class))
                 .collect(Collectors.toList());
     }
-
-    public void setCommentOnReport(Integer idTeam, String comment) throws CustomRuntimeException {
-        // TO DO : ADD JURY MEMBER ROLE TO ROLE DTO
-        // userServiceRules.checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
-        TeamDTO team = this.teamService.getTeamById(idTeam);
-        team.setReportComments(comment);
-        this.teamService.saveTeam(team);
-    }
-   
 }
