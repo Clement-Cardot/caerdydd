@@ -411,4 +411,91 @@ public class ConsultingControllerTest {
         // Assertions
         assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
     }
+
+    @Test
+    void testSetNotesConsulting_Nominal() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        ConsultingDTO mockedConsultingDTO = new ConsultingDTO();
+        when(consultingService.setNotesConsulting(any(), any())).thenReturn(mockedConsultingDTO);
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultingDTO, response.getBody());
+
+    }
+
+    @Test
+    void testSetNotesConsulting_UserNotATeachingStaff() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_User_Is_Not_Owner_Of_Consulting() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_CONSULTING));
+        
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_ConsultingNotFinished() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FINISHED));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_ConsultingNotFound() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNoteConsulting_ServiceError() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_UnexpedtedException() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException("Unexpected exception"));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
 }

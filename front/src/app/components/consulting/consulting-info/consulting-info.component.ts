@@ -9,6 +9,7 @@ import { ApiConsultingService } from 'src/app/core/services/api-consulting.servi
 export interface DialogData {
   consulting: Consulting;
   newNotes: string;
+  isTeachingStaffOfConsulting: boolean;
 }
 
 @Component({
@@ -21,6 +22,7 @@ export class ConsultingInfoComponent {
   @Input() consulting!: Consulting;
   currentUser!: User | null;
   newNotes!: string;
+  isTeachingStaffOfConsulting! : boolean;
 
   constructor(public dialog: MatDialog, public userDataService: UserDataService, public apiConsultingService: ApiConsultingService) {}
 
@@ -28,6 +30,7 @@ export class ConsultingInfoComponent {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
       this.currentUser = user;
     });
+    this.isTeachingStaffOfConsulting = this.isCurrentUserTeachingStaffOfConsulting();
   }
 
   isFinished() : boolean {
@@ -37,19 +40,20 @@ export class ConsultingInfoComponent {
   openDialog(): void {
     this.newNotes = this.consulting.notes;
     const dialogRef = this.dialog.open(DialogAnnotationsComponent, {
-      data: {consulting : this.consulting, newNotes: this.newNotes},
+      data: {consulting : this.consulting, newNotes: this.newNotes, isTeachingStaffOfConsulting: this.isTeachingStaffOfConsulting},
+      width: '50%'
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if(result != undefined) {
+      if(result != undefined && this.isTeachingStaffOfConsulting) {
         this.newNotes = result;
         this.setNotesConsulting(this.newNotes);
       }
     });
   }
 
-  isCurrentUserATeachingStaff() {
+  isCurrentUserATeachingStaff(): boolean {
     if (this.currentUser == null) {
       console.log("User is not connected");
       return false;
@@ -58,6 +62,13 @@ export class ConsultingInfoComponent {
       return true;
     }
     return false; 
+  }
+
+  isCurrentUserTeachingStaffOfConsulting() : boolean {
+    if(this.isCurrentUserATeachingStaff() && this.currentUser != null && this.consulting.plannedTimingAvailability.teachingStaff.user.id == this.currentUser.id) {
+      return true;
+    }
+    return false;
   }
 
   setNotesConsulting(newNotes: string) {

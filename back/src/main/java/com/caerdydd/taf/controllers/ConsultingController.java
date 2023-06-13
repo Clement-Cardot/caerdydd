@@ -126,6 +126,12 @@ public class ConsultingController {
                 case CustomRuntimeException.CONSULTING_NOT_FINISHED:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.CONSULTING_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 default:
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);

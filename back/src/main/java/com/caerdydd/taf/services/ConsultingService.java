@@ -141,7 +141,7 @@ public class ConsultingService {
         }
     
         if (optionalConsulting.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND);
+            throw new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND);
         }
     
         ConsultingEntity consultingEntity = optionalConsulting.get();
@@ -304,7 +304,6 @@ public class ConsultingService {
         } else {
             throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_CONSULTING);
         }
-
     }
         
 }
