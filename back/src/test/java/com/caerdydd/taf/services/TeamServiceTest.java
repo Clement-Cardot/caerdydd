@@ -23,17 +23,22 @@ import org.modelmapper.ModelMapper;
 import com.caerdydd.taf.models.dto.notification.NotificationDTO;
 import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.project.TeamEntity;
+import com.caerdydd.taf.models.entities.user.JuryEntity;
+import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 import com.caerdydd.taf.models.entities.user.TeamMemberEntity;
 import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.JuryServiceRules;
 import com.caerdydd.taf.services.rules.TeamServiceRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 
@@ -66,6 +71,9 @@ class TeamServiceTest {
 
     @Mock
     private UserServiceRules userServiceRules;
+
+    @Mock
+    private JuryServiceRules juryServiceRules;
 
     @Mock
     private ProjectRepository projectRepository;
@@ -944,7 +952,6 @@ class TeamServiceTest {
         verify(notificationService, times(3)).createNotification(any(NotificationDTO.class));
     }
 
-
     @Test
     void testGetTestBookLinkDev() {
         // Mock teamRepository.findById() method
@@ -1032,6 +1039,7 @@ class TeamServiceTest {
         });
     }
     
+    @Test
     void testGetTestBookLinkValidation() throws CustomRuntimeException {
         // Préparation des données
         Integer idTeam = 1;
@@ -1061,6 +1069,116 @@ class TeamServiceTest {
         assertEquals(pairedTeamLink, result);
     }
 
-    
+    @Test
+    void testSetCommentOnReport_Nominal() throws CustomRuntimeException {
+        ProjectEntity mockedProject = new ProjectEntity(null, null);
+        mockedProject.setJury(new JuryEntity(
+            new TeachingStaffEntity(
+                new UserEntity(1, null, null, null, null, null, null)
+            ), 
+            new TeachingStaffEntity(
+                new UserEntity(2, null, null, null, null, null, null)
+            )
+        ));
+        TeamEntity mockedTeam = new TeamEntity(1, null, mockedProject, null);
+        Optional<TeamEntity> mockedAnswer = Optional.of(mockedTeam);
+
+        // Mock userServiceRules.checkUserRole()
+        doNothing().when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
+        // Mock juryServiceRules.checkJuryMemberManageTeam
+        doNothing().when(juryServiceRules).checkJuryMemberManageTeam(any(Integer.class), any(Integer.class));
+        
+        UserDTO mockedUser = new UserDTO(1, null, null, null, null, null, null);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+
+        ProjectDTO expectedProject = new ProjectDTO(null, null);
+        expectedProject.setJury(new JuryDTO(
+            new TeachingStaffDTO(
+                new UserDTO(1, null, null, null, null, null, null)
+            ), 
+            new TeachingStaffDTO(
+                new UserDTO(2, null, null, null, null, null, null)
+            )
+        ));
+        TeamDTO expectedAnswer = new TeamDTO(1, null, expectedProject, null);
+        expectedAnswer.setReportComments("comment");
+
+        when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+        when(teamRepository.save(any(TeamEntity.class))).then(AdditionalAnswers.returnsFirstArg());
+
+        TeamDTO result = new TeamDTO();
+        try {
+            result = teamService.setCommentOnReport(1, "comment");
+        } catch (CustomRuntimeException e) {
+            fail();
+        }
+
+        assertEquals(expectedAnswer.getIdTeam(), result.getIdTeam());
+        assertEquals(expectedAnswer.getReportComments(), result.getReportComments());
+    }
+
+    @Test
+    void testSetCommentOnReport_UserNotJury() throws CustomRuntimeException {
+        // Mock userServiceRules.checkUserRole()
+        doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED))
+        .when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
+        
+        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
+            teamService.setCommentOnReport(1, "comment");
+        });
+
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, thrownException.getMessage());
+    }
+
+    @Test
+    void testSetCommentOnReport_UserNotJuryOfTeam() throws CustomRuntimeException {
+        ProjectEntity mockedProject = new ProjectEntity(null, null);
+        mockedProject.setJury(new JuryEntity(
+            new TeachingStaffEntity(
+                new UserEntity(1, null, null, null, null, null, null)
+            ), 
+            new TeachingStaffEntity(
+                new UserEntity(2, null, null, null, null, null, null)
+            )
+        ));
+        TeamEntity mockedTeam = new TeamEntity(1, null, mockedProject, null);
+        Optional<TeamEntity> mockedAnswer = Optional.of(mockedTeam);
+
+        UserDTO mockedUser = new UserDTO(1, null, null, null, null, null, null);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+
+        // Mock userServiceRules.checkUserRole()
+        doNothing().when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
+        // Mock userServiceRules.checkUserRole()
+        doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED))
+        .when(juryServiceRules).checkJuryMemberManageTeam(any(Integer.class), any(Integer.class));
+        
+        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
+            teamService.setCommentOnReport(1, "comment");
+        });
+
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, thrownException.getMessage());
+    }
+
+    @Test
+    void testSetCommentOnReport_TeamNotPresent() throws CustomRuntimeException {
+        // Mock userServiceRules.checkUserRole()
+        doNothing().when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
+        // Mock juryServiceRules.checkJuryMemberManageTeam
+        doNothing().when(juryServiceRules).checkJuryMemberManageTeam(any(Integer.class), any(Integer.class));
+        
+        UserDTO mockedUser = new UserDTO(1, null, null, null, null, null, null);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+
+        // when(teamRepository.findById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+        doThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND))
+        .when(teamRepository).findById(any(Integer.class));
+
+        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
+            teamService.setCommentOnReport(1, "comment");
+        });
+
+        assertEquals(CustomRuntimeException.TEAM_NOT_FOUND, thrownException.getMessage());
+    }
 }
 

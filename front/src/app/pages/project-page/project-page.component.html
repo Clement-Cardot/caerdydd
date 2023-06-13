@@ -35,12 +35,18 @@
             <p></p>
           </div>
           <mat-form-field id="reportComment">
-            <textarea matInput formControlName="reportComment" rows="5">{{ team.reportComments }}</textarea>
+            <textarea matInput formControlName="reportComment" rows="5"></textarea>
             <!-- [disabled]="isUserOptionLeader() && !isUserJury()" -->
+            <mat-error *ngIf="reportCommentFormControl.hasError('required')">
+              Vous devez écrire un commentaire
+            </mat-error>
+            <mat-error *ngIf="reportCommentFormControl.hasError('apiError')">
+                {{errorMessage}}
+            </mat-error>
           </mat-form-field>
           <button mat-raised-button color="accent" [disabled]="addReportCommentform.invalid" *ngIf="isUserJury()">
             Envoyer le commentaire
-        </button>
+          </button>
         </form>
       </mat-card-content>
     </mat-card>

@@ -18,7 +18,7 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
     styleUrls: ['./project-page.component.scss']
   })
   export class ProjectPageComponent {
-    
+
     id!: string;
     team!: Team;
     currentUser!: User | undefined;
@@ -32,12 +32,14 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
     addReportCommentform: FormGroup;
     reportCommentFormControl = new FormControl('', [Validators.required]);
 
+    reportCommentFormValueSet: boolean = false;
+
     errorMessage!: string;
 
     refresh: any;
     currentUserSubscription: any;
 
-    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private juryService: ApiJuryService,private _snackBar: MatSnackBar, private formBuilder: FormBuilder, private consultingService: ApiConsultingService) {
+    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService,private _snackBar: MatSnackBar, private formBuilder: FormBuilder, private consultingService: ApiConsultingService) {
       this.importReportAnnotform = this.formBuilder.group({
         reportAnnot: this.reportAnnotFormControl
       });
@@ -71,6 +73,12 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
     getTeam() {
       this.apiTeamService.getTeam(+this.id).subscribe(data => {
         this.team = data;
+        if (!this.reportCommentFormValueSet) {
+          this.reportCommentFormValueSet = true;
+          this.addReportCommentform.patchValue({
+            reportComment: this.team.reportComments,
+          });
+        }
         this.getAllConsultingsForCurrentTeam();
       });
     }
@@ -100,7 +108,7 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
           a.click();
         },
         error => {
-          {this.showErrorDownload()} 
+          {this.showErrorDownload()}
         });
       }
     }
@@ -116,9 +124,9 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
           const file = file_form.files[0];
           this.uploadFileService.upload(file, this.team.idTeam, "annotedReport").subscribe(
           data => {
-            this.showSuccess("Import du fichier avec succès");
-          },
+            this.showSuccess("Import du fichier avec succès");          },
           error => {
+            this.reportAnnotFormControl.setErrors({apiError: true});
             this.showError(error)
           },
         );
@@ -145,22 +153,24 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
 
     uploadComment() {
       if (this.team != null) {
+        this.reportCommentFormControl.setErrors({'apiError': null});
+        this.reportCommentFormControl.updateValueAndValidity();
         if(this.addReportCommentform.invalid) {
           console.log("The form is invalid, form was :");
           console.log(this.addReportCommentform);
         } else {
           const comment: string = this.addReportCommentform.get('reportComment')?.value;
-          this.juryService.setCommentOnReport(this.team.idTeam, comment).subscribe(
+          this.apiTeamService.setCommentOnReport(this.team.idTeam, comment).subscribe(
             data => {
               this.showSuccess("Le commentaire à été modifier avec succès");
             },
             error => {
+              this.reportCommentFormControl.setErrors({apiError: true});
               this.showError(error)
             },
           );
         }
-        // this.reportAnnotFormControl.setErrors({'apiError': null});
-        // this.reportAnnotFormControl.updateValueAndValidity();
+
       }
     }
 
@@ -171,8 +181,13 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
     }
 
     showError(error: { status: number; }) {
-      this.reportAnnotFormControl.setErrors({apiError: true});
       switch (error.status) {
+        case 401:
+          this.errorMessage = "Vous n'avez pas la permittion d'ajouter ou modifier un commentaire";
+          break;
+        case 404:
+          this.errorMessage = "L'équipe que vous modifiez est introuvable";
+          break;
         case 415:
           this.errorMessage = "Le fichier n'est pas au bon format";
           break;
@@ -201,5 +216,5 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
         );
       }
     }
-  
+
   }
