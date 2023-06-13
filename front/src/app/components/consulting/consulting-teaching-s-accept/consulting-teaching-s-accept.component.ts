@@ -27,8 +27,6 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
 
   bool!: boolean;
 
-  teachingStaffLoaded = false; // Ajout d'un indicateur pour suivre si teachingStaff est chargé
-
   constructor(
     private _snackBar: MatSnackBar,
     private userDataService: UserDataService,
@@ -38,9 +36,11 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
-      this.currentUser = user;
-    });
+    this.userDataService
+      .getCurrentUser()
+      .subscribe((user: User | undefined) => {
+        this.currentUser = user;
+      });
     if (this.currentUser == null) {
       console.log('User is not connected');
     } else {
@@ -49,8 +49,6 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
         .subscribe(
           (teachingStaff: TeachingStaff) => {
             this.teachingStaff = teachingStaff;
-            this.filterBySpeciality(this.consulting);
-            this.teachingStaffLoaded = true; // Indique que teachingStaff est chargé
           },
           (error) => {
             console.error('Error while fetching teaching staff:', error);
@@ -63,22 +61,6 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
     this._snackBar.open('Vous avez accepté ce consulting', 'Fermer', {
       duration: 5000,
     });
-  }
-
-  filterBySpeciality(consulting: Consulting): boolean {
-    if (!this.teachingStaffLoaded) {
-      return false; // Quitte la fonction si teachingStaff n'est pas encore chargé
-    }
-    if (this.teachingStaff.isInfrastructureSpecialist) {
-      this.specialities.push('Infrastructure');
-    }
-    if (this.teachingStaff.isDevelopmentSpecialist) {
-      this.specialities.push('Développement');
-    }
-    if (this.teachingStaff.isModelingSpecialist) {
-      this.specialities.push('Modélisation');
-    }
-    return this.specialities.includes(consulting.speciality);
   }
 
   validConsulting(consulting: Consulting): void {

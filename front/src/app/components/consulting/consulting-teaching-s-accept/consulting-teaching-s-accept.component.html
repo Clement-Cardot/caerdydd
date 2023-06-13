@@ -15,7 +15,7 @@
       aria-hidden="false"
       fontIcon="laptop"
     ></mat-icon>
-    <mat-card-title>Consulting {{ consulting.team.name }}</mat-card-title>
+    <mat-card-title>Consulting {{ consulting.team?.name }}</mat-card-title>
     <mat-card-subtitle>
       {{ consulting.plannedTimingConsulting.datetimeBegin | date : "short" }}
     </mat-card-subtitle>
@@ -28,10 +28,7 @@
       {{ consulting.plannedTimingAvailability?.teachingStaff?.user?.lastname }}
     </p>
     <button
-      *ngIf="
-        consulting.plannedTimingAvailability == null &&
-        filterBySpeciality(consulting)
-      "
+      *ngIf="consulting.plannedTimingAvailability == null"
       mat-raised-button
       color="primary"
       (click)="validConsulting(consulting)"
