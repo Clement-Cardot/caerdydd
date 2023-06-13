@@ -31,8 +31,9 @@ public class ConsultingDTO {
 
     @Override
     public String toString() {
-        return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + ", team=" + team + "]";
+        return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + "]";
     }
+
 
         
 }
