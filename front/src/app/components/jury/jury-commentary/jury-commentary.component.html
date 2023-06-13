@@ -1,0 +1,32 @@
+
+<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+  
+    <mat-expansion-panel-header>
+        <mat-panel-title> 
+          Projet {{presentation.project?.name ?? 'Pas encore de projet'}} - Présentation {{presentation.type}}
+        </mat-panel-title>      
+        <mat-panel-description>
+          {{ presentation.datetimeBegin.getDate().toString().padStart(2, '0') }}
+          /{{ (presentation.datetimeBegin.getMonth() + 1).toString().padStart(2, '0') }}
+          /{{ presentation.datetimeBegin.getFullYear() }}
+          {{ presentation.datetimeBegin.getHours().toString().padStart(2, '0') }}
+          :{{ presentation.datetimeBegin.getMinutes().toString().padStart(2, '0') }}
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <form *ngIf="currentDate >= presentationDate">      
+        <mat-form-field id="commentary">
+          <mat-label>Commentaire de la présentation</mat-label>
+          <textarea matInput placeholder="" [(ngModel)]="commentary"></textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" id="submitButton" (click)="onSubmit()">Enregistrer</button>
+
+        <mat-error *ngIf="errorMessage != ''">
+          {{errorMessage}}
+        </mat-error>
+    </form>
+
+    <p *ngIf="currentDate < presentationDate">Vous ne pouvez pas laisser de commentaire tant que la présentation n'a pas commencé.</p>
+
+  </mat-expansion-panel>
