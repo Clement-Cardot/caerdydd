@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.notification.NotificationDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
@@ -72,6 +73,9 @@ public class ConsultingService {
     @Autowired
     private FileRules fileRules;
 
+    @Autowired
+    private NotificationService notificationService;
+
     // List all planned timing for consultings
     public List<PlannedTimingConsultingDTO> listAllPlannedTimingConsultings() throws CustomRuntimeException {
         try {
@@ -88,6 +92,16 @@ public class ConsultingService {
         try {
             return consultingRepository.findAll().stream()
                         .map(consultingEntity -> modelMapper.map(consultingEntity, ConsultingDTO.class))
+                        .collect(Collectors.toList()) ;
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
+
+    public List<PlannedTimingAvailabilityDTO> listAllPlannedTimingAvailabilities() throws CustomRuntimeException {
+        try {
+            return plannedTimingAvailabilityRepository.findAll().stream()
+                        .map(plannedTimingAvailabilityEntity -> modelMapper.map(plannedTimingAvailabilityEntity, PlannedTimingAvailabilityDTO.class))
                         .collect(Collectors.toList()) ;
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
@@ -294,6 +308,8 @@ public class ConsultingService {
         return savePlannedTimingAvailability(plannedTimingAvailability);
     }
 
+
+
     // Create a consulting
     public ConsultingDTO createConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {
 
@@ -313,8 +329,38 @@ public class ConsultingService {
 
         consultingRules.checkDemandIsMadeOnTime(consulting);
 
+        List<PlannedTimingAvailabilityDTO> availabilities = listAllPlannedTimingAvailabilities();
+
+        // Filtering only relevant availabilities
+        List<PlannedTimingAvailabilityDTO> relevantAvailabilities = availabilities.stream()
+                .filter(availability -> consulting.getPlannedTimingConsulting().getIdPlannedTimingConsulting().equals(availability.getPlannedTimingConsulting().getIdPlannedTimingConsulting()))
+                .filter(availability -> availability.getIsAvailable())
+                .collect(Collectors.toList());
+
+        // Get the Teaching Staff with the required speciality
+        List<TeachingStaffDTO> teachingStaffList = teachingStaffService.getTeachingStaffBySpeciality(consulting.getSpeciality());
+
+        // Loop over all relevant availabilities and teaching staff to create notifications
+        for (PlannedTimingAvailabilityDTO availability : relevantAvailabilities) {
+            for (TeachingStaffDTO teachingStaff : teachingStaffList) {
+                if (teachingStaff.getIdUser().equals(availability.getTeachingStaff().getIdUser())) {
+                    // Create the notification
+                    NotificationDTO notification = new NotificationDTO();
+                    // Personalize the message
+                    String message = team.getName() + " a effectuée une nouvelle demande de consulting en " 
+                                    + consulting.getSpeciality()+ ".";
+                    notification.setMessage(message);
+                    notification.setUser(teachingStaff.getUser());
+                    notification.setIsRead(false);
+
+                    notificationService.createNotification(notification);
+                }
+            }
+        }
+
         return saveConsulting(consulting);
     }
+
 
     // Get all the finished consultings of the current teaching staff
     public List<ConsultingDTO> getConsultingsForCurrentTeachingStaff() throws CustomRuntimeException {
