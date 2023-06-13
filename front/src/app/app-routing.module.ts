@@ -11,10 +11,10 @@ import { ValidateSubjectPageComponent } from './pages/validate-subject-page/vali
 import { TeamsPageComponent } from './pages/teams-page/teams-page.component';
 import { DevProjectPageComponent } from './pages/dev-project-page/dev-project-page.component';
 import { ValidationProjectPageComponent } from './pages/validation-project-page/validation-project-page.component';
-import { ProjectDescriptionPageComponent } from './pages/project-description-page/project-description-page.component';
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { TeachingStaffPageComponent } from './pages/teaching-staff-page/teaching-staff-page.component';
 import { ProjectPageComponent } from './pages/project-page/project-page.component';
+import { PresentationCommentaryPageComponent } from './pages/presentation-commentary-page/presentation-commentary-page.component';
 import { ConsultingPageComponent } from './pages/consulting-page/consulting-page.component';
 
 const websiteName = " - Taf"
@@ -49,12 +49,11 @@ const routes: Routes = [
 
   // Teaching Staff Pages
   { path: 'teachingStaff', title: 'Corps Enseignant' + websiteName, component: TeachingStaffPageComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['TEACHING_STAFF_ROLE'] }},
-
-  // Temporaire pour tester
-  { path: 'projectD', title: 'Project-description' + websiteName, component: ProjectDescriptionPageComponent, canActivate: [AuthGuard] },
   
   { path: 'error', title: 'Erreur' + websiteName, component: ErrorPageComponent },
 
+  { path: 'presentationCommentary', title: 'Commentaire présentation' + websiteName, component: PresentationCommentaryPageComponent },
+  
   ];
 
 @NgModule({

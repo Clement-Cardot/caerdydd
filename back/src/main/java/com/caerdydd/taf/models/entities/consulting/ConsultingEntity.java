@@ -2,6 +2,7 @@ package com.caerdydd.taf.models.entities.consulting;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,11 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
 import com.caerdydd.taf.models.entities.project.TeamEntity;
-import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,15 +29,15 @@ public class ConsultingEntity implements Serializable {
         private String speciality;
         private String notes;
 
-        @OneToOne
+        @OneToOne(cascade = CascadeType.MERGE)
         @JoinColumn(name = "id_planned_timing_availability")
         private PlannedTimingAvailabilityEntity plannedTimingAvailability;
 
-        @ManyToOne
+        @ManyToOne(cascade = CascadeType.MERGE)
         @JoinColumn(name = "id_planned_timing_consulting")
         private PlannedTimingConsultingEntity plannedTimingConsulting;
 
-        @ManyToOne
+        @ManyToOne(cascade = CascadeType.MERGE)
         @JoinColumn(name = "id_team")
         private TeamEntity team;
 
@@ -50,7 +47,7 @@ public class ConsultingEntity implements Serializable {
         @Override
         public String toString() {
                 return "ConsultingEntity [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes
-                        + ", team=" + team + "]";
+                                + ", team=" + team + "]";
         }
         
 }

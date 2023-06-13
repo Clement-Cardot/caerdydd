@@ -13,7 +13,7 @@ import lombok.Setter;
 @JsonIdentityInfo(
   generator = ObjectIdGenerators.PropertyGenerator.class, 
   property = "idPresentation")
-  @Getter
+@Getter
 @Setter
 @Component
 public class PresentationDTO {

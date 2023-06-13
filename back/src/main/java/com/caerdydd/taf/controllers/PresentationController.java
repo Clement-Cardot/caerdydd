@@ -1,6 +1,7 @@
 package com.caerdydd.taf.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +37,7 @@ public class PresentationController {
         logger.info("Process request : Create presentation");
         try {
             PresentationDTO savedPresentationDTO = presentationService.createPresentation(presentation);
-            return new ResponseEntity<>(savedPresentationDTO, HttpStatus.CREATED);
+            return new ResponseEntity<>(savedPresentationDTO, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             logger.warn(e.getMessage());
             switch (e.getMessage()) {
@@ -73,7 +75,7 @@ public class PresentationController {
             } else if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
@@ -88,15 +90,14 @@ public class PresentationController {
             } else if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
-
-    @GetMapping("/teachingStaff/{staffId}")
-    public ResponseEntity<List<PresentationDTO>> getTeachingStaffPresentations(@PathVariable Integer staffId) {
+    @GetMapping("/teachingStaff/{userId}")
+    public ResponseEntity<List<PresentationDTO>> getTeachingStaffPresentations(@PathVariable Integer userId) {
         try {
-            List<PresentationDTO> presentations = presentationService.getTeachingStaffPresentations(staffId);
+            List<PresentationDTO> presentations = presentationService.getTeachingStaffPresentations(userId);
             return ResponseEntity.ok(presentations);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND)) {
@@ -104,7 +105,25 @@ public class PresentationController {
             } else if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @GetMapping("/teamMember/{userId}")
+    public ResponseEntity<List<PresentationDTO>> getTeamMemberPresentations(@PathVariable Integer userId) {
+        try {
+            List<PresentationDTO> presentations = presentationService.getTeamMemberPresentations(userId);
+            return ResponseEntity.ok(presentations);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.TEAM_MEMBER_NOT_FOUND:
+                case CustomRuntimeException.TEAM_NOT_FOUND:
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
         }
     }
 
@@ -118,10 +137,32 @@ public class PresentationController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
+    @PostMapping("/updateJuryNotes")
+    public ResponseEntity<PresentationDTO> updateNotesJury(@RequestBody Map<String, Object> requestBody) {
+        logger.info("Process request : update jury notes");
 
+        Integer idPresentation = (Integer) requestBody.get("idPresentation");
+        String note = (String) requestBody.get("note");
+
+        try {
+            PresentationDTO presentation = presentationService.setJuryNotes(idPresentation, note);
+            return new ResponseEntity<>(presentation, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.JURY_NOT_FOUND)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.PRESENTATION_DID_NOT_BEGIN)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

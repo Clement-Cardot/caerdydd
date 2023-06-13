@@ -20,14 +20,14 @@ export interface DialogData {
 
 export class ConsultingInfoComponent {
   @Input() consulting!: Consulting;
-  currentUser!: User | null;
+  currentUser!: User | undefined;
   newNotes!: string;
   isTeachingStaffOfConsulting! : boolean;
 
   constructor(public dialog: MatDialog, public userDataService: UserDataService, public apiConsultingService: ApiConsultingService) {}
 
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
     this.isTeachingStaffOfConsulting = this.isCurrentUserTeachingStaffOfConsulting();
@@ -38,7 +38,11 @@ export class ConsultingInfoComponent {
   }
   
   openDialog(): void {
-    this.newNotes = this.consulting.notes;
+    if(this.consulting.notes == null) {
+      this.consulting.notes = "";
+    } else {
+      this.newNotes = this.consulting.notes;
+    }
     const dialogRef = this.dialog.open(DialogAnnotationsComponent, {
       data: {consulting : this.consulting, newNotes: this.newNotes, isTeachingStaffOfConsulting: this.isTeachingStaffOfConsulting},
       width: '50%'
@@ -65,7 +69,7 @@ export class ConsultingInfoComponent {
   }
 
   isCurrentUserTeachingStaffOfConsulting() : boolean {
-    if(this.isCurrentUserATeachingStaff() && this.currentUser != null && this.consulting.plannedTimingAvailability.teachingStaff.user.id == this.currentUser.id) {
+    if(this.isCurrentUserATeachingStaff() && this.currentUser != null && this.consulting.plannedTimingAvailability?.teachingStaff.user.id == this.currentUser.id) {
       return true;
     }
     return false;

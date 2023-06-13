@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Project } from '../../../core/data/models/project.model';
+import { Component, Input } from '@angular/core';
 import { ApiProjectService } from '../../../core/services/api-project.service';
+import { Team } from 'src/app/core/data/models/team.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -9,12 +10,21 @@ import { ApiProjectService } from '../../../core/services/api-project.service';
   styleUrls: ['./subject-validation.component.scss']
 })
 export class SubjectValidationComponent {
-  @Input() project!: Project;
-  constructor(private projectService: ApiProjectService) { }
+  @Input() team!: Team;
+  constructor(
+    private projectService: ApiProjectService,
+    private _snackbar: MatSnackBar
+    ) { }
 
   validateSubject() {
-    this.project.isValidated = true;
-    console.log(this.project);
-    this.projectService.updateProjectValidation(this.project).subscribe(); // TODO call the write fonction
+    this.team.projectDev.isValidated = true;
+    try {
+      this.projectService.updateProjectValidation(this.team.projectDev).subscribe();
+      this._snackbar.open("Le sujet a bien été validé", "Fermer", {
+        duration: 5000,
+      });
+    } catch (error) {
+      this.team.projectDev.isValidated = false;
+    }
   }
 }

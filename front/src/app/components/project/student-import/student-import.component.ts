@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileInput } from 'ngx-material-file-input';
@@ -30,22 +30,24 @@ export class StudentImportComponent {
     });
   }
 
-  upload() {
+  upload(formDirective: FormGroupDirective) {
     this.fileFormControl.setErrors({'apiError': null});
     this.fileFormControl.updateValueAndValidity();
     if(this.studentsForm.invalid){
-      console.log("Invalid form");
+      console.error("Invalid form");
     } else {
       const file_form: FileInput = this.studentsForm.get('file')?.value;
       const file = file_form.files[0];
       this.apiUserService.uploadStudents(file).subscribe(
-        data => {this.showSuccess(data)},
+        data => {this.showSuccess(data, formDirective)},
         error => {this.showError(error)},
       );
     }
   }
   
-  showSuccess(data : User[]) {
+  showSuccess(data : User[], formDirective: FormGroupDirective) {
+    formDirective.resetForm();
+    this.studentsForm.reset();
     let nbStudents = data.length;
     this._snackBar.open(nbStudents + " étudiants ont bien été importés", "Fermer", {
       duration: 5000,

@@ -8,7 +8,6 @@ import { environment } from "../../../environments/environment";
 import { PlannedTimingConsultingAdapter, PlannedTimingConsulting } from "../data/models/planned-timing-consulting.model";
 import { PlannedTimingAvailability, PlannedTimingAvailabilityAdapter } from "../data/models/planned-timing-availability.model";
 import { Consulting, ConsultingAdapter } from "../data/models/consulting.model";
-import { Team } from "../data/models/team.model";
 
 @Injectable({
     providedIn: "root"
@@ -24,7 +23,7 @@ export class ApiConsultingService {
         ) {
     }
 
-    getAllConsultings(): Observable<PlannedTimingConsulting[]> {
+    getAllPlannedTimingConsulting(): Observable<PlannedTimingConsulting[]> {
         const url = `${this.baseUrl}/plannedTiming`;
         return this.http.get<any>(url)
         .pipe(
@@ -84,12 +83,27 @@ export class ApiConsultingService {
 
     setNotesConsulting(consulting: Consulting, notes: string): Observable<Consulting> {
         const formData: FormData = new FormData();
-
-        formData.append('id', consulting.idConsulting.toString());
+        if (consulting.idConsulting != null) {
+            formData.append('id', consulting.idConsulting.toString());
+        } else {
+            formData.append('id', '');
+        }
+        
         formData.append('notes', notes);
         
         const url = `${this.baseUrl}/notes`;
         return this.http.put<Consulting>(url, formData)
+        .pipe(
+            map((data: any) => this.consultingAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
+    createConsulting(consulting: Consulting): Observable<Consulting> {
+        const url = `${this.baseUrl}/createConsulting`;
+        return this.http.put<Consulting>(url, consulting)
         .pipe(
             map((data: any) => this.consultingAdapter.adapt(data))
         )

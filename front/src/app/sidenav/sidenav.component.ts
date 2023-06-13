@@ -22,7 +22,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   fillerNav = Array.from({ length: 5 }, (_, i) => `Nav Item ${i + 1}`);
   navLink = new Array<string>();
 
-  currentUser: User | null = null;
+  currentUser: User | undefined = undefined;
 
   private _mobileQueryListener: () => void;
 
@@ -39,7 +39,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.pageName = 'Accueil';
-    this.userDataService.getCurrentUser().subscribe((user: User | null) => {
+    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
       this.initButtons();
     });
@@ -60,7 +60,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         this.router.navigateByUrl('/');
       }
       // Global
-      this.navLink.push('Tableau de bord');
+      // this.navLink.push('Tableau de bord');
 
       // Option Leader
       if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
@@ -102,11 +102,15 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       if (this.currentUser.getRoles().includes('STUDENT_ROLE')) {
         this.navLink.push('Equipes');
       }
+
+      // Jury Member
+      if (this.currentUser.getRoles().includes('JURY_MEMBER_ROLE')) {
+        this.navLink.push('Commentaires Présentation');
+      }
     }
   }
 
   switchPage(pageName: string) {
-    console.log(pageName);
     this.pageName = pageName;
     switch (pageName) {
       case 'Tableau de bord':
@@ -144,6 +148,9 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'Projet Validation':
         this.router.navigateByUrl('/validation-project');
+        break;
+      case 'Commentaires Présentation':
+        this.router.navigateByUrl('/presentationCommentary');
         break;
       default:
         this.router.navigateByUrl('/dashboard');

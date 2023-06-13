@@ -1,5 +1,7 @@
 package com.caerdydd.taf.models.dto.consulting;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -16,10 +18,10 @@ public class ConsultingDTO {
     private String speciality;
     private String notes;
 
-    @JsonManagedReference(value = "consulting")
+    @JsonManagedReference(value = "availabilities")
     private PlannedTimingAvailabilityDTO plannedTimingAvailability;
 
-    @JsonManagedReference(value = "consultingTiming")
+    @JsonManagedReference(value = "consulting")
     private PlannedTimingConsultingDTO plannedTimingConsulting;
 
     private TeamDTO team;
@@ -31,6 +33,7 @@ public class ConsultingDTO {
     public String toString() {
         return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + "]";
     }
+
 
         
 }

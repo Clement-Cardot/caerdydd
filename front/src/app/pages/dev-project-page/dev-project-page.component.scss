@@ -3,15 +3,18 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 90%;
-  padding: 5% 5%;
+  margin: 2rem;
 }
 
 app-project-file {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: contents;
 }
+
+app-project-description {
+  width: 47rem;
+}
+
 
 #buttonModifyProject {
   margin: 25px 0px;
@@ -27,4 +30,12 @@ app-consulting-info {
 h2 {
   text-align: center;
   margin: 20px;
+}
+
+#cards-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }

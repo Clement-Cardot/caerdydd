@@ -6,11 +6,11 @@ import { PlannedTimingConsulting, PlannedTimingConsultingAdapter } from './plann
 
 export class Consulting {
     constructor(
-        public idConsulting: number,
+        public idConsulting: number | null,
         public speciality: string,
-        public notes: string,
-        public team: Team,
-        public plannedTimingAvailability: PlannedTimingAvailability,
+        public notes: string | null,
+        public team: Team | null,
+        public plannedTimingAvailability: PlannedTimingAvailability | null,
         public plannedTimingConsulting: PlannedTimingConsulting
     ) {}
 }

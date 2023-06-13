@@ -269,8 +269,7 @@ public class TeamController {
     public ResponseEntity<TeamDTO> setTeamMarks(@RequestParam("teamId") Integer id, @RequestParam("teamWorkMark") Integer teamWorkMark,@RequestParam("teamValidationMark") Integer teamValidationMark) {
         logger.info("Process request: Set team marks for team by id: {}", id);
         try {
-            TeamDTO 
-            team = teamService.setTeamWorkMarkById(id, teamWorkMark);
+            TeamDTO team = teamService.setTeamWorkMarkById(id, teamWorkMark);
             team = teamService.setTeamValidationMarkById(id, teamValidationMark);
             return new ResponseEntity<>(team, HttpStatus.OK);
         } catch (CustomRuntimeException e) {

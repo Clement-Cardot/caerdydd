@@ -37,41 +37,60 @@ export class ApiPresentationService {
             );
     }      
 
+    updateJuryNotes(idPresentation: number, note: string): Observable<Presentation> {
+        const url = `${this.baseUrl}/updateJuryNotes`;
+        const requestBody = {
+          idPresentation: idPresentation,
+          note: note
+        };
+        return this.http.post<Presentation>(url, requestBody)
+          .pipe(
+            catchError(this.handleError)
+          );
+      }
+      
+      
     getTeamPresentations(teamId: number): Observable<Presentation[]> {
         const url = `${this.baseUrl}/team/${teamId}`;
         return this.http.get<any[]>(url)
             .pipe(
-                tap((data: any[]) => console.log("Before adaptation:", data)),
-                map((data: any[]) => {
-                    const presentations = data.map(item => this.presentationAdapter.adapt(item));
-                    console.log("After adaptation:", presentations);
-                    return presentations;
-                }),
+                map((data: any[]) => data.map((item) => this.presentationAdapter.adapt(item))),
+            )
+            .pipe(
                 catchError(this.handleError)
             );
     }
-    
-    getTeachingStaffPresentations(staffId: number): Observable<Presentation[]> {
-        const url = `${this.baseUrl}/teachingStaff/${staffId}`;
+
+    getTeamMemberPresentations(userId: number): Observable<Presentation[]> {
+        const url = `${this.baseUrl}/teamMember/${userId}`;
         return this.http.get<any[]>(url)
             .pipe(
-                tap((data: any[]) => console.log("Before adaptation:", data)),
-                map((data: any[]) => {
-                    const presentations = data.map(item => this.presentationAdapter.adapt(item));
-                    console.log("After adaptation:", presentations);
-                    return presentations;
-                }),
+                map((data: any[]) => data.map((item) => this.presentationAdapter.adapt(item)))
+            )
+            .pipe(
                 catchError(this.handleError)
             );
     }
-    
-    
 
-    listAllPresentations(): Observable<Presentation[]> {
+    
+    getTeachingStaffPresentations(userId: number): Observable<Presentation[]> {
+        const url = `${this.baseUrl}/teachingStaff/${userId}`;
+        return this.http.get<any[]>(url)
+            .pipe(
+                map((data: any[]) => data.map((item) => this.presentationAdapter.adapt(item)))
+            )
+            .pipe(
+                catchError(this.handleError)
+            );
+    }
+
+    getAllPresentations(): Observable<Presentation[]> {
         const url = `${this.baseUrl}/all`;
         return this.http.get<any[]>(url)
             .pipe(
-                map((data: any[]) => data.map(item => this.presentationAdapter.adapt(item))),
+                map((data: any[]) => data.map((item) => this.presentationAdapter.adapt(item)))
+            )
+            .pipe(
                 catchError(this.handleError)
             );
     }

@@ -1,3 +1,12 @@
+app-teaching-staff-entity {
+  display: contents;
+}
+
+app-define-speciality {
+  display: flex;
+  justify-content: center;
+}
+
 button {
   background-color: #b0324f;
   color: #fff;
@@ -23,4 +32,11 @@ button {
 
 .name {
   font-weight: bold;
+}
+
+.listTS {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 10px;
 }
