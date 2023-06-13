@@ -4,6 +4,7 @@ import { Presentation } from 'src/app/core/data/models/presentation.model';
 import { Project } from 'src/app/core/data/models/project.model';
 import { ApiPresentationService } from 'src/app/core/services/api-presentation.service';
 import { ApiProjectService } from 'src/app/core/services/api-project.service';
+import { UserDataService } from 'src/app/core/services/user-data.service';
 
 @Component({
   selector: 'app-jury-commentary',
@@ -19,6 +20,7 @@ export class JuryCommentaryComponent {
   presentationDate !: Date;
 
   constructor(private apiPresentationService : ApiPresentationService,
+              private userService : UserDataService,
               private _snackBar: MatSnackBar){}
 
   @Input() presentation!: Presentation;
@@ -26,7 +28,11 @@ export class JuryCommentaryComponent {
   ngOnInit(){
     this.presentationDate = new Date(this.presentation.datetimeBegin);
     this.currentDate = new Date();
-    this.commentary = this.presentation.jury1Notes;
+    if(this.presentation.jury.ts1.idUser == this.userService.getCurrentUser().getValue()?.id){
+      this.commentary = this.presentation.jury1Notes;
+    } else {
+      this.commentary = this.presentation.jury2Notes;
+    }
   }
 
   onSubmit() {

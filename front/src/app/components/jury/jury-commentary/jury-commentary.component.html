@@ -3,8 +3,8 @@
   
     <mat-expansion-panel-header>
         <mat-panel-title> 
-          Projet {{presentation.project.name}} - Présentation {{presentation.type}}
-        </mat-panel-title>
+          Projet {{presentation.project?.name ?? 'Pas encore de projet'}} - Présentation {{presentation.type}}
+        </mat-panel-title>      
         <mat-panel-description>
           {{ presentation.datetimeBegin.getDate().toString().padStart(2, '0') }}
           /{{ (presentation.datetimeBegin.getMonth() + 1).toString().padStart(2, '0') }}

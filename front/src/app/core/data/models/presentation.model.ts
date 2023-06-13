@@ -30,7 +30,7 @@ export class Presentation implements CalendarEvent {
         public jury1Notes: string,
         public jury2Notes: string,
         public jury: Jury,
-        public project: Project
+        public project: Project | undefined
     ) {
         this.id = idPresentation;
         this.start = datetimeBegin;
@@ -67,7 +67,7 @@ export class PresentationAdapter implements Adapter<Presentation> {
             item.jury1Notes,
             item.jury2Notes,
             this.juryAdapter.adapt(item.jury),
-            this.projectAdapter.adapt(item.project)
+            project
         );
     }
 }
