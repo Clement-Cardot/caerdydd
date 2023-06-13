@@ -1,0 +1,40 @@
+.notification-badge {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0 7px;
+  position: relative;
+  top: -10px;
+  left: -10px;
+}
+
+[mat-menu-item] {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.message {
+font-weight: bold;
+}
+
+.read .message {
+font-weight: 300;
+}
+
+.status {
+color: grey;
+font-style: italic;
+}
+
+.menu-bottom {
+display: flex;
+justify-content: flex-end;
+}
+
+.my-notification-component ::ng-deep .mat-badge-content {
+  font-size: 15px;
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+}

@@ -1,9 +1,16 @@
 <div>
   <h2>Consultings en attente d'acceptation</h2>
-  <div class="consulting">
-    <app-consulting-teaching-s-accept
-      *ngFor="let consulting of consultings"
-      [consulting]="consulting"
-    ></app-consulting-teaching-s-accept>
+  <div class="twoColumnDisplay" class="consulting-list">
+    <app-consulting-teaching-s-accept class="consulting" *ngFor="let consulting of consultingWaitingAcceptation" [consulting]="consulting"></app-consulting-teaching-s-accept>
   </div>
+    <h2>Consultings à venir</h2>
+    <div class="twoColumnDisplay" class="consulting-list">
+    <app-consulting-info class="consulting" *ngFor="let consulting of consultingProgrammedList" [consulting]="consulting"></app-consulting-info>
+    </div>
+</div>
+<div>
+    <h2>Consultings finis</h2>
+    <div class="twoColumnDisplay" class="consulting-list">
+    <app-consulting-info class="consulting" *ngFor="let consulting of consultingFinishedList" [consulting]="consulting"></app-consulting-info>
+    </div>
 </div>

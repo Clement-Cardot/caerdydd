@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Adapter } from "../adapter";
+import { Jury, JuryAdapter } from "./jury.model";
 
 export class Project {
     constructor(
@@ -7,7 +8,7 @@ export class Project {
         public name: string,
         public description: string,
         public isValidated: boolean,
-        public teamName?: string,
+        public jury: Jury | null
     ) {}
 }
 
@@ -15,12 +16,20 @@ export class Project {
     providedIn: 'root'
 })
 export class ProjectAdapter implements Adapter<Project>{
+
+    constructor(private juryAdapter: JuryAdapter) { }
+
     adapt(item: any): Project {
+        let jury: Jury | null = null; 
+        if (item.jury) {
+            jury = this.juryAdapter.adapt(item.jury);
+        }
         return new Project(
             item.idProject,
             item.name,
             item.description,
-            item.isValidated
+            item.isValidated,
+            jury
         );
     }
 }

@@ -11,14 +11,16 @@ import {
 } from './planned-timing-consulting.model';
 
 export class Consulting {
+
   constructor(
-    public idConsulting: number,
+    public idConsulting: number | null,
     public speciality: string,
-    public notes: string,
-    public team: Team,
+    public notes: string | null,
+    public team: Team | null,
     public plannedTimingAvailability: PlannedTimingAvailability | null,
     public plannedTimingConsulting: PlannedTimingConsulting
-  ) {}
+) {}
+
 }
 
 @Injectable({
@@ -29,7 +31,7 @@ export class ConsultingAdapter implements Adapter<Consulting> {
     private teamAdapter: TeamAdapter,
     private plannedTimingConsultingAdapter: PlannedTimingConsultingAdapter,
     private plannedTimingAvailabilityAdapter: PlannedTimingAvailabilityAdapter
-  ) {}
+  ) {} 
 
   adapt(item: any): Consulting {
     let plannedTimingAvailability;

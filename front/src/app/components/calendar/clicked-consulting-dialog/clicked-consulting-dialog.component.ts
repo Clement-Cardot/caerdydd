@@ -1,9 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Consulting } from 'src/app/core/data/models/consulting.model';
 import { PlannedTimingAvailability } from 'src/app/core/data/models/planned-timing-availability.model';
 import { PlannedTimingConsulting } from 'src/app/core/data/models/planned-timing-consulting.model';
 import { User } from 'src/app/core/data/models/user.model';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
+import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 
 interface DialogData {
@@ -17,16 +20,19 @@ interface DialogData {
 })
 export class ClickedConsultingDialogComponent {
 
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
   userRole!: string;
   myAvailability!: PlannedTimingAvailability;
+  myConsulting: Consulting;
 
   constructor(
     private apiConsultingService: ApiConsultingService,
     private userDataService: UserDataService,
     public dialogRef: MatDialogRef<ClickedConsultingDialogComponent>,
+    private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
+    this.myConsulting = new Consulting(null, "", null, null, null, data.event);
     this.changeDialogDependingOnUserRole();
   }
 
@@ -53,8 +59,22 @@ export class ClickedConsultingDialogComponent {
   }
 
   submit(){
-    this.apiConsultingService.updateAvailability(this.myAvailability).subscribe();
-    this.dialogRef.close();
+    if (this.userRole == "TEAM_MEMBER_ROLE") {
+      this.apiConsultingService.createConsulting(this.myConsulting).subscribe(
+        (response) => {
+          this.dialogRef.close(response);
+          this._snackBar.open("Session de consulting demandée", "Fermer", {
+            duration: 5000,
+          });
+        }
+      );
+    } else if (this.userRole == "TEACHING_STAFF_ROLE") {
+      this.apiConsultingService.updateAvailability(this.myAvailability).subscribe(
+        (response) => {
+          this.dialogRef.close(response);
+        }
+      );
+    }
   }
 
   onNoClick(): void {

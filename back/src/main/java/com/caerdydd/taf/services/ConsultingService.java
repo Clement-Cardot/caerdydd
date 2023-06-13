@@ -15,20 +15,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
-import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
+import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
-import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
 import com.caerdydd.taf.repositories.PlannedTimingAvailabilityRepository;
 import com.caerdydd.taf.repositories.PlannedTimingConsultingRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.ConsultingRules;
 import com.caerdydd.taf.services.rules.FileRules;
+import com.caerdydd.taf.services.rules.TeamServiceRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -50,16 +52,25 @@ public class ConsultingService {
     private TeachingStaffService teachingStaffService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
     private UserServiceRules userServiceRules;
 
     @Autowired
-    private FileRules fileRules;
+    private TeamServiceRules teamServiceRules;
 
     @Autowired
     private ConsultingRules consultingRules;
+
+    @Autowired
+    private FileRules fileRules;
 
     // List all planned timing for consultings
     public List<PlannedTimingConsultingDTO> listAllPlannedTimingConsultings() throws CustomRuntimeException {
@@ -72,18 +83,7 @@ public class ConsultingService {
         }
     }
 
-    // List all planned timing for availabilities
-    public List<PlannedTimingAvailabilityDTO> listAllPlannedTimingAvailabilities() throws CustomRuntimeException {
-        try {
-            return plannedTimingAvailabilityRepository.findAll().stream()
-                        .map(plannedTimingAvailabilityEntity -> modelMapper.map(plannedTimingAvailabilityEntity, PlannedTimingAvailabilityDTO.class))
-                        .collect(Collectors.toList()) ;
-        } catch (Exception e) {
-            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
-        }
-    }
-
-    // List all consultings
+    // List all ConsulingDTO
     public List<ConsultingDTO> listAllConsultings() throws CustomRuntimeException {
         try {
             return consultingRepository.findAll().stream()
@@ -112,22 +112,22 @@ public class ConsultingService {
     }
 
     // Get a planned timing consulting by id
-    public PlannedTimingConsultingDTO getPlannedTimingConsultingById(Integer id) throws CustomRuntimeException {
-        Optional<PlannedTimingConsultingEntity> optionalPTC;
+    public PlannedTimingConsultingDTO getPlannedTimingConsultingById(Integer id) throws CustomRuntimeException{
+        Optional<PlannedTimingConsultingEntity> optionalPlannedTimingConsulting;
         try {
-            optionalPTC = plannedTimingConsultingRepository.findById(id);
+            optionalPlannedTimingConsulting = plannedTimingConsultingRepository.findById(id);
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
-    
-        if (optionalPTC.isEmpty()) {
+
+        if (optionalPlannedTimingConsulting.isEmpty()) {
             throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_CONSULTING_NOT_FOUND);
         }
     
-        PlannedTimingConsultingEntity consultingEntity = optionalPTC.get();
+        PlannedTimingConsultingEntity consultingEntity = optionalPlannedTimingConsulting.get();
         return modelMapper.map(consultingEntity, PlannedTimingConsultingDTO.class);
     }
-
+    
     // Get a consulting by id
     public ConsultingDTO getConsultingById(Integer id) throws CustomRuntimeException {
         Optional<ConsultingEntity> optionalConsulting;
@@ -138,7 +138,7 @@ public class ConsultingService {
         }
     
         if (optionalConsulting.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND);
+            throw new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND);
         }
     
         ConsultingEntity consultingEntity = optionalConsulting.get();
@@ -313,7 +313,7 @@ public class ConsultingService {
 
     // Update a consulting
     public ConsultingDTO updateConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {
-        List<PlannedTimingAvailabilityDTO> listPTA = listAllPlannedTimingAvailabilities();
+        List<PlannedTimingAvailabilityDTO> listPTA = listAllPlannedTimingAvailabilities(); //TODO use a repository request
         Integer idPlannedTC = consultingDTO.getPlannedTimingConsulting().getIdPlannedTimingConsulting();
         UserDTO user = userServiceRules.getCurrentUser();
         // Verify that user is a Teaching staff
@@ -334,4 +334,76 @@ public class ConsultingService {
         return saveConsulting(consultingDTO);
     }
 
+    // Create a consulting
+    public ConsultingDTO createConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {
+
+        // Verify that user is a Team Member
+        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+
+        // Check if user is in the team
+        UserDTO currentUser = this.userService.getUserById(userServiceRules.getCurrentUser().getId());
+        TeamDTO team = currentUser.getTeamMember().getTeam();
+
+        teamServiceRules.checkIfUserIsMemberOfTeam(team);
+
+        ConsultingDTO consulting = new ConsultingDTO();
+        consulting.setSpeciality(consultingDTO.getSpeciality());
+        consulting.setPlannedTimingConsulting(getPlannedTimingConsultingById(consultingDTO.getPlannedTimingConsulting().getIdPlannedTimingConsulting()));
+        consulting.setTeam(team);
+
+        consultingRules.checkDemandIsMadeOnTime(consulting);
+
+        return saveConsulting(consulting);
+    }
+
+    // Get all the finished consultings of the current teaching staff
+    public List<ConsultingDTO> getConsultingsForCurrentTeachingStaff() throws CustomRuntimeException {
+
+        // Verify that user is a Teaching staff
+        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Get all consultings
+        List<ConsultingDTO> consultings = listAllConsultings();
+
+        // Get all consultings for the current teaching staff
+        List<ConsultingDTO> consultingsCurrentTeachingStaff = new ArrayList<>();
+        for(ConsultingDTO consulting : consultings) {
+            if(consulting.getPlannedTimingAvailability().getTeachingStaff().getIdUser().equals(userServiceRules.getCurrentUser().getId())) {
+                consultingsCurrentTeachingStaff.add(consulting);
+            }
+        }
+
+        return consultingsCurrentTeachingStaff;
+    }
+
+    // Get all the consultings for a team
+    public List<ConsultingDTO> getConsultingsForATeam(Integer idTeam) throws CustomRuntimeException {
+        
+        TeamDTO teamDTO = teamService.getTeamById(idTeam);
+
+        // Verify that user has access to the information
+        List<String> roles = new ArrayList<>();
+        roles.add("TEACHING_STAFF_ROLE");
+        roles.add("TEAM_MEMBER_ROLE");
+        userServiceRules.checkCurrentUserRoles(roles);
+
+        // Verify that user is a member of the team
+        if(userServiceRules.getCurrentUser().getRoles().stream().anyMatch(r -> r.getRole().equals("TEAM_MEMBER_ROLE"))) {
+            teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
+        }
+
+        // Get all consultings
+        List<ConsultingDTO> consultings = listAllConsultings();
+
+        // Get all consultings for a team
+        List<ConsultingDTO> consultingsForTeam = new ArrayList<>();
+        for(ConsultingDTO consulting : consultings) {
+            if(consulting.getTeam().getIdTeam().equals(teamDTO.getIdTeam())) {
+                consultingsForTeam.add(consulting);
+            }
+        }
+
+        return consultingsForTeam;
+    }
+        
 }

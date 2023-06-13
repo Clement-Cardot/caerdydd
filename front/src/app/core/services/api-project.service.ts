@@ -52,7 +52,7 @@ export class ApiProjectService {
         );
     }
 
-    getAllSubjects(): Observable<Project[]> {
+    getAllProjects(): Observable<Project[]> {
         return this.http.get<any[]>(this.baseUrl)
         .pipe(
             map((data: any[]) => data.map((item) => this.projectAdapter.adapt(item)))

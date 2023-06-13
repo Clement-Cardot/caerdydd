@@ -8,37 +8,41 @@ import { ApiConsultingService } from 'src/app/core/services/api-consulting.servi
   styleUrls: ['./consulting-page.component.scss'],
 })
 export class ConsultingPageComponent {
-  consultingsInfra: Consulting[] = [];
-  consultingsDev: Consulting[] = [];
-  consultingsModeling: Consulting[] = [];
-
-  consultings: Consulting[] = [];
-
-  constructor(private apiConsultingService: ApiConsultingService) {}
+  consultingFinishedList: Consulting[] = [];
+  consultingProgrammedList: Consulting[] = [];
+  consultingWaitingAcceptation: Consulting[] = [];
+  
+  constructor(private apiConsultingService: ApiConsultingService) { }
 
   ngOnInit(): void {
-    this.getAllConsultings();
+    this.getAllConsultingsForCurrentTeachingStaff();
   }
 
-  getAllConsultings() {
-    this.apiConsultingService.getAllConsultings().subscribe((data) => {
-      console.log(data);
-      this.consultingsDev = data.filter((c) => c.speciality == 'Développement');
-      this.consultingsInfra = data.filter(
-        (c) => c.speciality == 'Infrastructure'
-      );
-      this.consultingsModeling = data.filter(
-        (c) => c.speciality == 'Modélisation'
-      );
-      console.log('Infra :' + this.consultingsInfra);
-      console.log('Dev :' + this.consultingsDev);
-      console.log('Model :' + this.consultingsModeling);
-      this.consultings = this.consultings.concat(
-        this.consultingsInfra,
-        this.consultingsDev,
-        this.consultingsModeling
-      );
-      console.log('Consultings :' + this.consultings);
-    });
+  getAllConsultingsForCurrentTeachingStaff(){
+    this.apiConsultingService.getConsultingForCurrentTeachingStaff()
+        .subscribe(data => {
+            this.sortConsulting(data);
+          }
+        );
+
+    this.apiConsultingService.getAllWaitingAcceptationConsultings()
+    .subscribe(data => {
+        this.consultingWaitingAcceptation = data;
+      }
+    );
   }
+
+  sortConsulting(consultingList: Consulting[]) : void {
+    for(let consulting of consultingList) {
+      if(consulting.plannedTimingConsulting.datetimeEnd.getTime() < new Date().getTime()) {
+        this.consultingFinishedList.push(consulting);
+      } else {
+        console.log("Consulting à venir")
+        this.consultingProgrammedList.push(consulting);
+      }
+    }
+    this.consultingFinishedList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());
+    this.consultingProgrammedList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());
+  }
+
 }

@@ -18,7 +18,7 @@ CREATE TABLE user (
 CREATE TABLE role (
     id_role INT NOT NULL AUTO_INCREMENT,
     id_user INT NOT NULL,
-    role ENUM('STUDENT_ROLE', 'TEAM_MEMBER_ROLE', 'PLANNING_ROLE', 'TEACHING_STAFF_ROLE', 'OPTION_LEADER_ROLE') NOT NULL,
+    role ENUM('STUDENT_ROLE', 'TEAM_MEMBER_ROLE', 'PLANNING_ROLE', 'TEACHING_STAFF_ROLE', 'OPTION_LEADER_ROLE', 'JURY_MEMBER_ROLE') NOT NULL,
     FOREIGN KEY (id_user) REFERENCES user (id),
     PRIMARY KEY(id_role)
 );
@@ -46,7 +46,7 @@ CREATE TABLE jury (
 CREATE TABLE project (
     id_project INT NOT NULL AUTO_INCREMENT, 
     name VARCHAR(20) NOT NULL,
-    description VARCHAR(250),
+    description VARCHAR(1000),
     is_validated BOOLEAN NOT NULL,
     id_jury INT,
     PRIMARY KEY(id_project),
@@ -55,9 +55,9 @@ CREATE TABLE project (
 
 CREATE TABLE presentation (
     id_presentation INT NOT NULL AUTO_INCREMENT, 
-    type ENUM('intermediate', 'final'),
-    datetime_begin DATE NOT NULL,
-    datetime_end DATE NOT NULL,
+    type ENUM('Présentation intermédiaire', 'Présentation finale','Audit CSS','Audit LD'),
+    datetime_begin DATETIME NOT NULL,
+    datetime_end DATETIME NOT NULL,
     room VARCHAR(20) NOT NULL,
     jury1_notes VARCHAR(250),
     jury2_notes VARCHAR(250),
@@ -78,6 +78,8 @@ CREATE TABLE team (
     file_path_final_scope_statement VARCHAR(100),
     file_path_scope_statement_analysis VARCHAR(100),
     file_path_report VARCHAR(100),
+    is_report_annotation BOOLEAN,
+    report_comments VARCHAR(4000),
     id_project_dev INT NOT NULL,
     id_project_validation INT NOT NULL,
     PRIMARY KEY(id_team),
@@ -102,9 +104,10 @@ CREATE TABLE planned_timing_availability (
     FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user)
 );
 
+
 CREATE TABLE consulting (
     id_consulting INT NOT NULL AUTO_INCREMENT,
-    speciality ENUM('infrastructure', 'development', 'modeling'),
+    speciality ENUM('Infrastructure', 'Développement', 'Modélisation'),
     notes VARCHAR(250),
     id_team INT NOT NULL,
     id_planned_timing_availability INT,
@@ -114,6 +117,8 @@ CREATE TABLE consulting (
     FOREIGN KEY (id_planned_timing_availability) REFERENCES planned_timing_availability (id_planned_timing_availability),
     FOREIGN KEY (id_planned_timing_consulting) REFERENCES planned_timing_consulting (id_planned_timing_consulting)
 );
+
+
 
 CREATE TABLE team_member (
     id_user INT NOT NULL,
@@ -130,14 +135,7 @@ CREATE TABLE notification (
     message VARCHAR(250) NOT NULL,
     link VARCHAR(100), 
     id_user INT NOT NULL,
+    is_read BOOLEAN NOT NULL,
     PRIMARY KEY(id_notification),
     FOREIGN KEY (id_user) REFERENCES user (id)
-);
-
-CREATE TABLE assigned_consulting (
-    id_ts INT NOT NULL,
-    id_consulting INT NOT NULL,
-    PRIMARY KEY(id_ts, id_consulting),
-    FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user),
-    FOREIGN KEY (id_consulting) REFERENCES consulting (id_consulting)
 );

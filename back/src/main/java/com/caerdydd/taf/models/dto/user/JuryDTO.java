@@ -1,6 +1,12 @@
 package com.caerdydd.taf.models.dto.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,10 +18,19 @@ import lombok.Setter;
 public class JuryDTO {
     private Integer idJury;
 
+    // @JsonIgnore
     private TeachingStaffDTO ts1;
     
+    // @JsonIgnore
     private TeachingStaffDTO ts2;
 
+    // @JsonGetter("teachingStaff")
+    // private List<TeachingStaffDTO> teachingStaff(){
+    //     List<TeachingStaffDTO> teachingStaff = new ArrayList<>();
+    //     teachingStaff.add(ts1);
+    //     teachingStaff.add(ts2);
+    //     return teachingStaff;
+    // }
 
     public JuryDTO() {
     }

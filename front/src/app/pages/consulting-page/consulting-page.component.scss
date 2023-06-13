@@ -1,16 +1,15 @@
-#consulting {
-  padding: 10px;
+.consulting-list {
+    padding: 10px;
 }
 
-app-consulting-teaching-s-accept {
+.consulting {
   margin: 5px;
   display: grid;
   justify-items: center;
   align-content: start;
-  display: inline-flex;
 }
 
 h2 {
-  text-align: center;
-  margin: 10px;
+    text-align: center;
+    margin: 10px;
 }

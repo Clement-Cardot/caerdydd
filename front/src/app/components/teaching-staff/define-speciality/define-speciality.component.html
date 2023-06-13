@@ -1,0 +1,34 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h3>Modifier vos spécialités</h3>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="checkboxList" *ngIf="teachingStaff">
+      <mat-checkbox [(ngModel)]="teachingStaff.isInfrastructureSpecialist">
+        <div>
+          <mat-icon aria-hidden="false">router</mat-icon>
+          <label>Infrastructure</label>
+        </div>
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="teachingStaff.isDevelopmentSpecialist">
+        <div>
+          <mat-icon aria-hidden="false">laptop</mat-icon>
+          <label>Développement</label>
+        </div>
+      </mat-checkbox>
+      <mat-checkbox [(ngModel)]="teachingStaff.isModelingSpecialist">
+        <div>
+          <mat-icon aria-hidden="false">create</mat-icon>
+          <label>Modélisation</label>
+        </div>
+      </mat-checkbox>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" id="buttonModifySpeciality" (click)="modifySpeciality()">
+      Valider
+    </button>
+  </mat-card-actions>
+</mat-card>

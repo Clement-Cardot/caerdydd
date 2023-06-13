@@ -1,6 +1,7 @@
 package com.caerdydd.taf.services.rules;
 
 import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
@@ -37,9 +38,15 @@ public class ConsultingRules {
 
     public void checkConsultingIsNotAlreadyTaken(ConsultingDTO consulting) throws CustomRuntimeException{
         if (consulting.getPlannedTimingAvailability() != null){
-            throw new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN);
+            this.checkPlannedTimingIsNotAlreadyTaken(consulting.getPlannedTimingAvailability());
         }
     }
 
+    public void checkDemandIsMadeOnTime(ConsultingDTO consultingDTO) throws CustomRuntimeException{
+        // Check if the demand is made two days under 48h before the consulting
+        if (consultingDTO.getPlannedTimingConsulting().getDatetimeEnd().minusDays(2).isBefore(LocalDateTime.now())){
+            throw new CustomRuntimeException(CustomRuntimeException.DEMAND_IS_MADE_TOO_LATE);
+        }
+    }
     
 }

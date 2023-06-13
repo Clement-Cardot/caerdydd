@@ -1,6 +1,18 @@
-<div id="dev-projectComponent">
-  <app-project-file></app-project-file>
-  <button id="buttonModifyProject" mat-raised-button color="primary" routerLink="/projectD">Modifier le projet de développement</button>
+<div id="dev-projectComponent" *ngIf="team != undefined">
+  <app-project-description [team]="team"></app-project-description>
+  <div id="cards-list">
+    <app-project-file [team]="team" [fileName]="'teamScopeStatement'" (updatableEvent)="getData()"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'analysis'" (updatableEvent)="getData()"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'finalTeamScopeStatement'" (updatableEvent)="getData()"></app-project-file>
+    <app-project-file [team]="team" [fileName]="'report'" (updatableEvent)="getData()"></app-project-file>
+    <app-test-book-link [team]="team" (updatableEvent)="getData()"></app-test-book-link>
+  </div>
+  <div>
+    <h2>Consultings</h2>
+    <div class="twoColumnDisplay" id="consulting-list">
+      <app-consulting-info *ngFor="let consulting of consultingsList" [consulting]="consulting"></app-consulting-info>
+    </div>
+  </div>
 </div>
 
 

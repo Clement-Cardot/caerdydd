@@ -1,0 +1,17 @@
+<mat-card>
+    <mat-card-header> 
+        <mat-card-title>
+            <h3>Jury n°{{jury.idJury}}</h3> 
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="teacher">
+            <mat-icon>person</mat-icon>
+            <span>{{jury.ts1.user.firstname}} {{jury.ts1.user.lastname}}</span>
+        </div>
+        <div class="teacher">
+            <mat-icon>person</mat-icon>
+            <span>{{jury.ts2.user.firstname}} {{jury.ts2.user.lastname}}</span>
+        </div>
+    </mat-card-content>
+</mat-card>
