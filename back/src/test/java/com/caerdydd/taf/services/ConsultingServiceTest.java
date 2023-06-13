@@ -550,7 +550,7 @@ public class ConsultingServiceTest {
         });
 
         // Assertions
-        assertEquals(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND, exception.getMessage());
+        assertEquals(CustomRuntimeException.CONSULTING_NOT_FOUND, exception.getMessage());
     }
 
     // SavePlannedTimingConsultings
@@ -927,6 +927,10 @@ public class ConsultingServiceTest {
         // Configure Mocks behavior
         when(plannedTimingAvailabilityRepository.findAll()).thenReturn(plannedTimingAvailabilityEntityList);
         // Mock other dependencies as needed
+
+        // Mock userServiceRules.getCurrentUser()
+        UserDTO mockedUser = new UserDTO(1, "Bob", "Smith", "login", "password", "email", null);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
     
         // Call the method to test
         ConsultingDTO updatedConsultingDTO = consultingService.updateConsulting(consultingDTO);

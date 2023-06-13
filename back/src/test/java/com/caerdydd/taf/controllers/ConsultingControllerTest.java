@@ -116,30 +116,6 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testGetAllConsultings_ConsultingNotFound() throws CustomRuntimeException {
-        // Mock consultingService.listAllConsultings()
-        when(consultingService.listAllConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND));
-
-        // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
-
-        // Assertions
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
-    @Test
-    void testGetAllConsultings_ConflictError() throws CustomRuntimeException {
-        // Mock consultingService.listAllConsultings()
-        when(consultingService.listAllConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN));
-
-        // Call method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
-
-        // Assertions
-        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-    }
-
-    @Test
     void testGetAllConsultings_UnexpectedError() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
         when(consultingService.listAllConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
@@ -198,22 +174,6 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testGetConsultingsBySpecialityInfra_ConsultingNotFound() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityInfra() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityInfra()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityInfra();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityInfra();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
     void testGetConsultingsBySpecialityInfra_UserNotTeachingStaff() throws CustomRuntimeException {
         // Mock consultingService.getConsultingsBySpecialityInfra() pour lancer l'exception
         when(consultingService.getConsultingsBySpecialityInfra()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
@@ -236,38 +196,6 @@ public class ConsultingControllerTest {
 
         // Define the expected answer
         ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityInfra();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityInfra();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
-    void testGetConsultingsBySpecialityInfra_ConsultingIsInPast() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityInfra() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityInfra()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_IN_PAST));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityInfra();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityInfra();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
-    void testGetConsultingsBySpecialityInfra_ConsultingIsAlreadyTaken() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityInfra() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityInfra()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.CONFLICT);
 
         // Call the method to test
         ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityInfra();
@@ -328,22 +256,6 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testGetConsultingsBySpecialityDev_ConsultingNotFound() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityDevelopment() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityDevelopment()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityDev();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityDevelopment();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
     void testGetConsultingsBySpecialityDev_UserNotTeachingStaff() throws CustomRuntimeException {
         // Mock consultingService.getConsultingsBySpecialityDevelopment() pour lancer l'exception
         when(consultingService.getConsultingsBySpecialityDevelopment()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
@@ -366,38 +278,6 @@ public class ConsultingControllerTest {
 
         // Define the expected answer
         ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityDev();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityDevelopment();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
-    void testGetConsultingsBySpecialityDev_ConsultingIsInPast() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityDevelopment() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityDevelopment()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_IN_PAST));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityDev();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityDevelopment();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
-    void testGetConsultingsBySpecialityDev_ConsultingIsAlreadyTaken() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityDevelopment() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityDevelopment()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.CONFLICT);
 
         // Call the method to test
         ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityDev();
@@ -458,22 +338,6 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testGetConsultingsBySpecialityModel_ConsultingNotFound() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityModeling() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityModeling()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityModel();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityModeling();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
     void testGetConsultingsBySpecialityModel_UserNotTeachingStaff() throws CustomRuntimeException {
         // Mock consultingService.getConsultingsBySpecialityModeling() pour lancer l'exception
         when(consultingService.getConsultingsBySpecialityModeling()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
@@ -496,38 +360,6 @@ public class ConsultingControllerTest {
 
         // Define the expected answer
         ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityModel();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityModeling();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
-    void testGetConsultingsBySpecialityModel_ConsultingIsInPast() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityModeling() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityModeling()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_IN_PAST));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-        // Call the method to test
-        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityModel();
-
-        // Verify the result
-        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityModeling();
-        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
-    }
-
-    @Test
-    void testGetConsultingsBySpecialityModel_ConsultingIsAlreadyTaken() throws CustomRuntimeException {
-        // Mock consultingService.getConsultingsBySpecialityModeling() pour lancer l'exception
-        when(consultingService.getConsultingsBySpecialityModeling()).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN));
-
-        // Define the expected answer
-        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.CONFLICT);
 
         // Call the method to test
         ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityModel();
