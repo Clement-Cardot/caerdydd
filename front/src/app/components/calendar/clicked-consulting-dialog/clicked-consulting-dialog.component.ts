@@ -1,10 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Consulting } from 'src/app/core/data/models/consulting.model';
 import { PlannedTimingAvailability } from 'src/app/core/data/models/planned-timing-availability.model';
 import { PlannedTimingConsulting } from 'src/app/core/data/models/planned-timing-consulting.model';
-import { Team } from 'src/app/core/data/models/team.model';
 import { User } from 'src/app/core/data/models/user.model';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
@@ -28,9 +27,9 @@ export class ClickedConsultingDialogComponent {
 
   constructor(
     private apiConsultingService: ApiConsultingService,
-    private apiTeamService: ApiTeamService,
     private userDataService: UserDataService,
     public dialogRef: MatDialogRef<ClickedConsultingDialogComponent>,
+    private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
     this.myConsulting = new Consulting("", this.data.event);
@@ -61,10 +60,12 @@ export class ClickedConsultingDialogComponent {
 
   submit(){
     if (this.userRole == "TEAM_MEMBER_ROLE") {
-      // TODO: send datas to DB
       this.apiConsultingService.createConsulting(this.myConsulting).subscribe(
         (response) => {
           this.dialogRef.close(response);
+          this._snackBar.open("Session de consulting demandée", "Fermer", {
+            duration: 5000,
+          });
         }
       );
     } else if (this.userRole == "TEACHING_STAFF_ROLE") {
