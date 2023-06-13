@@ -51,6 +51,7 @@ public class CustomRuntimeException extends Exception{
     public static final String TEACHING_STAFF_IS_NOT_AVAILABLE = "Teaching staff is not available";
     public static final String TEAM_MEMBER_INCORRECT_INDIVIDUAL_MARK = "The individual mark of the team member is under 0 or above 10";
     public static final String TEAM_MEMBER_INCORRECT_TEAM_MARK = "The team mark of the team member is under 0 or above 5";
+    public static final String USER_IS_NOT_OWNER_OF_CONSULTING = "User is not owner of consulting";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
@@ -74,6 +75,7 @@ public class CustomRuntimeException extends Exception{
 
     //time 
     public static final String PRESENTATION_END_BEFORE_BEGIN = "Presentation end time is before its start time.";
+    public static final String CONSULTING_NOT_FINISHED = "Consulting is not finished.";
     
 
     public CustomRuntimeException(String message) {

@@ -113,6 +113,26 @@ public class ConsultingController {
         
     }
 
+    @PutMapping("/notes")
+    public ResponseEntity<ConsultingDTO> setNotesConsulting(@RequestBody ConsultingDTO consulting, @RequestParam String notes) {
+        logger.info("Process request : Set notes consulting");
+        try {
+            ConsultingDTO savedConsultingDTO = consultingService.setNotesConsulting(consulting, notes);
+            return new ResponseEntity<>(savedConsultingDTO, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
+                case CustomRuntimeException.USER_IS_NOT_OWNER_OF_CONSULTING:
+                case CustomRuntimeException.CONSULTING_NOT_FINISHED:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }
+
     @PostMapping("/availability")
     public ResponseEntity<PlannedTimingAvailabilityDTO> updateAvailability(@RequestBody PlannedTimingAvailabilityDTO plannedTimingAvailabilityDTO) {
         logger.info("Process request : Update availability");

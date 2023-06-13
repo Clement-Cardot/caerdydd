@@ -21,6 +21,7 @@ import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingConsultingEntity;
 import com.caerdydd.taf.repositories.ConsultingRepository;
@@ -204,6 +205,15 @@ public class ConsultingService {
         return savePlannedTimingAvailability(plannedTimingAvailability);
     }
 
+     //Save a consulting
+    public ConsultingDTO saveConsulting(ConsultingDTO consulting) {
+        ConsultingEntity consultingEntity = modelMapper.map(consulting, ConsultingEntity.class);
+
+        ConsultingEntity response = consultingRepository.save(consultingEntity);
+
+        return modelMapper.map(response, ConsultingDTO.class);
+    }
+
     // Get all the finished consultings of the current teaching staff
     public List<ConsultingDTO> getConsultingsForCurrentTeachingStaff() throws CustomRuntimeException {
 
@@ -252,6 +262,28 @@ public class ConsultingService {
         }
 
         return consultingsForTeam;
+    }
+
+    // Add notes to a consulting
+    public ConsultingDTO setNotesConsulting(ConsultingDTO consulting, String notesConsulting) throws CustomRuntimeException {
+        
+        // Check if the user is teaching staff
+        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Check if the user is the teaching staff assigned to the consulting
+        if(consulting.getPlannedTimingAvailability().getTeachingStaff().getIdUser().equals(userServiceRules.getCurrentUser().getId())) {
+            // Vérifier que le consulting est fini
+            if(consulting.getPlannedTimingConsulting().getDatetimeEnd().isBefore(LocalDateTime.now())) {
+                consulting.setNotes(notesConsulting);
+                saveConsulting(consulting);
+                return consulting;
+            } else {
+                throw new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FINISHED);
+            }
+        } else {
+            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_CONSULTING);
+        }
+
     }
         
 }
