@@ -18,8 +18,6 @@ import java.util.Optional;
 
 @Service
 public class PresentationServiceRule {
-
-
     @Autowired
     private JuryRepository juryRepository;
 
@@ -59,13 +57,15 @@ public class PresentationServiceRule {
         }
     }
     
-    
     public void checkPresentationTimeframe(LocalDateTime begin, LocalDateTime end) throws CustomRuntimeException {
         if (end.isBefore(begin)) {
             throw new CustomRuntimeException(CustomRuntimeException.PRESENTATION_END_BEFORE_BEGIN);
         }
     }
 
-
-
+    public void checkDateBeginPassed(LocalDateTime dateBegin) throws CustomRuntimeException{
+        if(LocalDateTime.now().isBefore(dateBegin)){
+            throw new CustomRuntimeException(CustomRuntimeException.PRESENTATION_DID_NOT_BEGIN);
+        }
+    }
 }

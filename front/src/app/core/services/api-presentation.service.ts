@@ -37,6 +37,19 @@ export class ApiPresentationService {
             );
     }      
 
+    updateJuryNotes(idPresentation: number, note: string): Observable<Presentation> {
+        const url = `${this.baseUrl}/updateJuryNotes`;
+        const requestBody = {
+          idPresentation: idPresentation,
+          note: note
+        };
+        return this.http.post<Presentation>(url, requestBody)
+          .pipe(
+            catchError(this.handleError)
+          );
+      }
+      
+      
     getTeamPresentations(teamId: number): Observable<Presentation[]> {
         const url = `${this.baseUrl}/team/${teamId}`;
         return this.http.get<any[]>(url)

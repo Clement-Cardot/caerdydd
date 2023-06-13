@@ -3,38 +3,53 @@ package com.caerdydd.taf.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.caerdydd.taf.models.dto.project.PresentationDTO;
 import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.user.JuryDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.project.TeamEntity;
 import com.caerdydd.taf.models.entities.user.JuryEntity;
+import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
+import com.caerdydd.taf.models.entities.user.TeamMemberEntity;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.repositories.PresentationRepository;
 import com.caerdydd.taf.repositories.ProjectRepository;
@@ -221,8 +236,6 @@ void testCreatePresentation_Nominal() throws CustomRuntimeException {
     doNothing().when(userServiceRules).checkCurrentUserRole("PLANNING_ROLE");
     doNothing().when(presentationServiceRule).checkPresentationTimeframe(presentationDTO.getDatetimeBegin(), presentationDTO.getDatetimeEnd());
     doNothing().when(presentationServiceRule).checkTeachingStaffAvailability(presentationDTO.getJury().getIdJury(), presentationDTO.getDatetimeBegin(), presentationDTO.getDatetimeEnd());
-    when(projectRepository.findById(presentationDTO.getProject().getIdProject())).thenReturn(Optional.of(projectEntity));
-    when(juryRepository.findById(presentationDTO.getJury().getIdJury())).thenReturn(Optional.of(juryEntity));
 
     // Call method
     PresentationDTO result = presentationService.createPresentation(presentationDTO);
@@ -235,9 +248,6 @@ void testCreatePresentation_Nominal() throws CustomRuntimeException {
     assertEquals(presentationDTO.getProject().getIdProject(), result.getProject().getIdProject());
     assertEquals(presentationDTO.getDatetimeBegin(), result.getDatetimeBegin());
     assertEquals(presentationDTO.getDatetimeEnd(), result.getDatetimeEnd());
-
-    assertNotNull(projectEntity.getJury());
-    assertEquals(juryEntity.getIdJury(), projectEntity.getJury().getIdJury());
 }
 
     
@@ -358,7 +368,157 @@ void testGetTeamPresentations_ServiceError() {
     verify(presentationRepository, times(2)).findByProject(any(ProjectEntity.class)); 
 }
 
+    @Test
+    void testSetJury1Notes_Nominal() throws CustomRuntimeException {
+        PresentationEntity presentation = new PresentationEntity();
+        PresentationDTO presentationDTO = new PresentationDTO();
 
+        String notes = "test";
+        presentation.setJury1Notes((notes));
 
+        ArgumentCaptor<PresentationEntity> captor = ArgumentCaptor.forClass(PresentationEntity.class);
+        when(presentationRepository.save(captor.capture())).thenReturn(presentation);
 
+        Optional<PresentationEntity> mockedPresentation = Optional.of(presentation);
+        when(presentationRepository.findById(mockedPresentation.get().getIdPresentation())).thenReturn(mockedPresentation);
+
+        presentationService.setJury1Notes(presentationDTO, notes);
+        assertEquals(notes, captor.getValue().getJury1Notes());
+    }
+
+    @Test
+    void testSetJury2Notes_Nominal() throws CustomRuntimeException {
+        PresentationEntity presentation = new PresentationEntity();
+        PresentationDTO presentationDTO = new PresentationDTO();
+
+        String notes = "test";
+        presentation.setJury2Notes((notes));
+
+        ArgumentCaptor<PresentationEntity> captor = ArgumentCaptor.forClass(PresentationEntity.class);
+        when(presentationRepository.save(captor.capture())).thenReturn(presentation);
+
+        Optional<PresentationEntity> mockedPresentation = Optional.of(presentation);
+        when(presentationRepository.findById(mockedPresentation.get().getIdPresentation())).thenReturn(mockedPresentation);
+
+        presentationService.setJury2Notes(presentationDTO, notes);
+        assertEquals(notes, captor.getValue().getJury2Notes());
+    }
+
+    @Test
+    void testSetJuryNotes_Nominal_ts1() throws CustomRuntimeException {
+        UserDTO user1 = new UserDTO();
+        user1.setId(1);   
+        UserDTO user2 = new UserDTO();
+        user2.setId(2); 
+        
+        TeachingStaffDTO ts1 = new TeachingStaffDTO(user1);
+        TeachingStaffDTO ts2 = new TeachingStaffDTO(user2);
+
+        JuryDTO jury = new JuryDTO(ts1, ts2);
+
+        UserEntity user1Entity = new UserEntity();
+        user1Entity.setId(1);   
+        UserEntity user2Entity = new UserEntity();
+        user2Entity.setId(2); 
+        
+        TeachingStaffEntity ts1Entity = new TeachingStaffEntity(user1Entity);
+        TeachingStaffEntity ts2Entity = new TeachingStaffEntity(user2Entity);
+
+        JuryEntity juryEntity = new JuryEntity(ts1Entity, ts2Entity);
+
+        PresentationEntity presentation = new PresentationEntity();
+        PresentationDTO presentationDTO = new PresentationDTO();
+
+        String notes = "test";
+        presentation.setJury1Notes((notes));
+        presentationDTO.setJury1Notes((notes));
+
+        presentation.setIdPresentation(1);
+        presentation.setJury(juryEntity);
+
+        presentationDTO.setIdPresentation(1);
+        presentationDTO.setJury(jury);
+
+        ArgumentCaptor<PresentationEntity> captor = ArgumentCaptor.forClass(PresentationEntity.class);
+        when(presentationRepository.save(captor.capture())).thenReturn(presentation);
+
+        Optional<PresentationEntity> mockedPresentation = Optional.of(presentation);
+        when(presentationRepository.findById(mockedPresentation.get().getIdPresentation())).thenReturn(mockedPresentation);
+
+        // Mock des méthodes et comportements nécessaires
+        doNothing().when(presentationServiceRule).checkDateBeginPassed(any());
+        when(userServiceRules.getCurrentUser()).thenReturn(user1);
+        
+        PresentationDTO mockedJury1NotesPresentation = new PresentationDTO();
+        mockedJury1NotesPresentation.setIdPresentation(presentation.getIdPresentation());
+        PresentationDTO mockedJury2NotesPresentation = new PresentationDTO();
+        mockedJury2NotesPresentation.setIdPresentation(presentation.getIdPresentation());
+
+        // Appel de la méthode à tester
+        PresentationDTO result = presentationService.setJuryNotes(1, notes);
+
+        // Vérification des appels de méthodes et des résultats
+        verify(presentationServiceRule).checkDateBeginPassed(presentation.getDatetimeBegin());
+        verify(userServiceRules).getCurrentUser();
+
+        assertEquals(notes, result.getJury1Notes());
+    }
+
+    @Test
+    void testSetJuryNotes_Nominal_ts2() throws CustomRuntimeException {
+        UserDTO user1 = new UserDTO();
+        user1.setId(1);   
+        UserDTO user2 = new UserDTO();
+        user2.setId(2); 
+        
+        TeachingStaffDTO ts1 = new TeachingStaffDTO(user1);
+        TeachingStaffDTO ts2 = new TeachingStaffDTO(user2);
+
+        JuryDTO jury = new JuryDTO(ts1, ts2);
+
+        UserEntity user1Entity = new UserEntity();
+        user1Entity.setId(1);   
+        UserEntity user2Entity = new UserEntity();
+        user2Entity.setId(2); 
+        
+        TeachingStaffEntity ts1Entity = new TeachingStaffEntity(user1Entity);
+        TeachingStaffEntity ts2Entity = new TeachingStaffEntity(user2Entity);
+
+        JuryEntity juryEntity = new JuryEntity(ts1Entity, ts2Entity);
+
+        PresentationEntity presentation = new PresentationEntity();
+        PresentationDTO presentationDTO = new PresentationDTO();
+
+        String notes = "test";
+        presentation.setJury2Notes((notes));
+        presentationDTO.setJury2Notes((notes));
+
+        presentation.setIdPresentation(1);
+        presentation.setJury(juryEntity);
+
+        presentationDTO.setIdPresentation(1);
+        presentationDTO.setJury(jury);
+
+        ArgumentCaptor<PresentationEntity> captor = ArgumentCaptor.forClass(PresentationEntity.class);
+        when(presentationRepository.save(captor.capture())).thenReturn(presentation);
+
+        Optional<PresentationEntity> mockedPresentation = Optional.of(presentation);
+        when(presentationRepository.findById(mockedPresentation.get().getIdPresentation())).thenReturn(mockedPresentation);
+
+        // Mock des méthodes et comportements nécessaires
+        doNothing().when(presentationServiceRule).checkDateBeginPassed(any());
+        when(userServiceRules.getCurrentUser()).thenReturn(user2);
+        
+        PresentationDTO mockedJury1NotesPresentation = new PresentationDTO();
+        mockedJury1NotesPresentation.setIdPresentation(presentation.getIdPresentation());
+        PresentationDTO mockedJury2NotesPresentation = new PresentationDTO();
+        mockedJury2NotesPresentation.setIdPresentation(presentation.getIdPresentation());
+
+        // Appel de la méthode à tester
+        PresentationDTO result = presentationService.setJuryNotes(1, notes);
+
+        // Vérification des appels de méthodes et des résultats
+        verify(presentationServiceRule).checkDateBeginPassed(presentation.getDatetimeBegin());
+        assertEquals(notes, result.getJury2Notes());
+    }
 }

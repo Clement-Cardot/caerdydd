@@ -6,6 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
@@ -169,5 +172,17 @@ public class PresentationServiceRulesTest {
 
         // Verify the result
         Assertions.assertEquals(CustomRuntimeException.PRESENTATION_END_BEFORE_BEGIN, exception.getMessage());
+    }
+
+    @Test
+    public void checkDateBeginPassed_DateBeforeNow_ThrowsCustomRuntimeException() {
+        LocalDateTime dateBegin = LocalDateTime.now().plusHours(1);
+        assertThrows(CustomRuntimeException.class, () -> presentationServiceRule.checkDateBeginPassed(dateBegin));
+    }
+
+    @Test
+    public void checkDateBeginPassed_DateAfterNow_NoExceptionThrown() throws CustomRuntimeException {
+        LocalDateTime dateBegin = LocalDateTime.now().minusHours(1);
+        assertDoesNotThrow(() -> presentationServiceRule.checkDateBeginPassed(dateBegin));
     }
 }

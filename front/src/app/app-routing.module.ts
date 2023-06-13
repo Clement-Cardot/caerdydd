@@ -14,6 +14,7 @@ import { ValidationProjectPageComponent } from './pages/validation-project-page/
 import { ErrorPageComponent } from './pages/error-page/error-page.component';
 import { TeachingStaffPageComponent } from './pages/teaching-staff-page/teaching-staff-page.component';
 import { ProjectPageComponent } from './pages/project-page/project-page.component';
+import { PresentationCommentaryPageComponent } from './pages/presentation-commentary-page/presentation-commentary-page.component';
 import { ConsultingPageComponent } from './pages/consulting-page/consulting-page.component';
 
 const websiteName = " - Taf"
@@ -51,6 +52,8 @@ const routes: Routes = [
   
   { path: 'error', title: 'Erreur' + websiteName, component: ErrorPageComponent },
 
+  { path: 'presentationCommentary', title: 'Commentaire présentation' + websiteName, component: PresentationCommentaryPageComponent },
+  
   ];
 
 @NgModule({
