@@ -69,4 +69,10 @@ public class PresentationServiceRule {
             throw new CustomRuntimeException(CustomRuntimeException.PRESENTATION_DID_NOT_BEGIN);
         }
     }
+
+    public void checkDateEndPassed(LocalDateTime dateEnd) throws CustomRuntimeException{
+        if(LocalDateTime.now().isBefore(dateEnd)){
+            throw new CustomRuntimeException(CustomRuntimeException.PRESENTATION_DID_NOT_FINISH);
+        }
+    }
 }

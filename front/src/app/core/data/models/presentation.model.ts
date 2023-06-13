@@ -29,6 +29,8 @@ export class Presentation implements CalendarEvent {
         public room: string,
         public jury1Notes: string,
         public jury2Notes: string,
+        public validationTeamNotes: string,
+        public teachingStaffNotes: string,
         public jury: Jury,
         public project: Project | undefined
     ) {
@@ -66,6 +68,8 @@ export class PresentationAdapter implements Adapter<Presentation> {
             item.room,
             item.jury1Notes,
             item.jury2Notes,
+            item.validationTeamNotes,
+            item.teachingStaffNotes,
             this.juryAdapter.adapt(item.jury),
             project
         );

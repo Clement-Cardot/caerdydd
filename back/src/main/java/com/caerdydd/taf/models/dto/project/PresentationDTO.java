@@ -32,6 +32,8 @@ public class PresentationDTO {
     private String room;
     private String jury1Notes;
     private String jury2Notes;
+    private String validationTeamNotes;
+    private String teachingStaffNotes;
 
     private JuryDTO jury;
 

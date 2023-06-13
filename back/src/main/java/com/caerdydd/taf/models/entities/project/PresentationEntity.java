@@ -37,6 +37,9 @@ public class PresentationEntity implements Serializable {
     @Column(name = "jury2_notes")
     private String jury2Notes;
 
+    private String validationTeamNotes;
+    private String teachingStaffNotes;
+
     @ManyToOne
     @JoinColumn(name = "id_jury")
     private JuryEntity jury;
@@ -54,9 +57,18 @@ public class PresentationEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "PresentationEntity [idPresentation=" + idPresentation + ", type=" + type + ", dateTimeBegin="
-                + datetimeBegin + ", dateTimeEnd=" + datetimeEnd + ", room=" + room + ", jury1Notes=" + jury1Notes
-                + ", jury2Notes=" + jury2Notes + ", jury=" + jury + ", project=" + project + "]";
+        return "{" +
+            " idPresentation='" + getIdPresentation() + "'" +
+            ", type='" + getType() + "'" +
+            ", datetimeBegin='" + getDatetimeBegin() + "'" +
+            ", datetimeEnd='" + getDatetimeEnd() + "'" +
+            ", room='" + getRoom() + "'" +
+            ", jury1Notes='" + getJury1Notes() + "'" +
+            ", jury2Notes='" + getJury2Notes() + "'" +
+            ", validationTeamNotes='" + getValidationTeamNotes() + "'" +
+            ", teachingStaffNotes='" + getTeachingStaffNotes() + "'" +
+            ", jury='" + getJury() + "'" +
+            ", project='" + getProject() + "'" +
+            "}";
     }
-    
 }
