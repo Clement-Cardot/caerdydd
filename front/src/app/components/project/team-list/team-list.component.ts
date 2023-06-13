@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { Team } from 'src/app/core/data/models/team.model';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
@@ -10,13 +10,14 @@ import { User } from 'src/app/core/data/models/user.model';
   styleUrls: ['./team-list.component.scss']
 })
 
-export class TeamListComponent implements OnInit {
+export class TeamListComponent implements OnInit, OnDestroy {
   @Input() team!: Team;
   @Output() applyEvent = new EventEmitter<number>();
 
   displayedColumns: string[] = ['name', 'surname', 'speciality'];
 
   currentUser: User | undefined = undefined;
+  currentUserSubscription: any;
 
   panelOpenState = false;
 
@@ -26,9 +27,13 @@ export class TeamListComponent implements OnInit {
   
   
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
+    this.currentUserSubscription = this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
                                       this.currentUser = user;
                                     });
+  }
+
+  ngOnDestroy(): void {
+    this.currentUserSubscription.unsubscribe();
   }
 
   applyInTeam(idTeam: number) {

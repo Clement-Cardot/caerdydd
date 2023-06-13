@@ -31,6 +31,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     errorMessage!: string;
 
     refresh: any;
+    currentUserSubscription: any;
 
     constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder, private consultingService: ApiConsultingService) {
       this.importReportAnnotform = this.formBuilder.group({
@@ -46,6 +47,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
 
     ngOnDestroy(): void {
       clearInterval(this.refresh);
+      this.currentUserSubscription.unsubscribe();
     }
 
     getData() {
@@ -54,7 +56,7 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     }
 
     getCurrentUser() {
-      this.userDataService.getCurrentUser().subscribe(user => {
+      this.currentUserSubscription = this.userDataService.getCurrentUser().subscribe(user => {
         this.currentUser = user;
       });
     }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Consulting } from 'src/app/core/data/models/consulting.model';
 import { User } from 'src/app/core/data/models/user.model';
@@ -14,10 +14,11 @@ import { ApiUserService } from 'src/app/core/services/api-user.service';
   templateUrl: './consulting-teaching-s-accept.component.html',
   styleUrls: ['./consulting-teaching-s-accept.component.scss'],
 })
-export class ConsultingTeachingSAcceptComponent implements OnInit {
+export class ConsultingTeachingSAcceptComponent implements OnInit, OnDestroy {
   @Input() consulting!: Consulting;
 
   currentUser!: User | undefined;
+  currentUserSubscription: any;
 
   teachingStaff!: TeachingStaff;
 
@@ -36,7 +37,7 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userDataService
+    this.currentUserSubscription = this.userDataService
       .getCurrentUser()
       .subscribe((user: User | undefined) => {
         this.currentUser = user;
@@ -55,6 +56,10 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
           }
         );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.currentUserSubscription.unsubscribe();
   }
 
   openSnackBar() {
