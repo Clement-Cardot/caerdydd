@@ -57,8 +57,7 @@ const routes: Routes = [
     path: 'consulting',
     title: 'Consulting' + websiteName,
     component: ConsultingPageComponent,
-    canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE'] },
+    canActivate: [AuthGuard],
   },
 
   // Notation pages

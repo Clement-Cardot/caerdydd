@@ -23,11 +23,13 @@ export class ConsultingPageComponent {
   getAllConsultings() {
     this.apiConsultingService.getAllConsultings().subscribe((data) => {
       console.log(data);
-      this.consultingsDev = data.filter((c) => c.speciality == 'development');
+      this.consultingsDev = data.filter((c) => c.speciality == 'Développement');
       this.consultingsInfra = data.filter(
-        (c) => c.speciality == 'infrastructure'
+        (c) => c.speciality == 'Infrastructure'
       );
-      this.consultingsModeling = data.filter((c) => c.speciality == 'modeling');
+      this.consultingsModeling = data.filter(
+        (c) => c.speciality == 'Modélisation'
+      );
       console.log('Infra :' + this.consultingsInfra);
       console.log('Dev :' + this.consultingsDev);
       console.log('Model :' + this.consultingsModeling);

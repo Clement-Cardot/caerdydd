@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,12 +15,12 @@ public class PlannedTimingAvailabilityDTO {
 
     private Integer idPlannedTimingAvailability;
 
-    @JsonManagedReference(value = "teachingStaffAvailabilities")
+    @JsonBackReference(value = "teachingStaffAvailabilities")
     private PlannedTimingConsultingDTO plannedTimingConsulting;
 
     private TeachingStaffDTO teachingStaff;
 
-    @JsonBackReference(value ="consulting")
+    @JsonBackReference(value = "availabilities")
     private ConsultingDTO consulting;
 
     private Boolean isAvailable = true;

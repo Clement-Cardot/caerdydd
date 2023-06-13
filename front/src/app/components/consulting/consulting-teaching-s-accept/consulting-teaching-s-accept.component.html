@@ -28,7 +28,10 @@
       {{ consulting.plannedTimingAvailability?.teachingStaff?.user?.lastname }}
     </p>
     <button
-      *ngIf="consulting.plannedTimingAvailability == null"
+      *ngIf="
+        consulting.plannedTimingAvailability == null &&
+        filterBySpeciality(consulting)
+      "
       mat-raised-button
       color="primary"
       (click)="validConsulting(consulting)"

@@ -78,10 +78,10 @@ public class ConsultingController {
 
     @GetMapping("/consultings")
     public ResponseEntity<List<ConsultingDTO>> getAllConsultings() {
-        logger.info("Process request : Get all planned timing consultings");
+        logger.info("Process request : Get all consultings");
         try {
             List<ConsultingDTO> consultingDTOs = consultingService.listAllConsultings();
-            logger.info("Process request : Get all planned timing consultings DONE");
+            logger.info("Process request : Get all consultings DONE");
             return new ResponseEntity<>(consultingDTOs, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {

@@ -16,13 +16,13 @@ public class ConsultingDTO {
     private String speciality;
     private String notes;
 
-    private TeamDTO team;
-
-    @JsonManagedReference(value = "consulting")
+    @JsonManagedReference(value = "availabilities")
     private PlannedTimingAvailabilityDTO plannedTimingAvailability;
 
-    @JsonManagedReference(value = "consultingTiming")
+    @JsonManagedReference(value = "consulting")
     private PlannedTimingConsultingDTO plannedTimingConsulting;
+
+    private TeamDTO team;
 
     public ConsultingDTO() {
     }
@@ -39,9 +39,6 @@ public class ConsultingDTO {
         if (this.plannedTimingAvailability != null){
             idPlannedTimingAvailability = String.valueOf(this.plannedTimingAvailability.getIdPlannedTimingAvailability());
         }
-
         return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + ", team=" + team + ", idPlannedTimingConsulting=" + idPlannedTimingConsulting + ", idPlannedTimingAvailability" + idPlannedTimingAvailability + "]";
     }
-
-        
 }

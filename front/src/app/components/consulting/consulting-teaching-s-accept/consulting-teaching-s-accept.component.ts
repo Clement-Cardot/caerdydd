@@ -23,6 +23,12 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
 
   plannedAvailabilities: PlannedTimingAvailability[] = [];
 
+  specialities: string[] = [];
+
+  bool!: boolean;
+
+  teachingStaffLoaded = false; // Ajout d'un indicateur pour suivre si teachingStaff est chargé
+
   constructor(
     private _snackBar: MatSnackBar,
     private userDataService: UserDataService,
@@ -40,9 +46,16 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
     } else {
       this.apiTeachingStaffService
         .getTeachingStaff(this.currentUser.id)
-        .subscribe((teachingStaff: TeachingStaff) => {
-          this.teachingStaff = teachingStaff;
-        });
+        .subscribe(
+          (teachingStaff: TeachingStaff) => {
+            this.teachingStaff = teachingStaff;
+            this.filterBySpeciality(this.consulting);
+            this.teachingStaffLoaded = true; // Indique que teachingStaff est chargé
+          },
+          (error) => {
+            console.error('Error while fetching teaching staff:', error);
+          }
+        );
     }
   }
 
@@ -52,19 +65,23 @@ export class ConsultingTeachingSAcceptComponent implements OnInit {
     });
   }
 
-  validConsulting(consulting: Consulting): void {
-    /*     for (const plannedAvailability of this.plannedAvailabilities) {
-      if (
-        consulting.plannedTimingConsulting ===
-        plannedAvailability.plannedTimingConsulting
-      ) {
-        console.log('Consulting 1 : ' + consulting);
-        consulting.plannedTimingAvailability = plannedAvailability;
-        console.log('Consulting 2 : ' + consulting);
-        this.apiConsultingService.updateConsulting(consulting);
-      }
+  filterBySpeciality(consulting: Consulting): boolean {
+    if (!this.teachingStaffLoaded) {
+      return false; // Quitte la fonction si teachingStaff n'est pas encore chargé
     }
- */
+    if (this.teachingStaff.isInfrastructureSpecialist) {
+      this.specialities.push('Infrastructure');
+    }
+    if (this.teachingStaff.isDevelopmentSpecialist) {
+      this.specialities.push('Développement');
+    }
+    if (this.teachingStaff.isModelingSpecialist) {
+      this.specialities.push('Modélisation');
+    }
+    return this.specialities.includes(consulting.speciality);
+  }
+
+  validConsulting(consulting: Consulting): void {
     this.apiConsultingService.updateConsulting(consulting).subscribe(
       (response) => {
         console.log('Response from server: ', response);

@@ -14,19 +14,18 @@ class ClickEvent {
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss']
+  styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent implements OnInit {
-  
   currentUser: User | null = null;
-  
+
   viewDate: Date = new Date();
   events: PlannedTimingConsulting[] = [];
   refresh: any;
 
   constructor(
     private userDataService: UserDataService,
-    private apiConsultingService: ApiConsultingService, 
+    private apiConsultingService: ApiConsultingService,
     public dialog: MatDialog
   ) {}
 
@@ -35,18 +34,20 @@ export class CalendarComponent implements OnInit {
       this.currentUser = user;
       this.loadConsultings();
     });
-    this.refresh = setInterval(() => { this.loadConsultings() },  5000 );
+    this.refresh = setInterval(() => {
+      this.loadConsultings();
+    }, 5000);
   }
 
   ngOnDestroy(): void {
-    console.log("destroy");
+    console.log('destroy');
     if (this.refresh) {
       clearInterval(this.refresh);
     }
   }
 
   loadConsultings() {
-    this.apiConsultingService.getAllConsultings().subscribe(data => {
+    this.apiConsultingService.getAllPlannedConsultings().subscribe((data) => {
       this.events = data;
       this.filterConsultingsByRole();
     });
@@ -54,17 +55,17 @@ export class CalendarComponent implements OnInit {
 
   filterConsultingsByRole() {
     let currentUserRoles = this.currentUser?.getRoles();
-    if (currentUserRoles == null || currentUserRoles == undefined || currentUserRoles.length == 0) {
+    if (
+      currentUserRoles == null ||
+      currentUserRoles == undefined ||
+      currentUserRoles.length == 0
+    ) {
       return;
-    }
-    else if (currentUserRoles.includes("TEAM_MEMBER_ROLE")) {
+    } else if (currentUserRoles.includes('TEAM_MEMBER_ROLE')) {
       this.filterConsultingsTeamMember();
-
-    }
-    else if (currentUserRoles.includes("TEACHING_STAFF_ROLE")) {
+    } else if (currentUserRoles.includes('TEACHING_STAFF_ROLE')) {
       this.filterConsultingsTeachingStaff();
-    }
-    else if (currentUserRoles.includes("PLANNING_ROLE")) {
+    } else if (currentUserRoles.includes('PLANNING_ROLE')) {
       this.filterConsultingsPlanning();
     }
   }
@@ -74,13 +75,15 @@ export class CalendarComponent implements OnInit {
   }
 
   filterConsultingsTeachingStaff() {
-    this.events.forEach(event => {
-      let result = event.availabilities.find(availability => availability.teachingStaff.user.id == this.currentUser?.id);
+    this.events.forEach((event) => {
+      let result = event.availabilities.find(
+        (availability) =>
+          availability.teachingStaff.user.id == this.currentUser?.id
+      );
       if (result?.isAvailable) {
-        event.color = {primary: '#1e90ff', secondary: '#D1E8FF'};
-      }
-      else {
-        event.color = {primary: '#ad2121', secondary: '#FAE3E3'};
+        event.color = { primary: '#1e90ff', secondary: '#D1E8FF' };
+      } else {
+        event.color = { primary: '#ad2121', secondary: '#FAE3E3' };
       }
     });
   }
@@ -89,8 +92,9 @@ export class CalendarComponent implements OnInit {
     // TODO
   }
 
-  clickOnEvent(clickEvent : ClickEvent) {
-    this.dialog.open(ClickedConsultingDialogComponent, { data: { event: clickEvent.event }});
+  clickOnEvent(clickEvent: ClickEvent) {
+    this.dialog.open(ClickedConsultingDialogComponent, {
+      data: { event: clickEvent.event },
+    });
   }
-
 }
