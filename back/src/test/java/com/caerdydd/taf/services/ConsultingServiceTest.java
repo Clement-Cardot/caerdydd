@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
@@ -899,7 +900,6 @@ public class ConsultingServiceTest {
         consultingDTO.setIdConsulting(consultingId);
 
         // Prepare Mocked Data for plannedTimingAvailabilityRepository.findAll()
-        List<PlannedTimingAvailabilityEntity> plannedTimingAvailabilityEntityList = new ArrayList<>();
         PlannedTimingAvailabilityEntity plannedTimingAvailabilityEntity = new PlannedTimingAvailabilityEntity();
         PlannedTimingConsultingEntity plannedTimingConsultingEntity = new PlannedTimingConsultingEntity();
         TeachingStaffEntity teachingStaff = new TeachingStaffEntity();
@@ -913,19 +913,18 @@ public class ConsultingServiceTest {
         plannedTimingAvailabilityEntity.setPlannedTimingConsulting(plannedTimingConsultingEntity);
         plannedTimingAvailabilityEntity.setTeachingStaff(teachingStaff);
         consultingEntity.setPlannedTimingAvailability(plannedTimingAvailabilityEntity);
-        plannedTimingAvailabilityEntityList.add(0, plannedTimingAvailabilityEntity);
 
         // Mocke consultingRepository.save()
         when(consultingRepository.save(any(ConsultingEntity.class))).thenAnswer(i -> i.getArguments()[0]);
 
         // Set other properties of consultingDTO
         PlannedTimingConsultingDTO plannedTimingConsultingDTO = new PlannedTimingConsultingDTO();
-        plannedTimingConsultingDTO.setIdPlannedTimingConsulting(2);
+        plannedTimingConsultingDTO.setIdPlannedTimingConsulting(1);
         // Set other properties of plannedTimingConsultingDTO
         consultingDTO.setPlannedTimingConsulting(plannedTimingConsultingDTO);        
     
         // Configure Mocks behavior
-        when(plannedTimingAvailabilityRepository.findAll()).thenReturn(plannedTimingAvailabilityEntityList);
+        when(plannedTimingAvailabilityRepository.findByIdPlannedTimingConsultingAndIdUser(1,1)).thenReturn(Optional.of(plannedTimingAvailabilityEntity));
         // Mock other dependencies as needed
 
         // Mock userServiceRules.getCurrentUser()
@@ -1103,7 +1102,7 @@ public class ConsultingServiceTest {
 
         // Assertions
         assertEquals(expectedAnswer.size(), result.size());
-        assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
+        assertEquals(expectedAnswer.get(0).getIdConsulting(), result.get(0).getIdConsulting());
         
     }
 
@@ -1200,7 +1199,7 @@ public class ConsultingServiceTest {
 
         // Assertions
         assertEquals(expectedAnswer.size(), result.size());
-        assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
+        assertEquals(expectedAnswer.get(0).getIdConsulting(), result.get(0).getIdConsulting());
         
     }
 
