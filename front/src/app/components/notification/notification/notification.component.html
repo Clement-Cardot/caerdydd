@@ -6,7 +6,7 @@
 
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent>
-    <div *ngFor="let notification of notifications" [ngClass]="{'unread': !notification.isRead, 'read': notification.isRead}">
+    <div *ngFor="let notification of notifications; let i = index" [ngClass]="{'unread': !notification.isRead, 'read': notification.isRead, 'last-notification': i === notifications.length - 1}">
       <button mat-menu-item (click)="$event.stopPropagation(); markAsRead(notification)">
         <div class="message">{{ notification.message }}</div>
         <div class="status"><span>({{ notification.isRead ? 'Lu' : 'Non lu' }})</span></div>
