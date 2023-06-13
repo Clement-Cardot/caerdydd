@@ -82,6 +82,22 @@ export class ApiConsultingService {
         );
     }
 
+    setNotesConsulting(consulting: Consulting, notes: string): Observable<Consulting> {
+        const formData: FormData = new FormData();
+
+        formData.append('id', consulting.idConsulting.toString());
+        formData.append('notes', notes);
+        
+        const url = `${this.baseUrl}/notes`;
+        return this.http.put<Consulting>(url, formData)
+        .pipe(
+            map((data: any) => this.consultingAdapter.adapt(data))
+        )
+        .pipe(
+            catchError(this.handleError)
+        );
+    }
+
     private handleError(error: HttpErrorResponse) {
         if (error.status === 0) {
             // A client-side or network error occurred. Handle it accordingly.

@@ -114,10 +114,10 @@ public class ConsultingController {
     }
 
     @PutMapping("/notes")
-    public ResponseEntity<ConsultingDTO> setNotesConsulting(@RequestBody ConsultingDTO consulting, @RequestParam String notes) {
+    public ResponseEntity<ConsultingDTO> setNotesConsulting(@RequestParam("id") String idConsulting, @RequestParam("notes") String notes) {
         logger.info("Process request : Set notes consulting");
         try {
-            ConsultingDTO savedConsultingDTO = consultingService.setNotesConsulting(consulting, notes);
+            ConsultingDTO savedConsultingDTO = consultingService.setNotesConsulting(idConsulting, notes);
             return new ResponseEntity<>(savedConsultingDTO, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {

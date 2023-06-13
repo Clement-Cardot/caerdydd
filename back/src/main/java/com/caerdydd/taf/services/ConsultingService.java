@@ -131,6 +131,24 @@ public class ConsultingService {
         return modelMapper.map(response, PlannedTimingAvailabilityDTO.class);
     }
 
+    // Get a consulting by id
+    public ConsultingDTO getConsultingById(Integer id) throws CustomRuntimeException {
+        Optional<ConsultingEntity> optionalConsulting;
+        try {
+            optionalConsulting = consultingRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    
+        if (optionalConsulting.isEmpty()) {
+            throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND);
+        }
+    
+        ConsultingEntity consultingEntity = optionalConsulting.get();
+        return modelMapper.map(consultingEntity, ConsultingDTO.class);
+    }
+
+
     // Upload a file with planned timings for consulting
     public List<PlannedTimingConsultingDTO> uploadPlannedTimingConsultings(MultipartFile consultingFile) throws CustomRuntimeException, IOException {
 
@@ -265,10 +283,13 @@ public class ConsultingService {
     }
 
     // Add notes to a consulting
-    public ConsultingDTO setNotesConsulting(ConsultingDTO consulting, String notesConsulting) throws CustomRuntimeException {
+    public ConsultingDTO setNotesConsulting(String idConsulting, String notesConsulting) throws CustomRuntimeException {
         
         // Check if the user is teaching staff
         userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Get consulting
+        ConsultingDTO consulting = getConsultingById(Integer.parseInt(idConsulting));
 
         // Check if the user is the teaching staff assigned to the consulting
         if(consulting.getPlannedTimingAvailability().getTeachingStaff().getIdUser().equals(userServiceRules.getCurrentUser().getId())) {

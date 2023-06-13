@@ -4,10 +4,11 @@ import { Consulting } from 'src/app/core/data/models/consulting.model';
 import { DialogAnnotationsComponent } from './dialog-annotations/dialog-annotations.component';
 import { User } from 'src/app/core/data/models/user.model';
 import { UserDataService } from 'src/app/core/services/user-data.service';
+import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
 
 export interface DialogData {
   consulting: Consulting;
-  isFinished: boolean;
+  newNotes: string;
 }
 
 @Component({
@@ -19,8 +20,9 @@ export interface DialogData {
 export class ConsultingInfoComponent {
   @Input() consulting!: Consulting;
   currentUser!: User | null;
+  newNotes!: string;
 
-  constructor(public dialog: MatDialog, public userDataService: UserDataService) {}
+  constructor(public dialog: MatDialog, public userDataService: UserDataService, public apiConsultingService: ApiConsultingService) {}
 
   ngOnInit(): void {
     this.userDataService.getCurrentUser().subscribe((user: User | null) => {
@@ -33,12 +35,17 @@ export class ConsultingInfoComponent {
   }
   
   openDialog(): void {
+    this.newNotes = this.consulting.notes;
     const dialogRef = this.dialog.open(DialogAnnotationsComponent, {
-      data: {consulting : this.consulting},
+      data: {consulting : this.consulting, newNotes: this.newNotes},
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      if(result != undefined) {
+        this.newNotes = result;
+        this.setNotesConsulting(this.newNotes);
+      }
     });
   }
 
@@ -51,6 +58,14 @@ export class ConsultingInfoComponent {
       return true;
     }
     return false; 
+  }
+
+  setNotesConsulting(newNotes: string) {
+    this.apiConsultingService.setNotesConsulting(this.consulting, this.newNotes).subscribe((consultingResponse) => {
+      console.log(consultingResponse);
+      this.consulting = consultingResponse;
+    }
+    );
   }
 
 }
