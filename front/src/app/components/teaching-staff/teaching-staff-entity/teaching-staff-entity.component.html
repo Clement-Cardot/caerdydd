@@ -1,0 +1,21 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            <h3>{{teachingStaff.user.firstname}} {{teachingStaff.user.lastname}}</h3>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div *ngIf="teachingStaff.isInfrastructureSpecialist">
+            <mat-icon aria-hidden="false">router</mat-icon>
+            <p >Spécialiste Infrastructure</p>
+        </div>
+        <div *ngIf="teachingStaff.isDevelopmentSpecialist">
+            <mat-icon aria-hidden="false">laptop</mat-icon>
+            <p>Spécialiste Développement</p>
+        </div>
+        <div *ngIf="teachingStaff.isModelingSpecialist">
+            <mat-icon aria-hidden="false">create</mat-icon>
+            <p>Spécialiste Modélisation</p>
+        </div>
+    </mat-card-content>
+</mat-card>

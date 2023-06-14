@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
+import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
 
@@ -28,6 +30,13 @@ public class UserServiceRulesTest {
 
     @Mock
     SecurityConfig securityConfig;
+
+
+    @InjectMocks
+    private UserServiceRules userServiceRule;
+    
+    @Mock
+    private UserRepository userRepository;
 
     @ParameterizedTest
     @ValueSource(strings = {"STUDENT_ROLE", "TEACHING_STAFF_ROLE", "OPTION_LEADER_ROLE", "TEAM_MEMBER_ROLE", "PLANNING_ROLE"})
@@ -100,6 +109,49 @@ public class UserServiceRulesTest {
         assertEquals("Unexpected role value: UNEXPECTED_ROLE", exception.getMessage());
 
     }
+
+    @Test
+    void checkUserRoleTest_UserHasRoles() {
+        List<String> roles = new ArrayList<String>();
+        roles.add("TEACHING_ROLE");
+        roles.add("JURY_MEMBER_ROLE");
+        roles.add("OPTION_LEADER_ROLE");
+
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        for(String role : roles) {
+            user.getRoles().add(new RoleDTO(1, role, user));
+        }
+        // Call method to test
+        try {
+            userServiceRules.checkUserRoles(user, roles);
+        } catch (Exception e) {
+            fail("Exception thrown when it shouldn't have been : " + e.getMessage());
+        }
+
+        // If nothing throw : success
+    }
+
+    @Test
+    public void checkUserRolesTest_UserHasNotRoles() {
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        user.getRoles().add(new RoleDTO(1, "PLANNING_ASSISTANT_ROLE", user));
+
+        List<String> roles = new ArrayList<String>();
+        roles.add("STUDENT_ROLE");
+        roles.add("TEAM_MEMBER_ROLE");
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            userServiceRules.checkUserRoles(user, roles);
+        });
+
+        // Check exception
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, exception.getMessage());
+    }
     
     @Test
     void checkCurrentUser_UserIsNotCurrentUser() throws CustomRuntimeException {
@@ -141,4 +193,120 @@ public class UserServiceRulesTest {
         // If nothing throw : success
 
     }
+
+    @Test
+    void checkCurrentUserRole_Nominal() throws CustomRuntimeException {
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        user.getRoles().add(new RoleDTO(1, "STUDENT_ROLE", user));
+
+        // Mock securityConfig.getCurrentUser()
+        when(securityConfig.getCurrentUser()).thenReturn(user);
+
+        // Call method to test
+        try {
+            userServiceRules.checkCurrentUserRole("STUDENT_ROLE");
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        
+        // If nothing throw : success
+    }
+
+    @Test
+    void testCheckUserExists_True() {
+        // Prepare Input
+        Integer idUser = 1;
+        when(userRepository.existsById(idUser)).thenReturn(true);
+
+        // Call method to test
+        try {
+            userServiceRule.checkUserExists(idUser);
+        } catch (CustomRuntimeException e) {
+            Assertions.fail(e);
+        }
+    }
+
+    @Test
+    void testCheckUserExists_False() {
+        // Prepare Input
+        Integer idUser = 1;
+        when(userRepository.existsById(idUser)).thenReturn(false);
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrows(CustomRuntimeException.class, () -> {
+            userServiceRule.checkUserExists(idUser);
+        });
+
+        // Verify the result
+        Assertions.assertEquals(CustomRuntimeException.USER_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    void checkCurrentUserRole_UserHasNotRole() throws CustomRuntimeException {
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        user.getRoles().add(new RoleDTO(1, "STUDENT_ROLE", user));
+
+        // Mock securityConfig.getCurrentUser()
+        when(securityConfig.getCurrentUser()).thenReturn(user);
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+        });
+
+        // Check exception
+        assertEquals(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF, exception.getMessage());
+    }
+
+    @Test
+    void checkCurrentUserRoles_Nominal() throws CustomRuntimeException {
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        user.getRoles().add(new RoleDTO(1, "STUDENT_ROLE", user));
+
+        // Mock securityConfig.getCurrentUser()
+        when(securityConfig.getCurrentUser()).thenReturn(user);
+
+        List<String> roles = new ArrayList<String>();
+        roles.add("STUDENT_ROLE");
+        roles.add("TEAM_MEMBER_ROLE");
+
+        // Call method to test
+        try {
+            userServiceRules.checkCurrentUserRoles(roles);
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+        
+        // If nothing throw : success
+    }
+
+    @Test
+    void checkCurrentUserRoles_UserHasNotRoles() throws CustomRuntimeException {
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        user.getRoles().add(new RoleDTO(1, "STUDENT_ROLE", user));
+
+        // Mock securityConfig.getCurrentUser()
+        when(securityConfig.getCurrentUser()).thenReturn(user);
+
+        List<String> roles = new ArrayList<String>();
+        roles.add("TEACHING_STAFF_ROLE");
+        roles.add("TEAM_MEMBER_ROLE");
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            userServiceRules.checkCurrentUserRoles(roles);
+        });
+
+        // Check exception
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, exception.getMessage());
+    }
+
 }

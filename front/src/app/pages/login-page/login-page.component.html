@@ -2,39 +2,36 @@
   <div id="loginBox">
     <img src="assets/login/logoEseo.png" alt="logoEseo" id="logoLogin">
     <form id="loginForm" [formGroup]="loginForm" (ngSubmit)="loggingIn()">
+
       <mat-form-field class="inputForm" appearance="fill" color="accent">
-        <mat-label class="labelForm">Username</mat-label>
-        <input matInput id="inputUsername" type="text" placeholder="Ex. rousseso" [formControl]="usernameFormControl"  [errorStateMatcher]="matcher"/>
+        <mat-label class="labelForm">Nom d'utilisateur</mat-label>
+        <input matInput  type="text" placeholder="Ex. rousseso" [formControl]="usernameFormControl"  [errorStateMatcher]="matcher" (change)="onChange()"/>
         <mat-icon matSuffix>person</mat-icon>
         <mat-error *ngIf="usernameFormControl.hasError('required')">
           Un nom d'utilisateur est <strong>requis</strong>
         </mat-error>
+
         <mat-error *ngIf="usernameFormControl.hasError('incorrect')">
-        Username ou Password incorrect
+          Username ou Password incorrect
         </mat-error>
-        
-        <mat-error *ngIf="usernameFormControl.hasError('notFound')">
-          Utilisateur non trouvé.
-        </mat-error>
+
       </mat-form-field>
 
       <mat-form-field class="inputForm" appearance="fill" color="accent">
-        <mat-label class="labelForm">Password</mat-label>
-        <input matInput id="inputPassword" [type]="showPassword ? 'text' : 'password'" [formControl]="passwordFormControl"  [errorStateMatcher]="matcher"/>
+        <mat-label class="labelForm">Mot de passe</mat-label>
+        <input matInput [type]="showPassword ? 'text' : 'password'" [formControl]="passwordFormControl"  [errorStateMatcher]="matcher" (change)="onChange()"/>
         <mat-icon matSuffix (click)="togglePasswordVisibility()">{{showPassword?'visibility_off':'visibility'}}</mat-icon>
         <mat-error *ngIf="passwordFormControl.hasError('required')">
           Un mot de passe est <strong>requis</strong>
         </mat-error>
+
         <mat-error *ngIf="usernameFormControl.hasError('incorrect')">
-        Username ou Password incorrect
+          Username ou Password incorrect
         </mat-error>
-        
-        <mat-error *ngIf="usernameFormControl.hasError('notFound')">
-          Utilisateur non trouvé.
-        </mat-error>
+
       </mat-form-field>
 
-      <button mat-raised-button color="primary" id="buttonsLogin">SE CONNECTER</button>
+      <button mat-raised-button color="accent" id="buttonsLogin">SE CONNECTER</button>
     </form>
   </div>
 </div>

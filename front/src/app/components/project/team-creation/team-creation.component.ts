@@ -13,9 +13,8 @@ import { MyErrorStateMatcher } from 'src/app/pages/login-page/login-page.compone
 export class TeamCreationComponent implements OnInit {
   teamCreationForm!: FormGroup;
   matcher = new MyErrorStateMatcher();
-  nbTeamsFormControl = new FormControl('', [Validators.required, Validators.min(1)]);
-  teams!: Team[];
-  @Output() componentDisplayed = new EventEmitter<boolean>();
+  nbTeamsFormControl = new FormControl('', Validators.required);
+  @Output() componentDisplayed = new EventEmitter<Team[]>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,15 +32,19 @@ export class TeamCreationComponent implements OnInit {
     if(this.teamCreationForm.invalid){
       return;
     } else {
-      this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(response => {
-        console.log("Team Creation Response : " + JSON.stringify(response));
-        this.teams = response;
-      });
-      this.componentDisplayed.emit(false);
+      this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(
+        response => {
+          this.showSnackbar(response.length + " Equipes créées avec succès !");
+          this.componentDisplayed.emit(response);
+        },
+        error => {
+          this.showSnackbar("Une erreur est survenue lors de la création des équipes.");
+        }
+      );
     }
   }
 
-  openSnackBar() {
-    this._snackBar.open(this.teamCreationForm.value.nbTeams*2 + " équipes créées", "Fermer", {duration: 5000});
+  showSnackbar(message : string) {
+    this._snackBar.open(message, "Fermer", {duration: 5000});
   }
 }

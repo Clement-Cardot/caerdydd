@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeachingStaffDTO {
 
     private Integer idUser;

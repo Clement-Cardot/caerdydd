@@ -5,7 +5,8 @@
       <button mat-raised-button [routerLink]="['/project', team.idTeam]"  *ngIf="isCurrentUserATeachingStaff()" id="buttonSeeTeam{{team.idTeam}}">Voir plus</button>
   </mat-card-header>
 <mat-card-content>
-      <table mat-table [dataSource]="team.teamMembers" class="mat-elevation-z8">
+      <p id="noStudents" *ngIf="team.teamMembers.length == 0">Cette équipe n'a pas d'étudiants !</p>
+      <table mat-table class="mat-elevation-z8" [dataSource]="team.teamMembers" *ngIf="team.teamMembers.length > 0">
 
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
@@ -32,7 +33,4 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </mat-card-content>
-    <mat-card-actions>
-     
-  </mat-card-actions>
 </mat-card>

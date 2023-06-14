@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, OnInit, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Jury } from 'src/app/core/data/models/jury.model';
 import { TeachingStaff } from 'src/app/core/data/models/teaching-staff.model';
@@ -10,8 +10,9 @@ import { ApiTeachingStaffService } from 'src/app/core/services/api-teaching-staf
   templateUrl: './jury-creation.component.html',
   styleUrls: ['./jury-creation.component.scss']
 })
-export class JuryCreationComponent {
+export class JuryCreationComponent implements OnInit {
   teachingStaffs!: TeachingStaff[];
+  @Output() juryCreation = new EventEmitter<Jury>();
 
   selectedOption1: string = "0";
   selectedOption2: string = "0";
@@ -59,6 +60,7 @@ export class JuryCreationComponent {
     this._snackBar.open("Le jury, constitué de " + data.ts1.user.lastname + " et " + data.ts2.user.lastname + ", a bien été créé.", "Fermer", {
       duration: 5000,
     });
+    this.juryCreation.emit(data);
   }
 
   showError(error: { status: number; }) {

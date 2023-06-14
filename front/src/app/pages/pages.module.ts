@@ -9,12 +9,12 @@ import { LoginPageModule } from './login-page/login-page.module';
 import { NotationPageModule } from './notation-page/notation-page.module';
 import { DevProjectPageModule } from './dev-project-page/dev-project-page.module';
 import { PlanificationPageModule } from './planification-page/planification-page.module';
-import { ProjectDescriptionPageModule } from './project-description-page/project-description-page.module';
 import { TeachingStaffPageModule } from './teaching-staff-page/teaching-staff-page.module';
 import { TeamsPageModule } from './teams-page/teams-page.module';
 import { ValidateSubjectPageModule } from './validate-subject-page/validate-subject-page.module';
 import { ValidationProjectPageModule } from './validation-project-page/validation-project-page.module';
 import { ProjectPageModule } from './project-page/project-page.module';
+import { PresentationCommentaryPageModule } from './presentation-commentary-page/presentation-commentary-page.module';
 
 
 @NgModule({
@@ -33,12 +33,12 @@ import { ProjectPageModule } from './project-page/project-page.module';
     LoginPageModule,
     NotationPageModule,
     PlanificationPageModule,
-    ProjectDescriptionPageModule,
     ProjectPageModule,
     TeachingStaffPageModule,
     TeamsPageModule,
     ValidateSubjectPageModule,
-    ValidationProjectPageModule
+    ValidationProjectPageModule,
+    PresentationCommentaryPageModule
   ]
 })
 export class PagesModule { }

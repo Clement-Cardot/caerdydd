@@ -13,7 +13,7 @@ import lombok.Setter;
 @JsonIdentityInfo(
   generator = ObjectIdGenerators.PropertyGenerator.class, 
   property = "idPresentation")
-  @Getter
+@Getter
 @Setter
 @Component
 public class PresentationDTO {
@@ -31,6 +31,7 @@ public class PresentationDTO {
     private String room;
     private String jury1Notes;
     private String jury2Notes;
+    private String validationTeamNotes;
 
     private JuryDTO jury;
 
@@ -45,8 +46,18 @@ public class PresentationDTO {
 
     @Override
     public String toString() {
-        return "PresentationDTO [id=" + idPresentation + ", type=" + type + ", datetimeBegin=" + datetimeBegin + ", datetimeEnd="
-                + datetimeEnd + ", room=" + room + ", jury1Notes=" + jury1Notes + ", jury2Notes=" + jury2Notes
-                + ", idJury=" + jury + ", idProject=" + project + "]";
+        return "{" +
+            " idPresentation='" + getIdPresentation() + "'" +
+            ", type='" + getType() + "'" +
+            ", datetimeBegin='" + getDatetimeBegin() + "'" +
+            ", datetimeEnd='" + getDatetimeEnd() + "'" +
+            ", room='" + getRoom() + "'" +
+            ", jury1Notes='" + getJury1Notes() + "'" +
+            ", jury2Notes='" + getJury2Notes() + "'" +
+            ", validationTeamNotes='" + getValidationTeamNotes() + "'" +
+            ", jury='" + getJury() + "'" +
+            ", project='" + getProject() + "'" +
+            "}";
     }
+    
 }

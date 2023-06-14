@@ -2,15 +2,12 @@ package com.caerdydd.taf.models.dto.user;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Component
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JuryDTO {
     private Integer idJury;
 

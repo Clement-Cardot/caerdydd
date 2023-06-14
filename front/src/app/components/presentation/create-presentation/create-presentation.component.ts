@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Jury } from 'src/app/core/data/models/jury.model';
 import { Project } from 'src/app/core/data/models/project.model';
-import { Presentation, PresentationPayload } from 'src/app/core/data/models/presentation.model';
+import { Presentation } from 'src/app/core/data/models/presentation.model';
 import { ApiPresentationService } from 'src/app/core/services/api-presentation.service';
-import { ApiJuryService } from 'src/app/core/services/api-jury.service';
-import { ApiProjectService } from 'src/app/core/services/api-project.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-presentation',
@@ -14,14 +12,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./create-presentation.component.scss']
 })
 export class CreatePresentationComponent implements OnInit {
+  
   presentationForm!: FormGroup;
-  juries!: Jury[];
-  projects!: Project[];
+  @Input() juries!: Jury[];
+  @Input() projects!: Project[];
 
   constructor(
-    private apiPresentationService: ApiPresentationService, 
-    private apiJuryService: ApiJuryService,
-    private apiProjectService: ApiProjectService,
+    private apiPresentationService: ApiPresentationService,
     private _snackBar: MatSnackBar
   ) { }
 
@@ -34,12 +31,9 @@ export class CreatePresentationComponent implements OnInit {
       'idJury': new FormControl(null, Validators.required),
       'idProject': new FormControl(null, Validators.required)
     });
-
-    this.apiJuryService.getAllJuries().subscribe(juries => {this.juries = juries;});
-    this.apiProjectService.getAllSubjects().subscribe(projects => this.projects = projects);
   }
 
-  onSubmit() {
+  onSubmit(formDirective: FormGroupDirective) {
     if (!this.presentationForm.valid) {
       return;
     }
@@ -54,35 +48,41 @@ export class CreatePresentationComponent implements OnInit {
     beginDate.setHours(beginDate.getHours() - timezoneOffsetHours);
     endDate.setHours(endDate.getHours() - timezoneOffsetHours + 1);
 
-    const presentationPayload: PresentationPayload = {
-        type: this.presentationForm.value['type'],
-        datetimeBegin: beginDate,
-        datetimeEnd: endDate,
-        room: this.presentationForm.value['room'],
-        jury: {
-            idJury: this.presentationForm.value['idJury'],
-        },
-        project: {
-            idProject: this.presentationForm.value['idProject'],
-        }
-    };
+    const jury: Jury | undefined = this.juries.find(j => j.idJury === this.presentationForm.value['idJury']);
+    if (!jury) {
+      throw new Error('Jury non trouvé');
+    }
 
-    this.apiPresentationService.createPresentation(presentationPayload)
+    const project: Project | undefined = this.projects.find(p => p.idProject === this.presentationForm.value['idProject']);
+    if (!project) {
+      throw new Error('Projet non trouvé');
+    }
+    const presentation = new Presentation(
+      0, // idPresentation - Nous ne le connaissons pas encore car il sera généré par le backend
+      this.presentationForm.value['type'],
+      beginDate,
+      endDate,
+      this.presentationForm.value['room'],
+      "", // jury1Notes - Nous ne les connaissons pas encore car ils seront ajoutés plus tard
+      "", // jury2Notes - Nous ne les connaissons pas encore car ils seront ajoutés plus tard
+      "",
+      jury,
+      project
+    );
+
+    this.apiPresentationService.createPresentation(presentation)
         .subscribe(
-            data => { this.showSuccess(data) },
+            data => { this.showSuccess(data, formDirective) },
             error => { this.showError(error) },
         );
   }
 
-  
-
-  showSuccess(data: Presentation) {
+  showSuccess(data: Presentation, formDirective: FormGroupDirective) {
     this._snackBar.open("La présentation a été  créée avec succès", "Fermer", {
       duration: 5000,
     });
+    formDirective.resetForm();
     this.presentationForm.reset();
-    // Update the projects list after creating the presentation
-    this.apiProjectService.getAllSubjects().subscribe(projects => this.projects = projects);
   }
 
   showError(error: any) {

@@ -13,14 +13,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.ConsultingService;
 
@@ -34,7 +38,7 @@ public class ConsultingControllerTest {
     private ConsultingService consultingService;
 
     @Test
-    void testGetAllConsultings_Nominal() throws CustomRuntimeException {
+    void testGetAllPlannedTimingConsultings_Nominal() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
         List<PlannedTimingConsultingDTO> mockedConsultings = List.of(
             new PlannedTimingConsultingDTO(
@@ -55,7 +59,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testGetAllConsultings_Empty() throws CustomRuntimeException {
+    void testGetAllPlannedTimingConsultings_Empty() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
         List<PlannedTimingConsultingDTO> mockedConsultings = new ArrayList<>();
         when(consultingService.listAllPlannedTimingConsultings()).thenReturn(mockedConsultings);
@@ -69,7 +73,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testGetAllConsultings_UnexpectedError() throws CustomRuntimeException {
+    void testGetAllPlannedTimingConsultings_UnexpectedError() throws CustomRuntimeException {
         // Mock consultingService.listAllConsultings()
         when(consultingService.listAllPlannedTimingConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
@@ -81,7 +85,308 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testuploadConsulting_Nominal() throws CustomRuntimeException, IOException {
+    void testGetAllConsultings_Nominal() throws CustomRuntimeException {
+        // Mock consultingService.listAllConsultings()
+        List<ConsultingDTO> mockedConsultings = List.of(
+            new ConsultingDTO(),
+            new ConsultingDTO()
+        );
+        when(consultingService.listAllConsultings()).thenReturn(mockedConsultings);
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultings, response.getBody());
+    }
+
+    @Test
+    void testGetAllConsultings_Empty() throws CustomRuntimeException {
+        // Mock consultingService.listAllConsultings()
+        List<ConsultingDTO> mockedConsultings = new ArrayList<>();
+        when(consultingService.listAllConsultings()).thenReturn(mockedConsultings);
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultings, response.getBody());
+    }
+
+    @Test
+    void testGetAllConsultings_UnexpectedError() throws CustomRuntimeException {
+        // Mock consultingService.listAllConsultings()
+        when(consultingService.listAllConsultings()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testGetAllConsultings_UnhandledException() throws CustomRuntimeException {
+        // Mock consultingService.listAllConsultings()
+        when(consultingService.listAllConsultings()).thenThrow(new CustomRuntimeException("Some unhandled exception"));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getAllConsultings();
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+
+    // Get Consulting By Speciality Infrastructure
+    @Test
+    void testGetConsultingsBySpecialityInfra_Nominal() throws CustomRuntimeException {
+
+        // Mock listAllConsultings() method
+        List<ConsultingDTO> allConsultings = new ArrayList<>();
+        ConsultingDTO consulting1 = new ConsultingDTO();
+        ConsultingDTO consulting2 = new ConsultingDTO();
+        ConsultingDTO consulting3 = new ConsultingDTO();
+        consulting1.setSpeciality("infrastructure");
+        consulting1.setIdConsulting(1);
+        consulting2.setSpeciality("development");
+        consulting2.setIdConsulting(2);
+        consulting3.setSpeciality("infrastructure");
+        consulting3.setIdConsulting(3);
+        allConsultings.add(consulting1);
+        allConsultings.add(consulting2);
+        allConsultings.add(consulting3);
+
+        // Mock consultingService.getConsultingsBySpecialityInfra()
+        when(consultingService.getConsultingsBySpecialityInfra()).thenReturn(allConsultings);
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(allConsultings, HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityInfra();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityInfra();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+        assertEquals(expectedResponse.getBody(), response.getBody());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityInfra_UserNotTeachingStaff() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityInfra() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityInfra()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityInfra();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityInfra();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityInfra_UserNotOwnerOfAvailability() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityInfra() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityInfra()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityInfra();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityInfra();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityInfra_ServiceError() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityInfra() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityInfra()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityInfra();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityInfra();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    // Get Consulting By Speciality Development
+    @Test
+    void testGetConsultingsBySpecialityDev_Nominal() throws CustomRuntimeException {
+
+        // Mock listAllConsultings() method
+        List<ConsultingDTO> allConsultings = new ArrayList<>();
+        ConsultingDTO consulting1 = new ConsultingDTO();
+        ConsultingDTO consulting2 = new ConsultingDTO();
+        ConsultingDTO consulting3 = new ConsultingDTO();
+        consulting1.setSpeciality("infrastructure");
+        consulting1.setIdConsulting(1);
+        consulting2.setSpeciality("development");
+        consulting2.setIdConsulting(2);
+        consulting3.setSpeciality("infrastructure");
+        consulting3.setIdConsulting(3);
+        allConsultings.add(consulting1);
+        allConsultings.add(consulting2);
+        allConsultings.add(consulting3);
+
+        // Mock consultingService.getConsultingsBySpecialityInfra()
+        when(consultingService.getConsultingsBySpecialityDevelopment()).thenReturn(allConsultings);
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(allConsultings, HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityDev();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityDevelopment();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+        assertEquals(expectedResponse.getBody(), response.getBody());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityDev_UserNotTeachingStaff() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityDevelopment() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityDevelopment()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityDev();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityDevelopment();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityDev_UserNotOwnerOfAvailability() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityDevelopment() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityDevelopment()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityDev();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityDevelopment();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityDev_ServiceError() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityDevelopment() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityDevelopment()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityDev();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityDevelopment();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    // Get Consulting By Speciality Modeling
+    @Test
+    void testGetConsultingsBySpecialityModeling() throws CustomRuntimeException {
+
+        // Mock listAllConsultings() method
+        List<ConsultingDTO> allConsultings = new ArrayList<>();
+        ConsultingDTO consulting1 = new ConsultingDTO();
+        ConsultingDTO consulting2 = new ConsultingDTO();
+        ConsultingDTO consulting3 = new ConsultingDTO();
+        consulting1.setSpeciality("modeling");
+        consulting1.setIdConsulting(1);
+        consulting2.setSpeciality("development");
+        consulting2.setIdConsulting(2);
+        consulting3.setSpeciality("infrastructure");
+        consulting3.setIdConsulting(3);
+        allConsultings.add(consulting1);
+        allConsultings.add(consulting2);
+        allConsultings.add(consulting3);
+
+        // Mock consultingService.getConsultingsBySpecialityInfra()
+        when(consultingService.getConsultingsBySpecialityModeling()).thenReturn(allConsultings);
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(allConsultings, HttpStatus.OK);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityModel();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityModeling();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+        assertEquals(expectedResponse.getBody(), response.getBody());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityModel_UserNotTeachingStaff() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityModeling() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityModeling()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityModel();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityModeling();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityModel_UserNotOwnerOfAvailability() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityModeling() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityModeling()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityModel();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityModeling();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsBySpecialityModel_ServiceError() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsBySpecialityModeling() pour lancer l'exception
+        when(consultingService.getConsultingsBySpecialityModeling()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Define the expected answer
+        ResponseEntity<List<ConsultingDTO>> expectedResponse = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // Call the method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsBySpecialityModel();
+
+        // Verify the result
+        Mockito.verify(consultingService, Mockito.times(1)).getConsultingsBySpecialityModeling();
+        assertEquals(expectedResponse.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    void testuploadPlannedTimingConsulting_Nominal() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/csv", "mock".getBytes());
 
@@ -105,7 +410,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testuploadConsulting_EmptyFile() throws CustomRuntimeException, IOException {
+    void testuploadPlannedTimingConsulting_EmptyFile() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "".getBytes());
 
@@ -120,7 +425,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testuploadConsulting_UnsupportedMediaType() throws CustomRuntimeException, IOException {
+    void testuploadPlannedTimingConsulting_UnsupportedMediaType() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "test data".getBytes());
 
@@ -135,7 +440,7 @@ public class ConsultingControllerTest {
     }
 
     @Test
-    void testuploadConsulting_UnexpectedException() throws CustomRuntimeException, IOException {
+    void testuploadPlannedTimingConsulting_UnexpectedException() throws CustomRuntimeException, IOException {
         // Mock File
         MultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "mock".getBytes());
 
@@ -242,6 +547,417 @@ public class ConsultingControllerTest {
 
         // Call method to test
         ResponseEntity<PlannedTimingAvailabilityDTO> response = consultingController.updateAvailability(new PlannedTimingAvailabilityDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+
+    @Test
+    void testUpdateConsulting_Nominal() throws CustomRuntimeException {
+        // Mock consultingService.updateConsulting()
+        ConsultingDTO mockedConsulting = new ConsultingDTO();
+        when(consultingService.updateConsulting(mockedConsulting)).thenReturn(mockedConsulting);
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.updateConsulting(mockedConsulting);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsulting, response.getBody());
+    }
+
+    @Test
+    void testUpdateConsulting_ConsultingNotFound() throws CustomRuntimeException {
+        // Mock consultingService.updateConsulting()
+        when(consultingService.updateConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.updateConsulting(new ConsultingDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testCreateConsulting_PlannedTimingAvailabilityNotFound() throws CustomRuntimeException {
+        // Mock consultingService.createConsulting()
+        when(consultingService.createConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.createConsulting(new ConsultingDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testUpdateConsulting_UserNotTeachingStaff() throws CustomRuntimeException {
+        // Mock consultingService.updateConsulting()
+        when(consultingService.updateConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.updateConsulting(new ConsultingDTO());
+        
+         // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    void testCreateConsulting_UserNotTeamMember() throws CustomRuntimeException {
+        // Mock consultingService.createConsulting()
+        when(consultingService.createConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEAM_MEMBER));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.createConsulting(new ConsultingDTO());
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    void testGetConsultingsForCurrentTeachingStaff_Nominal() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForCurrentTeachingStaff()
+        PlannedTimingAvailabilityDTO mockedAvailabilityDTO = new PlannedTimingAvailabilityDTO(
+            new PlannedTimingConsultingDTO(
+                LocalDateTime.of(2023, 1, 1, 10, 0, 0),
+                LocalDateTime.of(2023, 1, 1, 10, 30, 0)
+            ),
+            new TeachingStaffDTO(
+                new UserDTO(1, "Bob", "Smith", "login", "password", "email", null)
+            )
+        );
+        ConsultingDTO mockedConsultingDTO = new ConsultingDTO();
+        mockedConsultingDTO.setPlannedTimingAvailability(mockedAvailabilityDTO);
+        List<ConsultingDTO> mockedConsultings = List.of(mockedConsultingDTO);
+        when(consultingService.getConsultingsForCurrentTeachingStaff()).thenReturn(mockedConsultings);
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForCurrentTeachingStaff();
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultings, response.getBody());
+    }
+
+    @Test
+    void testGetConsultingsForCurrentTeachingStaff_Empty() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForCurrentTeachingStaff()
+        List<ConsultingDTO> mockedConsultings = new ArrayList<>();
+        when(consultingService.getConsultingsForCurrentTeachingStaff()).thenReturn(mockedConsultings);
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForCurrentTeachingStaff();
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultings, response.getBody());
+    }
+
+    @Test
+    void testGetConsultingsForCurrentTeachingStaff_UserNotTeachingStaff() throws CustomRuntimeException{
+        // Mock consultingService.getConsultingsForCurrentTeachingStaff()
+        when(consultingService.getConsultingsForCurrentTeachingStaff()).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForCurrentTeachingStaff();
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testUpdateConsulting_UserIsNotOwnerOfAvailability() throws CustomRuntimeException {
+        // Mock consultingService.updateConsulting()
+        when(consultingService.updateConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_AVAILABILITY));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.updateConsulting(new ConsultingDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    void testCreateConsulting_PlannedTimingIsPast() throws CustomRuntimeException {
+        // Mock consultingService.createConsulting()
+        when(consultingService.createConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_IS_IN_PAST));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.createConsulting(new ConsultingDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testUpdateConsulting_ConsultingIsPast() throws CustomRuntimeException {
+        // Mock consultingService.updateConsulting()
+        when(consultingService.updateConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_IN_PAST));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.updateConsulting(new ConsultingDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testUpdateConsulting_ConsultingIsAlreadyTaken() throws CustomRuntimeException {
+        // Mock consultingService.updateConsulting()
+        when(consultingService.updateConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_ALREADY_TAKEN));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.updateConsulting(new ConsultingDTO());
+        // Assertions
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    }
+
+    @Test
+    void testCreateConsulting_PlannedTimingIsAlreadyTaken() throws CustomRuntimeException {
+        // Mock consultingService.createConsulting()
+        when(consultingService.createConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.createConsulting(new ConsultingDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    }
+
+    @Test
+    void testUpdateConsulting_ServiceError() throws CustomRuntimeException {
+        // Mock consultingService.updateConsulting()
+        when(consultingService.updateConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.updateConsulting(new ConsultingDTO());
+        
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testCreateConsulting_ServiceError() throws CustomRuntimeException {
+        // Mock consultingService.createConsulting()
+        when(consultingService.createConsulting(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.createConsulting(new ConsultingDTO());
+        
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+    void testGetConsultingsForCurrentTeachsingStaff_ServiceError() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForCurrentTeachingStaff()
+        when(consultingService.getConsultingsForCurrentTeachingStaff()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForCurrentTeachingStaff();
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testUpdateConsulting_UnexpectedException() throws CustomRuntimeException {
+        // Mock consultingService.updateConsulting()
+        when(consultingService.updateConsulting(any())).thenThrow(new CustomRuntimeException("Unexpected exception"));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.updateConsulting(new ConsultingDTO());
+        
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+    
+    @Test
+    void testCreateConsulting_UnexpectedException() throws CustomRuntimeException {
+        // Mock consultingService.createConsulting()
+        when(consultingService.createConsulting(any())).thenThrow(new CustomRuntimeException("Unexpected exception"));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.createConsulting(new ConsultingDTO());
+        
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+    
+    void testGetConsultingsForCurrentTeachsingStaff_UnexpectedException() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForCurrentTeachingStaff()
+        when(consultingService.getConsultingsForCurrentTeachingStaff()).thenThrow(new CustomRuntimeException("Unexpected exception"));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForCurrentTeachingStaff();
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_Nominal() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForATeam()
+        PlannedTimingAvailabilityDTO mockedAvailabilityDTO = new PlannedTimingAvailabilityDTO(
+            new PlannedTimingConsultingDTO(
+                LocalDateTime.of(2023, 1, 1, 10, 0, 0),
+                LocalDateTime.of(2023, 1, 1, 10, 30, 0)
+            ),
+            new TeachingStaffDTO(
+                new UserDTO(1, "Bob", "Smith", "login", "password", "email", null)
+            )
+        );
+        ConsultingDTO mockedConsultingDTO = new ConsultingDTO();
+        mockedConsultingDTO.setPlannedTimingAvailability(mockedAvailabilityDTO);
+        List<ConsultingDTO> mockedConsultings = List.of(mockedConsultingDTO);
+        when(consultingService.getConsultingsForATeam(any())).thenReturn(mockedConsultings);
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForATeam(1);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultings, response.getBody());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_Empty() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForATeam()
+        List<ConsultingDTO> mockedConsultings = new ArrayList<>();
+        when(consultingService.getConsultingsForATeam(any())).thenReturn(mockedConsultings);
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForATeam(1);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultings, response.getBody());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_UserIsNotAuthorized() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForATeam()
+        when(consultingService.getConsultingsForATeam(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForATeam(1);
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_UserIsNotInAssociatedTeam() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForATeam()
+        when(consultingService.getConsultingsForATeam(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForATeam(1);
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_ServiceError() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForATeam()
+        when(consultingService.getConsultingsForATeam(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForATeam(1);
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testGetConsultingsForATeam_UnexpectedException() throws CustomRuntimeException {
+        // Mock consultingService.getConsultingsForATeam()
+        when(consultingService.getConsultingsForATeam(any())).thenThrow(new CustomRuntimeException("Unexpected exception"));
+
+        // Call method to test
+        ResponseEntity<List<ConsultingDTO>> response = consultingController.getConsultingsForATeam(1);
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_Nominal() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        ConsultingDTO mockedConsultingDTO = new ConsultingDTO();
+        when(consultingService.setNotesConsulting(any(), any())).thenReturn(mockedConsultingDTO);
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedConsultingDTO, response.getBody());
+
+    }
+
+    @Test
+    void testSetNotesConsulting_UserNotATeachingStaff() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_User_Is_Not_Owner_Of_Consulting() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_OWNER_OF_CONSULTING));
+        
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_ConsultingNotFinished() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FINISHED));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_ConsultingNotFound() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNoteConsulting_ServiceError() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testSetNotesConsulting_UnexpedtedException() throws CustomRuntimeException {
+        // Mock ConsultingService.setNotesConsulting()
+        when(consultingService.setNotesConsulting(any(), any())).thenThrow(new CustomRuntimeException("Unexpected exception"));
+
+        // Call method to test
+        ResponseEntity<ConsultingDTO> response = consultingController.setNotesConsulting("1", "notes");
 
         // Assertions
         assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());

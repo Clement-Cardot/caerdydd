@@ -1,22 +1,7 @@
-<app-define-specialty></app-define-specialty>
-<div class="listTS">
-  <mat-list role="list" *ngFor="let teachingStaff of teachingStaffs">
-    <mat-divider></mat-divider>
-    <mat-list-item class="name"
-      >{{ teachingStaff.user.firstname }} {{ teachingStaff.user.lastname }} :
-    </mat-list-item>
-    <mat-list-item
-      class="speciality"
-      *ngIf="teachingStaff.isInfrastructureSpecialist"
-      >Spécialiste Infrastructure
-    </mat-list-item>
-    <mat-list-item
-      class="speciality"
-      *ngIf="teachingStaff.isDevelopmentSpecialist"
-      >Spécialiste Développement
-    </mat-list-item>
-    <mat-list-item class="speciality" *ngIf="teachingStaff.isModelingSpecialist"
-      >Spécialiste Modélisation</mat-list-item
-    >
-  </mat-list>
+<div *ngIf="teachingStaffs.length > 0">
+  <app-define-speciality [teachingStaff]="getCurrentTeachingStaff()"></app-define-speciality>
+
+  <div class="listTS">
+    <app-teaching-staff-entity *ngFor="let teachingStaff of teachingStaffs" [teachingStaff]="teachingStaff"></app-teaching-staff-entity>
+  </div>
 </div>

@@ -1,0 +1,6 @@
+<ng-container *ngIf="this.userRole === 'JURY_MEMBER_ROLE'">
+    <app-jury-commentary *ngFor="let presentation of presentations" [presentation]="presentation"></app-jury-commentary>
+</ng-container>
+<ng-container *ngIf="this.userRole === 'TEAM_MEMBER_ROLE'">
+    <app-teaching-staff-commentary *ngFor="let presentation of presentations" [presentation]="presentation"></app-teaching-staff-commentary>
+</ng-container>

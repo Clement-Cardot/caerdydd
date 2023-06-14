@@ -1,0 +1,51 @@
+
+<ng-container *ngIf="this.isDisplayable">
+<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+  
+    <mat-expansion-panel-header>
+        <mat-panel-title> 
+          {{presentation.project?.name ?? 'Pas encore de projet'}} - {{presentation.type}}
+        </mat-panel-title>      
+        <mat-panel-description>
+          {{ presentation.datetimeBegin.getDate().toString().padStart(2, '0') }}
+          /{{ (presentation.datetimeBegin.getMonth() + 1).toString().padStart(2, '0') }}
+          /{{ presentation.datetimeBegin.getFullYear() }}
+          {{ presentation.datetimeBegin.getHours().toString().padStart(2, '0') }}
+          :{{ presentation.datetimeBegin.getMinutes().toString().padStart(2, '0') }}
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <h4 *ngIf="this.presentation.jury1Notes">Commentaire du premier membre du jury : </h4>
+    <p>{{this.presentation.jury1Notes}}</p>
+    <br *ngIf="this.presentation.jury1Notes">
+
+    <h4 *ngIf="this.presentation.jury2Notes">Commentaire du deuxième membre du jury : </h4>
+    <p>{{this.presentation.jury2Notes}}</p>
+    <br *ngIf="this.presentation.jury2Notes">
+
+    <ng-container *ngIf="this.writable">
+      <br>
+      <form *ngIf="currentDate >= presentationDate">      
+          <mat-form-field id="commentary">
+            <mat-label>Commentaire de l'équipe de validation pour la présentation</mat-label>
+            <textarea matInput placeholder="" [(ngModel)]="commentary"></textarea>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" id="submitButton" (click)="onSubmit()">Enregistrer</button>
+
+          <mat-error *ngIf="errorMessage != ''">
+            {{errorMessage}}
+          </mat-error>
+      </form>
+
+      <p *ngIf="currentDate < presentationDate">Vous ne pouvez pas laisser de commentaire tant que la présentation n'a pas commencé.</p>
+
+    </ng-container>
+
+    <ng-container *ngIf="this.writable == false">     
+      <h4 *ngIf="commentary">Commentaire de l'équipe de validation : </h4> 
+      <p>{{ commentary }}</p>
+      <p *ngIf="currentDate < presentationDate">L'autre équipe ne peut pas laisser de commentaire tant que l'audit n'a pas commencé.</p>
+    </ng-container>
+  </mat-expansion-panel>
+</ng-container>

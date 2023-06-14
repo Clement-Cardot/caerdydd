@@ -46,7 +46,7 @@ CREATE TABLE jury (
 CREATE TABLE project (
     id_project INT NOT NULL AUTO_INCREMENT, 
     name VARCHAR(20) NOT NULL,
-    description VARCHAR(250),
+    description VARCHAR(1000),
     is_validated BOOLEAN NOT NULL,
     id_jury INT,
     PRIMARY KEY(id_project),
@@ -59,8 +59,9 @@ CREATE TABLE presentation (
     datetime_begin DATETIME NOT NULL,
     datetime_end DATETIME NOT NULL,
     room VARCHAR(20) NOT NULL,
-    jury1_notes VARCHAR(250),
-    jury2_notes VARCHAR(250),
+    jury1_notes TEXT,
+    jury2_notes TEXT,
+    validation_team_notes TEXT,
     id_jury INT NOT NULL,
     id_project INT NOT NULL,
     PRIMARY KEY(id_presentation),
@@ -78,6 +79,8 @@ CREATE TABLE team (
     file_path_final_scope_statement VARCHAR(100),
     file_path_scope_statement_analysis VARCHAR(100),
     file_path_report VARCHAR(100),
+    is_report_annotation BOOLEAN,
+    report_comments VARCHAR(4000),
     id_project_dev INT NOT NULL,
     id_project_validation INT NOT NULL,
     PRIMARY KEY(id_team),
@@ -102,18 +105,21 @@ CREATE TABLE planned_timing_availability (
     FOREIGN KEY (id_ts) REFERENCES teaching_staff (id_user)
 );
 
+
 CREATE TABLE consulting (
     id_consulting INT NOT NULL AUTO_INCREMENT,
-    speciality ENUM('infrastructure', 'development', 'modeling'),
+    speciality ENUM('Infrastructure', 'Développement', 'Modélisation'),
     notes VARCHAR(250),
-    is_validated BOOLEAN NOT NULL,
-    is_reserved BOOLEAN NOT NULL,
     id_team INT NOT NULL,
-    id_planned_timing_availability INT NOT NULL,
+    id_planned_timing_availability INT,
+    id_planned_timing_consulting INT NOT NULL,
     PRIMARY KEY(id_consulting),
     FOREIGN KEY (id_team) REFERENCES team (id_team),
-    FOREIGN KEY (id_planned_timing_availability) REFERENCES planned_timing_availability (id_planned_timing_availability)
+    FOREIGN KEY (id_planned_timing_availability) REFERENCES planned_timing_availability (id_planned_timing_availability),
+    FOREIGN KEY (id_planned_timing_consulting) REFERENCES planned_timing_consulting (id_planned_timing_consulting)
 );
+
+
 
 CREATE TABLE team_member (
     id_user INT NOT NULL,
@@ -130,6 +136,7 @@ CREATE TABLE notification (
     message VARCHAR(250) NOT NULL,
     link VARCHAR(100), 
     id_user INT NOT NULL,
+    is_read BOOLEAN NOT NULL,
     PRIMARY KEY(id_notification),
     FOREIGN KEY (id_user) REFERENCES user (id)
 );

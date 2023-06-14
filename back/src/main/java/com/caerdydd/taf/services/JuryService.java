@@ -4,14 +4,17 @@ import java.util.Optional;
 
 
 import javax.transaction.Transactional;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.user.JuryEntity;
 import com.caerdydd.taf.models.entities.user.TeachingStaffEntity;
 import com.caerdydd.taf.repositories.JuryRepository;
@@ -25,14 +28,16 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class JuryService {
+    private static final Logger logger = LogManager.getLogger(JuryService.class);
+
     @Autowired
     private JuryRepository juryRepository;
 
     @Autowired 
     private TeachingStaffService teachingStaffService;
 
-    @Autowired 
-    private RoleService roleService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private JuryServiceRules juryServiceRules;
@@ -89,14 +94,16 @@ public class JuryService {
     public JuryDTO addJury(Integer idJuryMemberDev, Integer idJuryMemberArchi) throws CustomRuntimeException{
         userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
 
-
         juryServiceRules.checkDifferentTeachingStaff(idJuryMemberDev, idJuryMemberArchi);
         checkJuryExists(idJuryMemberDev, idJuryMemberArchi);
 
         TeachingStaffDTO juryMemberDev = teachingStaffService.getTeachingStaffById(idJuryMemberDev);
         TeachingStaffDTO juryMemberArchi = teachingStaffService.getTeachingStaffById(idJuryMemberArchi);
 
-        JuryDTO juryDTO = new JuryDTO(juryMemberDev, juryMemberArchi);
+        TeachingStaffDTO updatedjuryMemberDev = this.addJuryMemberRole(juryMemberArchi);
+        TeachingStaffDTO updatedjuryMemberArchi = this.addJuryMemberRole(juryMemberDev);
+
+        JuryDTO juryDTO = new JuryDTO(updatedjuryMemberDev, updatedjuryMemberArchi);
         return updateJury(juryDTO);
     }
 
@@ -113,6 +120,30 @@ public class JuryService {
         return modelMapper.map(response, JuryDTO.class);
     }
 
+    public TeachingStaffDTO addJuryMemberRole(TeachingStaffDTO teachingStaffDTO) throws CustomRuntimeException {
+        UserDTO user = teachingStaffDTO.getUser();
+        // Vérifier que l'utilisateur actuel a le rôle "PLANNING_ROLE"
+        userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
+    
+        // Vérifier si le rôle JURY_MEMBER_ROLE existe déjà
+        if (teachingStaffDTO.getUser().getRoles().stream().anyMatch(role -> role.getRole().equals("JURY_MEMBER_ROLE"))) {
+            // Le rôle JURY_MEMBER_ROLE existe déjà, pas besoin de l'ajouter à nouveau
+            return teachingStaffDTO;
+        }
+    
+        // Créer et sauvegarder le nouveau rôle JURY_MEMBER_ROLE
+        logger.info("Create role of User {}: JURY_MEMBER_ROLE", user.getId());
+        RoleDTO juryMemberRole = new RoleDTO();
+        juryMemberRole.setRole("JURY_MEMBER_ROLE");
+        juryMemberRole.setUser(user);
+        teachingStaffDTO.getUser().getRoles().add(juryMemberRole);
+        logger.info("Save modifications ...");
+        userService.updateUser(user);
+        logger.info("Modifications saved !");
+        return this.teachingStaffService.getTeachingStaffById(user.getId());
+    }
+
+
     public JuryDTO getJury(Integer idJury) throws CustomRuntimeException {
         Optional<JuryEntity> optionalJury = juryRepository.findById(idJury);
         if (!optionalJury.isPresent()) {
@@ -127,9 +158,4 @@ public class JuryService {
                 .map(juryEntity -> modelMapper.map(juryEntity, JuryDTO.class))
                 .collect(Collectors.toList());
     }
-    
-    
-
-
-
 }

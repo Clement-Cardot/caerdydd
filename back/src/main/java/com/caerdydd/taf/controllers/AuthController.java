@@ -33,7 +33,7 @@ public class AuthController {
     } catch (CustomRuntimeException e) {
       if (e.getMessage().equals(CustomRuntimeException.USER_NOT_FOUND)) {
         logger.warn(e.getMessage());
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
       }
       if (e.getMessage().equals(CustomRuntimeException.USER_PASSWORD_NOT_MATCH)) {
         logger.warn(e.getMessage());
