@@ -88,6 +88,26 @@ export class ApiConsultingService {
       .pipe(catchError(this.handleError));
   }
 
+  setNotesConsulting(consulting: Consulting, notes: string): Observable<Consulting> {
+      const formData: FormData = new FormData();
+      if (consulting.idConsulting != null) {
+          formData.append('id', consulting.idConsulting.toString());
+      } else {
+          formData.append('id', '');
+      }
+      
+      formData.append('notes', notes);
+      
+      const url = `${this.baseUrl}/notes`;
+      return this.http.put<Consulting>(url, formData)
+      .pipe(
+          map((data: any) => this.consultingAdapter.adapt(data))
+      )
+      .pipe(
+          catchError(this.handleError)
+      );
+  }
+
   getAllConsultings(): Observable<Consulting[]> {
     const url = `${this.baseUrl}/consultings`;
     return this.http
@@ -173,10 +193,20 @@ export class ApiConsultingService {
 
   createConsulting(consulting: Consulting): Observable<Consulting> {
     const url = `${this.baseUrl}/createConsulting`;
-    return this.http
-      .put<Consulting>(url, consulting)
-      .pipe(map((data: any) => this.consultingAdapter.adapt(data)))
-      .pipe(catchError(this.handleError));
+    return this.http.put<Consulting>(url, consulting)
+    .pipe(
+        map((data: any) => this.consultingAdapter.adapt(data))
+        )
+    .pipe(catchError(this.handleError));
+  }
+
+  replaceTeachingStaff(consulting: Consulting): Observable<Consulting> {
+    const url = `${this.baseUrl}/replaceTeachingStaff`;
+    return this.http.post<Consulting>(url, consulting)
+    .pipe(
+        map((data: any) => this.consultingAdapter.adapt(data))
+        ) 
+    .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {

@@ -5,38 +5,48 @@
       </mat-card-header>
       <mat-card-content>
         <div class="sameRow">
-          <p>Cahier des charges :</p>
+          <p class="label">Cahier des charges :</p>
           <button mat-raised-button color="accent" (click)="getFile('teamScopeStatement')" class="downloadButton" [disabled]="!isThereFile('teamScopeStatement')">Télécharger le document</button>
         </div>
         <div class="sameRow">
-          <p>Analyse du cahier des charges :</p>
+          <p class="label">Analyse du cahier des charges :</p>
           <button mat-raised-button color="accent" (click)="getFile('analysis')" class="downloadButton" [disabled]="!isThereFile('analysis')">Télécharger le document</button>
         </div>
         <div class="sameRow">
-          <p>Cahier des charges final :</p>
+          <p class="label">Cahier des charges final :</p>
           <button mat-raised-button color="accent" (click)="getFile('finalTeamScopeStatement')" class="downloadButton" [disabled]="!isThereFile('finalTeamScopeStatement')">Télécharger le document</button>
         </div>
         <div class="sameRow">
-          <p>Rapport :</p>
+          <p class="label">Rapport :</p>
           <button mat-raised-button color="accent" (click)="getFile('report')" class="downloadButton" [disabled]="!isThereFile('report')">Télécharger le document</button>
         </div>
         <div class="sameRow">
-          <p>Rapport annoté :</p>
+          <p class="label">Rapport annoté :</p>
           <button mat-raised-button color="accent" (click)="getFile('annotedReport')" class="downloadButton" [disabled]="!isThereFile('reportAnnotation')">Télécharger le document</button>
         </div>
         <div class="sameRow">
-          <p>Cahier de tests :</p>
+          <p class="label">Cahier de tests :</p>
           <a mat-button color="primary" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
         </div>
         <br>
-        <form action="" id="formReportComment">
-          <div class="sameRow" *ngIf="isUserOptionLeader() || isUserJury()">
-            <p>Commentaire sur le rapport :</p>
-            <p></p>
-          </div>
+        <div class="sameRow" *ngIf="isUserOptionLeader()">
+          <p class="label">Commentaire sur le rapport :</p>
+          <p></p>
+        </div>
+        <p *ngIf="!isUserJury() && isUserOptionLeader()" id="reportCommentParagraph">{{ team.reportComments }}</p>
+        <form [formGroup]="addReportCommentform" id="formReportComment" (ngSubmit)="uploadComment()" *ngIf="isUserJury()">
           <mat-form-field id="reportComment">
-            <textarea matInput [disabled]="isUserOptionLeader() && !isUserJury()" rows="5">{{ team.reportComments }}</textarea>
+            <textarea matInput formControlName="reportComment" rows="5" *ngIf="isUserJury()"></textarea>
+            <mat-error *ngIf="reportCommentFormControl.hasError('required')">
+              Vous devez écrire un commentaire
+            </mat-error>
+            <mat-error *ngIf="reportCommentFormControl.hasError('apiError')">
+                {{errorMessage}}
+            </mat-error>
           </mat-form-field>
+          <button mat-raised-button color="accent" [disabled]="addReportCommentform.invalid" *ngIf="isUserJury()">
+            Envoyer le commentaire
+          </button>
         </form>
       </mat-card-content>
     </mat-card>

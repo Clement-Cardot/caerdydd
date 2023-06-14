@@ -1,6 +1,9 @@
 package com.caerdydd.taf.services.rules;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,6 +11,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
+import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.JuryDTO;
+import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.repositories.TeachingStaffRepository;
 import com.caerdydd.taf.repositories.UserRepository;
@@ -33,14 +42,14 @@ public class JuryServiceRulesTest {
     JuryRepository juryRepositoryMock;
 
     @Test
-    void checkDifferentTeachingStaff_DifferentTeachingStaff(){
+    void testCheckDifferentTeachingStaff_DifferentTeachingStaff(){
         Integer teachingStaffId = 1;
         Integer otherTeachingStaffId = 2;
         assertDoesNotThrow(() -> juryServiceRules.checkDifferentTeachingStaff(teachingStaffId, otherTeachingStaffId));
     }
 
     @Test
-    void checkDifferentTeachingStaff_SameTeachingStaff(){
+    void testCheckDifferentTeachingStaff_SameTeachingStaff(){
         Integer teachingStaffId = 1;
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
             juryServiceRules.checkDifferentTeachingStaff(teachingStaffId, teachingStaffId);
@@ -48,5 +57,30 @@ public class JuryServiceRulesTest {
         
         // Verify the result
         assertEquals(CustomRuntimeException.TEACHING_STAFF_ARE_THE_SAME, exception.getMessage());
+    }
+
+    @Test
+    void testCheckJuryMemberManageTeam_Managing() throws CustomRuntimeException {
+        Integer idJury = 1;
+        ProjectDTO mockedProject = new ProjectDTO(null, null);
+        mockedProject.setJury(new JuryDTO(new TeachingStaffDTO(new UserDTO(1, null, null, null, null, null, null)), new TeachingStaffDTO(new UserDTO(2, null, null, null, null, null, null))));
+        TeamDTO mockedTeam = new TeamDTO(1, null, mockedProject, null);
+
+        assertDoesNotThrow(() -> juryServiceRules.checkJuryMemberManageTeam(idJury, mockedTeam));
+    }
+
+    @Test
+    void testCheckJuryMemberManageTeam_NotManaging() throws CustomRuntimeException {
+        Integer idJury = 3;
+        ProjectDTO mockedProject = new ProjectDTO(null, null);
+        mockedProject.setJury(new JuryDTO(new TeachingStaffDTO(new UserDTO(1, null, null, null, null, null, null)), new TeachingStaffDTO(new UserDTO(2, null, null, null, null, null, null))));
+        TeamDTO mockedTeam = new TeamDTO(1, null, mockedProject, null);
+
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            juryServiceRules.checkJuryMemberManageTeam(idJury, mockedTeam);
+        });
+        
+        // Verify the result
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, exception.getMessage());
     }
 }

@@ -32,7 +32,7 @@ export class ClickedConsultingDialogComponent {
     private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {
-    this.myConsulting = new Consulting(null, "", null, null, null, data.event);
+    this.myConsulting = new Consulting(null, "Modélisation", null, null, null, data.event);
     this.changeDialogDependingOnUserRole();
   }
 
@@ -61,23 +61,30 @@ export class ClickedConsultingDialogComponent {
   submit(){
     if (this.userRole == "TEAM_MEMBER_ROLE") {
       this.apiConsultingService.createConsulting(this.myConsulting).subscribe(
-        (response) => {
-          this.dialogRef.close(response);
-          this._snackBar.open("Session de consulting demandée", "Fermer", {
-            duration: 5000,
-          });
-        }
+        (response) => { this.showSuccess(response); },
+        (error) => { this.showError(); }
       );
     } else if (this.userRole == "TEACHING_STAFF_ROLE") {
       this.apiConsultingService.updateAvailability(this.myAvailability).subscribe(
-        (response) => {
-          this.dialogRef.close(response);
-        }
+        (response) => { this.dialogRef.close(response); }
       );
     }
   }
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  showSuccess(data: any) {
+    this._snackBar.open("La demande de consulting a été envoyée", "Fermer", {
+      duration: 5000,
+    });
+    this.dialogRef.close(data);
+  }
+
+  showError() {
+    this._snackBar.open("La demande de consulting n'a pas pu être envoyée", "Fermer", {
+      duration: 5000,
+    });
   }
 }
