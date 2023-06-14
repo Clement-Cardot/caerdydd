@@ -1,7 +1,5 @@
 package com.caerdydd.taf.models.dto.consulting;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -31,9 +29,16 @@ public class ConsultingDTO {
 
     @Override
     public String toString() {
-        return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + "]";
+        String idPlannedTimingConsulting = "null";
+        String idPlannedTimingAvailability = "null";
+
+        if (this.plannedTimingConsulting != null){
+            idPlannedTimingConsulting = String.valueOf(this.plannedTimingConsulting.getIdPlannedTimingConsulting());
+        }
+
+        if (this.plannedTimingAvailability != null){
+            idPlannedTimingAvailability = String.valueOf(this.plannedTimingAvailability.getIdPlannedTimingAvailability());
+        }
+        return "ConsultingDTO [idConsulting=" + idConsulting + ", speciality=" + speciality + ", notes=" + notes + ", team=" + team + ", idPlannedTimingConsulting=" + idPlannedTimingConsulting + ", idPlannedTimingAvailability" + idPlannedTimingAvailability + "]";
     }
-
-
-        
 }

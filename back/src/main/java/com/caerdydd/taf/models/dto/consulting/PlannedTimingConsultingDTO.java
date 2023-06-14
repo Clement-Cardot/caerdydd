@@ -33,7 +33,7 @@ public class PlannedTimingConsultingDTO {
 
     @JsonBackReference(value = "consulting")
     private ConsultingDTO consulting;
-
+    
     public PlannedTimingConsultingDTO() {
     }
 

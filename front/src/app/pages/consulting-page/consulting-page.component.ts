@@ -5,24 +5,31 @@ import { ApiConsultingService } from 'src/app/core/services/api-consulting.servi
 @Component({
   selector: 'app-consulting-page',
   templateUrl: './consulting-page.component.html',
-  styleUrls: ['./consulting-page.component.scss']
+  styleUrls: ['./consulting-page.component.scss'],
 })
 export class ConsultingPageComponent {
   consultingFinishedList: Consulting[] = [];
   consultingProgrammedList: Consulting[] = [];
+  consultingWaitingAcceptation: Consulting[] = [];
   
-  constructor(private consultingService: ApiConsultingService) { }
+  constructor(private apiConsultingService: ApiConsultingService) { }
 
   ngOnInit(): void {
     this.getAllConsultingsForCurrentTeachingStaff();
   }
 
   getAllConsultingsForCurrentTeachingStaff(){
-    this.consultingService.getConsultingForCurrentTeachingStaff()
+    this.apiConsultingService.getConsultingForCurrentTeachingStaff()
         .subscribe(data => {
             this.sortConsulting(data);
           }
         );
+
+    this.apiConsultingService.getAllWaitingAcceptationConsultings()
+    .subscribe(data => {
+        this.consultingWaitingAcceptation = data;
+      }
+    );
   }
 
   sortConsulting(consultingList: Consulting[]) : void {
@@ -37,5 +44,5 @@ export class ConsultingPageComponent {
     this.consultingFinishedList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());
     this.consultingProgrammedList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());
   }
-  
+
 }

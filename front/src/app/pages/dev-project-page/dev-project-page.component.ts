@@ -21,10 +21,11 @@ export class DevProjectPageComponent  implements OnInit, OnDestroy {
   consultingsList!: Consulting[];
 
   refresh: any;
+  currentUserSubscription: any;
   constructor(public userDataService: UserDataService, private apiTeamMemberService: ApiTeamMemberService, private apiTeamService: ApiTeamService, private apiConsultingService: ApiConsultingService ) { }
 
   public ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
+    this.currentUserSubscription = this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
       this.getTeamMember();
     });
@@ -33,6 +34,7 @@ export class DevProjectPageComponent  implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.refresh);
+    this.currentUserSubscription.unsubscribe();
   }
 
   getData() {

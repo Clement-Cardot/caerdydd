@@ -102,6 +102,11 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       if (this.currentUser.getRoles().includes('STUDENT_ROLE')) {
         this.navLink.push('Equipes');
       }
+
+      // Jury Member
+      if (this.currentUser.getRoles().includes('JURY_MEMBER_ROLE')) {
+        this.navLink.push('Commentaires Présentation');
+      }
     }
   }
 
@@ -143,6 +148,9 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'Projet Validation':
         this.router.navigateByUrl('/validation-project');
+        break;
+      case 'Commentaires Présentation':
+        this.router.navigateByUrl('/presentationCommentary');
         break;
       default:
         this.router.navigateByUrl('/dashboard');

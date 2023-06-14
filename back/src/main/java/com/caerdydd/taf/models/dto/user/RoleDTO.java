@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RoleDTO {
 
     public static final String STUDENT_ROLE = "STUDENT_ROLE";

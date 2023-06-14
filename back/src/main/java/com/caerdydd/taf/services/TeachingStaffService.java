@@ -1,5 +1,6 @@
 package com.caerdydd.taf.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -87,5 +88,28 @@ public class TeachingStaffService {
 
     return modelMapper.map(response, TeachingStaffDTO.class);
   }
+
+  public List<TeachingStaffDTO> getTeachingStaffBySpeciality(String speciality) throws CustomRuntimeException {
+    try {
+        List<TeachingStaffDTO> teachingStaffList = teachingStaffRepository.findAll().stream()
+                    .map(teachingStaffEntity -> modelMapper.map(teachingStaffEntity, TeachingStaffDTO.class))
+                    .collect(Collectors.toList());
+
+        List<TeachingStaffDTO> teachingStaffWithSpeciality = new ArrayList<>();
+        
+        for (TeachingStaffDTO teachingStaff : teachingStaffList) {
+            if ((speciality.equals("Infrastructure") && teachingStaff.getIsInfrastructureSpecialist()) ||
+                (speciality.equals("Développement") && teachingStaff.getIsDevelopmentSpecialist()) ||
+                (speciality.equals("Modélisation") && teachingStaff.getIsModelingSpecialist())) {
+                teachingStaffWithSpeciality.add(teachingStaff);
+            }
+        }
+
+        return teachingStaffWithSpeciality;
+    } catch (Exception e) {
+        throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+    }
+}
+
     
 }
