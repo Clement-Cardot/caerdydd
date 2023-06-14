@@ -15,7 +15,7 @@
     </mat-card-content>
     <mat-card-actions>
         <button mat-raised-button *ngIf="canBeCommented()" color="accent" (click)="openDialog()">Commentaires</button>
-        <button mat-raised-button *ngIf="consulting.plannedTimingAvailability == null" color="accent" (click)="validConsulting(consulting)">Valider</button>
+        <button mat-raised-button *ngIf="consulting.plannedTimingAvailability == null && isCurrentUserATeachingStaff()" color="accent" (click)="validConsulting(consulting)">Valider</button>
         <button mat-raised-button *ngIf="isTeachingStaffReplacable()" color="accent" (click)="replaceTeachingStaffOfConsulting()">Remplacer le Professeur</button>
     </mat-card-actions>
 </mat-card>

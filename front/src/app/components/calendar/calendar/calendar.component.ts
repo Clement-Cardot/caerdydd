@@ -151,6 +151,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     if (clickEvent.event instanceof Presentation) {
       //TODO : open presentation dialog
     } else if (clickEvent.event instanceof PlannedTimingConsulting) {
+      if(this.currentUser?.getRoles().includes("PLANNING_ROLE")) return;
       this.dialog.open(ClickedConsultingDialogComponent, { data: { event: clickEvent.event }})
             .afterClosed().subscribe(result => {
               if (result) {
