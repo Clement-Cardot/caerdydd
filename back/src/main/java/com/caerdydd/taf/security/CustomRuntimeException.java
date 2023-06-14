@@ -31,6 +31,7 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_IS_NOT_AN_OPTION_LEADER = "Requested user is not a option leader";
     public static final String USER_IS_NOT_A_TEAM_MEMBER = "Requested user is not a team member";
     public static final String USER_IS_NOT_A_PLANNING_ASSISTANT = "Requested user is not a planning assistant";
+    public static final String USER_IS_NOT_AUTHORIZED = "Requested user is not authorized";
     public static final String USER_IS_NOT_A_JURY_MEMBER = "Requested user is not a jury member";
 
     // Règles métiers messages <- A traduire en anglais ^^
@@ -44,12 +45,15 @@ public class CustomRuntimeException extends Exception{
     public static final String USER_NOT_IN_ASSOCIATED_TEAM = "User is not associated in a team";
     public static final String USER_NOT_IN_A_TEAM = "User is not in a team";
     public static final String USER_IS_NOT_OWNER_OF_AVAILABILITY = "User is not owner of availability";
+    public static final String CONSULTING_IS_ALREADY_TAKEN = "Consulting is already taken";
     public static final String PLANNED_TIMING_IS_IN_PAST = "Planned timing is in past";
     public static final String PLANNED_TIMING_IS_ALREADY_TAKEN = "Planned timing is already taken";
+    public static final String DEMAND_IS_MADE_TOO_LATE = "Demand is made too late";
     public static final String CONSULTING_IS_IN_PAST = "Consulting is in past";
     public static final String TEACHING_STAFF_IS_NOT_AVAILABLE = "Teaching staff is not available";
     public static final String TEAM_MEMBER_INCORRECT_INDIVIDUAL_MARK = "The individual mark of the team member is under 0 or above 10";
     public static final String TEAM_MEMBER_INCORRECT_TEAM_MARK = "The team mark of the team member is under 0 or above 5";
+    public static final String USER_IS_NOT_OWNER_OF_CONSULTING = "User is not owner of consulting";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
@@ -72,6 +76,7 @@ public class CustomRuntimeException extends Exception{
 
     //time 
     public static final String PRESENTATION_END_BEFORE_BEGIN = "Presentation end time is before its start time.";
+    public static final String CONSULTING_NOT_FINISHED = "Consulting is not finished.";
     public static final String PRESENTATION_DID_NOT_BEGIN = "Presentation did not start yet.";
     public static final String PRESENTATION_DID_NOT_FINISH = "Presentation did not finish yet.";
 

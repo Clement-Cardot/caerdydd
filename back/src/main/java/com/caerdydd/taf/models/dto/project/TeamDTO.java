@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeamDTO {
     
     private Integer idTeam;
@@ -26,6 +25,7 @@ public class TeamDTO {
     private String filePathScopeStatementAnalysis;
     private String filePathReport;
     private Boolean isReportAnnotation;
+    private String reportComments;
 
     @JsonManagedReference(value="team")
     List<TeamMemberDTO> teamMembers;

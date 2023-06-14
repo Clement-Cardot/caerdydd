@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { Team } from 'src/app/core/data/models/team.model';
@@ -10,10 +10,11 @@ import { User } from 'src/app/core/data/models/user.model';
   styleUrls: ['./teams-page.component.scss']
 })
 
-export class TeamsPageComponent implements OnInit {
+export class TeamsPageComponent implements OnInit, OnDestroy {
   teams: Team[] = [];
 
   refresh: any;
+  currentUserSubscription: any;
 
   openTeamsCreation: boolean = false;
 
@@ -25,15 +26,14 @@ export class TeamsPageComponent implements OnInit {
   ngOnInit(): void {
     this.getAllData();
     this.refresh = setInterval(() => { this.getAllData() },  5000 );
-    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
+    this.currentUserSubscription = this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
     });
   }
 
   ngOnDestroy(): void {
-    if (this.refresh) {
-      clearInterval(this.refresh);
-    }
+    clearInterval(this.refresh);
+    this.currentUserSubscription.unsubscribe();
   }
 
   getAllData(){

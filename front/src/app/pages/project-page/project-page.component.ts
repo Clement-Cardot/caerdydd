@@ -1,13 +1,16 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { FileInput } from "ngx-material-file-input";
+import { Consulting } from "src/app/core/data/models/consulting.model";
 import { Team } from "src/app/core/data/models/team.model";
-import { User } from "src/app/core/data/models/user.model";
+import { ApiConsultingService } from "src/app/core/services/api-consulting.service";
 import { ApiTeamService } from "src/app/core/services/api-team.service";
 import { ApiUploadFileService } from "src/app/core/services/api-upload-file.service";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FileInput } from "ngx-material-file-input";
+import { User } from "src/app/core/data/models/user.model";
 import { UserDataService } from "src/app/core/services/user-data.service";
+import { ApiJuryService } from "src/app/core/services/api-jury.service";
 
 @Component({
     selector: 'app-project-page',
@@ -19,38 +22,50 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     id!: string;
     team!: Team;
     currentUser!: User | undefined;
+    consultingsList: Consulting[] = [];
 
     isJury: boolean = false;
 
     importReportAnnotform: FormGroup;
     reportAnnotFormControl = new FormControl('', [Validators.required]);
 
+    addReportCommentform: FormGroup;
+    reportCommentFormControl = new FormControl('', [Validators.required]);
+
+    reportCommentFormValueSet: boolean = false;
+
     errorMessage!: string;
 
     refresh: any;
+    currentUserSubscription: any;
 
-    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService, private _snackBar: MatSnackBar, private formBuilder: FormBuilder) {
+    constructor(public userDataService: UserDataService, private route: ActivatedRoute, private apiTeamService: ApiTeamService, private uploadFileService: ApiUploadFileService,private _snackBar: MatSnackBar, private formBuilder: FormBuilder, private consultingService: ApiConsultingService) {
       this.importReportAnnotform = this.formBuilder.group({
         reportAnnot: this.reportAnnotFormControl
+      });
+      this.addReportCommentform = this.formBuilder.group({
+        reportComment: this.reportCommentFormControl
       });
     }
 
     ngOnInit(): void {
       this.id = this.route.snapshot.params['id'];
-
-      this.getCurrentUser();
-      this.getTeam();
-      this.refresh = setInterval(() => { this.getTeam() },  5000 );
+      this.getData()
+      this.refresh = setInterval(() => { this.getData() },  5000 );
     }
 
     ngOnDestroy(): void {
-      if (this.refresh) {
-        clearInterval(this.refresh);
-      }
+      clearInterval(this.refresh);
+      this.currentUserSubscription.unsubscribe();
+    }
+
+    getData() {
+      this.getCurrentUser();
+      this.getTeam();
     }
 
     getCurrentUser() {
-      this.userDataService.getCurrentUser().subscribe(user => {
+      this.currentUserSubscription = this.userDataService.getCurrentUser().subscribe(user => {
         this.currentUser = user;
       });
     }
@@ -58,15 +73,32 @@ import { UserDataService } from "src/app/core/services/user-data.service";
     getTeam() {
       this.apiTeamService.getTeam(+this.id).subscribe(data => {
         this.team = data;
+        if (!this.reportCommentFormValueSet) {
+          this.reportCommentFormValueSet = true;
+          this.addReportCommentform.patchValue({
+            reportComment: this.team.reportComments,
+          });
+        }
+        this.getAllConsultingsForCurrentTeam();
       });
     }
 
     isUserJury() {
-      let userID = this.currentUser?.id
-      let ts1 = this.team.projectDev.jury?.ts1.idUser;
-      let ts2 = this.team.projectDev.jury?.ts2.idUser;
-      let statement = this.currentUser?.getRoles().includes("JURY_MEMBER_ROLE") && (ts1 == userID || ts2 == userID)
-      return statement;
+      if (this.currentUser && this.team.projectDev.jury) {
+        let userID = this.currentUser.id;
+        let ts1 = this.team.projectDev.jury.ts1.idUser;
+        let ts2 = this.team.projectDev.jury.ts2.idUser;
+        let statement = this.currentUser.getRoles().includes("JURY_MEMBER_ROLE") && (ts1 == userID || ts2 == userID);
+        return statement;
+      }
+      return false
+    }
+
+    isUserOptionLeader() {
+      if (this.currentUser) {
+        return this.currentUser.getRoles().includes("OPTION_LEADER_ROLE");
+      }
+      return false
     }
 
     getFile(file: string) {
@@ -98,9 +130,9 @@ import { UserDataService } from "src/app/core/services/user-data.service";
           const file = file_form.files[0];
           this.uploadFileService.upload(file, this.team.idTeam, "annotedReport").subscribe(
           data => {
-            this.showSuccess();
-          },
+            this.showSuccess("Import du fichier avec succès");          },
           error => {
+            this.reportAnnotFormControl.setErrors({apiError: true});
             this.showError(error)
           },
         );
@@ -125,15 +157,43 @@ import { UserDataService } from "src/app/core/services/user-data.service";
       }
     }
 
-    showSuccess() {
-      this._snackBar.open("Import du fichier avec succès", "Fermer", {
+    uploadComment() {
+      if (this.team != null) {
+        this.reportCommentFormControl.setErrors({'apiError': null});
+        this.reportCommentFormControl.updateValueAndValidity();
+        if(this.addReportCommentform.invalid) {
+          console.log("The form is invalid, form was :");
+          console.log(this.addReportCommentform);
+        } else {
+          const comment: string = this.addReportCommentform.get('reportComment')?.value;
+          this.apiTeamService.setCommentOnReport(this.team.idTeam, comment).subscribe(
+            data => {
+              this.showSuccess("Le commentaire à été modifier avec succès");
+            },
+            error => {
+              this.reportCommentFormControl.setErrors({apiError: true});
+              this.showError(error)
+            },
+          );
+        }
+
+      }
+    }
+
+    showSuccess(message: string) {
+      this._snackBar.open(message, "Fermer", {
         duration: 5000,
       });
     }
 
     showError(error: { status: number; }) {
-      this.reportAnnotFormControl.setErrors({apiError: true});
       switch (error.status) {
+        case 401:
+          this.errorMessage = "Vous n'avez pas la permittion d'ajouter ou modifier un commentaire";
+          break;
+        case 404:
+          this.errorMessage = "L'équipe que vous modifiez est introuvable";
+          break;
         case 415:
           this.errorMessage = "Le fichier n'est pas au bon format";
           break;
@@ -149,6 +209,18 @@ import { UserDataService } from "src/app/core/services/user-data.service";
       this._snackBar.open("Une erreur est survenue lors du téléchargement", "Fermer", {
         duration: 5000,
       });
+    }
+
+    getAllConsultingsForCurrentTeam(){
+      if(this.team) {
+        this.consultingService.getConsultingForATeam(this.team.idTeam)
+        .subscribe(data => {
+            this.consultingsList = data;
+            this.consultingsList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());
+
+          }
+        );
+      }
     }
 
   }

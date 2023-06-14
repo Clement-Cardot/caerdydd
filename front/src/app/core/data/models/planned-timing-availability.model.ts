@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { TeachingStaff, TeachingStaffAdapter } from "./teaching-staff.model";
-import { Adapter } from "../adapter";
+import { Injectable } from '@angular/core';
+import { TeachingStaff, TeachingStaffAdapter } from './teaching-staff.model';
+import { Adapter } from '../adapter';
 
 export class PlannedTimingAvailability {
     constructor(
@@ -10,20 +10,20 @@ export class PlannedTimingAvailability {
         public teachingStaff: TeachingStaff,
     ) {}
 }
-
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
-export class PlannedTimingAvailabilityAdapter implements Adapter<PlannedTimingAvailability>{
+export class PlannedTimingAvailabilityAdapter
+  implements Adapter<PlannedTimingAvailability>
+{
+  constructor(private teachingStaffAdapter: TeachingStaffAdapter) {}
 
-    constructor(private teachingStaffAdapter: TeachingStaffAdapter) { }
-
-    adapt(item: any): PlannedTimingAvailability {
-        return new PlannedTimingAvailability(
-            item.idPlannedTimingAvailability,
-            item.idPlannedTimingConsulting,
-            item.isAvailable,
-            this.teachingStaffAdapter.adapt(item.teachingStaff),
-        );
-    }
+  adapt(item: any): PlannedTimingAvailability {
+      return new PlannedTimingAvailability(
+          item.idPlannedTimingAvailability,
+          item.idPlannedTimingConsulting,
+          item.isAvailable,
+          this.teachingStaffAdapter.adapt(item.teachingStaff),
+      );
+  }
 }

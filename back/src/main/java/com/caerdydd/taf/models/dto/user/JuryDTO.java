@@ -8,23 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JuryDTO {
     private Integer idJury;
 
-    // @JsonIgnore
     private TeachingStaffDTO ts1;
     
-    // @JsonIgnore
     private TeachingStaffDTO ts2;
-
-    // @JsonGetter("teachingStaff")
-    // private List<TeachingStaffDTO> teachingStaff(){
-    //     List<TeachingStaffDTO> teachingStaff = new ArrayList<>();
-    //     teachingStaff.add(ts1);
-    //     teachingStaff.add(ts2);
-    //     return teachingStaff;
-    // }
 
     public JuryDTO() {
     }

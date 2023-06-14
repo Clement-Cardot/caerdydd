@@ -18,7 +18,10 @@ import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.project.TeamEntity;
+import com.caerdydd.taf.models.entities.user.JuryEntity;
+import com.caerdydd.taf.repositories.JuryRepository;
 import com.caerdydd.taf.repositories.PresentationRepository;
+import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.rules.PresentationServiceRule;
@@ -40,6 +43,12 @@ public class PresentationService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private JuryRepository juryRepository;
 
     @Autowired
     private UserServiceRules userServiceRules;
@@ -141,9 +150,23 @@ public class PresentationService {
         // Check Presentation timeframe
         presentationServiceRule.checkPresentationTimeframe(presentation.getDatetimeBegin(), presentation.getDatetimeEnd());
 
-        // Check  Teaching Staff availability
+        // Check Teaching Staff availability
         presentationServiceRule.checkTeachingStaffAvailability(presentation.getJury().getIdJury(), presentation.getDatetimeBegin(), presentation.getDatetimeEnd());
     
+        // Get the corresponding project entity
+        ProjectEntity projectEntity = projectRepository.findById(presentation.getProject().getIdProject()).orElse(null);
+
+        // Get the corresponding jury entity
+        JuryEntity juryEntity = juryRepository.findById(presentation.getJury().getIdJury()).orElse(null);
+
+        if(projectEntity != null && juryEntity != null){
+            // Set the jury to the one provided in the presentation
+            projectEntity.setJury(juryEntity);
+
+            // Save the project
+            projectRepository.save(projectEntity);
+        }
+
         // Save Presentation (Convert the saved PresentationEntity back to PresentationDTO)
         return savePresentation(presentation);
     }

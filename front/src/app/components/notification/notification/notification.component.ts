@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy ,ViewChild  } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Notification } from 'src/app/core/data/models/notification.model';
 import { User } from 'src/app/core/data/models/user.model';
@@ -17,6 +17,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   currentUser: User | undefined = undefined;
 
   refresh: any;
+  currentUserSubscription: any;
 
   constructor(
     private apiNotificationService: ApiNotificationService,
@@ -25,7 +26,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   
 
   ngOnInit(): void {
-    this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
+    this.currentUserSubscription = this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
       this.getNotifications();
       
@@ -35,6 +36,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.refresh);
+    this.currentUserSubscription.unsubscribe();
   }
 
   getNotifications(): void {
