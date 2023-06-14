@@ -21,12 +21,12 @@
           <button mat-raised-button color="accent" (click)="getFile('report')" class="downloadButton" [disabled]="!isThereFile('report')">Télécharger le document</button>
         </div>
         <div class="sameRow">
-          <p class="label">Rapport annoté:</p>
+          <p class="label">Rapport annoté :</p>
           <button mat-raised-button color="accent" (click)="getFile('annotedReport')" class="downloadButton" [disabled]="!isThereFile('reportAnnotation')">Télécharger le document</button>
         </div>
         <div class="sameRow">
           <p class="label">Cahier de tests :</p>
-          <a mat-button color="primary" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
+          <a mat-button color="primary" *ngIf="team.testBookLink != null && team.testBookLink != ''" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
         </div>
         <br>
         <div class="sameRow" *ngIf="isUserOptionLeader()">

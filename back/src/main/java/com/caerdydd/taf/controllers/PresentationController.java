@@ -52,6 +52,9 @@ public class PresentationController {
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 case CustomRuntimeException.PRESENTATION_END_BEFORE_BEGIN:
+                case CustomRuntimeException.PRESENTATION_ALREADY_PASSED:
+                case CustomRuntimeException.INTERMEDIATE_PRESENTATION_NOT_CREATED:
+                case CustomRuntimeException.PRESENTATION_ALREADY_EXISTS:
                     logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 case CustomRuntimeException.SERVICE_ERROR:

@@ -199,9 +199,6 @@ public class TeamController {
         logger.info("Process request : Get test book link validation of team: {}", idTeam);
         try {
             String testBookLinkValidation = teamService.getTestBookLinkValidation(idTeam);
-            if (testBookLinkValidation == null) {
-                throw new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND);
-            }
             return new ResponseEntity<>(testBookLinkValidation, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {

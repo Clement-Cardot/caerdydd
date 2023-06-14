@@ -263,6 +263,9 @@ public class ConsultingService {
         List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
 
         for (PlannedTimingConsultingDTO plannedTimingConsulting : plannedTimingConsultingsFromFile) {
+            if(!this.plannedTimingConsultingRepository.findByDatetimeBegin(plannedTimingConsulting.getDatetimeBegin()).isEmpty()){
+                throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_CONSULTING_ALREADY_EXISTS);
+            }
             plannedTimingConsulting.setTeachingStaffAvailabilities(new ArrayList<>());
             for (TeachingStaffDTO teachingStaffDTO : teachingStaffs) {
                 PlannedTimingAvailabilityDTO availabilityDTO = new PlannedTimingAvailabilityDTO();
@@ -481,7 +484,7 @@ public class ConsultingService {
         // Filtering only relevant availabilities
         List<PlannedTimingAvailabilityDTO> relevantAvailabilities = availabilities.stream()
                 .filter(availability -> consulting.getPlannedTimingConsulting().getIdPlannedTimingConsulting().equals(availability.getPlannedTimingConsulting().getIdPlannedTimingConsulting()))
-                .filter(availability -> availability.getIsAvailable())
+                .filter(PlannedTimingAvailabilityDTO::getIsAvailable)
                 .collect(Collectors.toList());
 
         // Get the Teaching Staff with the required speciality

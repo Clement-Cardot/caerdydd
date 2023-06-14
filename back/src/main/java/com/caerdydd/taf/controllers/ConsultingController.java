@@ -244,6 +244,10 @@ public class ConsultingController {
                 logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
             }
+            if (e.getMessage().equals(CustomRuntimeException.PLANNED_TIMING_CONSULTING_ALREADY_EXISTS)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
             if (e.getMessage().equals(CustomRuntimeException.INCORRECT_FILE_FORMAT)) {
                 logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
@@ -363,6 +367,7 @@ public class ConsultingController {
             }
         }
     }
+    
     @PutMapping("/createConsulting")
     public ResponseEntity<ConsultingDTO> createConsulting(@RequestBody ConsultingDTO consultingDTO) {
         logger.info("Process request : Create consulting");

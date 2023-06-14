@@ -1,7 +1,7 @@
 <div>
   <h2>Consultings en attente d'acceptation</h2>
   <div class="twoColumnDisplay" class="consulting-list">
-    <app-consulting-info class="consulting" *ngFor="let consulting of consultingWaitingAcceptation" [consulting]="consulting"></app-consulting-info>
+    <app-consulting-info class="consulting" *ngFor="let consulting of consultingWaitingAcceptation" [consulting]="consulting" (consultingAccepted)="getAllConsultingsForCurrentTeachingStaff()"></app-consulting-info>
   </div>
     <h2>Consultings à venir</h2>
     <div class="twoColumnDisplay" class="consulting-list">

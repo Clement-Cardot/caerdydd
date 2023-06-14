@@ -1,6 +1,8 @@
 package com.caerdydd.taf.services;
 
 import java.util.List;
+import java.util.Optional;
+
 import java.lang.reflect.Type;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -46,14 +48,18 @@ public class NotificationService {
         //Vérifier que la notification existe
         notificationServiceRules.checkNotificationExists(id);
 
-        NotificationEntity notification = notificationRepository.findById(id).get();
+        Optional<NotificationEntity> notificationOpt = notificationRepository.findById(id);
+        if(!notificationOpt.isPresent()){
+            throw new CustomRuntimeException(CustomRuntimeException.NOTIFICATION_NOT_FOUND);
+        }
+        NotificationEntity notification = notificationOpt.get();
         notification.setIsRead(true);
         NotificationEntity updatedNotification = notificationRepository.save(notification);
         return modelMapper.map(updatedNotification, NotificationDTO.class);
     }
     
 
-        public List<NotificationDTO> getNotificationsByUserId(Integer idUser) throws CustomRuntimeException {
+    public List<NotificationDTO> getNotificationsByUserId(Integer idUser) throws CustomRuntimeException {
 
         //Vérifier que l'utilisateur existe
         userServiceRules.checkUserExists(idUser);

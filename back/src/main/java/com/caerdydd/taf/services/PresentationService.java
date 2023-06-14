@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.project.PresentationDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
@@ -46,6 +47,9 @@ public class PresentationService {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     private JuryRepository juryRepository;
@@ -144,6 +148,8 @@ public class PresentationService {
         presentationServiceRule.checkJuryExists(presentation.getJury().getIdJury());
         presentationServiceRule.checkProjectExists(presentation.getProject().getIdProject());
 
+        ProjectDTO project = projectService.getProjectById(presentation.getProject().getIdProject());
+
         // Verify that user is a Planning assistant
         userServiceRules.checkCurrentUserRole("PLANNING_ROLE");
 
@@ -153,6 +159,17 @@ public class PresentationService {
         // Check Teaching Staff availability
         presentationServiceRule.checkTeachingStaffAvailability(presentation.getJury().getIdJury(), presentation.getDatetimeBegin(), presentation.getDatetimeEnd());
     
+        // Check Presentation does not already exist
+        presentationServiceRule.checkPresentationDoesNotExist(presentation.getType(), project);
+
+        // Check the data is not passed
+        presentationServiceRule.checkDateIsNotPassed(presentation.getDatetimeBegin());
+
+        // If it is a final presentation, check the intermediate presentation exists
+        if(presentation.getType().equals("Présentation finale")){
+            presentationServiceRule.checkIntermediatePresentationIsCreated(presentation.getProject());
+        }
+
         // Get the corresponding project entity
         ProjectEntity projectEntity = projectRepository.findById(presentation.getProject().getIdProject()).orElse(null);
 
