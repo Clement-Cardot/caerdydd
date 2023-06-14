@@ -1,5 +1,7 @@
 package com.caerdydd.taf.models.dto.project;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.user.JuryDTO;
@@ -31,6 +33,8 @@ public class ProjectDTO {
     private TeamDTO teamValidation;
 
     private JuryDTO jury;
+
+    private List<PresentationDTO> presentations;
 
     public ProjectDTO() {
     }
