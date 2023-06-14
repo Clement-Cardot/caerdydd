@@ -249,8 +249,8 @@ public class TeamService {
         
     public TeamDTO setCommentOnReport(Integer idTeam, String comment) throws CustomRuntimeException {
         userServiceRules.checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
-        // juryServiceRules.checkJuryMemberManageTeam(userServiceRules.getCurrentUser().getId(), idTeam);
         TeamDTO team = this.getTeamById(idTeam);
+        juryServiceRules.checkJuryMemberManageTeam(userServiceRules.getCurrentUser().getId(), team);
         team.setReportComments(comment);
         return saveTeam(team);
     }

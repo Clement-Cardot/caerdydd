@@ -36,7 +36,7 @@
           </div>
           <mat-form-field id="reportComment">
             <textarea matInput formControlName="reportComment" rows="5"></textarea>
-            <!-- [disabled]="isUserOptionLeader() && !isUserJury()" -->
+            <!--  -->
             <mat-error *ngIf="reportCommentFormControl.hasError('required')">
               Vous devez écrire un commentaire
             </mat-error>

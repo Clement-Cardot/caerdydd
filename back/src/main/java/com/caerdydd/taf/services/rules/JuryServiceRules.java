@@ -13,9 +13,6 @@ public class JuryServiceRules {
 
     @Autowired
     TeachingStaffService teachingStaffService;
-
-    // @Autowired
-    // TeamService teamService;
     
     public void checkDifferentTeachingStaff(Integer ts1, Integer ts2) throws CustomRuntimeException {
         if (ts1.equals(ts2)) {
@@ -23,12 +20,11 @@ public class JuryServiceRules {
         }
     }
 
-    // public void checkJuryMemberManageTeam(Integer idJury, Integer idTeam) throws CustomRuntimeException {
-    //     TeamDTO team = teamService.getTeamById(idTeam);
-    //     Integer idJury1 = team.getProjectDev().getJury().getTs1().getIdUser();
-    //     Integer idJury2 = team.getProjectDev().getJury().getTs2().getIdUser();
-    //     if (!(idJury1.equals(idJury) || idJury2.equals(idJury))) {
-    //         throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED);
-    //     }
-    // }
+    public void checkJuryMemberManageTeam(Integer idJury, TeamDTO team) throws CustomRuntimeException {
+        Integer idJury1 = team.getProjectDev().getJury().getTs1().getIdUser();
+        Integer idJury2 = team.getProjectDev().getJury().getTs2().getIdUser();
+        if (!(idJury1.equals(idJury) || idJury2.equals(idJury))) {
+            throw new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED);
+        }
+    }
 }

@@ -22,7 +22,6 @@ import com.caerdydd.taf.repositories.TeachingStaffRepository;
 import com.caerdydd.taf.repositories.UserRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.JuryService;
-import com.caerdydd.taf.services.TeamService;
 
 @ExtendWith(MockitoExtension.class)
 public class JuryServiceRulesTest {
@@ -32,9 +31,6 @@ public class JuryServiceRulesTest {
 
     @Mock
     private JuryService juryService;
-
-    @Mock
-    private TeamService teamService;
 
     @Mock
     UserRepository userRepositoryMock;
@@ -66,28 +62,22 @@ public class JuryServiceRulesTest {
     @Test
     void testCheckJuryMemberManageTeam_Managing() throws CustomRuntimeException {
         Integer idJury = 1;
-        Integer idTeam = 1;
         ProjectDTO mockedProject = new ProjectDTO(null, null);
         mockedProject.setJury(new JuryDTO(new TeachingStaffDTO(new UserDTO(1, null, null, null, null, null, null)), new TeachingStaffDTO(new UserDTO(2, null, null, null, null, null, null))));
         TeamDTO mockedTeam = new TeamDTO(1, null, mockedProject, null);
 
-        when(teamService.getTeamById(any(Integer.class))).thenReturn(mockedTeam);
-
-        assertDoesNotThrow(() -> juryServiceRules.checkJuryMemberManageTeam(idJury, idTeam));
+        assertDoesNotThrow(() -> juryServiceRules.checkJuryMemberManageTeam(idJury, mockedTeam));
     }
 
     @Test
     void testCheckJuryMemberManageTeam_NotManaging() throws CustomRuntimeException {
         Integer idJury = 3;
-        Integer idTeam = 1;
         ProjectDTO mockedProject = new ProjectDTO(null, null);
         mockedProject.setJury(new JuryDTO(new TeachingStaffDTO(new UserDTO(1, null, null, null, null, null, null)), new TeachingStaffDTO(new UserDTO(2, null, null, null, null, null, null))));
         TeamDTO mockedTeam = new TeamDTO(1, null, mockedProject, null);
 
-        when(teamService.getTeamById(any(Integer.class))).thenReturn(mockedTeam);
-
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
-            juryServiceRules.checkJuryMemberManageTeam(idJury, idTeam);
+            juryServiceRules.checkJuryMemberManageTeam(idJury, mockedTeam);
         });
         
         // Verify the result
