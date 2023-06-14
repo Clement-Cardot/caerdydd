@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeamDTO {
     
     private Integer idTeam;
