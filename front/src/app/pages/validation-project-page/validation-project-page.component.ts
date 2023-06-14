@@ -14,7 +14,7 @@ import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.serv
   styleUrls: ['./validation-project-page.component.scss']
 })
 export class ValidationProjectPageComponent implements OnInit {
-  currentUser!: User | null;
+  currentUser: User | undefined = undefined;
   currentTeam!: Team | null;
   validationTeam!: Team;
   testBookLinkValidation!: string | null;
@@ -108,6 +108,10 @@ export class ValidationProjectPageComponent implements OnInit {
 
   isThereStateScope() {
     return (this.validationTeam?.filePathScopeStatement != null);
+  }
+  
+  isThereAnalysis() {
+    return (this.validationTeam?.filePathScopeStatementAnalysis != null);
   }
 
   isThereFinalStateScope() {

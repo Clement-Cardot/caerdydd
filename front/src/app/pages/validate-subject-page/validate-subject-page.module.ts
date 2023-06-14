@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { BrowserModule } from '@angular/platform-browser';
 import { ValidateSubjectPageComponent } from './validate-subject-page.component';
-import { TeamModule } from 'src/app/components/project/project.module';
+import { ProjectModule } from 'src/app/components/project/project.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +13,7 @@ import { TeamModule } from 'src/app/components/project/project.module';
     CommonModule,
     BrowserModule,
     MatCardModule,
-    TeamModule
+    ProjectModule
   ]
 })
 export class ValidateSubjectPageModule { }

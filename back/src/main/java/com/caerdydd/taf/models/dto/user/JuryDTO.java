@@ -8,14 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JuryDTO {
     private Integer idJury;
 
     private TeachingStaffDTO ts1;
     
     private TeachingStaffDTO ts2;
-
 
     public JuryDTO() {
     }

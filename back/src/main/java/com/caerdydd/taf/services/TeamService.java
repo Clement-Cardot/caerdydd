@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.notification.NotificationDTO;
 import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
@@ -53,6 +54,9 @@ public class TeamService {
 
     @Autowired
     private UserServiceRules userServiceRules;
+
+    @Autowired
+    private NotificationService notificationService;
     
     public List<TeamDTO> listAllTeams() throws CustomRuntimeException {
         try {
@@ -170,22 +174,34 @@ public class TeamService {
 
 
     public TeamDTO addTestBookLink(TeamDTO team) throws CustomRuntimeException {
+    // Vérifie si l'équipe existe
+    TeamDTO teamDTO = getTeamById(team.getIdTeam());
 
-        // Check if the Team exists
-        TeamDTO teamDTO = getTeamById(team.getIdTeam());
+    // Vérifie si l'utilisateur est un membre de l'équipe
+    userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+    teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
 
-        // Check if the user is a team member
-        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+    // Vérifie si le lien est valide
+    teamServiceRules.isValidLink(team.getTestBookLink());
 
-        // Check if the user is a member of the team
-        teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
+    teamDTO.setTestBookLink(team.getTestBookLink());
 
-        // Check if Link is valid
-        teamServiceRules.isValidLink(team.getTestBookLink());
-        
-        teamDTO.setTestBookLink(team.getTestBookLink());
-        return saveTeam(teamDTO);
+    // Récupère l'équipe pair
+    TeamDTO pairTeam = getTeamById(teamDTO.getProjectValidation().getIdProject());
+
+    // Crée et envoie une notification à chaque membre de l'équipe pair
+    for (TeamMemberDTO member : pairTeam.getTeamMembers()) {
+        UserDTO user = member.getUser();
+        NotificationDTO notification = new NotificationDTO();
+        notification.setUser(user);
+        notification.setMessage(team.getName() + " a déposé un nouveau lien pour le cahier de validation");
+        notification.setIsRead(false);
+        notificationService.createNotification(notification);
     }
+
+    return saveTeam(teamDTO);
+}
+
     
 
     public String getTestBookLinkDev(Integer idTeam) throws CustomRuntimeException {
@@ -198,5 +214,35 @@ public class TeamService {
         TeamDTO pairedTeam = getTeamById(team.getProjectValidation().getIdProject());
         return pairedTeam.getTestBookLink();
     }
+    
+    public TeamDTO setTeamWorkMarkById(Integer id, Integer teamWorkMark)throws CustomRuntimeException{
+        // Check if the current user is a jury member 
+        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
+
+      // Check if the value of the bonus is correct.
+      TeamServiceRules.checkTeamWorkMark(teamWorkMark);
+
+
+      TeamDTO team = getTeamById(id);
+
+      team.setTeamWorkMark(teamWorkMark);
+      return saveTeam(team);
+  }
+
+
+    public TeamDTO setTeamValidationMarkById(Integer id, Integer teamValidationMark)throws CustomRuntimeException{
+        // Check if the current user is a jury member 
+        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
+
+    // Check if the value of the bonus is correct.
+    TeamServiceRules.checkTeamValidationMark(teamValidationMark);
+
+    TeamDTO team = getTeamById(id);
+
+    team.setTeamValidationMark(teamValidationMark);
+    return saveTeam(team);
+    }
 
 }
+
+

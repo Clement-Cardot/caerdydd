@@ -1,3 +1,39 @@
 .mat-expansion-panel {
-        margin: 15px
+    margin: 15px;
+}
+
+th {
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+.tableinput {
+    border:groove;
+    text-align: center;
+}
+
+.sameRow {
+        display: flex;
+        flex-direction: row;
+        margin: 25px 0 0 0;
+    }
+    
+    .input-container {
+        margin-right: 15px;
+    }
+
+.save-message {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+    } 
+
+#noStudents {
+    font-weight: bold;
+    padding-top: 15px;
+    display: flex;
+    justify-content: center;
 }

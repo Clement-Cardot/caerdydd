@@ -25,37 +25,32 @@ mat-card-header {
     }
 }
 
-mat-card-actions {
-    padding: 20px;
-    border-top: 1px solid #ccc;
+mat-card-content {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex-direction: column;
-    align-items: left;
 }
 
-mat-card-actions mat-card-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 30px;
-    color: #1a1a1a;
+mat-card-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 1rem;
 }
 
-mat-card-actions mat-card-subtitle {
-    font-size: 1rem;
-    font-weight: 400;
-    margin-bottom: 10px;
-    padding-left: 10px;
-}
-
-button {
-    margin: 20px 0 0 0;
-    padding: 10px;
-    border: none;
-    background-color: #962051;
+#buttonValidateSubject {
+    height: 3.2rem;
+    width: 12rem;
     color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px #ccc;
-    transition: background-color 0.3s ease-in-out;
-    &:hover {
-        box-shadow: 0 0 20px #a8a8a8;
-    }
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 15px;
+}
+
+p {
+    margin-top: 1rem;
+    text-align: justify;
 }

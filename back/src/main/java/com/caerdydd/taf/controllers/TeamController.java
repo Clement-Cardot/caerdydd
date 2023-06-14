@@ -31,7 +31,7 @@ import com.caerdydd.taf.services.TeamService;
 public class TeamController {
 
     private static final Logger logger = LogManager.getLogger(TeamController.class);
-    private static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
+    static final String UNEXPECTED_EXCEPTION = "Unexpected Exception : {}";
 
     @Autowired
     private TeamService teamService;
@@ -173,6 +173,7 @@ public class TeamController {
     public ResponseEntity<String> getTestBookLinkDev(@PathVariable Integer idTeam) {
         logger.info("Process request : Get test book link dev of team: {}", idTeam);
         try {
+            // TODO : move this logical in service
             String testBookLinkDev = teamService.getTestBookLinkDev(idTeam);
             if (testBookLinkDev == null) {
                 throw new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND);
@@ -181,10 +182,11 @@ public class TeamController {
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
                 case CustomRuntimeException.TEAM_NOT_FOUND:
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.LINK_NOT_FOUND:
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
@@ -202,10 +204,11 @@ public class TeamController {
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
                 case CustomRuntimeException.TEAM_NOT_FOUND:
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.LINK_NOT_FOUND:
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
                     return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
             }
         }
@@ -221,10 +224,12 @@ public class TeamController {
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
                 case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 case CustomRuntimeException.TEAM_NOT_FOUND:
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 case CustomRuntimeException.INCORRECT_FILE_FORMAT:
+                    logger.warn(e.getMessage());
                     return new ResponseEntity<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
                 default:
                     logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
@@ -258,4 +263,78 @@ public class TeamController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+     
+
+    @PostMapping("/teamMarks")
+    public ResponseEntity<TeamDTO> setTeamMarks(@RequestParam("teamId") Integer id, @RequestParam("teamWorkMark") Integer teamWorkMark,@RequestParam("teamValidationMark") Integer teamValidationMark) {
+        logger.info("Process request: Set team marks for team by id: {}", id);
+        try {
+            TeamDTO team = teamService.setTeamWorkMarkById(id, teamWorkMark);
+            team = teamService.setTeamValidationMarkById(id, teamValidationMark);
+            return new ResponseEntity<>(team, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.error(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @PostMapping("/teamWorkMark")
+    public ResponseEntity<TeamDTO> setTeamWorkMark(@RequestParam("teamId") Integer id, @RequestParam("teamWorkMark") Integer teamWorkMark) {
+        logger.info("Process request : Set teamWorkMark for team by id : {}", id);
+        try {
+            TeamDTO team = teamService.setTeamWorkMarkById(id, teamWorkMark);
+            return new ResponseEntity<>(team, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+    @PostMapping("/teamValidationMark")
+    public ResponseEntity<TeamDTO> setTeamValidationMark(@RequestParam("teamId") Integer id, @RequestParam("teamValidationMark") Integer teamValidationMark) {
+        logger.info("Process request : Set teamValidationMark for team by id : {}", id);
+        try {
+            TeamDTO team = teamService.setTeamValidationMarkById(id, teamValidationMark);
+            return new ResponseEntity<>(team, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            if(e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            if (e.getMessage().equals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER)) {
+                logger.warn(e.getMessage());
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+    
 }

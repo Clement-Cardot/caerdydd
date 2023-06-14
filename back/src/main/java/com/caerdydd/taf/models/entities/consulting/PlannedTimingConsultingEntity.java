@@ -25,15 +25,14 @@ public class PlannedTimingConsultingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPlannedTimingConsulting;
-
     private LocalDateTime datetimeBegin;
     private LocalDateTime datetimeEnd;
 
     @OneToMany(mappedBy = "plannedTimingConsulting", cascade = CascadeType.ALL)
     private List<PlannedTimingAvailabilityEntity> teachingStaffAvailabilities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "plannedTimingConsulting", cascade = CascadeType.ALL)
-    private List<ConsultingEntity> consultings = new ArrayList<>();
+    @OneToMany(mappedBy = "plannedTimingConsulting")
+    private List<ConsultingEntity> consultings;
 
     public PlannedTimingConsultingEntity() {
     }

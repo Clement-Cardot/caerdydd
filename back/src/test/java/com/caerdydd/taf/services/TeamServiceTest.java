@@ -13,12 +13,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.AdditionalAnswers;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import com.caerdydd.taf.models.dto.notification.NotificationDTO;
 import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
@@ -27,6 +29,7 @@ import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.project.TeamEntity;
 import com.caerdydd.taf.models.entities.user.TeamMemberEntity;
+import com.caerdydd.taf.models.entities.user.UserEntity;
 import com.caerdydd.taf.repositories.ProjectRepository;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -66,6 +69,9 @@ class TeamServiceTest {
 
     @Mock
     private ProjectRepository projectRepository;
+
+    @Mock
+    private NotificationService notificationService;
 
     // Test listAllTeams() method
 
@@ -889,14 +895,36 @@ class TeamServiceTest {
     }
 
     @Test
-    void testAddTestBookLink() {
+    void testAddTestBookLink() throws CustomRuntimeException {
         // Mock teamRepository.findById() method
         TeamEntity teamEntity = new TeamEntity(1, "Team A", null, null);
+        TeamEntity pairTeamEntity = new TeamEntity(2, "Team B", null, null);
+        
+        // Add projectValidation to team
+        ProjectEntity projectValidation = new ProjectEntity();
+        projectValidation.setIdProject(2);
+        teamEntity.setProjectValidation(projectValidation);
+        
         Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
+        Optional<TeamEntity> pairTeamMockedAnswer = Optional.of(pairTeamEntity);
         when(teamRepository.findById(1)).thenReturn(mockedAnswer);
+        when(teamRepository.findById(2)).thenReturn(pairTeamMockedAnswer);
 
         // Mock teamRepository.save() method
         when(teamRepository.save(any(TeamEntity.class))).thenAnswer(i -> i.getArguments()[0]);
+
+            // Mock team members of pair team
+        List<TeamMemberEntity> pairTeamMembers = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            TeamMemberEntity member = new TeamMemberEntity();
+            UserEntity user = new UserEntity();
+            user.setId(i+1);
+            member.setUser(user);
+            pairTeamMembers.add(member);
+        }
+
+        pairTeamEntity.setTeamMembers(pairTeamMembers);
+
 
         // Prepare input
         TeamDTO input = new TeamDTO();
@@ -905,17 +933,17 @@ class TeamServiceTest {
 
         // Call the method to test
         TeamDTO result = new TeamDTO();
-        try {
-            result = teamService.addTestBookLink(input);
-        } catch (CustomRuntimeException e) {
-            fail();
-        }
-
+        result = teamService.addTestBookLink(input);
+        
         // Verify the result
-        verify(teamRepository, times(1)).findById(1);
+        verify(teamRepository, times(2)).findById(any(Integer.class));
         verify(teamRepository, times(1)).save(any(TeamEntity.class));
         assertEquals("https://testbook.com/testlink", result.getTestBookLink());
+
+        // Verify notifications were sent to each member of the pair team
+        verify(notificationService, times(3)).createNotification(any(NotificationDTO.class));
     }
+
 
     @Test
     void testGetTestBookLinkDev() {
@@ -937,4 +965,102 @@ class TeamServiceTest {
         verify(teamRepository, times(1)).findById(1);
         assertEquals("https://testbook.com/testlink", result);
     }
+
+    @Test
+    void testSetTeamWorkMarkByIdSuccess() throws CustomRuntimeException {
+        doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
+
+        TeamEntity team = new TeamEntity();
+
+        int mark = 2;
+        team.setTeamWorkMark(mark);
+
+        ArgumentCaptor<TeamEntity> captor = ArgumentCaptor.forClass(TeamEntity.class);
+        when(teamRepository.save(captor.capture())).thenReturn(team);
+
+        Optional<TeamEntity> mockedTeam = Optional.of(team);
+        when(teamRepository.findById(mockedTeam.get().getIdTeam())).thenReturn(mockedTeam);
+        mockedTeam.get().setTeamWorkMark(0); // set bonus penalty to 0 initially
+
+        teamService.setTeamWorkMarkById(mockedTeam.get().getIdTeam(), mark);
+
+        assertEquals(mark, captor.getValue().getTeamWorkMark());
+    }
+
+    @Test
+    void testSetteamWorkMarkByIdUserNotAuthorized() throws CustomRuntimeException {
+        // Mock des inputs
+        Integer id = 1;
+        Integer teamWorkMark = 15;
+
+        // Appel de la méthode à tester et vérification de l'exception levée
+        assertThrows(CustomRuntimeException.class, () -> {
+            teamService.setTeamWorkMarkById(id, teamWorkMark);
+        });
+    }
+
+    @Test
+    void testSetTeamValidationMarkByIdSuccess() throws CustomRuntimeException {
+        doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
+
+        TeamEntity team = new TeamEntity();
+
+        int mark = 2;
+        team.setTeamValidationMark(mark);
+
+        ArgumentCaptor<TeamEntity> captor = ArgumentCaptor.forClass(TeamEntity.class);
+        when(teamRepository.save(captor.capture())).thenReturn(team);
+
+        Optional<TeamEntity> mockedTeam = Optional.of(team);
+        when(teamRepository.findById(mockedTeam.get().getIdTeam())).thenReturn(mockedTeam);
+        mockedTeam.get().setTeamValidationMark(0); // set bonus penalty to 0 initially
+
+        teamService.setTeamValidationMarkById(mockedTeam.get().getIdTeam(), mark);
+
+        assertEquals(mark, captor.getValue().getTeamValidationMark());
+    }
+
+    @Test
+    void testSetteamValidationMarkByIdUserNotAuthorized() throws CustomRuntimeException {
+        // Mock des inputs
+        Integer id = 1;
+        Integer teamValidationMark = 15;
+
+        // Appel de la méthode à tester et vérification de l'exception levée
+        assertThrows(CustomRuntimeException.class, () -> {
+            teamService.setTeamValidationMarkById(id, teamValidationMark);
+        });
+    }
+    
+    void testGetTestBookLinkValidation() throws CustomRuntimeException {
+        // Préparation des données
+        Integer idTeam = 1;
+        Integer pairedTeamId = 2;
+        String pairedTeamLink = "https://testbook.com/testlink";
+
+        // Mock teamRepository.findById() method
+        TeamEntity teamEntity = new TeamEntity(idTeam, "Team A", null, null);
+        TeamEntity pairedTeamEntity = new TeamEntity(pairedTeamId, "Team B", null, null);
+        pairedTeamEntity.setTestBookLink(pairedTeamLink);
+
+        // Add projectValidation to team
+        ProjectEntity projectValidation = new ProjectEntity();
+        projectValidation.setIdProject(pairedTeamId);
+        teamEntity.setProjectValidation(projectValidation);
+
+        Optional<TeamEntity> mockedAnswer = Optional.of(teamEntity);
+        Optional<TeamEntity> pairedTeamMockedAnswer = Optional.of(pairedTeamEntity);
+        when(teamRepository.findById(idTeam)).thenReturn(mockedAnswer);
+        when(teamRepository.findById(pairedTeamId)).thenReturn(pairedTeamMockedAnswer);
+
+        // Appel de la méthode à tester
+        String result = teamService.getTestBookLinkValidation(idTeam);
+
+        // Vérification du résultat
+        verify(teamRepository, times(2)).findById(any(Integer.class));
+        assertEquals(pairedTeamLink, result);
+    }
+
+    
 }
+

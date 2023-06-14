@@ -20,6 +20,9 @@ public class PlannedTimingAvailabilityDTO {
 
     private TeachingStaffDTO teachingStaff;
 
+    @JsonBackReference(value = "availabilities")
+    private ConsultingDTO consulting;
+
     private Boolean isAvailable = true;
 
     public PlannedTimingAvailabilityDTO() {

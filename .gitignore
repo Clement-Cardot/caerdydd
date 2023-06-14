@@ -6,6 +6,7 @@
 back/target/
 back/src/main/resources/static/
 back/upload/
+back/test/
 **.war
 
 ### front ###

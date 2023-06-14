@@ -1,5 +1,6 @@
 package com.caerdydd.taf.services;
 
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.caerdydd.taf.models.dto.user.RoleDTO;
+import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.user.RoleEntity;
 import com.caerdydd.taf.repositories.RoleRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
@@ -20,6 +22,9 @@ public class RoleService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -59,4 +64,22 @@ public class RoleService {
         }
     }
     
+    public RoleDTO assignRoleToUser(Integer userId, String roleName) throws CustomRuntimeException {
+        try {
+            UserDTO user = userService.getUserById(userId);
+    
+            RoleDTO role = new RoleDTO();
+            role.setRole(roleName);
+            role.setUser(user);
+    
+            user.getRoles().add(role);
+            userService.updateUser(user);
+    
+            return role;
+        } catch (CustomRuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    }
 }

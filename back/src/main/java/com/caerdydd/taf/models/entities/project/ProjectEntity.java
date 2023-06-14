@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.caerdydd.taf.models.entities.user.JuryEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,22 +29,19 @@ public class ProjectEntity implements Serializable {
     private String name;
     private String description;
     private Boolean isValidated;
-
-    private Integer idJury;
-
+    
     @OneToOne(mappedBy = "projectDev")
     private TeamEntity teamDev;
 
     @OneToOne(mappedBy = "projectValidation")
     private TeamEntity teamValidation;
 
-    @OneToMany
-    @JoinColumn(name = "id_project")
+    @OneToMany(mappedBy = "project")
     private List<PresentationEntity> presentations;
 
-//    @OneToOne
-//    @JoinColumn(name = "id_jury")
-//    private JuryEntity jury;
+    @OneToOne
+    @JoinColumn(name = "id_jury")
+    private JuryEntity jury;
 
 
     public ProjectEntity() {
@@ -64,8 +62,7 @@ public class ProjectEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "ProjectEntity [description=" + description + ", idProject=" + idProject + ", idJury=" + idJury
-                + ", isValidated=" + isValidated + ", name=" + name + ", teamDev=" + teamDev + ", teamValidation="
+        return "ProjectEntity [description=" + description + ", idProject=" + idProject + ", idJury=" + isValidated + ", name=" + name + ", teamDev=" + teamDev + ", teamValidation="
                 + teamValidation + "presentation="+presentations+"]";
     }
 
@@ -81,13 +78,12 @@ public class ProjectEntity implements Serializable {
             && this.name.equals(teamEntity.getName())
             && this.description.equals(teamEntity.getDescription())
             && this.isValidated.equals(teamEntity.getIsValidated())
-            && this.idJury.equals(teamEntity.getIdJury())
             && this.teamDev.equals(teamEntity.getTeamDev())
             && this.teamValidation.equals(teamEntity.getTeamValidation());
     }
 
     @Override
     public int hashCode() {
-        return idProject.hashCode() + name.hashCode() + description.hashCode() + isValidated.hashCode() + idJury.hashCode() + teamDev.hashCode() + teamValidation.hashCode();
+        return idProject.hashCode() + name.hashCode() + description.hashCode() + isValidated.hashCode() + teamDev.hashCode() + teamValidation.hashCode();
     }
 }

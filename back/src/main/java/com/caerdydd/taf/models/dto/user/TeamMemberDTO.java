@@ -12,9 +12,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TeamMemberDTO {
 
+    private Integer idUser;
+    
     private Integer idTeam;
     private Integer individualMark;
     private Integer bonusPenalty;
