@@ -198,7 +198,16 @@ export class ApiConsultingService {
         map((data: any) => this.consultingAdapter.adapt(data))
         )
     .pipe(catchError(this.handleError));
-}
+  }
+
+  replaceTeachingStaff(consulting: Consulting): Observable<Consulting> {
+    const url = `${this.baseUrl}/replaceTeachingStaff`;
+    return this.http.post<Consulting>(url, consulting)
+    .pipe(
+        map((data: any) => this.consultingAdapter.adapt(data))
+        ) 
+    .pipe(catchError(this.handleError));
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {

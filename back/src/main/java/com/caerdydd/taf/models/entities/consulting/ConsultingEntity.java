@@ -28,15 +28,15 @@ public class ConsultingEntity implements Serializable {
         private String speciality;
         private String notes;
 
-        @OneToOne()
+        @OneToOne
         @JoinColumn(name = "id_planned_timing_availability")
         private PlannedTimingAvailabilityEntity plannedTimingAvailability;
 
-        @ManyToOne()
+        @ManyToOne
         @JoinColumn(name = "id_planned_timing_consulting")
         private PlannedTimingConsultingEntity plannedTimingConsulting;
 
-        @ManyToOne()
+        @ManyToOne
         @JoinColumn(name = "id_team")
         private TeamEntity team;
 

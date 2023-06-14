@@ -30,7 +30,6 @@ public class ProjectDTO {
     @JsonBackReference(value="projectValidation")
     private TeamDTO teamValidation;
 
-
     private JuryDTO jury;
 
     public ProjectDTO() {

@@ -823,7 +823,7 @@ public class ConsultingServiceTest {
         doNothing().when(consultingRules).checkPlannedTimingIsNotInPast(any(PlannedTimingAvailabilityDTO.class));
 
         // Mock consultingRules.checkPlannedTimingIsNotAlreadyTaken()
-        doNothing().when(consultingRules).checkPlannedTimingIsNotAlreadyTaken(any(PlannedTimingAvailabilityDTO.class));
+        doNothing().when(consultingRules).checkTeachingStaffIsAvailable(any(PlannedTimingAvailabilityDTO.class));
 
         // Mock plannedTimingAvailabilityRepository.save
         when(plannedTimingAvailabilityRepository.save(any(PlannedTimingAvailabilityEntity.class))).thenAnswer(i -> i.getArguments()[0]);
