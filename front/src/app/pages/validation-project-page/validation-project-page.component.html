@@ -3,7 +3,7 @@
     <mat-card-header>
       <mat-card-title>{{validationTeam.name}}</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content *ngIf="validationTeam != undefined">
       <div class="sameRow">
         <p class="label">Cahier des charges :</p>
         <button mat-raised-button color="accent" (click)="getFile('teamScopeStatement')" class="downloadButton" [disabled]="!isThereStateScope()">Télécharger le document</button>

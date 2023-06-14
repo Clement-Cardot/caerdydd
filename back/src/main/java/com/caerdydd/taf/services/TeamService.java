@@ -96,6 +96,10 @@ public class TeamService {
     }
 
     public List<TeamDTO> createTeams(Integer nbTeamsPairs) throws CustomRuntimeException{
+        
+        if(nbTeamsPairs < 1) {
+            throw new CustomRuntimeException(CustomRuntimeException.NB_TEAMS_INVALID);
+        }
         // Check if the user is an option leader
         userServiceRules.checkUserRole(securityConfig.getCurrentUser(), "OPTION_LEADER_ROLE");
 

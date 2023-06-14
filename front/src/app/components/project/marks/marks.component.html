@@ -1,5 +1,5 @@
 
-<mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+<mat-expansion-panel id="markPanel{{team.idTeam}}" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
   
   <mat-expansion-panel-header>
       <mat-panel-title> 
@@ -90,6 +90,9 @@
         <mat-form-field class="example-full-width">
           <mat-label>Saisie note de groupe</mat-label>
           <input matInput type="number"  [(ngModel)]="team.teamWorkMark" min="0" max="5">
+          <mat-error *ngIf="team.teamWorkMark > 5 || team.teamWorkMark < 0">
+            La note doit être comprise entre 0 et 5
+          </mat-error>
         </mat-form-field>
       </div>
   
@@ -98,6 +101,9 @@
         <mat-form-field class="example-full-width">
           <mat-label>Saisie note de validation</mat-label>
           <input matInput type="number" [(ngModel)]="team.teamValidationMark" min="0" max="5">
+          <mat-error *ngIf="team.teamValidationMark > 5 || team.teamValidationMark < 0">
+            La note doit être comprise entre 0 et 5
+          </mat-error>
         </mat-form-field>
       </div>
     </div>

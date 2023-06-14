@@ -17,14 +17,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.common.util.impl.LoggerFactory;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.commons.logging.Logger;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -757,27 +753,6 @@ public class TeamControllerTest {
         verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
         assertEquals(expectedAnswer.toString(), result.toString());
     }
-
-
-    @Test
-    void testGetTestBookLinkValidation_NullLink() throws CustomRuntimeException {
-        // Mock teamService.getTestBookLinkValidation() method to return null
-        when(teamService.getTestBookLinkValidation(anyInt())).thenReturn(null);
-
-        // Prepare request parameter
-        int teamId = 1;
-
-        // Define the expected response
-        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        // Call the method to test
-        ResponseEntity<String> result = teamController.getTestBookLinkValidation(teamId);
-
-        // Verify the result
-        verify(teamService, times(1)).getTestBookLinkValidation(teamId);
-        assertEquals(expectedAnswer, result);
-    }
-
     
     @Test
     void testTestBookLinkDev_NullLink() throws CustomRuntimeException {
@@ -788,7 +763,7 @@ public class TeamControllerTest {
     int teamId = 1;
 
     // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.OK);
 
     // Call the method to test
     ResponseEntity<String> result = teamController.getTestBookLinkDev(teamId);

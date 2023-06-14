@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Consulting } from 'src/app/core/data/models/consulting.model';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
 
@@ -7,15 +7,22 @@ import { ApiConsultingService } from 'src/app/core/services/api-consulting.servi
   templateUrl: './consulting-page.component.html',
   styleUrls: ['./consulting-page.component.scss'],
 })
-export class ConsultingPageComponent {
+export class ConsultingPageComponent implements OnInit, OnDestroy{
   consultingFinishedList: Consulting[] = [];
   consultingProgrammedList: Consulting[] = [];
   consultingWaitingAcceptation: Consulting[] = [];
+
+  refresh: any;
   
   constructor(private apiConsultingService: ApiConsultingService) { }
 
   ngOnInit(): void {
     this.getAllConsultingsForCurrentTeachingStaff();
+    this.refresh = setInterval(() => { this.getAllConsultingsForCurrentTeachingStaff() }, 5000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.refresh);
   }
 
   getAllConsultingsForCurrentTeachingStaff(){
@@ -27,18 +34,28 @@ export class ConsultingPageComponent {
 
     this.apiConsultingService.getAllWaitingAcceptationConsultings()
     .subscribe(data => {
-        this.consultingWaitingAcceptation = data;
+      data.forEach(consulting => {
+          this.addOrUpdateToList(this.consultingWaitingAcceptation, consulting);
+        });
       }
     );
+  }
+
+  addOrUpdateToList(consultingList: Consulting[] ,consulting: Consulting) : void {
+    let index = consultingList.findIndex(c => c.idConsulting === consulting.idConsulting);
+    if(index == -1) {
+      consultingList.push(consulting);
+    } else {
+      consultingList[index] = consulting;
+    }
   }
 
   sortConsulting(consultingList: Consulting[]) : void {
     for(let consulting of consultingList) {
       if(consulting.plannedTimingConsulting.datetimeEnd.getTime() < new Date().getTime()) {
-        this.consultingFinishedList.push(consulting);
+        this.addOrUpdateToList(this.consultingFinishedList, consulting);
       } else {
-        console.log("Consulting à venir")
-        this.consultingProgrammedList.push(consulting);
+        this.addOrUpdateToList(this.consultingProgrammedList, consulting);
       }
     }
     this.consultingFinishedList.sort((a, b) => a.plannedTimingConsulting.datetimeEnd.getTime() - b.plannedTimingConsulting.datetimeEnd.getTime());

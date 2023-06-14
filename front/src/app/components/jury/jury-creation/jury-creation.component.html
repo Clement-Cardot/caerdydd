@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card id="juryCreationCard">
   <mat-card-header>
       <mat-card-title>
           <h3>Création de jury</h3>
@@ -16,7 +16,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Spécialiste developpement</mat-label>
+        <mat-label>Spécialiste développement</mat-label>
         <mat-select [(ngModel)]="selectedOption2">
           <ng-container *ngFor="let staff of teachingStaffs">
             <mat-option *ngIf="staff.isDevelopmentSpecialist" [value]="staff.user.id">{{staff.user.firstname}} {{staff.user.lastname}}</mat-option>
