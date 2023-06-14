@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.project.PresentationDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.user.JuryEntity;
@@ -73,5 +75,30 @@ public class PresentationServiceRule {
         if(LocalDateTime.now().isBefore(dateEnd)){
             throw new CustomRuntimeException(CustomRuntimeException.PRESENTATION_DID_NOT_FINISH);
         }
+    }
+    
+    public void checkPresentationDoesNotExist(String type, ProjectDTO project) throws CustomRuntimeException{
+        List<PresentationDTO> presentations = project.getPresentations();
+        for (PresentationDTO presentation : presentations) {
+            if (presentation.getType().equals(type)) {
+                throw new CustomRuntimeException(CustomRuntimeException.PRESENTATION_ALREADY_EXISTS);
+            }
+        }
+    }
+
+    public void checkDateIsNotPassed(LocalDateTime begin) throws CustomRuntimeException{
+        if(LocalDateTime.now().isAfter(begin)){
+            throw new CustomRuntimeException(CustomRuntimeException.PRESENTATION_ALREADY_PASSED);
+        }
+    }
+
+    public void checkIntermediatePresentationIsCreated(ProjectDTO project) throws CustomRuntimeException{
+        List<PresentationDTO> presentations = project.getPresentations();
+        for (PresentationDTO presentation : presentations) {
+            if (presentation.getType().equals("intermediate")) {
+                return;
+            }
+        }
+        throw new CustomRuntimeException(CustomRuntimeException.INTERMEDIATE_PRESENTATION_NOT_CREATED);
     }
 }
