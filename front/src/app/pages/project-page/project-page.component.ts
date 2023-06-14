@@ -84,15 +84,21 @@ import { ApiJuryService } from "src/app/core/services/api-jury.service";
     }
 
     isUserJury() {
-      let userID = this.currentUser?.id
-      let ts1 = this.team.projectDev.jury?.ts1.idUser;
-      let ts2 = this.team.projectDev.jury?.ts2.idUser;
-      let statement = this.currentUser?.getRoles().includes("JURY_MEMBER_ROLE") && (ts1 == userID || ts2 == userID)
-      return statement;
+      if (this.currentUser && this.team.projectDev.jury) {
+        let userID = this.currentUser.id;
+        let ts1 = this.team.projectDev.jury.ts1.idUser;
+        let ts2 = this.team.projectDev.jury.ts2.idUser;
+        let statement = this.currentUser.getRoles().includes("JURY_MEMBER_ROLE") && (ts1 == userID || ts2 == userID);
+        return statement;
+      }
+      return false
     }
 
     isUserOptionLeader() {
-      return this.currentUser?.getRoles().includes("OPTION_LEADER_ROLE");
+      if (this.currentUser) {
+        return this.currentUser.getRoles().includes("OPTION_LEADER_ROLE");
+      }
+      return false
     }
 
     getFile(file: string) {

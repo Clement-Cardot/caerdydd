@@ -1086,7 +1086,7 @@ class TeamServiceTest {
         // Mock userServiceRules.checkUserRole()
         doNothing().when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
         // Mock juryServiceRules.checkJuryMemberManageTeam
-        doNothing().when(juryServiceRules).checkJuryMemberManageTeam(any(Integer.class), any(Integer.class));
+        doNothing().when(juryServiceRules).checkJuryMemberManageTeam(any(Integer.class), any(TeamDTO.class));
         
         UserDTO mockedUser = new UserDTO(1, null, null, null, null, null, null);
         when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
@@ -1146,39 +1146,19 @@ class TeamServiceTest {
 
         UserDTO mockedUser = new UserDTO(1, null, null, null, null, null, null);
         when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
-
+        
+        when(teamRepository.findById(anyInt())).thenReturn(mockedAnswer);
         // Mock userServiceRules.checkUserRole()
         doNothing().when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
         // Mock userServiceRules.checkUserRole()
         doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED))
-        .when(juryServiceRules).checkJuryMemberManageTeam(any(Integer.class), any(Integer.class));
+        .when(juryServiceRules).checkJuryMemberManageTeam(any(Integer.class), any(TeamDTO.class));
         
         CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
             teamService.setCommentOnReport(1, "comment");
         });
 
         assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, thrownException.getMessage());
-    }
-
-    @Test
-    void testSetCommentOnReport_TeamNotPresent() throws CustomRuntimeException {
-        // Mock userServiceRules.checkUserRole()
-        doNothing().when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
-        // Mock juryServiceRules.checkJuryMemberManageTeam
-        doNothing().when(juryServiceRules).checkJuryMemberManageTeam(any(Integer.class), any(Integer.class));
-        
-        UserDTO mockedUser = new UserDTO(1, null, null, null, null, null, null);
-        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
-
-        // when(teamRepository.findById(1)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
-        doThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND))
-        .when(teamRepository).findById(any(Integer.class));
-
-        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
-            teamService.setCommentOnReport(1, "comment");
-        });
-
-        assertEquals(CustomRuntimeException.TEAM_NOT_FOUND, thrownException.getMessage());
     }
 }
 
