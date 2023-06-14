@@ -2,6 +2,7 @@ package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -829,7 +830,7 @@ public class ConsultingServiceTest {
         doNothing().when(consultingRules).checkPlannedTimingIsNotInPast(any(PlannedTimingAvailabilityDTO.class));
 
         // Mock consultingRules.checkPlannedTimingIsNotAlreadyTaken()
-        doNothing().when(consultingRules).checkPlannedTimingIsNotAlreadyTaken(any(PlannedTimingAvailabilityDTO.class));
+        doNothing().when(consultingRules).checkTeachingStaffIsAvailable(any(PlannedTimingAvailabilityDTO.class));
 
         // Mock plannedTimingAvailabilityRepository.save
         when(plannedTimingAvailabilityRepository.save(any(PlannedTimingAvailabilityEntity.class))).thenAnswer(i -> i.getArguments()[0]);
@@ -1402,5 +1403,145 @@ public class ConsultingServiceTest {
         // Assertions
         assertEquals(expectedAnswer.size(), result.size());
         }
+    
+    @Test
+    void testSetNotesConsulting_Nominal() throws CustomRuntimeException{
+        // Mock userServiceRules.checkCurrentUserRoles()
+        doNothing().when(userServiceRules).checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Mock consultingRepository.findById()
+        PlannedTimingConsultingEntity mockedTimingConsulting = new PlannedTimingConsultingEntity(
+            LocalDateTime.of(2023, 1, 1, 10, 0, 0),
+            LocalDateTime.of(2023, 1, 1, 10, 30, 0)
+        );
+        PlannedTimingAvailabilityEntity mockedAvailability = new PlannedTimingAvailabilityEntity(
+            mockedTimingConsulting,
+            new TeachingStaffEntity(
+                new UserEntity(1, "Bob", "Smith", "login", "password", "email", null)
+            )
+        );
+        ConsultingEntity mockedConsulting = new ConsultingEntity();
+        mockedConsulting.setIdConsulting(1);
+        mockedConsulting.setPlannedTimingAvailability(mockedAvailability);
+        mockedConsulting.setPlannedTimingConsulting(mockedTimingConsulting);
+        mockedConsulting.setNotes("Notes");
+        when(consultingRepository.findById(1)).thenReturn(Optional.of(mockedConsulting));
+
+        // Mock userServiceRules.getCurentUser()
+        UserDTO mockedUser = new UserDTO(1, "Bob", "Smith", "login", "password", "email", null);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+
+        // Mock consultingRepository.save()
+        when(consultingRepository.save(any(ConsultingEntity.class))).thenReturn(mockedConsulting);
+
+        // Call method to test
+        ConsultingDTO result = consultingService.setNotesConsulting("1", "Test");
+
+        // Expected Answer
+        PlannedTimingAvailabilityDTO expectedAvailability = new PlannedTimingAvailabilityDTO(
+            new PlannedTimingConsultingDTO(
+                LocalDateTime.of(2023, 1, 1, 10, 0, 0),
+                LocalDateTime.of(2023, 1, 1, 10, 30, 0)
+            ),
+            new TeachingStaffDTO(
+                new UserDTO(1, "Bob", "Smith", "login", "password", "email", null)
+            )
+        );
+        ConsultingDTO expectedAnswer = new ConsultingDTO();
+        expectedAnswer.setIdConsulting(1);
+        expectedAnswer.setPlannedTimingAvailability(expectedAvailability);
+        expectedAnswer.setNotes("Test");
+
+        // Assertions
+        assertEquals(expectedAnswer.getIdConsulting(), result.getIdConsulting());
+        assertEquals(expectedAnswer.getNotes(), result.getNotes());
+    }
+
+    @Test
+    void testSetNotesConsulting_User_Is_Not_Teaching_Staff() throws CustomRuntimeException {
+        // Mock userServiceRules.checkCurrentUserRoles()
+        doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF)).when(userServiceRules).checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Call method to test
+        CustomRuntimeException exception = assertThrowsExactly(CustomRuntimeException.class, () -> {
+            consultingService.setNotesConsulting("1", "Test");
+        });
+
+        // Assertions
+        assertEquals(CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF, exception.getMessage());
+    }
+
+    @Test
+    void testSetNotesConsulting_ConsultingNotFinished() throws CustomRuntimeException {
+        // Mock userServiceRules.checkCurrentUserRoles()
+        doNothing().when(userServiceRules).checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Mock consultingRepository.findById()
+        PlannedTimingConsultingEntity mockedTimingConsulting = new PlannedTimingConsultingEntity(
+            LocalDateTime.of(2024, 1, 1, 10, 0, 0),
+            LocalDateTime.of(2024, 1, 1, 10, 30, 0)
+        );
+        PlannedTimingAvailabilityEntity mockedAvailability = new PlannedTimingAvailabilityEntity(
+            mockedTimingConsulting,
+            new TeachingStaffEntity(
+                new UserEntity(1, "Bob", "Smith", "login", "password", "email", null)
+            )
+        );
+        ConsultingEntity mockedConsulting = new ConsultingEntity();
+        mockedConsulting.setIdConsulting(1);
+        mockedConsulting.setPlannedTimingAvailability(mockedAvailability);
+        mockedConsulting.setPlannedTimingConsulting(mockedTimingConsulting);
+        mockedConsulting.setNotes("Notes");
+        when(consultingRepository.findById(1)).thenReturn(Optional.of(mockedConsulting));
+
+        // Mock userServiceRules.getCurentUser()
+        UserDTO mockedUser = new UserDTO(1, "Bob", "Smith", "login", "password", "email", null);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+
+        // Call method to test
+        CustomRuntimeException exception = assertThrowsExactly(CustomRuntimeException.class, () -> {
+            consultingService.setNotesConsulting("1", "Test");
+        });
+
+        // Assertions
+        assertEquals(CustomRuntimeException.CONSULTING_NOT_FINISHED, exception.getMessage());
+
+    }
+
+    @Test
+    void testSetNotesConsulting_User_Is_Not_Owner() throws CustomRuntimeException {
+        // Mock userServiceRules.checkCurrentUserRoles()
+        doNothing().when(userServiceRules).checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Mock consultingRepository.findById()
+        PlannedTimingConsultingEntity mockedTimingConsulting = new PlannedTimingConsultingEntity(
+            LocalDateTime.of(2023, 1, 1, 10, 0, 0),
+            LocalDateTime.of(2023, 1, 1, 10, 30, 0)
+        );
+        PlannedTimingAvailabilityEntity mockedAvailability = new PlannedTimingAvailabilityEntity(
+            mockedTimingConsulting,
+            new TeachingStaffEntity(
+                new UserEntity(2, "Bob", "Smith", "login", "password", "email", null)
+            )
+        );
+        ConsultingEntity mockedConsulting = new ConsultingEntity();
+        mockedConsulting.setIdConsulting(1);
+        mockedConsulting.setPlannedTimingAvailability(mockedAvailability);
+        mockedConsulting.setPlannedTimingConsulting(mockedTimingConsulting);
+        mockedConsulting.setNotes("Notes");
+        when(consultingRepository.findById(1)).thenReturn(Optional.of(mockedConsulting));
+
+        // Mock userServiceRules.getCurentUser()
+        UserDTO mockedUser = new UserDTO(1, "Bob", "Smith", "login", "password", "email", null);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+
+        // Call method to test
+        CustomRuntimeException exception = assertThrowsExactly(CustomRuntimeException.class, () -> {
+            consultingService.setNotesConsulting("1", "Test");
+        });
+
+        // Assertions
+        assertEquals(CustomRuntimeException.USER_IS_NOT_OWNER_OF_CONSULTING, exception.getMessage());
+    }
 
 }

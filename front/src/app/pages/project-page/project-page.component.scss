@@ -53,8 +53,17 @@ mat-card-content {
     justify-content: space-evenly;
 }
 
+.label {
+  font-weight: 700;
+}
+
 #reportComment {
   width: 50%;
+}
+
+#reportCommentParagraph {
+  width: 50%;
+  text-align: justify;
 }
 
 #formReportComment {

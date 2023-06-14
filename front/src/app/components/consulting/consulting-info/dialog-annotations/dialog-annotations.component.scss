@@ -1,3 +1,7 @@
+*{
+    width:100%;
+}
+
 #consulting-commentaires {
     margin: 10px;
 }
@@ -5,13 +9,23 @@
 #consulting-notes {
     padding:10px;
     margin: 10px;
-    border: 1px solid #ccc;
 }
 
+
 button {
+    width: auto;
     padding:10px;
 }
 h2 {
     text-align: center;
     margin: 10px;
+}
+
+textarea {
+    resize: none;
+}
+
+mat-dialog-actions {
+    display: flex;
+    flex-direction: row;
 }

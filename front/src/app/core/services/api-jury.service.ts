@@ -22,7 +22,7 @@ export class ApiJuryService {
     }
 
     addJury(juryMemberLDId: number, juryMemberCSSId: number): Observable<Jury> {
-        const url = `${this.baseUrl}/add/${juryMemberLDId}/${juryMemberCSSId}`;	
+        const url = `${this.baseUrl}/add/${juryMemberLDId}/${juryMemberCSSId}`;
         return this.http.put(url, null)
         .pipe(
             map((data: any) => this.juryAdapter.adapt(data))
@@ -30,7 +30,7 @@ export class ApiJuryService {
         .pipe(
             catchError(this.handleError)
         );
-    }   
+    }
 
     getAllJuries(): Observable<Jury[]> {
         return this.http.get<any[]>(this.baseUrl)
@@ -39,7 +39,7 @@ export class ApiJuryService {
                     const juries = data.map((item: any) =>
                         this.juryAdapter.adapt(item)
                     );
-                    
+
                     return juries;
                 })
             )
@@ -47,7 +47,6 @@ export class ApiJuryService {
                 catchError(this.handleError)
             );
     }
-    
 
     private handleError(error: HttpErrorResponse) {
         if (error.status === 0) {
