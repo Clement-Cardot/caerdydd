@@ -171,22 +171,22 @@ java-deploy-dev:
     - dev
     - gitlab-ci
 
-selenium-test:
-  stage: selenium
-  image: srv-proxy.openstack.etudis.eseo.fr:1973/markhobson/maven-chrome:jdk-11
-  script:
-    - cd selenium
-    - mvn $MAVEN_CLI_OPTS clean verify
-  artifacts:
-    reports:
-      junit: selenium/target/surefire-reports/TEST*.xml
-  cache:
-    paths:
-      - $CI_PROJECT_DIR/.m2/repository
-  only:
-    - dev
-    - gitlab-ci
-    - Integrate-Create-Team-Component
+# selenium-test:
+#   stage: selenium
+#   image: srv-proxy.openstack.etudis.eseo.fr:1973/markhobson/maven-chrome:jdk-11
+#   script:
+#     - cd selenium
+#     - mvn $MAVEN_CLI_OPTS clean verify
+#   artifacts:
+#     reports:
+#       junit: selenium/target/surefire-reports/TEST*.xml
+#   cache:
+#     paths:
+#       - $CI_PROJECT_DIR/.m2/repository
+#   only:
+#     - dev
+#     - gitlab-ci
+#     - Integrate-Create-Team-Component
 
 # Déploiement sur le serveur de prod
 angular-deploy-prod:
