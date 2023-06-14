@@ -59,6 +59,9 @@ export class ConsultingImportComponent {
       case 415:
         this.errorMessage = "Le fichier n'est pas au bon format";
         break;
+      case 409:
+        this.errorMessage = "Un ou plusieurs créneaux existe déjà";
+        break;
       case 500:
         this.errorMessage = "Une erreur est survenue, veuillez contacter l'administrateur";
         break;
