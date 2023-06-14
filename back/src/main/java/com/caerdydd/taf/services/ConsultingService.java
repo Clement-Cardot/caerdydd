@@ -263,7 +263,7 @@ public class ConsultingService {
         List<TeachingStaffDTO> teachingStaffs = teachingStaffService.listAllTeachingStaff();
 
         for (PlannedTimingConsultingDTO plannedTimingConsulting : plannedTimingConsultingsFromFile) {
-            if(this.plannedTimingConsultingRepository.findByDatetimeBegin(plannedTimingConsulting.getDatetimeBegin()).isEmpty()){
+            if(!this.plannedTimingConsultingRepository.findByDatetimeBegin(plannedTimingConsulting.getDatetimeBegin()).isEmpty()){
                 throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_CONSULTING_ALREADY_EXISTS);
             }
             plannedTimingConsulting.setTeachingStaffAvailabilities(new ArrayList<>());
