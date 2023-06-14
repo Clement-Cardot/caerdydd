@@ -58,6 +58,7 @@ public class CustomRuntimeException extends Exception{
     public static final String PRESENTATION_ALREADY_PASSED = "Presentation already passed";
     public static final String INTERMEDIATE_PRESENTATION_NOT_CREATED = "Intermediate presentation not created";
     public static final String PLANNED_TIMING_CONSULTING_ALREADY_EXISTS = "Planned Timing already exists";
+    public static final String NB_TEAMS_INVALID = "The number of teams is invalid";
 
     // File messages
     public static final String INCORRECT_FILE_FORMAT = "Incorrect file format";
