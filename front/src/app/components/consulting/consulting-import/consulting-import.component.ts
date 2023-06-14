@@ -11,7 +11,7 @@ import { ApiConsultingService } from 'src/app/core/services/api-consulting.servi
   styleUrls: ['./consulting-import.component.scss']
 })
 export class ConsultingImportComponent {
-  
+
   consultingForm!: FormGroup;
   fileFormControl = new FormControl('', [Validators.required]);
 

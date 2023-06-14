@@ -64,7 +64,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
       // Option Leader
       if (this.currentUser.getRoles().includes("OPTION_LEADER_ROLE")) {
-        this.navLink.push("Administration");
         this.navLink.push("Notes");
         this.navLink.push("Sujets");
       }
@@ -87,26 +86,21 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       // Teaching Staff
       if (this.currentUser.getRoles().includes('TEACHING_STAFF_ROLE')) {
         this.navLink.push('Consultings');
+        this.navLink.push('Présentation');
         this.navLink.push('Equipes');
-        this.navLink.push('Corps Enseignant');
+        this.navLink.push('Enseignants');
       }
 
       // Team Member
       if (this.currentUser.getRoles().includes('TEAM_MEMBER_ROLE')) {
-        this.navLink.push('Mon équipe');
         this.navLink.push('Projet Développement');
         this.navLink.push('Projet Validation');
-        this.navLink.push('Commentaires Présentation');
+        this.navLink.push('Présentation');
       }
 
       // Student
       if (this.currentUser.getRoles().includes('STUDENT_ROLE')) {
         this.navLink.push('Equipes');
-      }
-
-      // Jury Member
-      if (this.currentUser.getRoles().includes('JURY_MEMBER_ROLE')) {
-        this.navLink.push('Commentaires Présentation');
       }
     }
   }
@@ -117,9 +111,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       case 'Tableau de bord':
         this.router.navigateByUrl('/dashboard');
         break;
-      case 'Administration':
-        this.router.navigateByUrl('/administration');
-        break;
       case 'Planification':
         this.router.navigateByUrl('/planning');
         break;
@@ -129,7 +120,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       case 'Consultings':
         this.router.navigateByUrl('/consultings');
         break;
-      case 'Commentaires Présentation':
+      case 'Présentation':
         this.router.navigateByUrl('/presentationCommentary');
         break;
       case 'Notes':
@@ -141,11 +132,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       case 'Equipes':
         this.router.navigateByUrl('/teams');
         break;
-      case 'Corps Enseignant':
+      case 'Enseignants':
         this.router.navigateByUrl('/teachingStaff');
-        break;
-      case 'Mon équipe':
-        this.router.navigateByUrl('/my-team');
         break;
       case 'Projet Développement':
         this.router.navigateByUrl('/dev-project');
