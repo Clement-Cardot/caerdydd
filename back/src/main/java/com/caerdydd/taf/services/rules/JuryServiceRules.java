@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.services.TeachingStaffService;
-import com.caerdydd.taf.services.TeamService;
 
 @Component
 public class JuryServiceRules {

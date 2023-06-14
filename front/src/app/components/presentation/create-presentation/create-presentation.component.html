@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card id="createPresentationCard">
   <mat-card-header>
     <mat-card-title> 
       <h3>Création de présentation</h3> 
@@ -52,11 +52,11 @@
       
 
       <mat-form-field appearance="fill">
-        <mat-label>Project</mat-label>
+        <mat-label>Projet</mat-label>
         <mat-select formControlName="idProject">
           <ng-container *ngFor="let project of projects">
             <mat-option [value]="project.idProject">
-              {{project.name}} - Dernier jury associé: {{project.jury?.idJury ?? 'Aucun'}}
+              {{project.name}} - Dernier jury associé : {{project.jury?.idJury ?? 'Aucun'}}
             </mat-option>
           </ng-container>
         </mat-select>

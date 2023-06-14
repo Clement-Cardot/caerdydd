@@ -38,7 +38,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.pageName = 'Accueil';
+    this.pageName = '';
     this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
       this.currentUser = user;
       this.initButtons();

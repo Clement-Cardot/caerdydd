@@ -106,6 +106,8 @@ public class TeamController {
             case CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER:
                 logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            case CustomRuntimeException.NB_TEAMS_INVALID:
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             case CustomRuntimeException.SERVICE_ERROR:
                 logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -173,11 +175,7 @@ public class TeamController {
     public ResponseEntity<String> getTestBookLinkDev(@PathVariable Integer idTeam) {
         logger.info("Process request : Get test book link dev of team: {}", idTeam);
         try {
-            // TODO : move this logical in service
             String testBookLinkDev = teamService.getTestBookLinkDev(idTeam);
-            if (testBookLinkDev == null) {
-                throw new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND);
-            }
             return new ResponseEntity<>(testBookLinkDev, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
@@ -197,9 +195,6 @@ public class TeamController {
         logger.info("Process request : Get test book link validation of team: {}", idTeam);
         try {
             String testBookLinkValidation = teamService.getTestBookLinkValidation(idTeam);
-            if (testBookLinkValidation == null) {
-                throw new CustomRuntimeException(CustomRuntimeException.LINK_NOT_FOUND);
-            }
             return new ResponseEntity<>(testBookLinkValidation, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             switch (e.getMessage()) {
@@ -269,8 +264,8 @@ public class TeamController {
     public ResponseEntity<TeamDTO> setTeamMarks(@RequestParam("teamId") Integer id, @RequestParam("teamWorkMark") Integer teamWorkMark,@RequestParam("teamValidationMark") Integer teamValidationMark) {
         logger.info("Process request: Set team marks for team by id: {}", id);
         try {
-            TeamDTO team = teamService.setTeamWorkMarkById(id, teamWorkMark);
-            team = teamService.setTeamValidationMarkById(id, teamValidationMark);
+            teamService.setTeamWorkMarkById(id, teamWorkMark);
+            TeamDTO team = teamService.setTeamValidationMarkById(id, teamValidationMark);
             return new ResponseEntity<>(team, HttpStatus.OK);
         } catch (CustomRuntimeException e) {
             if (e.getMessage().equals(CustomRuntimeException.TEAM_NOT_FOUND)) {

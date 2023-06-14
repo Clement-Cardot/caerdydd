@@ -77,6 +77,9 @@ class PresentationServiceTest {
     private ProjectRepository projectRepository;
 
     @Mock
+    private ProjectService projectService;
+
+    @Mock
     private JuryRepository juryRepository;
 
     @Mock
@@ -217,6 +220,7 @@ void testCreatePresentation_Nominal() throws CustomRuntimeException {
     ProjectDTO projectDTO = new ProjectDTO();
     projectDTO.setIdProject(1);
     presentationDTO.setProject(projectDTO);
+    presentationDTO.setType("Présentation intermédiaire");
 
     presentationDTO.setDatetimeBegin(LocalDateTime.now());
     presentationDTO.setDatetimeEnd(LocalDateTime.now().plusHours(1));
@@ -231,6 +235,7 @@ void testCreatePresentation_Nominal() throws CustomRuntimeException {
     when(modelMapper.map(presentationDTO, PresentationEntity.class)).thenReturn(presentationEntity);
     when(modelMapper.map(presentationEntity, PresentationDTO.class)).thenReturn(presentationDTO); 
     when(presentationRepository.save(any(PresentationEntity.class))).thenReturn(presentationEntity);
+    when(projectService.getProjectById(projectDTO.getIdProject())).thenReturn(projectDTO);
     doNothing().when(presentationServiceRule).checkJuryExists(presentationDTO.getJury().getIdJury());
     doNothing().when(presentationServiceRule).checkProjectExists(presentationDTO.getProject().getIdProject());
     doNothing().when(userServiceRules).checkCurrentUserRole("PLANNING_ROLE");

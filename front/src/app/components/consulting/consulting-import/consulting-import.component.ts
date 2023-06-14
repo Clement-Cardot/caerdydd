@@ -48,7 +48,7 @@ export class ConsultingImportComponent {
     formDirective.resetForm();
     this.consultingForm.reset();
     let nbConsulting = data.length;
-    this._snackBar.open(nbConsulting + " sessions de consulting ont bien été importés", "Fermer", {
+    this._snackBar.open(nbConsulting + " sessions de consulting ont bien été importées", "Fermer", {
       duration: 5000,
     });
   }
@@ -58,6 +58,9 @@ export class ConsultingImportComponent {
     switch (error.status) {
       case 415:
         this.errorMessage = "Le fichier n'est pas au bon format";
+        break;
+      case 409:
+        this.errorMessage = "Un ou plusieurs créneaux existe déjà";
         break;
       case 500:
         this.errorMessage = "Une erreur est survenue, veuillez contacter l'administrateur";
