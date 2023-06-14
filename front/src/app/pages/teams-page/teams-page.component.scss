@@ -27,3 +27,11 @@ app-team-list {
     width: 90%;
     padding: 25px 5%;
 }
+
+@media screen and (max-width: 768px) {
+  .twoColumnDisplay {
+    grid-template-columns: 1fr;
+  }
+}
+
+

@@ -10,3 +10,9 @@ h1 {
     text-align: center;
     color: #1a1a1a;
 }
+
+@media screen and (max-width: 768px) {
+  .twoColumnDisplay {
+    grid-template-columns: 1fr;
+  }
+}
