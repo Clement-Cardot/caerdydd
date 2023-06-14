@@ -442,8 +442,10 @@ public class ConsultingService {
         // Get all consultings for the current teaching staff
         List<ConsultingDTO> consultingsCurrentTeachingStaff = new ArrayList<>();
         for(ConsultingDTO consulting : consultings) {
-            if(consulting.getPlannedTimingAvailability().getTeachingStaff().getIdUser().equals(userServiceRules.getCurrentUser().getId())) {
-                consultingsCurrentTeachingStaff.add(consulting);
+            if(consulting.getPlannedTimingAvailability() != null){
+                if(consulting.getPlannedTimingAvailability().getTeachingStaff().getIdUser().equals(userServiceRules.getCurrentUser().getId())) {
+                    consultingsCurrentTeachingStaff.add(consulting);
+                }
             }
         }
 
