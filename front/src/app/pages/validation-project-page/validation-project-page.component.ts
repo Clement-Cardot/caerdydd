@@ -34,6 +34,7 @@ export class ValidationProjectPageComponent implements OnInit, OnDestroy {
     if (this.currentUser) {
       this.getTeamMember(this.currentUser.id);
     }
+    this.refresh = setInterval(() => { this.getValidationTeam() }, 10000);
   }
 
   ngOnDestroy(): void {
