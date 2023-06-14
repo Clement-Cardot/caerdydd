@@ -21,6 +21,7 @@ import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.notification.NotificationDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
+import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
@@ -358,24 +359,46 @@ public class ConsultingService {
         return savePlannedTimingAvailability(plannedTimingAvailability);
     }
 
-    // Update a consulting
     public ConsultingDTO updateConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {
-        Integer idPlannedTC = consultingDTO.getPlannedTimingConsulting().getIdPlannedTimingConsulting();
-        UserDTO user = userServiceRules.getCurrentUser();
-        // Verify that user is a Teaching staff
-        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+    Integer idPlannedTC = consultingDTO.getPlannedTimingConsulting().getIdPlannedTimingConsulting();
+    UserDTO user = userServiceRules.getCurrentUser();
 
-        // check if consulting is not in the past
-        consultingRules.checkConsultingIsNotInPast(consultingDTO);
+    // Verify that user is a Teaching staff
+    userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
 
-        // check if consulting is not already taken
-        consultingRules.checkConsultingIsNotAlreadyTaken(consultingDTO);
+    // check if consulting is not in the past
+    consultingRules.checkConsultingIsNotInPast(consultingDTO);
 
-        // Update entity
-        consultingDTO.setPlannedTimingAvailability(getByIdPlannedTimingConsultingAndIdTeachingStaff(idPlannedTC, user.getId()));
+    // check if consulting is not already taken
+    consultingRules.checkConsultingIsNotAlreadyTaken(consultingDTO);
 
-        return saveConsulting(consultingDTO);
+    // Update entity
+    consultingDTO.setPlannedTimingAvailability(getByIdPlannedTimingConsultingAndIdTeachingStaff(idPlannedTC, user.getId()));
+    
+
+    // Get the teaching staff user who accepted the consulting
+    PlannedTimingAvailabilityDTO plannedTimingAvailability = consultingDTO.getPlannedTimingAvailability();
+    TeachingStaffDTO teachingStaff = plannedTimingAvailability.getTeachingStaff(); 
+    UserDTO teachingStaffUser = teachingStaff.getUser(); 
+
+    // Notify the team members
+    TeamDTO team = consultingDTO.getTeam();
+    for (TeamMemberDTO member : team.getTeamMembers()) {
+        UserDTO userT = member.getUser();
+        if (userT != null) {
+            NotificationDTO notification = new NotificationDTO();
+            String message = teachingStaffUser.getFirstname() + " " + teachingStaffUser.getLastname() + " a accepté votre demande de Consulting";
+            notification.setMessage(message);
+            notification.setUser(userT);
+            notification.setIsRead(false);
+
+            notificationService.createNotification(notification);
+        }
     }
+
+    return saveConsulting(consultingDTO);
+}
+
 
     // Create a consulting
     public ConsultingDTO createConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {
