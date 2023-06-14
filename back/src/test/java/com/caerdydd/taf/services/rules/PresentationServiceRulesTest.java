@@ -185,4 +185,16 @@ public class PresentationServiceRulesTest {
         LocalDateTime dateBegin = LocalDateTime.now().minusHours(1);
         assertDoesNotThrow(() -> presentationServiceRule.checkDateBeginPassed(dateBegin));
     }
+
+    @Test
+    public void checkDateEndPassed_DateBeforeNow_ThrowsCustomRuntimeException() {
+        LocalDateTime dateEnd = LocalDateTime.now().plusHours(1);
+        assertThrows(CustomRuntimeException.class, () -> presentationServiceRule.checkDateEndPassed(dateEnd));
+    }
+
+    @Test
+    public void checkDateEndPassed_DateAfterNow_NoExceptionThrown() throws CustomRuntimeException {
+        LocalDateTime dateEnd = LocalDateTime.now().minusHours(1);
+        assertDoesNotThrow(() -> presentationServiceRule.checkDateEndPassed(dateEnd));
+    }
 }

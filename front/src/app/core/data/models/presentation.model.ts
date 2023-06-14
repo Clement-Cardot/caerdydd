@@ -59,7 +59,7 @@ export class PresentationAdapter implements Adapter<Presentation> {
         } else {
             project = undefined;
         }
-
+        
         return new Presentation(
             item.idPresentation,
             item.type,

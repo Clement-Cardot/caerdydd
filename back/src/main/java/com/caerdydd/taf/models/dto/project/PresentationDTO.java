@@ -37,7 +37,6 @@ public class PresentationDTO {
 
     private JuryDTO jury;
 
-    @JsonBackReference(value="project")
     private ProjectDTO project;
 
     public PresentationDTO() {
@@ -49,8 +48,19 @@ public class PresentationDTO {
 
     @Override
     public String toString() {
-        return "PresentationDTO [id=" + idPresentation + ", type=" + type + ", datetimeBegin=" + datetimeBegin + ", datetimeEnd="
-                + datetimeEnd + ", room=" + room + ", jury1Notes=" + jury1Notes + ", jury2Notes=" + jury2Notes
-                + ", idJury=" + jury + ", idProject=" + project + "]";
+        return "{" +
+            " idPresentation='" + getIdPresentation() + "'" +
+            ", type='" + getType() + "'" +
+            ", datetimeBegin='" + getDatetimeBegin() + "'" +
+            ", datetimeEnd='" + getDatetimeEnd() + "'" +
+            ", room='" + getRoom() + "'" +
+            ", jury1Notes='" + getJury1Notes() + "'" +
+            ", jury2Notes='" + getJury2Notes() + "'" +
+            ", validationTeamNotes='" + getValidationTeamNotes() + "'" +
+            ", teachingStaffNotes='" + getTeachingStaffNotes() + "'" +
+            ", jury='" + getJury() + "'" +
+            ", project='" + getProject() + "'" +
+            "}";
     }
+    
 }

@@ -48,6 +48,30 @@ export class ApiPresentationService {
             catchError(this.handleError)
           );
       }
+
+    updateTeamNotes(idPresentation: number, note: string): Observable<Presentation> {
+        const url = `${this.baseUrl}/updateTeamNotes`;
+        const requestBody = {
+          idPresentation: idPresentation,
+          note: note
+        };
+        return this.http.post<Presentation>(url, requestBody)
+          .pipe(
+            catchError(this.handleError)
+          );
+      }
+
+    updateTeachingStaffNotes(idPresentation: number, note: string): Observable<Presentation> {
+        const url = `${this.baseUrl}/updateTeachingStaffNotes`;
+        const requestBody = {
+          idPresentation: idPresentation,
+          note: note
+        };
+        return this.http.post<Presentation>(url, requestBody)
+          .pipe(
+            catchError(this.handleError)
+          );
+    }
       
       
     getTeamPresentations(teamId: number): Observable<Presentation[]> {

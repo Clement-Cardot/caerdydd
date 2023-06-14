@@ -429,4 +429,88 @@ void testCreatePresentation_UnexpectedError() throws CustomRuntimeException {
         verify(presentationService, times(1)).setJuryNotes(1, "Excellent presentation");
     }
 
+    @Test
+    void testUpdateNotesTeam_Nominal() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes()
+        PresentationDTO mockedPresentation = new PresentationDTO();
+        when(presentationService.setTeamNotes(anyInt(), any())).thenReturn(mockedPresentation);
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesTeam(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedPresentation, response.getBody());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setTeamNotes(1, "Excellent presentation");
+    }
+
+    @Test
+    void testUpdateNotesTeam_PresentationDidNotFinish() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes() to throw CustomRuntimeException with PRESENTATION_DID_NOT_BEGIN message
+        when(presentationService.setTeamNotes(anyInt(), any()))
+                .thenThrow(new CustomRuntimeException(CustomRuntimeException.PRESENTATION_DID_NOT_FINISH));
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesTeam(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setTeamNotes(1, "Excellent presentation");
+    }
+
+    @Test
+    void testUpdateNotesTeam_ServiceError() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes() to throw CustomRuntimeException with SERVICE_ERROR message
+        when(presentationService.setTeamNotes(anyInt(), any()))
+                .thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesTeam(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setTeamNotes(1, "Excellent presentation");
+    }
+
+    @Test
+    void testUpdateNotesTeam_BadRequest() throws CustomRuntimeException {
+        // Mock presentationService.setJuryNotes() to throw a general CustomRuntimeException
+        when(presentationService.setTeamNotes(anyInt(), any())).thenThrow(new CustomRuntimeException("Some error"));
+
+        // Create a request body with the required parameters
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("idPresentation", 1);
+        requestBody.put("note", "Excellent presentation");
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.updateNotesTeam(requestBody);
+
+        // Assertions
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        // Verify that presentationService.setJuryNotes() was called with the correct arguments
+        verify(presentationService, times(1)).setTeamNotes(1, "Excellent presentation");
+    }
+
 }

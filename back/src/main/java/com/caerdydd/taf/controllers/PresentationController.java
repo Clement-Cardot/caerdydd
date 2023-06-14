@@ -166,7 +166,7 @@ public class PresentationController {
     }
 
     @PostMapping("/updateTeamNotes")
-    public ResponseEntity<PresentationDTO> updateTeamJury(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<PresentationDTO> updateNotesTeam(@RequestBody Map<String, Object> requestBody) {
         logger.info("Process request : update validation team notes");
 
         Integer idPresentation = (Integer) requestBody.get("idPresentation");
@@ -179,7 +179,7 @@ public class PresentationController {
             if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            if (e.getMessage().equals(CustomRuntimeException.PRESENTATION_DID_NOT_BEGIN)) {
+            if (e.getMessage().equals(CustomRuntimeException.PRESENTATION_DID_NOT_FINISH)) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
