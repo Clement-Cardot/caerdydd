@@ -2,7 +2,6 @@ package com.caerdydd.taf.models.entities.consulting;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,15 +28,15 @@ public class ConsultingEntity implements Serializable {
         private String speciality;
         private String notes;
 
-        @OneToOne(cascade = CascadeType.MERGE)
+        @OneToOne
         @JoinColumn(name = "id_planned_timing_availability")
         private PlannedTimingAvailabilityEntity plannedTimingAvailability;
 
-        @ManyToOne(cascade = CascadeType.MERGE)
+        @ManyToOne
         @JoinColumn(name = "id_planned_timing_consulting")
         private PlannedTimingConsultingEntity plannedTimingConsulting;
 
-        @ManyToOne(cascade = CascadeType.MERGE)
+        @ManyToOne
         @JoinColumn(name = "id_team")
         private TeamEntity team;
 

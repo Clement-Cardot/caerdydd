@@ -521,4 +521,22 @@ void testGetTeamPresentations_ServiceError() {
         verify(presentationServiceRule).checkDateBeginPassed(presentation.getDatetimeBegin());
         assertEquals(notes, result.getJury2Notes());
     }
+
+    @Test
+    void testSetTeamNotes_Nominal() throws CustomRuntimeException {
+        PresentationEntity presentation = new PresentationEntity();
+        PresentationDTO presentationDTO = new PresentationDTO();
+
+        String notes = "test";
+        presentation.setValidationTeamNotes((notes));
+
+        ArgumentCaptor<PresentationEntity> captor = ArgumentCaptor.forClass(PresentationEntity.class);
+        when(presentationRepository.save(captor.capture())).thenReturn(presentation);
+
+        Optional<PresentationEntity> mockedPresentation = Optional.of(presentation);
+        when(presentationRepository.findById(mockedPresentation.get().getIdPresentation())).thenReturn(mockedPresentation);
+
+        presentationService.setTeamNotes(presentationDTO.getIdPresentation(), notes);
+        assertEquals(notes, captor.getValue().getValidationTeamNotes());
+    }
 }

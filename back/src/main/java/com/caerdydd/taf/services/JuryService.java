@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.JuryDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
@@ -37,9 +38,6 @@ public class JuryService {
 
     @Autowired
     private UserService userService;
-
-    @Autowired 
-    private RoleService roleService;
 
     @Autowired
     private JuryServiceRules juryServiceRules;
@@ -160,5 +158,4 @@ public class JuryService {
                 .map(juryEntity -> modelMapper.map(juryEntity, JuryDTO.class))
                 .collect(Collectors.toList());
     }
-   
 }

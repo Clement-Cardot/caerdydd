@@ -3,10 +3,12 @@ import { CreatePresentationComponent } from "./create-presentation/create-presen
 import { CommonModule } from "@angular/common";
 import { MaterialModule } from "src/app/material.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { TeachingStaffCommentaryComponent } from "./teaching-staff-commentary/teaching-staff-commentary.component";
 
 @NgModule({
     declarations: [
-        CreatePresentationComponent
+        CreatePresentationComponent,
+        TeachingStaffCommentaryComponent
     ],
     imports: [
       CommonModule,
@@ -15,7 +17,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
       ReactiveFormsModule
     ],
     exports: [
-        CreatePresentationComponent
+        CreatePresentationComponent,
+        TeachingStaffCommentaryComponent
     ]
   })
   export class PresentationModule { }
