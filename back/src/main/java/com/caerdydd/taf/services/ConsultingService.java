@@ -99,6 +99,39 @@ public class ConsultingService {
         }
     }
 
+    // List all ConsulingDTO Waiting
+    public List<ConsultingDTO> listAllConsultingsWaiting() throws CustomRuntimeException {
+        // Verify that user is a Teaching staff
+        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+
+        // Get all consultings
+        List<ConsultingDTO> consultings = listAllConsultings();
+
+        // Get all consultings for Speciality infra
+        List<ConsultingDTO> consultingsWaiting = new ArrayList<>();
+        for(ConsultingDTO consulting : consultings) {
+            if(consulting.getPlannedTimingAvailability() == null) {
+                consultingsWaiting.add(consulting);
+            }
+        }
+        return consultingsWaiting;
+    }
+
+    public PlannedTimingAvailabilityDTO getByIdPlannedTimingConsultingAndIdTeachingStaff(Integer idPlannedTimingConsulting, Integer idUser ) throws CustomRuntimeException {
+        Optional<PlannedTimingAvailabilityEntity> optionalAvailability;
+        try {
+            optionalAvailability = plannedTimingAvailabilityRepository.findByIdPlannedTimingConsultingAndIdUser(idPlannedTimingConsulting, idUser);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+    
+        if (optionalAvailability.isEmpty()) {
+            throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND);
+        }
+    
+        PlannedTimingAvailabilityEntity availabilityEntity = optionalAvailability.get();
+        return modelMapper.map(availabilityEntity, PlannedTimingAvailabilityDTO.class);
+    }
     public List<PlannedTimingAvailabilityDTO> listAllPlannedTimingAvailabilities() throws CustomRuntimeException {
         try {
             return plannedTimingAvailabilityRepository.findAll().stream()
@@ -127,20 +160,37 @@ public class ConsultingService {
     }
 
     // Get a planned timing consulting by id
-    private PlannedTimingConsultingDTO getPlannedTimingConsultingById(Integer id) throws CustomRuntimeException{
-        Optional<PlannedTimingConsultingEntity> optionalPlannedTiming;
+    public PlannedTimingConsultingDTO getPlannedTimingConsultingById(Integer id) throws CustomRuntimeException{
+        Optional<PlannedTimingConsultingEntity> optionalPlannedTimingConsulting;
         try {
-            optionalPlannedTiming = plannedTimingConsultingRepository.findById(id);
+            optionalPlannedTimingConsulting = plannedTimingConsultingRepository.findById(id);
+        } catch (Exception e) {
+            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
+        }
+
+        if (optionalPlannedTimingConsulting.isEmpty()) {
+            throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_CONSULTING_NOT_FOUND);
+        }
+    
+        PlannedTimingConsultingEntity consultingEntity = optionalPlannedTimingConsulting.get();
+        return modelMapper.map(consultingEntity, PlannedTimingConsultingDTO.class);
+    }
+    
+    // Get a consulting by id
+    public ConsultingDTO getConsultingById(Integer id) throws CustomRuntimeException {
+        Optional<ConsultingEntity> optionalConsulting;
+        try {
+            optionalConsulting = consultingRepository.findById(id);
         } catch (Exception e) {
             throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
         }
     
-        if (optionalPlannedTiming.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND);
+        if (optionalConsulting.isEmpty()) {
+            throw new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND);
         }
     
-        PlannedTimingConsultingEntity plannedTimingEntity = optionalPlannedTiming.get();
-        return modelMapper.map(plannedTimingEntity, PlannedTimingConsultingDTO.class);
+        ConsultingEntity consultingEntity = optionalConsulting.get();
+        return modelMapper.map(consultingEntity, ConsultingDTO.class);
     }
 
     // Get a consulting by Speciality Infra
@@ -203,16 +253,6 @@ public class ConsultingService {
         return consultingsBySpecialityModeling;
     }
 
-    // Save consulting
-    public ConsultingDTO saveConsulting(ConsultingDTO consultingDTO) {
-        ConsultingEntity consultingEntity = modelMapper.map(consultingDTO, ConsultingEntity.class);
-
-        ConsultingEntity response = consultingRepository.save(consultingEntity);
-
-        return modelMapper.map(response, ConsultingDTO.class);
-    }
-
-
     // Save a planned Timing for consulting
     public List<PlannedTimingConsultingDTO> savePlannedTimingConsultings(List<PlannedTimingConsultingDTO> plannedTimingConsultings) {
         List<PlannedTimingConsultingEntity> plannedTimingConsultingEntities = plannedTimingConsultings.stream()
@@ -227,29 +267,21 @@ public class ConsultingService {
     }
 
     // Save a planned Timing for consulting
-    public PlannedTimingAvailabilityDTO savePlannedTimingAvailability(PlannedTimingAvailabilityDTO consulting) {
-        PlannedTimingAvailabilityEntity plannedTimingConsultingEntity = modelMapper.map(consulting, PlannedTimingAvailabilityEntity.class);
+    public PlannedTimingAvailabilityDTO savePlannedTimingAvailability(PlannedTimingAvailabilityDTO plannedTimingAvailability) {
+        PlannedTimingAvailabilityEntity plannedTimingConsultingEntity = modelMapper.map(plannedTimingAvailability, PlannedTimingAvailabilityEntity.class);
 
         PlannedTimingAvailabilityEntity response = plannedTimingAvailabilityRepository.save(plannedTimingConsultingEntity);
 
         return modelMapper.map(response, PlannedTimingAvailabilityDTO.class);
     }
 
-    // Get a consulting by id
-    public ConsultingDTO getConsultingById(Integer id) throws CustomRuntimeException {
-        Optional<ConsultingEntity> optionalConsulting;
-        try {
-            optionalConsulting = consultingRepository.findById(id);
-        } catch (Exception e) {
-            throw new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR);
-        }
-    
-        if (optionalConsulting.isEmpty()) {
-            throw new CustomRuntimeException(CustomRuntimeException.CONSULTING_NOT_FOUND);
-        }
-    
-        ConsultingEntity consultingEntity = optionalConsulting.get();
-        return modelMapper.map(consultingEntity, ConsultingDTO.class);
+    //Save a consulting
+    public ConsultingDTO saveConsulting(ConsultingDTO consulting) {
+        ConsultingEntity consultingEntity = modelMapper.map(consulting, ConsultingEntity.class);
+
+        ConsultingEntity response = consultingRepository.save(consultingEntity);
+
+        return modelMapper.map(response, ConsultingDTO.class);
     }
 
 
@@ -327,7 +359,24 @@ public class ConsultingService {
         return savePlannedTimingAvailability(plannedTimingAvailability);
     }
 
+    // Update a consulting
+    public ConsultingDTO updateConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {
+        Integer idPlannedTC = consultingDTO.getPlannedTimingConsulting().getIdPlannedTimingConsulting();
+        UserDTO user = userServiceRules.getCurrentUser();
+        // Verify that user is a Teaching staff
+        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
 
+        // check if consulting is not in the past
+        consultingRules.checkConsultingIsNotInPast(consultingDTO);
+
+        // check if consulting is not already taken
+        consultingRules.checkConsultingIsNotAlreadyTaken(consultingDTO);
+
+        // Update entity
+        consultingDTO.setPlannedTimingAvailability(getByIdPlannedTimingConsultingAndIdTeachingStaff(idPlannedTC, user.getId()));
+
+        return saveConsulting(consultingDTO);
+    }
 
     // Create a consulting
     public ConsultingDTO createConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {

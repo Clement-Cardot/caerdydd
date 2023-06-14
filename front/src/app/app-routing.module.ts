@@ -17,16 +17,16 @@ import { ProjectPageComponent } from './pages/project-page/project-page.componen
 import { PresentationCommentaryPageComponent } from './pages/presentation-commentary-page/presentation-commentary-page.component';
 import { ConsultingPageComponent } from './pages/consulting-page/consulting-page.component';
 
-const websiteName = " - Taf"
+const websiteName = ' - Taf';
 
 const routes: Routes = [
   { path: '', title: 'Login' + websiteName, component: LoginPageComponent },
 
   // Main Page
-  { path: 'dashboard', title: 'Tableau de bord' + websiteName, component: DashboardPageComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', title: 'Tableau de bord' + websiteName, component: DashboardPageComponent, canActivate: [AuthGuard]},
 
   // Administration page
-  /* TODO */ { path: 'administration', title: 'Administration' + websiteName, component: DashboardPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
+  /* TODO */ { path: 'administration', title: 'Administration' + websiteName, component: DashboardPageComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['OPTION_LEADER_ROLE'] }},
 
   // Planification pages
   { path: 'planning', title: 'Planification' + websiteName, component: PlanificationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['PLANNING_ROLE']}},
@@ -34,27 +34,25 @@ const routes: Routes = [
   { path: 'consultings', title: 'Consulting' + websiteName, component: ConsultingPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEACHING_STAFF_ROLE']}},
 
   // Notation pages
-  { path: 'marks', title: 'Notation' + websiteName, component: NotationPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE']}},
+  { path: 'marks', title: 'Notation' + websiteName, component: NotationPageComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['OPTION_LEADER_ROLE', 'TEACHING_STAFF_ROLE'] }},
 
   // Subject page
-  { path: 'subjects',title: 'Sujets' + websiteName, component: ValidateSubjectPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['OPTION_LEADER_ROLE']}},
+  { path: 'subjects', title: 'Sujets' + websiteName, component: ValidateSubjectPageComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['OPTION_LEADER_ROLE'] }},
 
   // Teams pages
   { path: 'teams', title: 'Teams' + websiteName, component: TeamsPageComponent, canActivate: [AuthGuard] },
 
   // Projects pages
   { path: 'project/:id', title: 'Projet' + websiteName, component: ProjectPageComponent, canActivate: [AuthGuard]},
-  { path: 'dev-project', title: 'Projet de Développement' + websiteName, component: DevProjectPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
-  { path: 'validation-project', title: 'Projet de Validation' + websiteName, component: ValidationProjectPageComponent, canActivate: [AuthGuard, RoleGuard], data: {roles: ['TEAM_MEMBER_ROLE']}},
+  { path: 'dev-project', title: 'Projet de Développement' + websiteName, component: DevProjectPageComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['TEAM_MEMBER_ROLE'] }},
+  { path: 'validation-project', title: 'Projet de Validation' + websiteName, component: ValidationProjectPageComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['TEAM_MEMBER_ROLE'] }},
 
   // Teaching Staff Pages
   { path: 'teachingStaff', title: 'Corps Enseignant' + websiteName, component: TeachingStaffPageComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: ['TEACHING_STAFF_ROLE'] }},
-  
-  { path: 'error', title: 'Erreur' + websiteName, component: ErrorPageComponent },
-
   { path: 'presentationCommentary', title: 'Commentaire présentation' + websiteName, component: PresentationCommentaryPageComponent },
-  
-  ];
+
+  { path: 'error', title: 'Erreur' + websiteName, component: ErrorPageComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

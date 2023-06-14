@@ -3,6 +3,7 @@ package com.caerdydd.taf.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -14,14 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.MapKeyColumn;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
@@ -93,7 +94,7 @@ public class ConsultingServiceTest {
         this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
-    // ListAllConsultings
+    // ListAllPlannedConsultings
     @Test
     void testListAllPlannedTimingConsultings_Nominal() throws CustomRuntimeException {
         // Mock consultingRepository.findAll()
@@ -178,6 +179,19 @@ public class ConsultingServiceTest {
         assertEquals(mockedConsultings.size(), consultings.size());
         assertEquals(expectedConsultings.get(0).toString(), consultings.get(0).toString());
         assertEquals(expectedConsultings.get(1).toString(), consultings.get(1).toString());
+    }
+
+    @Test
+    void testListAllConsultings_EmptyList() throws CustomRuntimeException {
+        // Mock consultingRepository.findAll()
+        List<ConsultingEntity> mockedConsultings = new ArrayList<>();
+        when(consultingRepository.findAll()).thenReturn(mockedConsultings);
+
+        // Call method to test
+        List<ConsultingDTO> consultings = consultingService.listAllConsultings();
+
+        // Assertions
+        assertEquals(mockedConsultings.size(), consultings.size());
     
     }
 
@@ -210,6 +224,174 @@ public class ConsultingServiceTest {
         // Assertions
         assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
     }
+
+    // Get Speciality Infra
+    @Test
+    void testGetConsultingsBySpecialityInfra_Nominal() throws CustomRuntimeException {
+
+        // Mock listAllConsultings() method
+        List<ConsultingDTO> allConsultings = new ArrayList<>();
+        ConsultingDTO consulting1 = new ConsultingDTO();
+        ConsultingDTO consulting2 = new ConsultingDTO();
+        ConsultingDTO consulting3 = new ConsultingDTO();
+        consulting1.setSpeciality("infrastructure");
+        consulting1.setIdConsulting(1);
+        consulting2.setSpeciality("development");
+        consulting2.setIdConsulting(2);
+        consulting3.setSpeciality("infrastructure");
+        consulting3.setIdConsulting(3);
+        allConsultings.add(consulting1);
+        allConsultings.add(consulting2);
+        allConsultings.add(consulting3);
+
+        // Prepare Mocked Data for consultingRepository.findAll()
+        List<ConsultingEntity> consultingEntities = new ArrayList<>();
+        ConsultingEntity consultingEntity1 = new ConsultingEntity();
+        ConsultingEntity consultingEntity2 = new ConsultingEntity();
+        ConsultingEntity consultingEntity3 = new ConsultingEntity();
+
+        consultingEntity1.setSpeciality("infrastructure");
+        consultingEntity1.setIdConsulting(1);
+        consultingEntity2.setSpeciality("development");
+        consultingEntity2.setIdConsulting(2);
+        consultingEntity3.setSpeciality("infrastructure");
+        consultingEntity3.setIdConsulting(3);
+
+        consultingEntities.add(0, consultingEntity1);
+        consultingEntities.add(1, consultingEntity2);
+        consultingEntities.add(2, consultingEntity3);
+ 
+        when(consultingRepository.findAll()).thenReturn(consultingEntities);
+
+        // Define the expected answer
+        List<ConsultingDTO> expectedAnswer = new ArrayList<>();
+        expectedAnswer.add(consulting1);
+        expectedAnswer.add(consulting3);
+
+        // Call the method to test
+        List<ConsultingDTO> result = new ArrayList<>();
+        try {
+            result = consultingService.getConsultingsBySpecialityInfra();
+        } catch (CustomRuntimeException e) {
+            fail();
+        } 
+
+        // Verify the result
+        Mockito.verify(consultingRepository, Mockito.times(1)).findAll();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+    // Get Speciality Development
+    @Test
+    void testGetConsultingsBySpecialityDev_Nominal() throws CustomRuntimeException {
+
+        // Mock listAllConsultings() method
+        List<ConsultingDTO> allConsultings = new ArrayList<>();
+        ConsultingDTO consulting1 = new ConsultingDTO();
+        ConsultingDTO consulting2 = new ConsultingDTO();
+        ConsultingDTO consulting3 = new ConsultingDTO();
+        consulting1.setSpeciality("development");
+        consulting1.setIdConsulting(1);
+        consulting2.setSpeciality("development");
+        consulting2.setIdConsulting(2);
+        consulting3.setSpeciality("infrastructure");
+        consulting3.setIdConsulting(3);
+        allConsultings.add(consulting1);
+        allConsultings.add(consulting2);
+        allConsultings.add(consulting3);
+
+        // Prepare Mocked Data for consultingRepository.findAll()
+        List<ConsultingEntity> consultingEntities = new ArrayList<>();
+        ConsultingEntity consultingEntity1 = new ConsultingEntity();
+        ConsultingEntity consultingEntity2 = new ConsultingEntity();
+        ConsultingEntity consultingEntity3 = new ConsultingEntity();
+
+        consultingEntity1.setSpeciality("development");
+        consultingEntity1.setIdConsulting(1);
+        consultingEntity2.setSpeciality("development");
+        consultingEntity2.setIdConsulting(2);
+        consultingEntity3.setSpeciality("infrastructure");
+        consultingEntity3.setIdConsulting(3);
+
+        consultingEntities.add(0, consultingEntity1);
+        consultingEntities.add(1, consultingEntity2);
+        consultingEntities.add(2, consultingEntity3);
+ 
+        when(consultingRepository.findAll()).thenReturn(consultingEntities);
+
+        // Define the expected answer
+        List<ConsultingDTO> expectedAnswer = new ArrayList<>();
+        expectedAnswer.add(consulting1);
+        expectedAnswer.add(consulting2);
+
+        // Call the method to test
+        List<ConsultingDTO> result = new ArrayList<>();
+        try {
+            result = consultingService.getConsultingsBySpecialityDevelopment();
+        } catch (CustomRuntimeException e) {
+            fail();
+        } 
+
+        // Verify the result
+        Mockito.verify(consultingRepository, Mockito.times(1)).findAll();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
+    // Get Speciality Modeling
+    @Test
+    void testGetConsultingsBySpecialityModeling_Nominal() throws CustomRuntimeException {
+
+        // Mock listAllConsultings() method
+        List<ConsultingDTO> allConsultings = new ArrayList<>();
+        ConsultingDTO consulting1 = new ConsultingDTO();
+        ConsultingDTO consulting2 = new ConsultingDTO();
+        ConsultingDTO consulting3 = new ConsultingDTO();
+        consulting1.setSpeciality("infrastructure");
+        consulting1.setIdConsulting(1);
+        consulting2.setSpeciality("modeling");
+        consulting2.setIdConsulting(2);
+        consulting3.setSpeciality("modeling");
+        consulting3.setIdConsulting(3);
+        allConsultings.add(consulting1);
+        allConsultings.add(consulting2);
+        allConsultings.add(consulting3);
+
+        // Prepare Mocked Data for consultingRepository.findAll()
+        List<ConsultingEntity> consultingEntities = new ArrayList<>();
+        ConsultingEntity consultingEntity1 = new ConsultingEntity();
+        ConsultingEntity consultingEntity2 = new ConsultingEntity();
+        ConsultingEntity consultingEntity3 = new ConsultingEntity();
+
+        consultingEntity1.setSpeciality("infrastructure");
+        consultingEntity1.setIdConsulting(1);
+        consultingEntity2.setSpeciality("modeling");
+        consultingEntity2.setIdConsulting(2);
+        consultingEntity3.setSpeciality("modeling");
+        consultingEntity3.setIdConsulting(3);
+
+        consultingEntities.add(0, consultingEntity1);
+        consultingEntities.add(1, consultingEntity2);
+        consultingEntities.add(2, consultingEntity3);
+ 
+        when(consultingRepository.findAll()).thenReturn(consultingEntities);
+
+        // Define the expected answer
+        List<ConsultingDTO> expectedAnswer = new ArrayList<>();
+        expectedAnswer.add(consulting2);
+        expectedAnswer.add(consulting3);
+
+        // Call the method to test
+        List<ConsultingDTO> result = new ArrayList<>();
+        try {
+            result = consultingService.getConsultingsBySpecialityModeling();
+        } catch (CustomRuntimeException e) {
+            fail();
+        } 
+
+        // Verify the result
+        Mockito.verify(consultingRepository, Mockito.times(1)).findAll();
+        assertEquals(expectedAnswer.toString(), result.toString());
+    }
+
 
     // getPlannedTimingAvailabilityById
     @Test
@@ -269,6 +451,110 @@ public class ConsultingServiceTest {
         assertEquals(CustomRuntimeException.PLANNED_TIMING_AVAILABILITY_NOT_FOUND, exception.getMessage());
     }
 
+    
+    // GetPlannedTimingConsultingById
+    @Test
+    void testGetPlannedTimingConsultingById_Nominal() throws CustomRuntimeException {
+        // Mock plannedTimingConsultingRepository.findById()
+        Integer plannedTimingConsultingId = 1;
+        PlannedTimingConsultingEntity plannedTimingConsultingEntity = new PlannedTimingConsultingEntity(
+                LocalDateTime.of(2023, 1, 1, 10, 0, 0),
+                LocalDateTime.of(2023, 1, 1, 10, 30, 0)
+        );
+        plannedTimingConsultingEntity.setIdPlannedTimingConsulting(plannedTimingConsultingId);
+        when(plannedTimingConsultingRepository.findById(plannedTimingConsultingId)).thenReturn(Optional.of(plannedTimingConsultingEntity));
+    
+        // Call method to test
+        PlannedTimingConsultingDTO plannedTimingConsultingDTO = consultingService.getPlannedTimingConsultingById(plannedTimingConsultingId);
+    
+        // Expected Answer
+        PlannedTimingConsultingDTO expectedConsultingDTO = new PlannedTimingConsultingDTO(
+                LocalDateTime.of(2023, 1, 1, 10, 0, 0),
+                LocalDateTime.of(2023, 1, 1, 10, 30, 0)
+        );
+        expectedConsultingDTO.setIdPlannedTimingConsulting(plannedTimingConsultingId);
+    
+        // Assertions
+        assertEquals(expectedConsultingDTO.toString(), plannedTimingConsultingDTO.toString());
+    }
+    
+    @Test
+    void testGetPlannedTimingConsultingById_ServiceError() {
+        // Mock plannedTimingConsultingRepository.findById()
+        Integer plannedTimingConsultingId = 1;
+        when(plannedTimingConsultingRepository.findById(plannedTimingConsultingId)).thenThrow(new RuntimeException());
+    
+        // Call method to test and verify the exception
+        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+            consultingService.getPlannedTimingConsultingById(plannedTimingConsultingId);
+        });
+    
+        // Assertions
+        assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
+    }
+        
+    @Test
+    void testGetPlannedTimingConsultingById_NotFound() {
+        // Mock plannedTimingConsultingRepository.findById()
+        Integer plannedTimingConsultingId = 1;
+        when(plannedTimingConsultingRepository.findById(plannedTimingConsultingId)).thenReturn(Optional.empty());
+    
+        // Call method to test and verify the exception
+        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+            consultingService.getPlannedTimingConsultingById(plannedTimingConsultingId);
+        });
+    
+        // Assertions
+        assertEquals(CustomRuntimeException.PLANNED_TIMING_CONSULTING_NOT_FOUND, exception.getMessage());
+    }
+    
+    // GetConsultingById
+    @Test
+    void testGetConsultingById_Nominal() throws CustomRuntimeException {
+        // Mock consultingRepository.findById()
+        ConsultingEntity mockedConsulting = new ConsultingEntity();
+        mockedConsulting.setIdConsulting(1);
+        when(consultingRepository.findById(1)).thenReturn(Optional.of(mockedConsulting));
+
+        // Call method to test
+        ConsultingDTO consulting = consultingService.getConsultingById(1);
+
+        // Expected Answer
+        ConsultingDTO expectedConsulting = new ConsultingDTO();
+        expectedConsulting.setIdConsulting(1);
+
+        // Assertions
+        assertEquals(expectedConsulting.toString(), consulting.toString());
+    }
+
+    @Test
+    void testGetConsultingById_ServiceError() throws CustomRuntimeException {
+        // Mock consultingRepository.findById()
+        when(consultingRepository.findById(1)).thenThrow(new NullPointerException());
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            consultingService.getConsultingById(1);
+        });
+
+        // Assertions
+        assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
+    }
+
+    @Test
+    void testGetConsultingById_NotFound() throws CustomRuntimeException {
+        // Mock consultingRepository.findById()
+        when(consultingRepository.findById(1)).thenReturn(Optional.empty());
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            consultingService.getConsultingById(1);
+        });
+
+        // Assertions
+        assertEquals(CustomRuntimeException.CONSULTING_NOT_FOUND, exception.getMessage());
+    }
+
     // SavePlannedTimingConsultings
     @Test
     void testSavePlannedTimingConsultings_Nominal() {
@@ -307,6 +593,23 @@ public class ConsultingServiceTest {
 
         // Call method to test
         PlannedTimingAvailabilityDTO response = consultingService.savePlannedTimingAvailability(input);
+
+        // Assertions
+        assertEquals(input.toString(), response.toString());
+    }
+
+    // SaveConsulting
+    @Test
+    void testSaveConsulting_Nominal() {
+        // Mock consultingRepository.save()
+        ConsultingEntity mockedConsulting = new ConsultingEntity();
+        when(consultingRepository.save(any(ConsultingEntity.class))).thenReturn(mockedConsulting);
+
+        // Prepare input
+        ConsultingDTO input = new ConsultingDTO();
+
+        // Call method to test
+        ConsultingDTO response = consultingService.saveConsulting(input);
 
         // Assertions
         assertEquals(input.toString(), response.toString());
@@ -589,6 +892,55 @@ public class ConsultingServiceTest {
         assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
     } 
     
+    //Update Consulting
+    @Test
+    void testUpdateConsulting_Nominal() throws CustomRuntimeException {
+        // Prepare input data
+        Integer consultingId = 1;
+        ConsultingDTO consultingDTO = new ConsultingDTO();
+        consultingDTO.setIdConsulting(consultingId);
+
+        // Prepare Mocked Data for plannedTimingAvailabilityRepository.findAll()
+        PlannedTimingAvailabilityEntity plannedTimingAvailabilityEntity = new PlannedTimingAvailabilityEntity();
+        PlannedTimingConsultingEntity plannedTimingConsultingEntity = new PlannedTimingConsultingEntity();
+        TeachingStaffEntity teachingStaff = new TeachingStaffEntity();
+        ConsultingEntity consultingEntity = new ConsultingEntity();
+
+        consultingEntity.setIdConsulting(consultingId);
+        plannedTimingAvailabilityEntity.setIdPlannedTimingAvailability(1);
+        teachingStaff.setIdUser(1);
+        plannedTimingConsultingEntity.setIdPlannedTimingConsulting(1);
+        
+        plannedTimingAvailabilityEntity.setPlannedTimingConsulting(plannedTimingConsultingEntity);
+        plannedTimingAvailabilityEntity.setTeachingStaff(teachingStaff);
+        consultingEntity.setPlannedTimingAvailability(plannedTimingAvailabilityEntity);
+
+        // Mocke consultingRepository.save()
+        when(consultingRepository.save(any(ConsultingEntity.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Set other properties of consultingDTO
+        PlannedTimingConsultingDTO plannedTimingConsultingDTO = new PlannedTimingConsultingDTO();
+        plannedTimingConsultingDTO.setIdPlannedTimingConsulting(1);
+        // Set other properties of plannedTimingConsultingDTO
+        consultingDTO.setPlannedTimingConsulting(plannedTimingConsultingDTO);        
+    
+        // Configure Mocks behavior
+        when(plannedTimingAvailabilityRepository.findByIdPlannedTimingConsultingAndIdUser(1,1)).thenReturn(Optional.of(plannedTimingAvailabilityEntity));
+        // Mock other dependencies as needed
+
+        // Mock userServiceRules.getCurrentUser()
+        UserDTO mockedUser = new UserDTO(1, "Bob", "Smith", "login", "password", "email", null);
+        when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
+    
+        // Call the method to test
+        ConsultingDTO updatedConsultingDTO = consultingService.updateConsulting(consultingDTO);
+    
+        // Verify the results
+        // Verify other dependencies as needed
+        // Assert the expected results
+        assertEquals(consultingDTO.toString(), updatedConsultingDTO.toString());
+    }
+
     @Test
     void testGetConsultingsForCurrentTeachingStaff_NoConsultingForTeachingStaff() throws CustomRuntimeException {
         // Mock userServiceRules.checkCurrentUserRole()
@@ -751,7 +1103,7 @@ public class ConsultingServiceTest {
 
         // Assertions
         assertEquals(expectedAnswer.size(), result.size());
-        assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
+        assertEquals(expectedAnswer.get(0).getIdConsulting(), result.get(0).getIdConsulting());
         
     }
 
@@ -848,7 +1200,7 @@ public class ConsultingServiceTest {
 
         // Assertions
         assertEquals(expectedAnswer.size(), result.size());
-        assertEquals(expectedAnswer.get(0).toString(), result.get(0).toString());
+        assertEquals(expectedAnswer.get(0).getIdConsulting(), result.get(0).getIdConsulting());
         
     }
 

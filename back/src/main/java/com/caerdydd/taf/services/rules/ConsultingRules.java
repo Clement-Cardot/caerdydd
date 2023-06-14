@@ -30,6 +30,18 @@ public class ConsultingRules {
         }
     }
 
+    public void checkConsultingIsNotInPast(ConsultingDTO consulting) throws CustomRuntimeException{
+        if (consulting.getPlannedTimingConsulting().getDatetimeEnd().isBefore(LocalDateTime.now())){
+            throw new CustomRuntimeException(CustomRuntimeException.CONSULTING_IS_IN_PAST);
+        }
+    }
+
+    public void checkConsultingIsNotAlreadyTaken(ConsultingDTO consulting) throws CustomRuntimeException{
+        if (consulting.getPlannedTimingAvailability() != null){
+            this.checkPlannedTimingIsNotAlreadyTaken(consulting.getPlannedTimingAvailability());
+        }
+    }
+
     public void checkDemandIsMadeOnTime(ConsultingDTO consultingDTO) throws CustomRuntimeException{
         // Check if the demand is made two days under 48h before the consulting
         if (consultingDTO.getPlannedTimingConsulting().getDatetimeEnd().minusDays(2).isBefore(LocalDateTime.now())){
