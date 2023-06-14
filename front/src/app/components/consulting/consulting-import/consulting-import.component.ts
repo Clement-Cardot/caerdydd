@@ -48,7 +48,7 @@ export class ConsultingImportComponent {
     formDirective.resetForm();
     this.consultingForm.reset();
     let nbConsulting = data.length;
-    this._snackBar.open(nbConsulting + " sessions de consulting ont bien été importés", "Fermer", {
+    this._snackBar.open(nbConsulting + " sessions de consulting ont bien été importées", "Fermer", {
       duration: 5000,
     });
   }

@@ -43,7 +43,7 @@ export class ProjectDescriptionComponent implements OnInit {
         .updateProjectDescription(this.team.projectDev)
         .subscribe(
           (response) => {
-            this.showSnackbar("Les infomations de votre projet ont été mises à jour !");
+            this.showSnackbar("Les informations de votre projet ont été mises à jour !");
             this.updatableEvent.emit();
           },
           (error) => {
