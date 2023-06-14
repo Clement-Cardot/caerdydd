@@ -38,3 +38,9 @@ button {
     margin-left: 0px;
     align-self: center;
 }
+
+@media screen and (max-width: 1200px) {
+    mat-card {
+        width: 22rem;
+    }
+}

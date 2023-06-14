@@ -39,3 +39,9 @@ h2 {
   justify-content: center;
   align-items: center;
 }
+
+@media screen and (max-width: 1200px) {
+  app-project-description {
+    width: 23rem;
+  }
+}

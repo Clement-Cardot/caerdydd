@@ -26,14 +26,16 @@
         </div>
         <div class="sameRow">
           <p class="label">Cahier de tests :</p>
-          <a mat-button color="primary" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
         </div>
+        <a class="testParagraphe" mat-button color="primary" [href]="team.testBookLink" target="_blank" *ngIf="team.testBookLink">{{ team.testBookLink }}</a>
+        <p class="testParagraphe" *ngIf="!team.testBookLink">Il n'y a aucun cahier de test actuellement</p>
         <br>
-        <div class="sameRow" *ngIf="isUserOptionLeader()">
+        <div class="sameRow" *ngIf="isUserOptionLeader() || isUserJury()">
           <p class="label">Commentaire sur le rapport :</p>
           <p></p>
         </div>
-        <p *ngIf="!isUserJury() && isUserOptionLeader()" id="reportCommentParagraph">{{ team.reportComments }}</p>
+        <p *ngIf="!isUserJury() && isUserOptionLeader() && team.reportComments" id="reportCommentParagraph">{{ team.reportComments }}</p>
+        <p *ngIf="!isUserJury() && isUserOptionLeader() && !team.reportComments" id="reportCommentParagraph">Aucun commentaire n'est présent actuellement</p>
         <form [formGroup]="addReportCommentform" id="formReportComment" (ngSubmit)="uploadComment()" *ngIf="isUserJury()">
           <mat-form-field id="reportComment">
             <textarea matInput formControlName="reportComment" rows="5" *ngIf="isUserJury()"></textarea>

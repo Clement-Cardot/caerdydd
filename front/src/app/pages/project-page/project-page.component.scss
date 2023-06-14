@@ -73,6 +73,11 @@ mat-card-content {
   align-items: center;
 }
 
+.testParagraphe {
+  width: 50%;
+  justify-content: left;
+}
+
 @media screen and (max-width: 1200px) {
   #reportComment {
     width: 70%;
@@ -80,10 +85,22 @@ mat-card-content {
   .sameRow {
     width: 70%;
   }
+  #reportCommentParagraph {
+    width: 70%;
+  }
+  .testParagraphe {
+    width: 70%;
+  }
 }
 
 @media screen and (max-width: 768px) {
   #reportComment {
+    width: 80%;
+  }
+  #reportCommentParagraph {
+    width: 80%;
+  }
+  .testParagraphe {
     width: 80%;
   }
   .sameRow {

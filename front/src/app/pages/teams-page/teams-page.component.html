@@ -4,6 +4,7 @@
 <div id="teamCreationBox" *ngIf="isCurrentUserAnOptionLeader() && (teams.length == 0 || openTeamsCreation == true)">
     <app-team-creation (componentDisplayed)="closeTeamsCreation($event)"></app-team-creation>
 </div>
+<p *ngIf="!teams">Aucune équipes</p>
 <div class="twoColumnDisplay">
     <app-team-list (applyEvent)='update($event)' *ngFor="let team of teams" [team]="team"></app-team-list>
 </div>

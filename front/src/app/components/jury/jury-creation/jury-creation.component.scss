@@ -7,8 +7,6 @@ mat-card {
     &:hover {
         box-shadow: 0 0 10px #a8a8a8;
     }
-    display: flex;
-    flex-direction: row;
 }
 
 mat-card-header {
@@ -43,10 +41,14 @@ button {
 }
 
 @media screen and (max-width: 1200px) {
-  mat-card {
-    flex-direction: column;
-  }
   form {
     flex-direction: column;
   }
+  mat-card {
+    width: 22rem;
+  }
+  button {
+    margin: 0;
+  }
 }
+  

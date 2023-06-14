@@ -35,3 +35,9 @@ mat-card-actions {
     flex-direction: row;
     justify-content: space-around;
 }
+
+@media screen and (max-width: 1200px) {
+    mat-card {
+      width: 22rem;
+    }
+  }

@@ -41,3 +41,9 @@ span {
 .center {
     text-align: center;
 }
+
+@media screen and (max-width: 1200px) {
+    mat-card {
+        width: 22rem;
+    }
+}

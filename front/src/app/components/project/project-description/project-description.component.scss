@@ -36,3 +36,8 @@ mat-card-actions {
 mat-form-field {
   width: 100%;
 }
+
+#projectForm {
+  display: flex;
+  flex-direction: column;
+}

@@ -13,6 +13,7 @@
 
 @media screen and (max-width: 1200px) {
   .parent {
+    margin: 0px;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(6, auto);
     grid-template-areas:  "div1"

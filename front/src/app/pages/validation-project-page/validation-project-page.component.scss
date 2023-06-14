@@ -26,8 +26,6 @@ mat-card {
     &:hover {
         box-shadow: 0 0 10px #a8a8a8;
     }
-
-
 }
 
 mat-card-header {
@@ -51,4 +49,31 @@ mat-card-content {
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
+}
+
+.label {
+    font-weight: 700;
+}
+
+.testParagraphe {
+    width: 50%;
+    justify-content: left;
+}
+
+@media screen and (max-width: 1200px) {
+    .sameRow {
+        width: 70%;
+    }
+    .testParagraphe {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .sameRow {
+        width: 80%;
+    }
+    .testParagraphe {
+        width: 80%;
+    }
 }

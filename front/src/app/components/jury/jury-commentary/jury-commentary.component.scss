@@ -5,3 +5,10 @@
 .mat-expansion-panel {
     margin: 15px
 }
+
+
+@media screen and (max-width: 1200px) {
+    .mat-expansion-panel-header {
+        height: 5rem;
+    }
+  }

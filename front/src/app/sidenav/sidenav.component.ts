@@ -93,8 +93,8 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
 
       // Team Member
       if (this.currentUser.getRoles().includes('TEAM_MEMBER_ROLE')) {
-        this.navLink.push('Projet Développement');
-        this.navLink.push('Projet Validation');
+        this.navLink.push('Développement');
+        this.navLink.push('Validation');
         this.navLink.push('Présentation');
       }
 
@@ -135,10 +135,10 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       case 'Enseignants':
         this.router.navigateByUrl('/teachingStaff');
         break;
-      case 'Projet Développement':
+      case 'Développement':
         this.router.navigateByUrl('/dev-project');
         break;
-      case 'Projet Validation':
+      case 'Validation':
         this.router.navigateByUrl('/validation-project');
         break;
       default:
