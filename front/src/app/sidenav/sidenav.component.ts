@@ -128,6 +128,9 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
       case 'Consultings':
         this.router.navigateByUrl('/consultings');
         break;
+      case 'Commentaires Présentation':
+        this.router.navigateByUrl('/presentationCommentary');
+        break;
       case 'Notes':
         this.router.navigateByUrl('/marks');
         break;
@@ -148,9 +151,6 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         break;
       case 'Projet Validation':
         this.router.navigateByUrl('/validation-project');
-        break;
-      case 'Commentaires Présentation':
-        this.router.navigateByUrl('/presentationCommentary');
         break;
       default:
         this.router.navigateByUrl('/dashboard');
