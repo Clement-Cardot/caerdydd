@@ -145,6 +145,6 @@ public class ConsultingRulesTest {
         });
             
         // Verify the result
-        assertEquals(CustomRuntimeException.PLANNED_TIMING_IS_ALREADY_TAKEN, exception.getMessage());
+        assertEquals(CustomRuntimeException.TEACHING_STAFF_IS_NOT_AVAILABLE, exception.getMessage());
     }
 }
