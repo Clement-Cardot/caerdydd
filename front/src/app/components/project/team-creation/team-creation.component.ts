@@ -33,11 +33,11 @@ export class TeamCreationComponent implements OnInit {
       return;
     } else {
       this.apiTeamService.createTeams(this.teamCreationForm.value.nbTeams).subscribe(
-        response => {
+        (response) => {
           this.showSnackbar(response.length + " Equipes créées avec succès !");
           this.componentDisplayed.emit(response);
         },
-        error => {
+        (error) => {
           this.showSnackbar("Une erreur est survenue lors de la création des équipes.");
         }
       );
