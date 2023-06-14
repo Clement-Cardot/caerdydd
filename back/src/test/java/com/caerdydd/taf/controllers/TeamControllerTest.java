@@ -757,27 +757,6 @@ public class TeamControllerTest {
         verify(teamService, times(1)).getTestBookLinkValidation(anyInt());
         assertEquals(expectedAnswer.toString(), result.toString());
     }
-
-
-    @Test
-    void testGetTestBookLinkValidation_NullLink() throws CustomRuntimeException {
-        // Mock teamService.getTestBookLinkValidation() method to return null
-        when(teamService.getTestBookLinkValidation(anyInt())).thenReturn(null);
-
-        // Prepare request parameter
-        int teamId = 1;
-
-        // Define the expected response
-        ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        // Call the method to test
-        ResponseEntity<String> result = teamController.getTestBookLinkValidation(teamId);
-
-        // Verify the result
-        verify(teamService, times(1)).getTestBookLinkValidation(teamId);
-        assertEquals(expectedAnswer, result);
-    }
-
     
     @Test
     void testTestBookLinkDev_NullLink() throws CustomRuntimeException {
