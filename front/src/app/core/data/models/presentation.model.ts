@@ -29,6 +29,7 @@ export class Presentation implements CalendarEvent {
         public room: string,
         public jury1Notes: string,
         public jury2Notes: string,
+        public validationTeamNotes: string,
         public jury: Jury,
         public project: Project | undefined
     ) {
@@ -57,7 +58,7 @@ export class PresentationAdapter implements Adapter<Presentation> {
         } else {
             project = undefined;
         }
-
+        
         return new Presentation(
             item.idPresentation,
             item.type,
@@ -66,6 +67,7 @@ export class PresentationAdapter implements Adapter<Presentation> {
             item.room,
             item.jury1Notes,
             item.jury2Notes,
+            item.validationTeamNotes,
             this.juryAdapter.adapt(item.jury),
             project
         );

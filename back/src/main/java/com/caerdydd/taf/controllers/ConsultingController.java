@@ -308,6 +308,32 @@ public class ConsultingController {
         }
     }
 
+    @PostMapping("/replaceTeachingStaff")
+    public ResponseEntity<ConsultingDTO> replaceTeachingStaff(@RequestBody ConsultingDTO consultingDTO) {
+        logger.info("Process request : Replace teaching staff from consulting {}", consultingDTO.getIdConsulting());
+        try {
+            ConsultingDTO updateConsultingDTO = consultingService.replaceTeachingStaff(consultingDTO);
+            return new ResponseEntity<>(updateConsultingDTO, HttpStatus.OK);
+        } catch (CustomRuntimeException e) {
+            switch (e.getMessage()) {
+                case CustomRuntimeException.CONSULTING_NOT_FOUND:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                case CustomRuntimeException.USER_IS_NOT_A_TEACHING_STAFF:
+                case CustomRuntimeException.TEACHING_STAFF_IS_NOT_AVAILABLE:
+                case CustomRuntimeException.CONSULTING_IS_IN_PAST:                
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                case CustomRuntimeException.SERVICE_ERROR:
+                    logger.warn(e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                default:
+                    logger.error(UNEXPECTED_EXCEPTION, e.getMessage());
+                    return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+            }
+        }
+    }
+    
     @PostMapping("/consulting")
     public ResponseEntity<ConsultingDTO> updateConsulting(@RequestBody ConsultingDTO consultingDTO) {
         logger.info("Process request : Update consulting");

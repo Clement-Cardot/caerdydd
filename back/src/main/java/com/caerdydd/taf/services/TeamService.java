@@ -22,6 +22,7 @@ import com.caerdydd.taf.models.entities.project.TeamEntity;
 import com.caerdydd.taf.repositories.TeamRepository;
 import com.caerdydd.taf.security.CustomRuntimeException;
 import com.caerdydd.taf.security.SecurityConfig;
+import com.caerdydd.taf.services.rules.JuryServiceRules;
 import com.caerdydd.taf.services.rules.TeamServiceRules;
 import com.caerdydd.taf.services.rules.UserServiceRules;
 
@@ -54,6 +55,9 @@ public class TeamService {
 
     @Autowired
     private UserServiceRules userServiceRules;
+
+    @Autowired
+    private JuryServiceRules juryServiceRules;
 
     @Autowired
     private NotificationService notificationService;
@@ -174,33 +178,33 @@ public class TeamService {
 
 
     public TeamDTO addTestBookLink(TeamDTO team) throws CustomRuntimeException {
-    // Vérifie si l'équipe existe
-    TeamDTO teamDTO = getTeamById(team.getIdTeam());
+        // Vérifie si l'équipe existe
+        TeamDTO teamDTO = getTeamById(team.getIdTeam());
 
-    // Vérifie si l'utilisateur est un membre de l'équipe
-    userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
-    teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
+        // Vérifie si l'utilisateur est un membre de l'équipe
+        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+        teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
 
-    // Vérifie si le lien est valide
-    teamServiceRules.isValidLink(team.getTestBookLink());
+        // Vérifie si le lien est valide
+        teamServiceRules.isValidLink(team.getTestBookLink());
 
-    teamDTO.setTestBookLink(team.getTestBookLink());
+        teamDTO.setTestBookLink(team.getTestBookLink());
 
-    // Récupère l'équipe pair
-    TeamDTO pairTeam = getTeamById(teamDTO.getProjectValidation().getIdProject());
+        // Récupère l'équipe pair
+        TeamDTO pairTeam = getTeamById(teamDTO.getProjectValidation().getIdProject());
 
-    // Crée et envoie une notification à chaque membre de l'équipe pair
-    for (TeamMemberDTO member : pairTeam.getTeamMembers()) {
-        UserDTO user = member.getUser();
-        NotificationDTO notification = new NotificationDTO();
-        notification.setUser(user);
-        notification.setMessage(team.getName() + " a déposé un nouveau lien pour le cahier de validation");
-        notification.setIsRead(false);
-        notificationService.createNotification(notification);
+        // Crée et envoie une notification à chaque membre de l'équipe pair
+        for (TeamMemberDTO member : pairTeam.getTeamMembers()) {
+            UserDTO user = member.getUser();
+            NotificationDTO notification = new NotificationDTO();
+            notification.setUser(user);
+            notification.setMessage(team.getName() + " a déposé un nouveau lien pour le cahier de validation");
+            notification.setIsRead(false);
+            notificationService.createNotification(notification);
+        }
+
+        return saveTeam(teamDTO);
     }
-
-    return saveTeam(teamDTO);
-}
 
     
 
@@ -219,30 +223,37 @@ public class TeamService {
         // Check if the current user is a jury member 
         userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
 
-      // Check if the value of the bonus is correct.
-      TeamServiceRules.checkTeamWorkMark(teamWorkMark);
+        // Check if the value of the bonus is correct.
+        TeamServiceRules.checkTeamWorkMark(teamWorkMark);
 
 
-      TeamDTO team = getTeamById(id);
+        TeamDTO team = getTeamById(id);
 
-      team.setTeamWorkMark(teamWorkMark);
-      return saveTeam(team);
-  }
+        team.setTeamWorkMark(teamWorkMark);
+        return saveTeam(team);
+    }
 
 
     public TeamDTO setTeamValidationMarkById(Integer id, Integer teamValidationMark)throws CustomRuntimeException{
         // Check if the current user is a jury member 
         userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
 
-    // Check if the value of the bonus is correct.
-    TeamServiceRules.checkTeamValidationMark(teamValidationMark);
+        // Check if the value of the bonus is correct.
+        TeamServiceRules.checkTeamValidationMark(teamValidationMark);
 
-    TeamDTO team = getTeamById(id);
+        TeamDTO team = getTeamById(id);
 
-    team.setTeamValidationMark(teamValidationMark);
-    return saveTeam(team);
+        team.setTeamValidationMark(teamValidationMark);
+        return saveTeam(team);
     }
-
+        
+    public TeamDTO setCommentOnReport(Integer idTeam, String comment) throws CustomRuntimeException {
+        userServiceRules.checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
+        TeamDTO team = this.getTeamById(idTeam);
+        juryServiceRules.checkJuryMemberManageTeam(userServiceRules.getCurrentUser().getId(), team);
+        team.setReportComments(comment);
+        return saveTeam(team);
+    }
 }
 
 

@@ -1,5 +1,7 @@
 package com.caerdydd.taf.models.dto.project;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.caerdydd.taf.models.dto.user.JuryDTO;
@@ -30,6 +32,7 @@ public class ProjectDTO {
     @JsonBackReference(value="projectValidation")
     private TeamDTO teamValidation;
 
+    private List<PresentationDTO> presentations;
 
     private JuryDTO jury;
 

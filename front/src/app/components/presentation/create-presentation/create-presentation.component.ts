@@ -65,6 +65,7 @@ export class CreatePresentationComponent implements OnInit {
       this.presentationForm.value['room'],
       "", // jury1Notes - Nous ne les connaissons pas encore car ils seront ajoutés plus tard
       "", // jury2Notes - Nous ne les connaissons pas encore car ils seront ajoutés plus tard
+      "",
       jury,
       project
     );

@@ -6,14 +6,12 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ConsultingImportComponent } from "./consulting-import/consulting-import.component";
 import { ConsultingInfoComponent } from './consulting-info/consulting-info.component';
 import { DialogAnnotationsComponent } from './consulting-info/dialog-annotations/dialog-annotations.component';
-import { ConsultingTeachingSAcceptComponent } from "./consulting-teaching-s-accept/consulting-teaching-s-accept.component";
 
 @NgModule({
     declarations: [
         ConsultingImportComponent,
         ConsultingInfoComponent,
-        DialogAnnotationsComponent,
-        ConsultingTeachingSAcceptComponent
+        DialogAnnotationsComponent
     ],
     imports: [
       CommonModule,
@@ -24,8 +22,7 @@ import { ConsultingTeachingSAcceptComponent } from "./consulting-teaching-s-acce
     ],
     exports: [
       ConsultingImportComponent,
-      ConsultingInfoComponent,
-      ConsultingTeachingSAcceptComponent
+      ConsultingInfoComponent
     ]
   })
   export class ConsultingModule { }

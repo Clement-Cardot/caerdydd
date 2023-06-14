@@ -96,6 +96,7 @@ export class SidenavComponent implements OnInit, OnChanges, OnDestroy {
         this.navLink.push('Mon équipe');
         this.navLink.push('Projet Développement');
         this.navLink.push('Projet Validation');
+        this.navLink.push('Commentaires Présentation');
       }
 
       // Student

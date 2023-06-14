@@ -66,7 +66,7 @@ export class ApiTeamService {
   addTestBookLink(team: Team): Observable<Team> {
     const url = `${this.baseUrl}/testBookLink`;
     return this.http.put<Team>(url, team)
-    .pipe( 
+    .pipe(
       map((data: any) => this.teamAdapter.adapt(data))
     )
     .pipe(
@@ -90,13 +90,13 @@ export class ApiTeamService {
       );
   }
 
-    setTeamMarks(teamId: number, teamWorkmark: number, teamValidationMark: number): Observable<Team> {
+  setTeamMarks(teamId: number, teamWorkmark: number, teamValidationMark: number): Observable<Team> {
     const url = `${this.baseUrl}/teamMarks`;
     const formData: FormData = new FormData();
     formData.append('teamId', teamId.toString());
     formData.append('teamWorkMark', teamWorkmark.toString());
     formData.append('teamValidationMark', teamValidationMark.toString());
-    
+
     return this.http.post(url, formData)
       .pipe(
         map((data: any) => this.teamAdapter.adapt(data)),
@@ -104,17 +104,28 @@ export class ApiTeamService {
       );
   }
 
-    private handleError(error: HttpErrorResponse) {
-        if (error.status === 0) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.error('An error occurred:', error.error);
-          } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong.
-            console.error(
-              `Backend returned code ${error.status}, body was: `, error.error);
-          }
-          // Return an observable with a user-facing error message.
-          return throwError(() => new Error('Something bad happened; please try again later.'));
-        }
+  setCommentOnReport(idTeam: number, comment: string) {
+      const formData: FormData = new FormData();
+
+      formData.append('idTeam', idTeam.toString());
+      formData.append('comment', comment);
+
+      return this.http.put(`${this.baseUrl}/setCommentOnReport`, formData )
+      .pipe(
+          catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(`Backend returned code ${error.status}, body was: `, error.error);
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(() => new Error('Something bad happened; please try again later.'));
+  }
 }
