@@ -38,7 +38,6 @@ public class PresentationEntity implements Serializable {
     private String jury2Notes;
 
     private String validationTeamNotes;
-    private String teachingStaffNotes;
 
     @ManyToOne
     @JoinColumn(name = "id_jury")
@@ -66,7 +65,6 @@ public class PresentationEntity implements Serializable {
             ", jury1Notes='" + getJury1Notes() + "'" +
             ", jury2Notes='" + getJury2Notes() + "'" +
             ", validationTeamNotes='" + getValidationTeamNotes() + "'" +
-            ", teachingStaffNotes='" + getTeachingStaffNotes() + "'" +
             ", jury='" + getJury() + "'" +
             ", project='" + getProject() + "'" +
             "}";

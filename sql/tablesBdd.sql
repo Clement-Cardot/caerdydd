@@ -62,7 +62,6 @@ CREATE TABLE presentation (
     jury1_notes TEXT,
     jury2_notes TEXT,
     validation_team_notes TEXT,
-    teaching_staff_notes TEXT,
     id_jury INT NOT NULL,
     id_project INT NOT NULL,
     PRIMARY KEY(id_presentation),

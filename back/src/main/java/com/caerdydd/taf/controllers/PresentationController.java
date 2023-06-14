@@ -185,26 +185,4 @@ public class PresentationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-    @PostMapping("/updateTeachingStaffNotes")
-    public ResponseEntity<PresentationDTO> updateTeachingStaffJury(@RequestBody Map<String, Object> requestBody) {
-        logger.info("Process request : update teaching staff notes");
-
-        Integer idPresentation = (Integer) requestBody.get("idPresentation");
-        String note = (String) requestBody.get("note");
-
-        try {
-            PresentationDTO presentation = presentationService.setTeachingStaffNotes(idPresentation, note);
-            return new ResponseEntity<>(presentation, HttpStatus.OK);
-        } catch (CustomRuntimeException e) {
-            if (e.getMessage().equals(CustomRuntimeException.SERVICE_ERROR)) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            if (e.getMessage().equals(CustomRuntimeException.PRESENTATION_DID_NOT_BEGIN)) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
 }

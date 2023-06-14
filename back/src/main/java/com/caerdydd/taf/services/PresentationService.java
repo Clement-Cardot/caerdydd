@@ -129,15 +129,6 @@ public class PresentationService {
         return updatePresentation(presentation);
     }
 
-    public PresentationDTO setTeachingStaffNotes(Integer id, String notes) throws CustomRuntimeException{
-        PresentationDTO presentation = getPresentationById(id);
-
-        presentationServiceRule.checkDateEndPassed(presentation.getDatetimeEnd());
-
-        presentation.setTeachingStaffNotes(notes);
-        return updatePresentation(presentation);
-    }
-
     public PresentationDTO createPresentation(PresentationDTO presentation) throws CustomRuntimeException {
         
         //Check existing jury and project 

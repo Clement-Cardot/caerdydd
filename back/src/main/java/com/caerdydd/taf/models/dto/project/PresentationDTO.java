@@ -33,7 +33,6 @@ public class PresentationDTO {
     private String jury1Notes;
     private String jury2Notes;
     private String validationTeamNotes;
-    private String teachingStaffNotes;
 
     private JuryDTO jury;
 
@@ -57,7 +56,6 @@ public class PresentationDTO {
             ", jury1Notes='" + getJury1Notes() + "'" +
             ", jury2Notes='" + getJury2Notes() + "'" +
             ", validationTeamNotes='" + getValidationTeamNotes() + "'" +
-            ", teachingStaffNotes='" + getTeachingStaffNotes() + "'" +
             ", jury='" + getJury() + "'" +
             ", project='" + getProject() + "'" +
             "}";
