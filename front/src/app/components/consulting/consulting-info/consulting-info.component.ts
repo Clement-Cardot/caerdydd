@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Consulting } from 'src/app/core/data/models/consulting.model';
 import { DialogAnnotationsComponent } from './dialog-annotations/dialog-annotations.component';
@@ -21,6 +21,8 @@ export interface DialogData {
 
 export class ConsultingInfoComponent implements OnInit, OnDestroy{
   @Input() consulting!: Consulting;
+  @Output() consultingAccepted = new EventEmitter();
+
   currentUser!: User | undefined;
   currentUserSubscription: any;
 
@@ -115,6 +117,7 @@ export class ConsultingInfoComponent implements OnInit, OnDestroy{
     this.apiConsultingService.updateConsulting(consulting).subscribe(
       (response) => {
         console.log('Response from server: ', response);
+        this.consultingAccepted.emit();
       },
       (error) => {
         console.error('Error:', error);
