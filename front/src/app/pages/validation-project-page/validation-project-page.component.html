@@ -3,7 +3,7 @@
     <mat-card-header>
       <mat-card-title *ngIf="validationTeam">{{validationTeam.name}}</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content *ngIf="validationTeam != undefined">
       <div class="sameRow">
         <p>Cahier des charges :</p>
         <button mat-raised-button color="accent" (click)="getFile('teamScopeStatement')" class="downloadButton" [disabled]="!isThereStateScope()">Télécharger le document</button>
@@ -18,7 +18,8 @@
       </div>
       <div class="sameRow">
         <p>Cahier de tests :</p>
-        <a mat-button color="primary" [href]="testBookLinkValidation" target="_blank">{{ testBookLinkValidation }}</a>
+        <p *ngIf="validationTeam.testBookLink == undefined">Aucun lien disponible</p>
+        <a mat-button color="primary" *ngIf="validationTeam.testBookLink != undefined" [href]="testBookLinkValidation" target="_blank">{{ testBookLinkValidation }}</a>
       </div>
     </mat-card-content>
   </mat-card>
