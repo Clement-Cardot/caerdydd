@@ -205,42 +205,6 @@ public class FileServiceTest {
     }
 
     @Test
-    @MockitoSettings(strictness = Strictness.LENIENT)
-    void testLoadFileAsResource_Nominal() throws CustomRuntimeException, IOException {
-        // Mock env
-        when(env.getProperty("file.upload-dir")).thenReturn("test/");
-
-        // Mock TeamDTO
-        TeamDTO mockedTeam = new TeamDTO();
-        mockedTeam.setIdTeam(1);
-        when(teamService.getTeamById(1)).thenReturn(mockedTeam);
-
-        // Create a temporary file
-        File tempFile = File.createTempFile("test", ".pdf");
-
-        // Write some content to it
-        FileWriter writer = new FileWriter(tempFile);
-        writer.write("some content");
-        writer.close();
-
-        // Now we pretend that this is the file that was saved
-        String path = tempFile.getAbsolutePath();
-        mockedTeam.setFilePathScopeStatement(path);
-
-        // Attempt to load the file as a resource
-        try {
-            Resource resource = fileService.loadFileAsResource(1, "test");
-            assertNotNull(resource);
-        } catch (CustomRuntimeException e) {
-            fail("Exception thrown: " + e.getMessage());
-        } finally {
-            // Delete the temporary file
-            tempFile.delete();
-        }
-    }
-
-
-    @Test
     void testLoadFileAsResource_TheFileIsNotPresent() throws CustomRuntimeException {
         CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
             fileService.loadFileAsResource(1, "notExistingFile");

@@ -6,6 +6,7 @@
 back/target/
 back/src/main/resources/static/
 back/upload/
+back/test
 back/test/
 **.war
 
@@ -16,6 +17,10 @@ front/out-tsc
 front/bazel-out
 front/node_modules
 front/.angular
+
+### Selenium ###
+selenium/taf_selenium/target
+selenium/target
 
 ### OTHER ###
 upload/

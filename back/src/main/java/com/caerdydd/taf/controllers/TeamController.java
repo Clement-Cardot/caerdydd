@@ -106,6 +106,8 @@ public class TeamController {
             case CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER:
                 logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            case CustomRuntimeException.NB_TEAMS_INVALID:
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             case CustomRuntimeException.SERVICE_ERROR:
                 logger.warn(e.getMessage());
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
