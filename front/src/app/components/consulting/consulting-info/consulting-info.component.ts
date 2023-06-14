@@ -5,6 +5,7 @@ import { DialogAnnotationsComponent } from './dialog-annotations/dialog-annotati
 import { User } from 'src/app/core/data/models/user.model';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiConsultingService } from 'src/app/core/services/api-consulting.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface DialogData {
   consulting: Consulting;
@@ -27,7 +28,11 @@ export class ConsultingInfoComponent implements OnInit, OnDestroy{
   isTeachingStaffOfConsulting! : boolean;
 
 
-  constructor(public dialog: MatDialog, public userDataService: UserDataService, public apiConsultingService: ApiConsultingService) {}
+  constructor(
+    public dialog: MatDialog, 
+    public userDataService: UserDataService, 
+    public apiConsultingService: ApiConsultingService, 
+    private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.currentUserSubscription = this.userDataService.getCurrentUser().subscribe((user: User | undefined) => {
@@ -40,8 +45,10 @@ export class ConsultingInfoComponent implements OnInit, OnDestroy{
     this.currentUserSubscription.unsubscribe();
   }
 
-  isFinished() : boolean {
-    return this.consulting.plannedTimingConsulting.datetimeEnd.getTime() < new Date().getTime();
+  canBeCommented() : boolean {
+    return this.consulting.plannedTimingConsulting.datetimeEnd.getTime() < new Date().getTime()
+      && this.isCurrentUserATeachingStaff()
+      && this.consulting.plannedTimingAvailability != null;
   }
   
   openDialog(): void {
@@ -82,12 +89,44 @@ export class ConsultingInfoComponent implements OnInit, OnDestroy{
     return false;
   }
 
+  isTeachingStaffReplacable() : boolean {
+    return !(this.consulting.plannedTimingConsulting.datetimeEnd.getTime() < new Date().getTime())
+      && this.isCurrentUserATeachingStaff()
+      && !this.isCurrentUserTeachingStaffOfConsulting()
+      && this.consulting.plannedTimingAvailability != null;
+  }
+
   setNotesConsulting(newNotes: string) {
     this.apiConsultingService.setNotesConsulting(this.consulting, this.newNotes).subscribe((consultingResponse) => {
+      this.consulting = consultingResponse;
+    }
+    );
+  }
+
+  replaceTeachingStaffOfConsulting() {
+    this.apiConsultingService.replaceTeachingStaff(this.consulting).subscribe((consultingResponse) => {
       console.log(consultingResponse);
       this.consulting = consultingResponse;
     }
     );
+  }
+
+  validConsulting(consulting: Consulting): void {
+    this.apiConsultingService.updateConsulting(consulting).subscribe(
+      (response) => {
+        console.log('Response from server: ', response);
+      },
+      (error) => {
+        console.error('Error:', error);
+      }
+    );
+    this.openSnackBar();
+  }
+
+  openSnackBar() {
+    this._snackBar.open('Vous avez accepté ce consulting', 'Fermer', {
+      duration: 5000,
+    });
   }
 
 }
