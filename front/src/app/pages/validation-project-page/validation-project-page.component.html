@@ -1,7 +1,7 @@
 <div id="validationPage">
-  <mat-card>
+  <mat-card *ngIf="validationTeam">
     <mat-card-header>
-      <mat-card-title *ngIf="validationTeam">{{validationTeam.name}}</mat-card-title>
+      <mat-card-title>{{validationTeam.name}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="sameRow">
@@ -20,8 +20,8 @@
         <p class="label">Cahier de tests :</p>
         
       </div>
-      <a class="testParagraphe" mat-button color="primary" [href]="testBookLinkValidation" target="_blank" *ngIf="testBookLinkValidation">{{ testBookLinkValidation }}</a>
-      <p class="testParagraphe" *ngIf="!testBookLinkValidation">Il n'y a aucun cahier de test actuellement</p>
+      <a class="testParagraphe" mat-button color="primary" [href]="validationTeam.testBookLink" target="_blank" *ngIf="validationTeam.testBookLink != undefined">{{ validationTeam.testBookLink }}</a>
+      <p class="testParagraphe" *ngIf="validationTeam.testBookLink == undefined">Il n'y a aucun cahier de test actuellement</p>
     </mat-card-content>
   </mat-card>
 </div>

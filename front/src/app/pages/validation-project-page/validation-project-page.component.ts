@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { ApiTeamService } from 'src/app/core/services/api-team.service';
@@ -13,12 +13,12 @@ import { ApiUploadFileService } from 'src/app/core/services/api-upload-file.serv
   templateUrl: './validation-project-page.component.html',
   styleUrls: ['./validation-project-page.component.scss']
 })
-export class ValidationProjectPageComponent implements OnInit {
+export class ValidationProjectPageComponent implements OnInit, OnDestroy {
   currentUser: User | undefined = undefined;
   currentTeam!: Team | null;
   validationTeam!: Team;
-  testBookLinkValidation!: string | null;
-
+  
+  refresh : any;
 
   constructor(
     private userDataService: UserDataService,
@@ -34,6 +34,10 @@ export class ValidationProjectPageComponent implements OnInit {
     if (this.currentUser) {
       this.getTeamMember(this.currentUser.id);
     }
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.refresh);
   }
 
 
@@ -53,9 +57,6 @@ export class ValidationProjectPageComponent implements OnInit {
     this.apiTeamService.getTeam(teamId).subscribe(
       (team: Team) => {
         this.currentTeam = team;
-        if (this.currentTeam) {
-          this.getTestBookLinkValidation(this.currentTeam.idTeam);
-        };
         this.getValidationTeam();
       },
       (error) => {
@@ -75,17 +76,6 @@ export class ValidationProjectPageComponent implements OnInit {
         }
       );
     }
-  }
-
-  getTestBookLinkValidation(teamId: number) {
-    this.apiTeamService.getTestBookLinkValidation(teamId).subscribe(
-      (link: string) => {
-        this.testBookLinkValidation = link;
-      },
-      (error) => {
-        console.error("Error getting test book link validation:", error);
-      }
-    );
   }
 
   getFile(file: string) {
