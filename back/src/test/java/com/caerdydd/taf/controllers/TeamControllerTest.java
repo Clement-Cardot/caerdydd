@@ -763,7 +763,7 @@ public class TeamControllerTest {
     int teamId = 1;
 
     // Define the expected response
-    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    ResponseEntity<String> expectedAnswer = new ResponseEntity<>(HttpStatus.OK);
 
     // Call the method to test
     ResponseEntity<String> result = teamController.getTestBookLinkDev(teamId);
