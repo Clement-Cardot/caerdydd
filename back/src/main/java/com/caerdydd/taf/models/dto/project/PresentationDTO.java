@@ -44,6 +44,11 @@ public class PresentationDTO {
         this.idPresentation = idPresentation;
     }
 
+    public PresentationDTO(Integer idPresentation, String type) {
+        this.idPresentation = idPresentation;
+        this.type=type;
+    }
+
     @Override
     public String toString() {
         return "{" +

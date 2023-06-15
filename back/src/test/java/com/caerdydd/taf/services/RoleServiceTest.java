@@ -1,8 +1,12 @@
 package com.caerdydd.taf.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,6 +39,10 @@ public class RoleServiceTest {
 
     @Mock
     private RoleRepository roleRepository;
+
+    @Mock
+    private UserService userService;
+    
 
     @Spy
     private ModelMapper modelMapper;
@@ -120,5 +128,100 @@ public class RoleServiceTest {
         verify(roleRepository, times(1)).save(any(RoleEntity.class));
         assertEquals(roleToSave.toString(), result.toString());
     }
+
+
+        @Test
+    void testGetRoleById_Nominal() throws CustomRuntimeException {
+        // Given
+        Integer roleId = 1;
+        RoleEntity mockRoleEntity = new RoleEntity(roleId, "STUDENT_ROLE", new UserEntity("firstname1", "lastname1", "login1", "password1", "email1", "LD"));
+        RoleDTO expectedRole = new RoleDTO(roleId, "STUDENT_ROLE", new UserDTO("firstname1", "lastname1", "login1", "password1", "email1", "LD"));
+        when(roleRepository.findByIdRole(roleId)).thenReturn(mockRoleEntity);
+
+        // When
+        RoleDTO result = roleService.getRoleById(roleId);
+
+        // Then
+        verify(roleRepository, times(1)).findByIdRole(roleId);
+        assertEquals(expectedRole.toString(), result.toString());
+    }
+
+    @Test
+    void testDeleteRole_Nominal() throws CustomRuntimeException {
+        // Given
+        RoleDTO roleToDelete = new RoleDTO(1, "STUDENT_ROLE", new UserDTO("firstname1", "lastname1", "login1", "password1", "email1", "LD"));
+        doNothing().when(roleRepository).delete(any(RoleEntity.class));
+
+        // When
+        roleService.deleteRole(roleToDelete);
+
+        // Then
+        verify(roleRepository, times(1)).delete(any(RoleEntity.class));
+    }
+
+    @Test
+    void testAssignRoleToUser_Nominal() throws CustomRuntimeException {
+        // Given
+        Integer userId = 1;
+        String roleName = "STUDENT_ROLE";
+        UserDTO mockUser = new UserDTO(userId, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
+        RoleDTO expectedRole = new RoleDTO(roleName, mockUser);
+        when(userService.getUserById(userId)).thenReturn(mockUser);
+        when(userService.updateUser(mockUser)).thenReturn(mockUser);
+
+        // When
+        RoleDTO result = roleService.assignRoleToUser(userId, roleName);
+
+        // Then
+        verify(userService, times(1)).getUserById(userId);
+        verify(userService, times(1)).updateUser(mockUser);
+        assertEquals(expectedRole.toString(), result.toString());
+    }
+
+
+        @Test
+        void testGetRoleById_ThrowException() {
+            // Given
+            when(roleRepository.findByIdRole(anyInt())).thenThrow(RuntimeException.class);
+
+            // Then
+            assertThrows(CustomRuntimeException.class, () -> roleService.getRoleById(1));
+            verify(roleRepository, times(1)).findByIdRole(anyInt());
+    }
+
+    @Test
+    void testDeleteRole_ThrowException() {
+        // Given
+        RoleDTO roleToDelete = new RoleDTO(1, "STUDENT_ROLE", new UserDTO("firstname1", "lastname1", "login1", "password1", "email1", "LD"));
+        doThrow(RuntimeException.class).when(roleRepository).delete(any(RoleEntity.class));
+
+        // Then
+        assertThrows(CustomRuntimeException.class, () -> roleService.deleteRole(roleToDelete));
+        verify(roleRepository, times(1)).delete(any(RoleEntity.class));
+    }
+
+    @Test
+    void testAssignRoleToUser_ThrowException() throws CustomRuntimeException {
+        // Given
+        when(userService.getUserById(anyInt())).thenThrow(RuntimeException.class);
+
+        // Then
+        assertThrows(CustomRuntimeException.class, () -> roleService.assignRoleToUser(1, "STUDENT_ROLE"));
+        verify(userService, times(1)).getUserById(anyInt());
+    }
+
+
+    @Test
+    void testAssignRoleToUser_ThrowCustomRuntimeException() throws CustomRuntimeException {
+        // Given
+        when(userService.getUserById(anyInt())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Then
+        assertThrows(CustomRuntimeException.class, () -> roleService.assignRoleToUser(1, "STUDENT_ROLE"));
+        verify(userService, times(1)).getUserById(anyInt());
+    }
+
+
+
     
 }

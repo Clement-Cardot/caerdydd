@@ -47,4 +47,95 @@ public class TeamMemberServiceRulesTest {
         // Verify the result
         assertEquals(CustomRuntimeException.TEAM_MEMBER_IMPOSSIBLE_TOTAL_MARK, exception.getMessage());
     }
+
+    @Test
+    void testCheckTeamMemberIndividualMark_GreaterThan10() {
+        // Prepare Input
+        int individualMark = 11;
+
+        // Call method to test and Verify the result
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamMemberServiceRules.checkTeamMemberIndividualMark(individualMark);
+        });
+        assertEquals(CustomRuntimeException.TEAM_MEMBER_INCORRECT_INDIVIDUAL_MARK, exception.getMessage());
+    }
+
+@Test
+void testCheckTeamMemberIndividualMark_LessThan0() {
+    // Prepare Input
+    int individualMark = -1;
+
+    // Call method to test and Verify the result
+    CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+        teamMemberServiceRules.checkTeamMemberIndividualMark(individualMark);
+    });
+    assertEquals(CustomRuntimeException.TEAM_MEMBER_INCORRECT_INDIVIDUAL_MARK, exception.getMessage());
+}
+
+@Test
+void testCheckTeamMemberIndividualMark_Between0And10() throws CustomRuntimeException {
+    // Prepare Input
+    int individualMark = 5;
+
+    // Call method to test
+    teamMemberServiceRules.checkTeamMemberIndividualMark(individualMark);
+}
+
+@Test
+void testCheckTeamMemberMarkAfterBonus_ValidTotalMark() throws CustomRuntimeException {
+    // Prepare Input
+    TeamMemberDTO teamMember = new TeamMemberDTO();
+    teamMember.setIndividualMark(5);
+    TeamDTO team = new TeamDTO();
+    team.setTeamValidationMark(5);
+    team.setTeamWorkMark(5);
+    teamMember.setTeam(team);
+    int bonusToAdd = 2;
+
+    // Call method to test
+    teamMemberServiceRules.checkTeamMemberMarkAfterBonus(teamMember, bonusToAdd);
+}
+
+@Test
+void testCheckTeamMemberMarkAfterBonus_InvalidTotalMark() {
+    // Prepare Input
+    TeamMemberDTO teamMember = new TeamMemberDTO();
+    teamMember.setIndividualMark(10);
+    TeamDTO team = new TeamDTO();
+    team.setTeamValidationMark(10);
+    team.setTeamWorkMark(10);
+    teamMember.setTeam(team);
+    int bonusToAdd = 2;
+
+    // Call method to test and Verify the result
+    CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+        teamMemberServiceRules.checkTeamMemberMarkAfterBonus(teamMember, bonusToAdd);
+    });
+    assertEquals(CustomRuntimeException.TEAM_MEMBER_IMPOSSIBLE_TOTAL_MARK, exception.getMessage());
+}
+
+@Test
+void testCheckTeamMemberBonusValue_ValidBonus() throws CustomRuntimeException {
+    // Prepare Input
+    int bonusToAdd = 3;
+
+    // Call method to test
+    teamMemberServiceRules.checkTeamMemberBonusValue(bonusToAdd);
+}
+
+@Test
+void testCheckTeamMemberBonusValue_InvalidBonus() {
+    // Prepare Input
+    int bonusToAdd = 5;
+
+    // Call method to test and Verify the result
+    CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+        teamMemberServiceRules.checkTeamMemberBonusValue(bonusToAdd);
+    });
+    assertEquals(CustomRuntimeException.TEAM_MEMBER_INCORRECT_BONUS_PENALTY, exception.getMessage());
+}
+
+
+
+
 }

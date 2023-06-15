@@ -8,9 +8,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+import com.caerdydd.taf.models.dto.project.PresentationDTO;
+import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.entities.project.PresentationEntity;
 import com.caerdydd.taf.models.entities.project.ProjectEntity;
 import com.caerdydd.taf.models.entities.user.JuryEntity;
@@ -197,4 +200,84 @@ public class PresentationServiceRulesTest {
         LocalDateTime dateEnd = LocalDateTime.now().minusHours(1);
         assertDoesNotThrow(() -> presentationServiceRule.checkDateEndPassed(dateEnd));
     }
+
+
+        @Test
+    void testCheckPresentationDoesNotExist_True() throws CustomRuntimeException {
+        // Prepare Input
+        ProjectDTO projectDTO = new ProjectDTO();
+        List<PresentationDTO> presentations = new ArrayList<>();
+        presentations.add(new PresentationDTO(1, "type1"));
+        projectDTO.setPresentations(presentations);
+
+        // Call method to test
+        presentationServiceRule.checkPresentationDoesNotExist("type2", projectDTO);
+    }
+
+    @Test
+    void testCheckPresentationDoesNotExist_False() {
+        // Prepare Input
+        ProjectDTO projectDTO = new ProjectDTO();
+        List<PresentationDTO> presentations = new ArrayList<>();
+        presentations.add(new PresentationDTO(1, "type1"));
+        projectDTO.setPresentations(presentations);
+
+        // Call method to test and Verify the result
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            presentationServiceRule.checkPresentationDoesNotExist("type1", projectDTO);
+        });
+        assertEquals(CustomRuntimeException.PRESENTATION_ALREADY_EXISTS, exception.getMessage());
+    }
+
+    @Test
+    void testCheckDateIsNotPassed_True() throws CustomRuntimeException {
+        // Prepare Input
+        LocalDateTime begin = LocalDateTime.now().plusDays(1);
+
+        // Call method to test
+        presentationServiceRule.checkDateIsNotPassed(begin);
+    }
+
+    @Test
+    void testCheckDateIsNotPassed_False() {
+        // Prepare Input
+        LocalDateTime begin = LocalDateTime.now().minusDays(1);
+
+        // Call method to test and Verify the result
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            presentationServiceRule.checkDateIsNotPassed(begin);
+        });
+        assertEquals(CustomRuntimeException.PRESENTATION_ALREADY_PASSED, exception.getMessage());
+    }
+
+    @Test
+    void testCheckIntermediatePresentationIsCreated_True() throws CustomRuntimeException {
+        // Prepare Input
+        ProjectDTO projectDTO = new ProjectDTO();
+        List<PresentationDTO> presentations = new ArrayList<>();
+        presentations.add(new PresentationDTO(1, "intermediate"));
+        projectDTO.setPresentations(presentations);
+
+        // Call method to test
+        presentationServiceRule.checkIntermediatePresentationIsCreated(projectDTO);
+    }
+
+    @Test
+    void testCheckIntermediatePresentationIsCreated_False() {
+        // Prepare Input
+        ProjectDTO projectDTO = new ProjectDTO();
+        List<PresentationDTO> presentations = new ArrayList<>();
+        presentations.add(new PresentationDTO(1, "notIntermediate"));
+        projectDTO.setPresentations(presentations);
+
+        // Call method to test and Verify the result
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            presentationServiceRule.checkIntermediatePresentationIsCreated(projectDTO);
+        });
+        assertEquals(CustomRuntimeException.INTERMEDIATE_PRESENTATION_NOT_CREATED, exception.getMessage());
+    }
+
+    
+
+
 }

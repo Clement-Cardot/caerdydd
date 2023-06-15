@@ -233,4 +233,7 @@ public class JuryServiceTest {
 
         assertEquals(CustomRuntimeException.SERVICE_ERROR, thrownException.getMessage());
     }
+
+
+    
 }

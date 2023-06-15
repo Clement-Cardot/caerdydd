@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -34,12 +32,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.caerdydd.taf.models.dto.consulting.ConsultingDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
-import com.caerdydd.taf.models.dto.notification.NotificationDTO;
-import com.caerdydd.taf.models.dto.project.ProjectDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
 import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
-import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
 import com.caerdydd.taf.models.entities.consulting.ConsultingEntity;
 import com.caerdydd.taf.models.entities.consulting.PlannedTimingAvailabilityEntity;
@@ -1141,7 +1136,6 @@ public class ConsultingServiceTest {
         mockedUser.setRoles(new ArrayList<RoleDTO>());
         mockedUser.getRoles().add(mockedRole);
 
-        TeamMemberDTO mockedTeamMember = new TeamMemberDTO(mockedUser, team);
 
         when(userServiceRules.getCurrentUser()).thenReturn(mockedUser);
 
@@ -1543,5 +1537,27 @@ public class ConsultingServiceTest {
         // Assertions
         assertEquals(CustomRuntimeException.USER_IS_NOT_OWNER_OF_CONSULTING, exception.getMessage());
     }
+
+
+    @Test
+    public void testGetByIdPlannedTimingConsultingAndIdTeachingStaff() throws CustomRuntimeException {
+        // Given
+        Integer idPlannedTimingConsulting = 1;
+        Integer idUser = 1;
+        PlannedTimingAvailabilityEntity availabilityEntity = new PlannedTimingAvailabilityEntity();
+        PlannedTimingAvailabilityDTO expectedDTO = new PlannedTimingAvailabilityDTO();
+
+        // When
+        when(plannedTimingAvailabilityRepository.findByIdPlannedTimingConsultingAndIdUser(idPlannedTimingConsulting, idUser))
+                .thenReturn(Optional.of(availabilityEntity));
+        when(modelMapper.map(availabilityEntity, PlannedTimingAvailabilityDTO.class)).thenReturn(expectedDTO);
+
+        // Then
+        PlannedTimingAvailabilityDTO result = consultingService.getByIdPlannedTimingConsultingAndIdTeachingStaff(idPlannedTimingConsulting, idUser);
+
+        assertEquals(expectedDTO, result);
+    }
+
+
 
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -168,5 +169,67 @@ public class TeamServiceRulesTest {
 
         // If nothing throw : success
     }
+
+    @Test
+    void testIsValidLink_ValidLink() {
+        // Prepare Input
+        String link = "http://example.com";
+
+        // Call method to test
+        assertDoesNotThrow(() -> teamServiceRules.isValidLink(link));
+    }
+
+
+    @Test
+    void testIsValidLink_InvalidLink() {
+        // Prepare Input
+        String link = "Invalid Link";
+
+        // Call method to test and Verify the result
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamServiceRules.isValidLink(link);
+        });
+        assertEquals(CustomRuntimeException.INVALID_LINK, exception.getMessage());
+    }
+
+    @Test
+    void testCheckIfUserIsMemberOfTeam_UserIsMember() throws CustomRuntimeException {
+        // Prepare Input
+        UserDTO currentUser = new UserDTO();
+        currentUser.setId(1);
+        when(securityConfig.getCurrentUser()).thenReturn(currentUser);
+        TeamMemberDTO teamMember = new TeamMemberDTO();
+        teamMember.setUser(currentUser);
+        List<TeamMemberDTO> teamMembers = new ArrayList<>();
+        teamMembers.add(teamMember);
+        TeamDTO team = new TeamDTO();
+        team.setTeamMembers(teamMembers);
+
+        // Call method to test
+        teamServiceRules.checkIfUserIsMemberOfTeam(team);
+    }
+
+    @Test
+    void testCheckIfUserIsMemberOfTeam_UserIsNotMember() throws CustomRuntimeException {
+        // Prepare Input
+        UserDTO currentUser = new UserDTO();
+        currentUser.setId(1);
+        when(securityConfig.getCurrentUser()).thenReturn(currentUser);
+        UserDTO anotherUser = new UserDTO();
+        anotherUser.setId(2);
+        TeamMemberDTO teamMember = new TeamMemberDTO();
+        teamMember.setUser(anotherUser);
+        List<TeamMemberDTO> teamMembers = new ArrayList<>();
+        teamMembers.add(teamMember);
+        TeamDTO team = new TeamDTO();
+        team.setTeamMembers(teamMembers);
+
+        // Call method to test and Verify the result
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            teamServiceRules.checkIfUserIsMemberOfTeam(team);
+        });
+        assertEquals(CustomRuntimeException.USER_NOT_IN_ASSOCIATED_TEAM, exception.getMessage());
+    }
+
 
 }

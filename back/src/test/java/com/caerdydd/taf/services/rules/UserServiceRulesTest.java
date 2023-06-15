@@ -309,4 +309,38 @@ public class UserServiceRulesTest {
         assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, exception.getMessage());
     }
 
+    @Test
+    void checkUserRoleTest_UserIsNotAJuryMember() {
+        // Create User
+        UserDTO user = new UserDTO();
+        user.setRoles(new ArrayList<>());
+        user.getRoles().add(new RoleDTO(1, "USELESS_ROLE", user));
+
+        // Call method to test
+        CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+            userServiceRules.checkUserRole(user, "JURY_MEMBER_ROLE");
+        });
+
+        // Check exception
+        assertEquals(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER, exception.getMessage());
+    }
+
+    @Test
+    void testGetCurrentUser() throws CustomRuntimeException {
+        // Mock User
+        UserDTO mockUser = new UserDTO();
+        mockUser.setId(1);
+
+        // Mock securityConfig.getCurrentUser()
+        when(securityConfig.getCurrentUser()).thenReturn(mockUser);
+
+        // Call method to test
+        UserDTO result = userServiceRules.getCurrentUser();
+
+        // Check result
+        assertEquals(mockUser, result);
+    }
+
+
+
 }
