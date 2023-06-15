@@ -8,11 +8,5 @@
     <p *ngIf="team.reportComments" id="reportCommentParagraph">{{ team.reportComments }}</p>
     <p *ngIf="!team.reportComments" id="reportCommentParagraph">Aucun commentaire n'est présent actuellement</p>
   </mat-card-content>
-  <mat-card-actions *ngIf="team.testBookLink">
-      <div>
-          <h5>Lien vers le cahier de test</h5>
-          <a mat-button color="primary" [href]="team.testBookLink" target="_blank">{{ team.testBookLink }}</a>
-      </div>
-  </mat-card-actions>
 </mat-card>
 
