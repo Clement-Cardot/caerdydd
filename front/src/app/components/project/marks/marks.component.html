@@ -54,7 +54,7 @@
       <ng-container matColumnDef="bonusMalus">
         <th mat-header-cell *matHeaderCellDef>Bonus/Malus</th>
         <td mat-cell *matCellDef="let element">
-          <ng-container *ngIf="isOptionLeader()">
+          <ng-container *ngIf="isOptionLeader() || isJuryOfTeam(team)">
             <input
               class="tableinput" 
               type="number" 
@@ -64,7 +64,7 @@
               (ngModelChange)="calculateFinalMark(element)" 
               onkeydown="return false">
           </ng-container>
-          <ng-container *ngIf="!isOptionLeader()">
+          <ng-container *ngIf="!isOptionLeader() && !isJuryOfTeam(team)">
             {{ element.bonusPenalty || "-" }}
           </ng-container>
         </td>
@@ -116,7 +116,7 @@
         </mat-error>
       </div>
       
-      <div style="display: inline-block;" *ngIf="isOptionLeader()">
+      <div style="display: inline-block;" *ngIf="isOptionLeader() || isJuryOfTeam(team)">
         <button mat-raised-button color="primary" [disabled]="getSumBonus() !== 0" (click)="saveBonus()">Valider les bonus/malus</button>
         <mat-error *ngIf="getSumBonus() !== 0">
           Pour valider, la somme des bonus/malus de l'équipe doit être 0, actuellement elle est de {{ getSumBonus() }}

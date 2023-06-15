@@ -74,7 +74,7 @@ public class TeamMemberService {
     public TeamMemberDTO setBonusPenaltyById(Integer id, Integer bonusPenalty) throws CustomRuntimeException {
 
         // Check if the current user is a option leader
-        userServiceRules.checkCurrentUserRole("OPTION_LEADER_ROLE");
+        userServiceRules.checkCurrentUserRoles(List.of("JURY_MEMBER_ROLE", "OPTION_LEADER_ROLE"));
 
         // Check if the value of the bonus is correct.
         teamMemberServiceRules.checkTeamMemberBonusValue(bonusPenalty);
