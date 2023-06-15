@@ -1,8 +1,6 @@
 <mat-card id="teamCard{{team.idTeam}}">
   <mat-card-header>
       <mat-card-title>{{ team.name }}</mat-card-title>
-      <button mat-raised-button *ngIf="isCurrentUserAStudent()" (click)="applyInTeam(team.idTeam)" id="buttonJoinTeam{{team.idTeam}}">Rejoindre l'équipe</button>
-      <button mat-raised-button [routerLink]="['/project', team.idTeam]"  *ngIf="isCurrentUserATeachingStaff()" id="buttonSeeTeam{{team.idTeam}}">Voir plus</button>
       <button mat-raised-button *ngIf="isCurrentUserAStudent() && team.teamMembers.length < 6" (click)="applyInTeam(team.idTeam)" id="buttonJoinTeam{{team.idTeam}}">Rejoindre l'équipe</button>
       <button mat-raised-button [routerLink]="['/project', team.idTeam]"  *ngIf="isCurrentUserATeachingStaff()" id="buttonSeeTeam{{team.idTeam}}">Voir plus</button>
   </mat-card-header>
