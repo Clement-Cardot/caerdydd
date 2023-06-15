@@ -41,6 +41,7 @@ public class ConsultingEntity implements Serializable {
         private TeamEntity team;
 
         public ConsultingEntity(){
+                // Empty constructor
         }
 
         @Override

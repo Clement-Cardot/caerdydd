@@ -25,6 +25,7 @@ public class ConsultingDTO {
     private TeamDTO team;
 
     public ConsultingDTO() {
+        // Empty constructor
     }
 
     @Override
