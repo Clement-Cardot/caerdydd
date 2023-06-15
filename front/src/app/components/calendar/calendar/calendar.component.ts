@@ -5,15 +5,11 @@ import { ApiConsultingService } from 'src/app/core/services/api-consulting.servi
 import { PlannedTimingConsulting } from 'src/app/core/data/models/planned-timing-consulting.model';
 import { UserDataService } from 'src/app/core/services/user-data.service';
 import { User } from 'src/app/core/data/models/user.model';
-import { Team } from 'src/app/core/data/models/team.model';
 import { ApiPresentationService } from 'src/app/core/services/api-presentation.service';
 import { Presentation } from 'src/app/core/data/models/presentation.model';
 import { PlannedTimingAvailability } from 'src/app/core/data/models/planned-timing-availability.model';
-import { TeamMember } from 'src/app/core/data/models/team-member.model';
-import { ApiTeamMemberService } from 'src/app/core/services/api-team-member.service';
-import { ApiTeamService } from 'src/app/core/services/api-team.service';
 import { ClickedConsultingDialogComponent } from '../clicked-consulting-dialog/clicked-consulting-dialog.component';
-import { Observable, Subject, interval } from 'rxjs';
+import { Subject } from 'rxjs';
 
 
 class ClickEvent {
@@ -119,17 +115,29 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   updateEvents(newEvents: CalendarEvent[]) {
     newEvents.forEach(newEvent => {
-      let correspondingIndex = this.events.findIndex(event => event.id == newEvent.id);
+      let correspondingIndex = -1;
+      if (newEvent instanceof Presentation) {
+        this.events.forEach((event, index) => {
+            if (event instanceof Presentation && event.id == newEvent.id) {
+              correspondingIndex = index;
+            }
+          }
+        );
+      } else if (newEvent instanceof PlannedTimingConsulting) {
+        this.events.forEach((event, index) => {
+          if (event instanceof PlannedTimingConsulting && event.id == newEvent.id) {
+            correspondingIndex = index;
+          }
+        }
+      );
+      }
       if (correspondingIndex != -1) {
         this.events.splice(correspondingIndex, 1);
-        this.events.push(newEvent);
-        this.refreshCalendar.next();
       }
-      else {
-        this.events.push(newEvent);
-        this.refreshCalendar.next();
-      }
+      this.events.push(newEvent);
     });
+    console.log(this.events)
+    this.refreshCalendar.next();
   }
 
   showTeachingStaffAvailabilitiesForConsulting(events: PlannedTimingConsulting[]): PlannedTimingConsulting[] {
