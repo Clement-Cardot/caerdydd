@@ -16,14 +16,14 @@ td {
 }
 
 .sameRow {
-        display: flex;
-        flex-direction: row;
-        margin: 25px 0 0 0;
-    }
+    display: flex;
+    flex-direction: row;
+    margin: 25px 0 0 0;
+}
     
-    .input-container {
-        margin-right: 15px;
-    }
+.input-container {
+    margin-right: 15px;
+}
 
 .save-message {
     color: green;
@@ -36,4 +36,14 @@ td {
     padding-top: 15px;
     display: flex;
     justify-content: center;
+}
+
+.table {
+    overflow: auto;
+}
+
+@media screen and (max-width: 768px) {
+    .sameRow {
+        flex-direction: column;
+    }
 }
