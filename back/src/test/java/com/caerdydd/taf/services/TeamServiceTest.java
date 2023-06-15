@@ -1008,14 +1008,19 @@ class TeamServiceTest {
         Integer id = 1;
         Integer teamWorkMark = 15;
 
+        doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED))
+        .when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
+
         // Appel de la méthode à tester et vérification de l'exception levée
-        assertThrows(CustomRuntimeException.class, () -> {
+        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
             teamService.setTeamWorkMarkById(id, teamWorkMark);
         });
+
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, thrownException.getMessage());
     }
 
     @Test
-    void testSetTeamValidationMarkByIdSuccess() throws CustomRuntimeException {
+    void testSetTeamValidationMarkById_Nominal() throws CustomRuntimeException {
         doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
 
         TeamEntity team = new TeamEntity();
@@ -1036,15 +1041,20 @@ class TeamServiceTest {
     }
 
     @Test
-    void testSetteamValidationMarkByIdUserNotAuthorized() throws CustomRuntimeException {
+    void testSetteamValidationMarkById_UserNotAuthorized() throws CustomRuntimeException {
         // Mock des inputs
         Integer id = 1;
         Integer teamValidationMark = 15;
 
+        doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED))
+        .when(userServiceRules).checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
+
         // Appel de la méthode à tester et vérification de l'exception levée
-        assertThrows(CustomRuntimeException.class, () -> {
+        CustomRuntimeException thrownException = assertThrows(CustomRuntimeException.class, () -> {
             teamService.setTeamValidationMarkById(id, teamValidationMark);
         });
+
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, thrownException.getMessage());
     }
     
     @Test

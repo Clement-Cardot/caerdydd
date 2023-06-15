@@ -37,11 +37,26 @@ h2 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 @media screen and (max-width: 1200px) {
   app-project-description {
     width: 23rem;
+  }
+  #reportCommentParagraph {
+    width: 70%;
+  }
+  .sameRow {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #reportCommentParagraph {
+    width: 80%;
+  }
+  .sameRow {
+    width: 80%;
   }
 }

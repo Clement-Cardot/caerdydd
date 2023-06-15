@@ -101,7 +101,7 @@ public class TeamService {
             throw new CustomRuntimeException(CustomRuntimeException.NB_TEAMS_INVALID);
         }
         // Check if the user is an option leader
-        userServiceRules.checkUserRole(securityConfig.getCurrentUser(), "OPTION_LEADER_ROLE");
+        userServiceRules.checkUserRole(securityConfig.getCurrentUser(), RoleDTO.OPTION_LEADER_ROLE);
 
         //If everyting is ok, create the teams and projects
         int nbTeams = nbTeamsPairs * 2;
@@ -136,7 +136,7 @@ public class TeamService {
         TeamDTO team  = this.getTeamById(idTeam);
 
         // Check if the user is a Student
-        userServiceRules.checkUserRole(user, "STUDENT_ROLE");
+        userServiceRules.checkUserRole(user, RoleDTO.STUDENT_ROLE);
 
         // Check if the current user is the same as the user to update
         userServiceRules.checkCurrentUser(user);
@@ -150,7 +150,7 @@ public class TeamService {
         // If everythings OK : create the user role "team_member" and create a new team member entity
         logger.info("Create role of User {} : team_member", idUser);
         RoleDTO newRole = new RoleDTO();
-        newRole.setRole("TEAM_MEMBER_ROLE");
+        newRole.setRole(RoleDTO.TEAM_MEMBER_ROLE);
         newRole.setUser(user);
 
         logger.info("Create a new TeamMemberEntity link to User {} and Team {}", idUser, idTeam);
@@ -186,7 +186,7 @@ public class TeamService {
         TeamDTO teamDTO = getTeamById(team.getIdTeam());
 
         // Vérifie si l'utilisateur est un membre de l'équipe
-        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEAM_MEMBER_ROLE);
         teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
 
         // Vérifie si le lien est valide
@@ -225,7 +225,7 @@ public class TeamService {
     
     public TeamDTO setTeamWorkMarkById(Integer id, Integer teamWorkMark)throws CustomRuntimeException{
         // Check if the current user is a jury member 
-        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
 
         // Check if the value of the bonus is correct.
         TeamServiceRules.checkTeamWorkMark(teamWorkMark);
@@ -240,7 +240,7 @@ public class TeamService {
 
     public TeamDTO setTeamValidationMarkById(Integer id, Integer teamValidationMark)throws CustomRuntimeException{
         // Check if the current user is a jury member 
-        userServiceRules.checkCurrentUserRole("JURY_MEMBER_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.JURY_MEMBER_ROLE);
 
         // Check if the value of the bonus is correct.
         TeamServiceRules.checkTeamValidationMark(teamValidationMark);

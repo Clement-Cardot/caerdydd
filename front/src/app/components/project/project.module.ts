@@ -12,6 +12,7 @@ import { MaterialFileInputModule } from "ngx-material-file-input";
 import { ProjectFileComponent } from './project-file/project-file.component';
 import { TestBookLinkComponent } from './test-book-link/test-book-link.component';
 import { ProjectDescriptionComponent } from "./project-description/project-description.component";
+import { CommentaireComponent } from './commentaire/commentaire.component';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { ProjectDescriptionComponent } from "./project-description/project-descr
       TeamListComponent,
       ProjectFileComponent,
       TestBookLinkComponent,
-      ProjectDescriptionComponent
+      ProjectDescriptionComponent,
+      CommentaireComponent
     ],
     imports: [
       CommonModule,
@@ -40,7 +42,8 @@ import { ProjectDescriptionComponent } from "./project-description/project-descr
       TeamListComponent,
       ProjectFileComponent,
       TestBookLinkComponent,
-      ProjectDescriptionComponent
+      ProjectDescriptionComponent,
+      CommentaireComponent
     ]
   })
   export class ProjectModule { }

@@ -21,6 +21,7 @@ import com.caerdydd.taf.models.dto.consulting.PlannedTimingAvailabilityDTO;
 import com.caerdydd.taf.models.dto.consulting.PlannedTimingConsultingDTO;
 import com.caerdydd.taf.models.dto.notification.NotificationDTO;
 import com.caerdydd.taf.models.dto.project.TeamDTO;
+import com.caerdydd.taf.models.dto.user.RoleDTO;
 import com.caerdydd.taf.models.dto.user.TeachingStaffDTO;
 import com.caerdydd.taf.models.dto.user.TeamMemberDTO;
 import com.caerdydd.taf.models.dto.user.UserDTO;
@@ -198,7 +199,7 @@ public class ConsultingService {
     // List all ConsulingDTO Waiting
     public List<ConsultingDTO> listAllConsultingsWaiting() throws CustomRuntimeException {
         // Verify that user is a Teaching staff
-        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEACHING_STAFF_ROLE);
 
         // Get all consultings
         List<ConsultingDTO> consultings = listAllConsultings();
@@ -248,7 +249,7 @@ public class ConsultingService {
     public List<PlannedTimingConsultingDTO> uploadPlannedTimingConsultings(MultipartFile consultingFile) throws CustomRuntimeException, IOException {
 
         // Verify that user is a Planning assistant
-        userServiceRules.checkCurrentUserRole("PLANNING_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.PLANNING_ROLE);
 
         // Verify that file is not empty
         fileRules.checkFileIsNotEmpty(consultingFile);
@@ -305,7 +306,7 @@ public class ConsultingService {
         PlannedTimingAvailabilityDTO plannedTimingAvailability = getPlannedTimingAvailabilityById(plannedTimingAvailabilityDTO.getIdPlannedTimingAvailability());
 
         // Verify that user is a Teaching staff
-        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEACHING_STAFF_ROLE);
 
         // check if user is the owner of the availability
         consultingRules.checkUserIsOwnerOfAvailability(userServiceRules.getCurrentUser().getTeachingStaff(), plannedTimingAvailability);
@@ -324,7 +325,7 @@ public class ConsultingService {
     public ConsultingDTO replaceTeachingStaff(ConsultingDTO consultingDTO) throws CustomRuntimeException {
 
         // Check if current User is Teaching Staff
-        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEACHING_STAFF_ROLE);
         
         // Check if consulting exists
         ConsultingDTO consulting = getConsultingById(consultingDTO.getIdConsulting());
@@ -362,7 +363,7 @@ public class ConsultingService {
     public List<ConsultingDTO> getConsultingsBySpecialityInfra() throws CustomRuntimeException {
 
         // Verify that user is a Teaching staff
-        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEACHING_STAFF_ROLE);
 
         // Get all consultings
         List<ConsultingDTO> consultings = listAllConsultings();
@@ -382,7 +383,7 @@ public class ConsultingService {
     public List<ConsultingDTO> getConsultingsBySpecialityDevelopment() throws CustomRuntimeException {
 
         // Verify that user is a Teaching staff
-        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEACHING_STAFF_ROLE);
 
         // Get all consultings
         List<ConsultingDTO> consultings = listAllConsultings();
@@ -402,7 +403,7 @@ public class ConsultingService {
     public List<ConsultingDTO> getConsultingsBySpecialityModeling() throws CustomRuntimeException {
 
         // Verify that user is a Teaching staff
-        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEACHING_STAFF_ROLE);
 
         // Get all consultings
         List<ConsultingDTO> consultings = listAllConsultings();
@@ -424,7 +425,7 @@ public class ConsultingService {
     UserDTO user = userServiceRules.getCurrentUser();
 
     // Verify that user is a Teaching staff
-    userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+    userServiceRules.checkCurrentUserRole(RoleDTO.TEACHING_STAFF_ROLE);
 
     // check if consulting is not in the past
     consultingRules.checkConsultingIsNotInPast(consultingDTO);
@@ -464,7 +465,7 @@ public class ConsultingService {
     public ConsultingDTO createConsulting(ConsultingDTO consultingDTO) throws CustomRuntimeException {
 
         // Verify that user is a Team Member
-        userServiceRules.checkCurrentUserRole("TEAM_MEMBER_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEAM_MEMBER_ROLE);
 
         // Check if user is in the team
         UserDTO currentUser = this.userService.getUserById(userServiceRules.getCurrentUser().getId());
@@ -515,7 +516,7 @@ public class ConsultingService {
     public List<ConsultingDTO> getConsultingsForCurrentTeachingStaff() throws CustomRuntimeException {
 
         // Verify that user is a Teaching staff
-        userServiceRules.checkCurrentUserRole("TEACHING_STAFF_ROLE");
+        userServiceRules.checkCurrentUserRole(RoleDTO.TEACHING_STAFF_ROLE);
 
         // Get all consultings
         List<ConsultingDTO> consultings = listAllConsultings();
@@ -540,12 +541,12 @@ public class ConsultingService {
 
         // Verify that user has access to the information
         List<String> roles = new ArrayList<>();
-        roles.add("TEACHING_STAFF_ROLE");
-        roles.add("TEAM_MEMBER_ROLE");
+        roles.add(RoleDTO.TEACHING_STAFF_ROLE);
+        roles.add(RoleDTO.TEAM_MEMBER_ROLE);
         userServiceRules.checkCurrentUserRoles(roles);
 
         // Verify that user is a member of the team
-        if(userServiceRules.getCurrentUser().getRoles().stream().anyMatch(r -> r.getRole().equals("TEAM_MEMBER_ROLE"))) {
+        if(userServiceRules.getCurrentUser().getRoles().stream().anyMatch(r -> r.getRole().equals(RoleDTO.TEAM_MEMBER_ROLE))) {
             teamServiceRules.checkIfUserIsMemberOfTeam(teamDTO);
         }
 

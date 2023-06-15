@@ -36,8 +36,7 @@ public class TeamDTO {
     @JsonManagedReference(value="projectValidation")
     private ProjectDTO projectValidation;
     
-    public TeamDTO() {
-    }
+    public TeamDTO() {}
 
     public TeamDTO(Integer idTeam, String name, ProjectDTO projectDev, ProjectDTO projectValidation) {
         this.idTeam = idTeam;
