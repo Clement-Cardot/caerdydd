@@ -246,7 +246,7 @@ public class TeamMemberServiceTest {
     @Test
     void testSetBonusTeamMember_Nominal() throws CustomRuntimeException {
         // Mock teamMemberRepository.save() method
-        doNothing().when(userServiceRules).checkCurrentUserRole(anyString());
+        doNothing().when(userServiceRules).checkCurrentUserRoles(List.of("JURY_MEMBER_ROLE", "OPTION_LEADER_ROLE"));
 
         TeamEntity team = new TeamEntity();
         UserEntity user = new UserEntity(1, "firstname1", "lastname1", "login1", "password1", "email1", "LD");
@@ -270,8 +270,8 @@ public class TeamMemberServiceTest {
     }
 
     @Test
-    void testSetBonusTeamMember_CurrentUserNotOptionLeader() throws CustomRuntimeException{
-        doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER)).when(userServiceRules).checkCurrentUserRole(anyString());
+    void testSetBonusTeamMember_CurrentUserNotOptionLeaderOrJuryMember() throws CustomRuntimeException{
+        doThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_AUTHORIZED)).when(userServiceRules).checkCurrentUserRoles(List.of("JURY_MEMBER_ROLE", "OPTION_LEADER_ROLE"));
 
         RoleDTO role = new RoleDTO();
         role.setRole(RoleDTO.TEAM_MEMBER_ROLE);
@@ -283,7 +283,7 @@ public class TeamMemberServiceTest {
             teamMemberService.setBonusPenaltyById(2, 1);
         });
 
-        assertEquals(CustomRuntimeException.USER_IS_NOT_AN_OPTION_LEADER, exception.getMessage());
+        assertEquals(CustomRuntimeException.USER_IS_NOT_AUTHORIZED, exception.getMessage());
     }
 
     @Test
