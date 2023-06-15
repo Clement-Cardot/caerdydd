@@ -19,8 +19,8 @@ export class JuryCreationComponent implements OnInit {
 
   errorMessage: string = "";
 
-  constructor(private apiJuryService: ApiJuryService, 
-              private apiTeachingStaffService: ApiTeachingStaffService, 
+  constructor(private apiJuryService: ApiJuryService,
+              private apiTeachingStaffService: ApiTeachingStaffService,
               private _snackBar: MatSnackBar){}
 
   ngOnInit(): void {
@@ -39,10 +39,16 @@ export class JuryCreationComponent implements OnInit {
     const option1 = parseInt(this.selectedOption1, 10);
     const option2 = parseInt(this.selectedOption2, 10);
 
-    if (option1 > 0 && option2 > 0 && option1 != option2) {
+    if (option1 != 0 && option2 != 0) {
+      if (option1 != option2) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    else {
       return false;
     }
-    return true;
   }
 
   onSubmit() : void {
