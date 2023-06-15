@@ -2,11 +2,14 @@ package com.caerdydd.taf.services.rules;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,6 +74,40 @@ public class FileRulesTest {
         
         // Verify the result
         assertEquals(CustomRuntimeException.INCORRECT_FILE_FORMAT, exception.getMessage());
+    }
+
+    // @Test
+    // void checkFileIsCSV_NullPointerException() {
+    //     // Create a null file
+    //     MultipartFile file = null;
+
+
+    //     doThrow(new NullPointerException()).when(fileRules).checkFileIsCSV(file);
+    //     // when(fileRules.checkFileIsCSV(file).thenThrow(new NullPointerException());
+    //     // Call method to test
+    //     CustomRuntimeException exception = Assertions.assertThrowsExactly(CustomRuntimeException.class, () -> {
+    //         fileRules.checkFileIsCSV(file);
+    //     });
+
+    //     // Verify the result
+    //     assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
+    // }
+
+    @Test
+    void checkFileIsCSV_NullPointerException() throws CustomRuntimeException {
+        // Create a null file
+        MultipartFile file = null;
+
+        // Mock la méthode checkFileIsCSV pour lancer une NullPointerException
+        Mockito.doThrow(new NullPointerException()).when(fileRules).checkFileIsCSV(Mockito.any(MultipartFile.class));
+
+        // Call method to test
+        NullPointerException exception = Assertions.assertThrows(NullPointerException.class, () -> {
+            fileRules.checkFileIsCSV(file);
+        });
+
+        // Verify the result
+        assertEquals(CustomRuntimeException.SERVICE_ERROR, exception.getMessage());
     }
 
     @Test

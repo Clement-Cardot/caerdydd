@@ -195,6 +195,18 @@ public class TeamMemberControllerTest {
     }
 
     @Test
+    void testSetBonusPenalty_TeamMemberNotFound() throws CustomRuntimeException {
+        // Mock teamMemberService.setBonusPenaltyById()
+        when(teamMemberService.setBonusPenaltyById(1, 2)).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND));
+
+        // Call the method to test
+        ResponseEntity<TeamMemberDTO> response = teamMemberController.setBonusPenalty(1, 2);
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
     void testSetBonus_ServiceError() throws CustomRuntimeException{
         // Mock userService.getUserById() method
         when(teamMemberService.setBonusPenaltyById(1, 2)).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
@@ -260,6 +272,17 @@ public class TeamMemberControllerTest {
         ResponseEntity<TeamMemberDTO> response = teamMemberController.setIndividualMarkById(1, 90);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
+
+    @Test
+    public void setIndividualMarkById_userNotAJuryMember() throws CustomRuntimeException {
+        // Simuler une exception personnalisée pour le cas où l'utilisateur n'est pas membre du jury
+        when(teamMemberService.setIndividualMarkById(1, 90)).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_JURY_MEMBER));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<TeamMemberDTO> response = teamMemberController.setIndividualMarkById(1, 90);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+    }
+
     @Test
     public void setIndividualMarkById_unexpectedException() throws CustomRuntimeException {
         // Simuler une exception inattendue

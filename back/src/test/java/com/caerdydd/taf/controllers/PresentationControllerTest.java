@@ -74,254 +74,254 @@ public class PresentationControllerTest {
     }
 
     @Test
-void testGetPresentationById_Nominal() throws CustomRuntimeException {
-    // Mock presentationService.getPresentationById()
-    PresentationDTO mockedPresentation = new PresentationDTO();
-    when(presentationService.getPresentationById(any())).thenReturn(mockedPresentation);
+    void testGetPresentationById_Nominal() throws CustomRuntimeException {
+        // Mock presentationService.getPresentationById()
+        PresentationDTO mockedPresentation = new PresentationDTO();
+        when(presentationService.getPresentationById(any())).thenReturn(mockedPresentation);
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
 
-    // Assertions
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(mockedPresentation, response.getBody());
-}
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedPresentation, response.getBody());
+    }
 
-@Test
-void testGetPresentationById_NotFound() throws CustomRuntimeException {
-    // Mock presentationService.getPresentationById()
-    when(presentationService.getPresentationById(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PRESENTATION_NOT_FOUND));
+    @Test
+    void testGetPresentationById_NotFound() throws CustomRuntimeException {
+        // Mock presentationService.getPresentationById()
+        when(presentationService.getPresentationById(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PRESENTATION_NOT_FOUND));
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
 
-    // Assertions
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-}
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 
-@Test
-void testGetTeamPresentations_Nominal() throws CustomRuntimeException {
-    // Mock presentationService.getTeamPresentations()
-    List<PresentationDTO> mockedPresentations = List.of(new PresentationDTO());
-    when(presentationService.getTeamPresentations(any())).thenReturn(mockedPresentations);
+    @Test
+    void testGetTeamPresentations_Nominal() throws CustomRuntimeException {
+        // Mock presentationService.getTeamPresentations()
+        List<PresentationDTO> mockedPresentations = List.of(new PresentationDTO());
+        when(presentationService.getTeamPresentations(any())).thenReturn(mockedPresentations);
 
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
 
-    // Assertions
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(mockedPresentations, response.getBody());
-}
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedPresentations, response.getBody());
+    }
 
-@Test
-void testGetTeamPresentations_TeamNotFound() throws CustomRuntimeException {
-    // Mock presentationService.getTeamPresentations()
-    when(presentationService.getTeamPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+    @Test
+    void testGetTeamPresentations_TeamNotFound() throws CustomRuntimeException {
+        // Mock presentationService.getTeamPresentations()
+        when(presentationService.getTeamPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
 
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
 
-    // Assertions
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-}
-
-
-@Test
-void testGetTeachingStaffPresentations_Nominal() throws CustomRuntimeException {
-    // Mock presentationService.getTeachingStaffPresentations()
-    List<PresentationDTO> mockedPresentations = List.of(new PresentationDTO());
-    when(presentationService.getTeachingStaffPresentations(any())).thenReturn(mockedPresentations);
-
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
-
-    // Assertions
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(mockedPresentations, response.getBody());
-}
-
-@Test
-void testGetTeachingStaffPresentations_TeachingStaffNotFound() throws CustomRuntimeException {
-    // Mock presentationService.getTeachingStaffPresentations()
-    when(presentationService.getTeachingStaffPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
-
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
-
-    // Assertions
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-}
-
-@Test
-void testListAllPresentations_Nominal() throws CustomRuntimeException {
-    // Mock presentationService.listAllPresentations()
-    List<PresentationDTO> mockedPresentations = List.of(new PresentationDTO());
-    when(presentationService.listAllPresentations()).thenReturn(mockedPresentations);
-
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.listAllPresentations();
-
-    // Assertions
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals(mockedPresentations, response.getBody());
-}
-
-@Test
-void testListAllPresentations_ServiceError() throws CustomRuntimeException {
-    // Mock presentationService.listAllPresentations()
-    when(presentationService.listAllPresentations()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
-
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.listAllPresentations();
-
-    // Assertions
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-}
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 
 
-@Test
-void testCreatePresentation_TeachingStaffNotAvailable() throws CustomRuntimeException {
-    // Mock presentationService.createPresentation()
-    when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_AVAILABLE));
+    @Test
+    void testGetTeachingStaffPresentations_Nominal() throws CustomRuntimeException {
+        // Mock presentationService.getTeachingStaffPresentations()
+        List<PresentationDTO> mockedPresentations = List.of(new PresentationDTO());
+        when(presentationService.getTeachingStaffPresentations(any())).thenReturn(mockedPresentations);
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
 
-    // Assertions
-    assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-}
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedPresentations, response.getBody());
+    }
 
-@Test
-void testCreatePresentation_UserIsNotAPlanningAssistant() throws CustomRuntimeException {
-    // Mock presentationService.createPresentation()
-    when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT));
+    @Test
+    void testGetTeachingStaffPresentations_TeachingStaffNotFound() throws CustomRuntimeException {
+        // Mock presentationService.getTeachingStaffPresentations()
+        when(presentationService.getTeachingStaffPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_FOUND));
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
 
-    // Assertions
-    assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-}
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 
-@Test
-void testCreatePresentation_PresentationEndBeforeBegin() throws CustomRuntimeException {
-    // Mock presentationService.createPresentation()
-    when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PRESENTATION_END_BEFORE_BEGIN));
+    @Test
+    void testListAllPresentations_Nominal() throws CustomRuntimeException {
+        // Mock presentationService.listAllPresentations()
+        List<PresentationDTO> mockedPresentations = List.of(new PresentationDTO());
+        when(presentationService.listAllPresentations()).thenReturn(mockedPresentations);
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.listAllPresentations();
 
-    // Assertions
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-}
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedPresentations, response.getBody());
+    }
 
-@Test
-void testGetPresentationById_ServiceError() throws CustomRuntimeException {
-    // Mock presentationService.getPresentationById()
-    when(presentationService.getPresentationById(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+    @Test
+    void testListAllPresentations_ServiceError() throws CustomRuntimeException {
+        // Mock presentationService.listAllPresentations()
+        when(presentationService.listAllPresentations()).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.listAllPresentations();
 
-    // Assertions
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-}
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
 
-@Test
-void testGetPresentationById_UnexpectedError() throws CustomRuntimeException {
-    // Mock presentationService.getPresentationById()
-    when(presentationService.getPresentationById(any())).thenThrow(new CustomRuntimeException("UnexpectedError"));
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
+    @Test
+    void testCreatePresentation_TeachingStaffNotAvailable() throws CustomRuntimeException {
+        // Mock presentationService.createPresentation()
+        when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEACHING_STAFF_NOT_AVAILABLE));
 
-    // Assertions
-    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
-}
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
 
-@Test
-void testGetTeamPresentations_ServiceError() throws CustomRuntimeException {
-    // Mock presentationService.getTeamPresentations()
-    when(presentationService.getTeamPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+        // Assertions
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    }
 
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
+    @Test
+    void testCreatePresentation_UserIsNotAPlanningAssistant() throws CustomRuntimeException {
+        // Mock presentationService.createPresentation()
+        when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.USER_IS_NOT_A_PLANNING_ASSISTANT));
 
-    // Assertions
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-}
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
 
-@Test
-void testGetTeamPresentations_UnexpectedError() throws CustomRuntimeException {
-    // Mock presentationService.getTeamPresentations()
-    when(presentationService.getTeamPresentations(any())).thenThrow(new CustomRuntimeException("UnexpectedError"));
+        // Assertions
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    }
 
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
+    @Test
+    void testCreatePresentation_PresentationEndBeforeBegin() throws CustomRuntimeException {
+        // Mock presentationService.createPresentation()
+        when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.PRESENTATION_END_BEFORE_BEGIN));
 
-    // Assertions
-    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
-}
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
 
-@Test
-void testGetTeachingStaffPresentations_ServiceError() throws CustomRuntimeException {
-    // Mock presentationService.getTeachingStaffPresentations()
-    when(presentationService.getTeachingStaffPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+        // Assertions
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
 
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
+    @Test
+    void testGetPresentationById_ServiceError() throws CustomRuntimeException {
+        // Mock presentationService.getPresentationById()
+        when(presentationService.getPresentationById(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
-    // Assertions
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-}
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
 
-@Test
-void testGetTeachingStaffPresentations_UnexpectedError() throws CustomRuntimeException {
-    // Mock presentationService.getTeachingStaffPresentations()
-    when(presentationService.getTeachingStaffPresentations(any())).thenThrow(new CustomRuntimeException("UnexpectedError"));
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
 
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
+    @Test
+    void testGetPresentationById_UnexpectedError() throws CustomRuntimeException {
+        // Mock presentationService.getPresentationById()
+        when(presentationService.getPresentationById(any())).thenThrow(new CustomRuntimeException("UnexpectedError"));
 
-    // Assertions
-    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
-}
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.getPresentationById(1);
 
-@Test
-void testListAllPresentations_UnexpectedError() throws CustomRuntimeException {
-    // Mock presentationService.listAllPresentations()
-    when(presentationService.listAllPresentations()).thenThrow(new CustomRuntimeException("UnexpectedError"));
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
 
-    // Call method to test
-    ResponseEntity<List<PresentationDTO>> response = presentationController.listAllPresentations();
+    @Test
+    void testGetTeamPresentations_ServiceError() throws CustomRuntimeException {
+        // Mock presentationService.getTeamPresentations()
+        when(presentationService.getTeamPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
-    // Assertions
-    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
-}
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
 
-@Test
-void testCreatePresentation_ServiceError() throws CustomRuntimeException {
-    // Mock presentationService.createPresentation()
-    when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
+    @Test
+    void testGetTeamPresentations_UnexpectedError() throws CustomRuntimeException {
+        // Mock presentationService.getTeamPresentations()
+        when(presentationService.getTeamPresentations(any())).thenThrow(new CustomRuntimeException("UnexpectedError"));
 
-    // Assertions
-    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-}
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamPresentations(1);
 
-@Test
-void testCreatePresentation_UnexpectedError() throws CustomRuntimeException {
-    // Mock presentationService.createPresentation()
-    when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException("UnexpectedError"));
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
 
-    // Call method to test
-    ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
+    @Test
+    void testGetTeachingStaffPresentations_ServiceError() throws CustomRuntimeException {
+        // Mock presentationService.getTeachingStaffPresentations()
+        when(presentationService.getTeachingStaffPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
 
-    // Assertions
-    assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
-}
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testGetTeachingStaffPresentations_UnexpectedError() throws CustomRuntimeException {
+        // Mock presentationService.getTeachingStaffPresentations()
+        when(presentationService.getTeachingStaffPresentations(any())).thenThrow(new CustomRuntimeException("UnexpectedError"));
+
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeachingStaffPresentations(1);
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+
+    @Test
+    void testListAllPresentations_UnexpectedError() throws CustomRuntimeException {
+        // Mock presentationService.listAllPresentations()
+        when(presentationService.listAllPresentations()).thenThrow(new CustomRuntimeException("UnexpectedError"));
+
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.listAllPresentations();
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
+
+    @Test
+    void testCreatePresentation_ServiceError() throws CustomRuntimeException {
+        // Mock presentationService.createPresentation()
+        when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testCreatePresentation_UnexpectedError() throws CustomRuntimeException {
+        // Mock presentationService.createPresentation()
+        when(presentationService.createPresentation(any())).thenThrow(new CustomRuntimeException("UnexpectedError"));
+
+        // Call method to test
+        ResponseEntity<PresentationDTO> response = presentationController.createPresentation(new PresentationDTO());
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
 
 
     @Test
@@ -513,4 +513,66 @@ void testCreatePresentation_UnexpectedError() throws CustomRuntimeException {
         verify(presentationService, times(1)).setTeamNotes(1, "Excellent presentation");
     }
 
+
+    @Test
+    void testGetTeamMemberPresentations_Nominal() throws CustomRuntimeException {
+        // Mock presentationService.getTeamPresentations()
+        List<PresentationDTO> mockedPresentations = List.of(new PresentationDTO());
+        when(presentationService.getTeamMemberPresentations(any())).thenReturn(mockedPresentations);
+
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamMemberPresentations(1);
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockedPresentations, response.getBody());
+    }
+
+    @Test
+    void testGetTeamMemberPresentations_TeamMemberNotFound() throws CustomRuntimeException {
+        // Mock presentationService.getTeamMemberPresentations()
+        when(presentationService.getTeamMemberPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_MEMBER_NOT_FOUND));
+
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamMemberPresentations(1);
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testGetTeamMemberPresentations_TeamNotFound() throws CustomRuntimeException {
+        // Mock presentationService.getTeamMemberPresentations()
+        when(presentationService.getTeamMemberPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.TEAM_NOT_FOUND));
+
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamMemberPresentations(1);
+
+        // Assertions
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testGetTeamMemberPresentations_ServiceError() throws CustomRuntimeException {
+        // Mock presentationService.getTeamMemberPresentations()
+        when(presentationService.getTeamMemberPresentations(any())).thenThrow(new CustomRuntimeException(CustomRuntimeException.SERVICE_ERROR));
+
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamMemberPresentations(1);
+
+        // Assertions
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
+    void testGetTeamMemberPresentations_UnexpectedError() throws CustomRuntimeException {
+        // Mock presentationService.getTeamMemberPresentations()
+        when(presentationService.getTeamMemberPresentations(any())).thenThrow(new CustomRuntimeException("Unexpected"));
+
+        // Call method to test
+        ResponseEntity<List<PresentationDTO>> response = presentationController.getTeamMemberPresentations(1);
+
+        // Assertions
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
 }

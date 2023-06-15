@@ -105,4 +105,16 @@ public class AuthControllerTest {
         assertEquals("JSESSIONID=Expired", response.getHeaders().get(HttpHeaders.SET_COOKIE).get(0));
     }
     
+    @Test
+    void testLogoutUser_Exception() {
+        // Mock authService.logout() pour simuler une exception
+        when(authService.logoutUser()).thenThrow(new RuntimeException("Something went wrong"));
+
+        // Appel de la méthode de contrôleur et vérification de la réponse
+        ResponseEntity<String> response = authController.logoutUser();
+
+        // Assertions
+        assertNotNull(response);
+        assertEquals(HttpStatus.I_AM_A_TEAPOT, response.getStatusCode());
+    }
 }
